@@ -1,0 +1,16 @@
+---
+- name: Add Nginx PPA
+  apt_repository: repo='ppa:nginx/stable' update_cache=yes
+
+- name: Install Nginx
+  apt: name=nginx state=present force=yes
+
+- name: Disable default server
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: Create base WordPress config
+  template: src=wordpress.conf.j2 dest=/etc/nginx/wordpress.conf
+
+- name: Create base WordPress subdirectory Multisite config
+  template: src=wordpress_multisite_subdirectories.conf.j2 dest=/etc/nginx/wordpress_multisite_subdirectories.conf
+

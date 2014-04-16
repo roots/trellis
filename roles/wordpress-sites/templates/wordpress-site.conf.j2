@@ -1,0 +1,17 @@
+server {
+  set $site_name {{ item.site_name }};
+
+  listen       80;
+  server_name  {{ item.site_hosts | join(' ') }};
+  access_log   {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.access.log;
+  error_log    {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.error.log;
+
+  root  {{ www_root }}/{{ item.site_name }}/current/web;
+  index index.php;
+
+  {% if item.multisite.enabled | default(false) -%}
+    include wordpress_multisite_subdirectories.conf;
+  {%- endif %}
+
+  include wordpress.conf;
+}

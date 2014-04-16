@@ -1,0 +1,24 @@
+---
+- name: Copy database dump
+  copy: src={{ item.db_import }} dest=/tmp
+  with_items: wordpress_sites
+  when: item.db_import|default(False)
+
+- name: Create database of sites
+  mysql_db: name={{ item.env.db_name | default(item.site_name) }} state=present login_host={{ item.env.db_host | default('localhost') }}
+  with_items: wordpress_sites
+  when: item.db_create|default(True)
+
+- name: Import database
+  mysql_db: name={{ item.env.db_name | default(item.site_name) }} state=import target=/tmp/{{ item.db_import | basename }} login_host={{ item.env.db_host | default('localhost') }}
+  with_items: wordpress_sites
+  when: item.db_import|default(False)
+
+- name: Create/assign database user to db and grant permissions
+  mysql_user: name={{ item.env.db_user }}
+              password={{ item.env.db_password }}
+              priv={{ item.env.db_name | default(item.site_name) }}.*:ALL
+              state=present
+              login_host={{ item.env.db_host | default('localhost') }}
+  with_items: wordpress_sites
+

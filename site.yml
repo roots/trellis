@@ -1,0 +1,19 @@
+---
+- name: Install LEMP Stack with PHP 5.5 and MariaDB MySQL
+  hosts: wordpress-server
+  user: root
+  # remote_user: deploy
+  # sudo: yes
+
+  roles:
+    - upgrade
+    - common
+    - mariadb
+    - php-55
+    - nginx
+    - composer
+    - nodejs
+    - dev-tools
+    - wp-cli
+    - capistrano-setup
+    - wordpress-sites

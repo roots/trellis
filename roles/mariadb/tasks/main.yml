@@ -1,0 +1,24 @@
+---
+- name: Add MariaDB MySQL apt-key
+  apt_key: url=http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ keyserver_fingerprint }} state=present
+
+- name: Add MariaDB MySQL deb and deb-src
+  apt_repository: repo='{{ item }}' state=present
+  with_items:
+  - deb http://{{ mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main
+  - deb-src http://{{ mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main
+
+- name: Install MariaDB MySQL server
+  apt: name=mariadb-server state=present
+
+- name: Start MariaDB MySQL Server
+  service: name=mysql state=started enabled=true
+
+- name: Delete anonymous MySQL server user for current hostname
+  action: mysql_user user='' host={{ ansible_hostname }} state=absent
+
+- name: Delete anonymous MySQL server user for localhost
+  action: mysql_user user='' state=absent
+
+- name: Remove the test database
+  mysql_db: name=test state=absent

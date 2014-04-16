@@ -1,0 +1,7 @@
+---
+- name: Running apt-get update
+  apt: update_cache=yes
+
+- name: Running apt-get upgrade
+  apt: upgrade=full
+  when: upgrade_packages
