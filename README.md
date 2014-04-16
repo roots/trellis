@@ -57,6 +57,5 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 
 * Multisite: basic support is included but not yet complete. There are issues with doing a network install from scratch via WP-CLI.
 * MariaDB: there's no `root` password set yet.
-* WordPress Salts/Keys: the generated `.env` file does not include these yet.
 * Nginx: configuration needs more options and advanced setups like static files and subdomain multisite support.
 
