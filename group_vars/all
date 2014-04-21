@@ -14,6 +14,7 @@ wordpress_sites:
     admin_user: admin
     admin_password: admin
     admin_email: admin@example.dev
+    system_cron: true
     multisite:
       enabled: false
     env:

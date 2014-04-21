@@ -59,17 +59,12 @@
   with_items: site_statuses.results
   when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled|default(False) == True
 
-- name: Disable WP cron?
-  command: wp eval --allow-root 'var_export(DISABLE_WP_CRON);' chdir={{ www_root }}/{{ item.site_name }}/current/
-  register: cron_settings
-  with_items: wordpress_sites
-
 - name: Setup system cron
   cron: name='{{ item.item.site_name }} WordPress cron'
         minute='*/15'
         user={{ item.item.user }}
         job='curl -s {{ item.item.env.wp_siteurl }}/wp-cron.php'
         cron_file=wordpress_{{ item.item.site_name }}
-  with_items: cron_settings.results
-  when: item.stdout == 'true'
+  with_items: wordpress_sites
+  when: item.system_cron|default(False) == True
 
