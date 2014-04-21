@@ -7,7 +7,7 @@
   dotenv: path={{ www_root }}/{{ item.site_name }}/shared/.env
           state=present
           items="{{ item.env }}"
-          generate='auth_key,secure_auth_key,logged_in_key,nonce_key,auth_salt,secure_auth_salt,logged_in_salt,nonce_salt'
+          generate={{ generated_env_vars | join(',') }}
           owner={{ item.user | default(user) }}
           group=www-data
           mode=0755
