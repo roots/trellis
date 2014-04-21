@@ -12,7 +12,6 @@
     - php-55
     - nginx
     - composer
-    - nodejs
     - dev-tools
     - wp-cli
     - capistrano-setup
