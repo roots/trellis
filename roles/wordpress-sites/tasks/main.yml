@@ -62,7 +62,7 @@
 - name: Setup system cron
   cron: name='{{ item.site_name }} WordPress cron'
         minute='*/15'
-        user={{ item.item.user }}
+        user={{ item.user }}
         job='curl -s {{ item.env.wp_siteurl }}/wp-cron.php'
         cron_file=wordpress_{{ item.site_name }}
   with_items: wordpress_sites
