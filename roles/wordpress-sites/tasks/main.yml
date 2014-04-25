@@ -60,11 +60,11 @@
   when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled|default(False) == True
 
 - name: Setup system cron
-  cron: name='{{ item.item.site_name }} WordPress cron'
+  cron: name='{{ item.site_name }} WordPress cron'
         minute='*/15'
         user={{ item.item.user }}
-        job='curl -s {{ item.item.env.wp_siteurl }}/wp-cron.php'
-        cron_file=wordpress_{{ item.item.site_name }}
+        job='curl -s {{ item.env.wp_siteurl }}/wp-cron.php'
+        cron_file=wordpress_{{ item.site_name }}
   with_items: wordpress_sites
   when: item.system_cron|default(False) == True
 
