@@ -9,5 +9,4 @@
         owner=deploy group=www-data
         state=link
   with_items: wordpress_sites
-  notify: reload nginx
 

@@ -1,5 +1,5 @@
 [{{ item.site_name }}]
-listen = /var/run/php5-fpm/{{ item.site_name }}.sock
+listen = /var/run/php5-fpm-{{ item.site_name }}.sock
 listen.owner = www-data
 listen.group = www-data
 user = {{ item.user | default(user) }}

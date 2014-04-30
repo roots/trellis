@@ -5,5 +5,5 @@ location / {
 location ~ \.php$ {
   try_files $uri =404;
   include fastcgi_params;
-  fastcgi_pass unix:/var/run/php5-fpm/$site_name.sock;
+  fastcgi_pass unix:/var/run/php5-fpm-$site_name.sock;
 }
