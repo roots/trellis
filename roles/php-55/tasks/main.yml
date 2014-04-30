@@ -17,6 +17,9 @@
   - php5-dev
   - php5-imap
 
+- name: Start php5-fpm service
+  service: name=php5-fpm state=started enabled=true
+
 - name: Create socket directory
   file: path=/var/run/php5-fpm/ state=directory
 
