@@ -28,7 +28,3 @@
   when: disable_default_pool
   notify: restart php-fpm
 
-- name: Copy php-fpm configuration
-  template: src=wordpress.conf.j2 dest=/etc/php5/fpm/pool.d/{{ item.site_name }}.conf
-  with_items: wordpress_sites
-  notify: restart php-fpm
