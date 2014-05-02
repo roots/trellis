@@ -27,6 +27,11 @@
   user: name={{ item.user }} groups=www-data state=present append=yes
   with_items: wordpress_sites
 
+- name: Install Dependencies with Composer
+  command: composer install chdir={{ www_root }}/{{ item.site_name }}/current/
+  with_items: wordpress_sites
+  when: item.run_composer|default(False) == True
+
 - name: WP installed?
   command: wp core is-installed --allow-root chdir={{ www_root }}/{{ item.site_name }}/current/
   register: site_statuses

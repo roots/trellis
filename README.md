@@ -48,6 +48,7 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 * `site_title` (optional) - WP site title (default: `site_name`)
 * `db_import` (optional) - Path to local `sql` dump file which will be imported (default: `false`)
 * `system_cron` (optional) - Disable WP cron and use system's (default: `false`)
+* `run_composer` (optional) - Run `composer install` before WP install (default: `false`)
 * `admin_user` (optional) - WP admin user name (default: `admin`)
 * `admin_password` (required if `site_install`) - WP admin user password (default: none)
 * `admin_email` (required if `site_install`) - WP admin email address (default: none)
