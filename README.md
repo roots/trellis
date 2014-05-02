@@ -9,8 +9,8 @@ Vagrant is recommended to provision servers and this comes with a basic `Vagrant
 ## Requirements
 
 1. Ansible >= 1.5.4 - [Installation docs](http://docs.ansible.com/intro_installation.html)
-2. Virtualbox >= 4.3 - [Downloads](https://www.virtualbox.org/wiki/Downloads)
-3. Vagrant >= 1.5 - [Downloads](http://www.vagrantup.com/downloads.html)
+2. Virtualbox >= 4.3.10 - [Downloads](https://www.virtualbox.org/wiki/Downloads)
+3. Vagrant >= 1.5.4 - [Downloads](http://www.vagrantup.com/downloads.html)
 
 ## Installation
 
