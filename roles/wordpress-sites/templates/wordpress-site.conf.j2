@@ -9,6 +9,11 @@ server {
   root  {{ www_root }}/{{ item.site_name }}/current/web;
   index index.php;
 
+  {% if item.env.wp_env | default('development') -%}
+    # See Virtualbox section at http://wiki.nginx.org/Pitfalls
+    sendfile off;
+  {%- endif %}
+
   {% if item.multisite.enabled | default(false) -%}
     include wordpress_multisite_subdirectories.conf;
   {%- endif %}
