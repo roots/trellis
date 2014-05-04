@@ -3,7 +3,11 @@
   group: name={{ deploy_group }} state=present
 
 - name: Setup deploy user
-  user: name={{ deploy_user }} group={{ deploy_group }} groups={{ deploy_groups }} state=present
+  user: name={{ deploy_user }}
+        group={{ deploy_group }}
+        groups={{ deploy_groups }}
+        state=present
+        shell=/bin/bash
 
 - name: Adding public key to server
   authorized_key: user={{ deploy_user }} key='{{ item }}'
