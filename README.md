@@ -14,15 +14,29 @@ Vagrant is recommended to provision servers and this comes with a basic `Vagrant
 
 ## Installation
 
-Download/fork/clone this repo to your local machine.
+1. Download/fork/clone this repo to your local machine.
+2. Download/fork/clone [Bedrock](https://github.com/roots/bedrock) or have an existing Bedrock-based site ready
+
+You should now have the following directories at the same level somewhere:
+
+```
+- bedrock-ansible/
+- example.dev/
+```
 
 ## Usage
 
-1. Edit `Vagrantfile` and set your `config.vm.synced_folder` (you can copy this `Vagrantfile` into a project's directory for a project specific VM).
+1. Edit `Vagrantfile` and set your `config.vm.synced_folder` path so that it points to a local relative path for a Bedrock project from #2 above.
 2. Edit `group_vars/all` and add your WordPress site(s). See [Options](#options) below for details.
 3. Optionally copy and edit `hosts.example` to `hosts` for more than the single dev host through Vagrant (since Vagrant automatically creates its own hosts inventory).
 4. Optionally add any dev hostnames to your local `/etc/hosts` file (or use the [hostsupdated plugin](https://github.com/cogitatio/vagrant-hostsupdater).
 5. Run `vagrant up`.
+
+### `Vagrantfile`
+
+The example `Vagrantfile` in this project can be kept in this folder, or moved anywhere else such as a project/site folder. Generally if you want to have multiple sites on 1 Vagrant VM, you should keep the `Vagrantfile` where it is (in the bedrock-ansible dir). If you want to have 1 Vagrant VM *PER* project/site, you should make copies of the `Vagrantfile` and put them into each project's dir. You'd then run `vagrant up` from the project specific directory.
+
+Whenever you move or copy the `Vagrantfile` somewhere else, you need to make sure to adjust the relative paths in it including `config.vm.synced_folder` and `ansible.playbook = './site.yml'`.
 
 ## Vagrant Box
 
