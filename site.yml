@@ -6,7 +6,6 @@
   # sudo: yes
 
   roles:
-    - upgrade
     - common
     - mariadb
     - php-55

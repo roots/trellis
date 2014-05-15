@@ -1,4 +1,7 @@
 ---
+- name: Update Apt
+  apt: update_cache=yes
+
 - name: Checking essentials
   apt: name={{ item }} state=present
   with_items:
@@ -7,3 +10,4 @@
   - build-essential
   - python-mysqldb
   - curl
+
