@@ -12,6 +12,18 @@ Vagrant is recommended to provision servers and this comes with a basic `Vagrant
 2. Virtualbox >= 4.3.10 - [Downloads](https://www.virtualbox.org/wiki/Downloads)
 3. Vagrant >= 1.5.4 - [Downloads](http://www.vagrantup.com/downloads.html)
 
+### OS Notes
+
+From the Ansible docs:
+
+> Currently Ansible can be run from any machine with Python 2.6 installed (Windows isn’t supported for the control machine).
+This includes Red Hat, Debian, CentOS, OS X, any of the BSDs, and so on.
+
+If your host machine is running Windows, the workaround is to run Ansible *on the VM* (since it's running Ubuntu) and not locally. This requires some additions to the default `Vagrantfile` and an extra script.
+
+Example `Vagrantfile` for Windows can be found [here](https://gist.github.com/starise/e90d981b5f9e1e39f632/a4b7819b3663c5d34e7c8a2ce4556b50771073e8). There may also be issues with permissions/UAC and symlinks. See this [comment](https://github.com/roots/bedrock-ansible/issues/8#issuecomment-43346116).
+
+
 ## Installation
 
 1. Download/fork/clone this repo to your local machine.
