@@ -1,3 +1,7 @@
 ---
 - name: reload nginx
   service: name=nginx state=reloaded
+
+- name: Import database
+  mysql_db: name={{ item.env.db_name | default(item.site_name) }} state=import target=/tmp/{{ item.db_import | basename }} login_host={{ item.env.db_host | default('localhost') }}
+  with_items: wordpress_sites
