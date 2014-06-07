@@ -1,0 +1,18 @@
+---
+- name: Upload private SSH key
+  copy: src=id_rsa dest=~/.ssh/id_rsa owner={{ item.user | default(user) }} group=www-data mode=0600
+  with_items: wordpress_sites
+
+- name: Flush known_hosts file
+  command: rm ~/.ssh/known_hosts
+  when: flush_known_hosts
+  ignore_errors: True
+
+- name: Create known_hosts file and assign permissions.
+  file: state=touch path=~/.ssh/known_hosts owner={{ item.user | default(user) }} group=www-data mode=0600
+  with_items: wordpress_sites
+
+- name: Add new hosts to known_hosts
+  shell: test -z "$( ssh-keygen -H -F {{ item }} -f ~/.ssh/known_hosts )" && ssh-keyscan -H {{ item }} >> ~/.ssh/known_hosts
+  with_items: known_hosts
+  ignore_errors: True

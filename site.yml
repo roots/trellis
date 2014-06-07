@@ -11,6 +11,7 @@
     - php-55
     - nginx
     - composer
+    - { role: known-hosts, when: wordpress_sites.0.run_composer and known_hosts is defined }
     - dev-tools
     - wp-cli
     - capistrano-setup

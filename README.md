@@ -64,6 +64,8 @@ Note: you can always set the box back to the base Ubuntu one if you prefer with 
 
 All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 
+### `wordpress_sites`
+
 `wordpress_sites` is the top level array used to define the WordPress sites/virtual hosts that will be created.
 
 * `site_name` (required) - name used to identify site (commonly the domain name) (default: none)
@@ -90,6 +92,17 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
   * `db_user` (required) - database user name (default: none)
   * `db_password` (required) - database user password (default: none)
   * `db_host` (required) - database host (default: `localhost`)
+
+### Private Packages
+
+You may want Composer to install packages from private repositories (e.g., a private plugin you've made into a [Composer package](http://roots.io/wordpress-plugins-with-composer/), or a paid plugin you've stored in a private repo). As an alternative to installing your private package from a repository like [Satis](https://getcomposer.org/doc/articles/handling-private-packages-with-satis.md), you may configure this playbook to install private projects that are in your control on hosts such as github or bitbucket:
+
+1. Generate a new ssh key pair (see #2 [here](https://help.github.com/articles/generating-ssh-keys#step-2-generate-a-new-ssh-key)).
+2. Add the content of the public key (e.g., `id_rsa.pub`) to each remote private project as a "deploy key" (see deploy keys on [github](https://help.github.com/articles/managing-deploy-keys) or [bitbucket](https://confluence.atlassian.com/display/BITBUCKET/Use+deployment+keys)).
+3. Copy the private key file just created (named `id_rsa`) into your bedrock-ansible at `roles/known-hosts/files/id_rsa`. The contents of that folder are gitignored so that private keys won't be committed to your repo.
+4. Uncomment the list of `known_hosts` in `group_vars/all` and add your hosts. For example, if you have a private project hosted at github, add `github.com` to the list.
+
+On the occasion a host changes its public key, the ansible play named 'Install Dependencies with Composer' may hang forever when you run `vagrant provision`. Try temporarily setting `flush_known_hosts: true` in `group_vars/all`.
 
 ## Todo
 

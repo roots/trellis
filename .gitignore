@@ -1,0 +1,3 @@
+.vagrant
+roles/known-hosts/files/*
+!.gitkeep

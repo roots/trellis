@@ -26,3 +26,12 @@ wordpress_sites:
       db_user: example_dbuser
       db_password: example_dbpassword
 
+# If Composer will install dependencies from private repos, uncomment this and list hosts
+# known_hosts:
+#   - github.com
+#   - bitbucket.org
+
+# If the play 'Install Dependencies with Composer' hangs forever when you 'vagrant provision'
+# (i.e., not creating the VM from scratch), try temporarily setting this to true
+# flush_known_hosts: false
+
