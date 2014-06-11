@@ -13,6 +13,7 @@
   mysql_db: name={{ item.env.db_name | default(item.site_name) }} state=import target=/tmp/{{ item.db_import | basename }} login_host={{ item.env.db_host | default('localhost') }}
   with_items: wordpress_sites
   when: item.db_import|default(False)
+  notify: reload nginx
 
 - name: Create/assign database user to db and grant permissions
   mysql_user: name={{ item.env.db_user }}
