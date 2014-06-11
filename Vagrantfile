@@ -25,12 +25,9 @@ Vagrant.configure('2') do |config|
     ansible.sudo = true
   end
 
-  if Vagrant.has_plugin?('vagrant-cachier')
-    config.cache.scope = :box
-
-    config.cache.synced_folder_opts = {
-      type: :nfs,
-      mount_options: ['rw', 'vers=3', 'tcp', 'nolock']
-    }
+  # Fix for slow external network connections
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+    vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
   end
 end
