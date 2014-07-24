@@ -46,7 +46,8 @@
            --admin_user='{{ item.item.admin_user }}'
            --admin_password='{{ item.item.admin_password }}'
            --admin_email='{{ item.item.admin_email }}'
-           chdir='{{ www_root }}/{{ item.item.site_name }}/current/'
+  args:
+    chdir: "{{ www_root }}/{{ item.item.site_name }}/current/"
   with_items: site_statuses.results
   when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled|default(False) == False
   notify: reload nginx
@@ -61,7 +62,8 @@
            --admin_user='{{ item.item.admin_user }}'
            --admin_password='{{ item.item.admin_password }}'
            --admin_email='{{ item.item.admin_email }}'
-           chdir='{{ www_root }}/{{ item.item.site_name }}/current/'
+  args:
+    chdir: "{{ www_root }}/{{ item.item.site_name }}/current/"
   with_items: site_statuses.results
   when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled|default(False) == True
   notify: reload nginx
