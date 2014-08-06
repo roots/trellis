@@ -1,6 +1,6 @@
 ---
 - name: Add Composer PPA
-  apt_repository: repo='ppa:duggan/composer' update_cache=yes
+  apt_repository: repo="ppa:duggan/composer" update_cache=yes
 
 - name: Install Composer
   apt: name=php5-composer state=present force=yes

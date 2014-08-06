@@ -2,4 +2,4 @@ deploy_user: deploy
 deploy_group: deploy
 deploy_groups: www-data
 deploy_keys:
-  - '~/.ssh/id_rsa.pub'
+  - "~/.ssh/id_rsa.pub"

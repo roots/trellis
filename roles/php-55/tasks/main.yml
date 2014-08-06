@@ -1,9 +1,9 @@
 ---
 - name: Add PHP 5.5 PPA
-  apt_repository: repo='ppa:ondrej/php5' update_cache=yes
+  apt_repository: repo="ppa:ondrej/php5" update_cache=yes
 
 - name: Install PHP 5.5
-  apt: name={{ item }} state=present force=yes
+  apt: name="{{ item }}" state=present force=yes
   with_items:
   - php5-common
   - php5-fpm
