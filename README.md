@@ -54,11 +54,11 @@ Whenever you move or copy the `Vagrantfile` somewhere else, you need to make sur
 
 By default, the example `Vagrantfile` now uses the `roots/bedrock` box. It's publicly available on the Vagrant Cloud site [here](https://vagrantcloud.com/roots/bedrock).
 
-The `roots/bedrock` box is simply the regular `ubuntu/trustry64` base box already provisioned with this playbook (except for the `wordpress-sites` role). The benefit to using this base box instead of a bare Ubuntu one is that provisioning will be much faster.
+The `roots/bedrock` box is simply the regular `ubuntu/trusty64` base box already provisioned with this playbook (except for the `wordpress-sites` role). The benefit to using this base box instead of a bare Ubuntu one is that provisioning will be much faster.
 
 Vagrant Cloud offers releases/versions for the boxes, so the `roots/bedrock` box versions will be kept in sync with this project. You can see if there's updates by running `vagrant box outdated` and update it with `vagrant box update`.
 
-Note: you can always set the box back to the base Ubuntu one if you prefer with `config.vm.box = 'ubuntu/trustry64'`
+Note: you can always set the box back to the base Ubuntu one if you prefer with `config.vm.box = 'ubuntu/trusty64'`
 
 ## Options
 
