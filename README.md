@@ -39,10 +39,23 @@ You should now have the following directories at the same level somewhere:
 ## Usage
 
 1. Edit `Vagrantfile` and set your `config.vm.synced_folder` path so that it points to a local relative path for a Bedrock project from #2 above.
-2. Edit `group_vars/all` and add your WordPress site(s). See [Options](#options) below for details.
-3. Optionally copy and edit `hosts.example` to `hosts` for more than the single dev host through Vagrant (since Vagrant automatically creates its own hosts inventory).
-4. Optionally add any dev hostnames to your local `/etc/hosts` file (or use the [hostsupdated plugin](https://github.com/cogitatio/vagrant-hostsupdater).
-5. Run `vagrant up`.
+2. Edit `group_vars/development` and add your WordPress site(s). See [Options](#options) below for details.
+3. Optionally add any dev hostnames to your local `/etc/hosts` file (or use the [hostsupdated plugin](https://github.com/cogitatio/vagrant-hostsupdater).
+4. Run `vagrant up`.
+
+### Servers/Environments
+
+This playbook is setup for development environments by default with its Vagrant integration. However, the following default environments are built in:
+
+* `development`
+* `staging`
+* `production`
+
+**Example** hosts and group_var files for these environment exist and should be modified as needed.
+
+Note: `hosts/development` is there for completeness sake only as Vagrant automatically generates and uses its own.
+
+Production note: the only necessary thing currently missing for full production support is setting a root password for MySQL. Right now no password is set.
 
 ### `Vagrantfile`
 
