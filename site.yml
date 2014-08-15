@@ -1,8 +1,7 @@
 ---
-- name: Install LEMP Stack with PHP 5.5 and MariaDB MySQL
-  hosts: wordpress-server
-  user: root
-  # remote_user: deploy
+- name: "WordPress Server: Install LEMP Stack with PHP 5.5 and MariaDB MySQL"
+  hosts: web
+  remote_user: root
   # sudo: yes
 
   roles:

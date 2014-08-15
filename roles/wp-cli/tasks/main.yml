@@ -1,4 +1,3 @@
 ---
 - name: Install WP-CLI
-  get_url: url={{ phar_url }} dest={{ bin_path }} mode=0755
-
+  get_url: url="{{ phar_url }}" dest="{{ bin_path }}" mode=0755

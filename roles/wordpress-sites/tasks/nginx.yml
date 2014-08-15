@@ -1,16 +1,19 @@
 ---
 - name: Create WordPress configuration for Nginx
-  template: src=wordpress-site.conf.j2 dest=/etc/nginx/sites-available/{{ item.site_name }}.conf
+  template: src="wordpress-site.conf.j2"
+            dest="/etc/nginx/sites-available/{{ item.site_name }}.conf"
   with_items: wordpress_sites
 
 - name: Enable WordPress site
-  file: src=/etc/nginx/sites-available/{{ item.site_name }}.conf
-        dest=/etc/nginx/sites-enabled/{{ item.site_name }}.conf
-        owner=deploy group=www-data
+  file: src="/etc/nginx/sites-available/{{ item.site_name }}.conf"
+        dest="/etc/nginx/sites-enabled/{{ item.site_name }}.conf"
+        owner=deploy
+        group=www-data
         state=link
   with_items: wordpress_sites
 
 - name: Copy php-fpm configuration
-  template: src=php-fpm.conf.j2 dest=/etc/php5/fpm/pool.d/{{ item.site_name }}.conf
+  template: src="php-fpm.conf.j2"
+            dest="/etc/php5/fpm/pool.d/{{ item.site_name }}.conf"
   with_items: wordpress_sites
   notify: restart php-fpm

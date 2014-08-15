@@ -1,6 +1,6 @@
 ---
 - name: Add Nginx PPA
-  apt_repository: repo='ppa:nginx/stable' update_cache=yes
+  apt_repository: repo="ppa:nginx/stable" update_cache=yes
 
 - name: Install Nginx
   apt: name=nginx state=present force=yes
@@ -13,4 +13,3 @@
 
 - name: Create base WordPress subdirectory Multisite config
   template: src=wordpress_multisite_subdirectories.conf.j2 dest=/etc/nginx/wordpress_multisite_subdirectories.conf
-
