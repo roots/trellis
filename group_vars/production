@@ -1,3 +1,5 @@
+mysql_root_password: productionpw
+
 wordpress_sites:
   - site_name: example.com
     site_hosts:
