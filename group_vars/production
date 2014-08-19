@@ -1,8 +1,8 @@
 wordpress_sites:
   - site_name: example.com
     site_hosts:
-      - 192.168.50.5
       - example.com
+      - 192.168.50.5
     user: deploy
     group: www-data
     site_install: true
