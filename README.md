@@ -57,6 +57,25 @@ Note: `hosts/development` is there for completeness sake only as Vagrant automat
 
 Production note: the only necessary thing currently missing for full production support is setting a root password for MySQL. Right now no password is set.
 
+### Passwords
+
+There a few places you'll want to set/change passwords:
+
+* `group_vars/<environment>` - `mysql_root_password`
+* `group_vars/<environment>` - `wordpress_sites.admin_password`
+* `group_vars/<environment>` - `wordpress_sites.env.db_password`
+
+For staging/production environments, it's best to randomly generate longer passwords using something like [random.org](http://www.random.org/passwords/).
+
+You may be concerned about setting plaintext passwords in a Git repository, and you should be. Any type of server configs such as this playbook should always be in a **private** Git repository.
+
+Even then it's still best to try avoid it if possible, so you have few options:
+
+* Use [Ansible Vault](http://docs.ansible.com/playbooks_vault.html)
+* Use [Git Encrytpt](https://github.com/shadowhand/git-encrypt)
+
+Note: if you're mostly using this for development environments only, you probably don't need to worry about any of this as everything is just run locally.
+
 ### `Vagrantfile`
 
 The example `Vagrantfile` in this project can be kept in this folder, or moved anywhere else such as a project/site folder. Generally if you want to have multiple sites on 1 Vagrant VM, you should keep the `Vagrantfile` where it is (in the bedrock-ansible dir). If you want to have 1 Vagrant VM *PER* project/site, you should make copies of the `Vagrantfile` and put them into each project's dir. You'd then run `vagrant up` from the project specific directory.
@@ -107,6 +126,4 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 ## Todo
 
 * Multisite: basic support is included but not yet complete. There are issues with doing a network install from scratch via WP-CLI.
-* MariaDB: there's no `root` password set yet.
 * Nginx: configuration needs more options and advanced setups like static files and subdomain multisite support.
-

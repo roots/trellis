@@ -1,3 +1,5 @@
+mysql_root_password: devpw
+
 wordpress_sites:
   - site_name: example.dev
     site_hosts:

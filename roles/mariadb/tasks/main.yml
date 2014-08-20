@@ -15,11 +15,34 @@
 - name: Start MariaDB MySQL Server
   service: name=mysql state=started enabled=true
 
+- name: Set root user password
+  mysql_user: name=root
+              password="{{ mysql_root_password }}"
+              check_implicit_admin=yes
+              login_user=root
+              login_password="{{ mysql_root_password }}"
+              state=present
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
 - name: Delete anonymous MySQL server user for current hostname
-  action: mysql_user user="" host="{{ ansible_hostname }}" state=absent
+  mysql_user: user=""
+              host="{{ ansible_hostname }}"
+              state=absent
+              login_user=root
+              login_password="{{ mysql_root_password }}"
 
 - name: Delete anonymous MySQL server user for localhost
-  action: mysql_user user="" state=absent
+  mysql_user: user=""
+              state=absent
+              login_user=root
+              login_password="{{ mysql_root_password }}"
 
 - name: Remove the test database
-  mysql_db: name=test state=absent
+  mysql_db: name=test
+            state=absent
+            login_user=root
+            login_password="{{ mysql_root_password }}"
