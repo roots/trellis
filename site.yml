@@ -9,6 +9,7 @@
     - mariadb
     - php-55
     - nginx
+    - memcached
     - composer
     - dev-tools
     - wp-cli
