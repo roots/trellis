@@ -1,7 +1,6 @@
 ---
 - name: Add miscellaneous tools
-  apt: name={{ item }} state=present
+  apt: name="{{ item }}" state=present
   with_items:
-  - git-core
   - fail2ban
   - ufw

@@ -10,3 +10,4 @@
   - build-essential
   - python-mysqldb
   - curl
+  - git-core
