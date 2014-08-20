@@ -9,9 +9,9 @@
     - mariadb
     - php-55
     - nginx
-    - memcached
+    - { role: memcached, when: "'development' not in group_names" }
     - composer
-    - dev-tools
+    - { role: dev-tools, when: "'development' not in group_names" }
     - wp-cli
-    - capistrano-setup
+    - { role: capistrano-setup, when: "'development' not in group_names" }
     - wordpress-sites
