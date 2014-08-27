@@ -27,4 +27,3 @@
   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.disabled creates=/etc/php5/fpm/pool.d/www.disabled
   when: disable_default_pool
   notify: restart php-fpm
-

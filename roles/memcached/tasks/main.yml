@@ -4,6 +4,7 @@
   with_items:
   - python-selinux
   - memcached
+  - php5-memcache
 
 - name: Copy the client configuration file
   template: src=memcached.j2 dest=/etc/memcached.conf
