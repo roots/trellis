@@ -5,6 +5,21 @@
 - name: Install Nginx
   apt: name=nginx state=present force=yes
 
+- name: Grab h5bp/server-configs-nginx
+  git:  repo=https://github.com/h5bp/server-configs-nginx.git
+        dest=/tmp/server-configs-nginx
+        version="3db5d61f81d7229d12b89e0355629249a49ee4ac"
+        force=yes
+
+- name: Copy over h5bp configuration
+  command: cp -r /tmp/server-configs-nginx/{{ item }} /etc/nginx/{{ item }}
+  with_items:
+    - "mime.types"
+    - "h5bp/"
+
+- name: Install nginx.conf
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
+
 - name: Disable default server
   file: path=/etc/nginx/sites-enabled/default state=absent
 

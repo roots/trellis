@@ -1,13 +1,15 @@
 server {
   set $site_name {{ item.site_name }};
 
-  listen       *:80;
+  listen *:80;
   server_name  {{ item.site_hosts | join(' ') }};
   access_log   {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.access.log;
   error_log    {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.error.log;
 
   root  {{ www_root }}/{{ item.site_name }}/current/web;
   index index.php;
+
+  charset utf-8;
 
   {% if item.env.wp_env | default('development') -%}
     # See Virtualbox section at http://wiki.nginx.org/Pitfalls
@@ -20,3 +22,11 @@ server {
 
   include wordpress.conf;
 }
+
+{% for host in item.site_hosts if strip_www %}
+server {
+  listen *:80;
+  server_name www.{{ host }};
+  return 301 $scheme://{{ host }}$request_uri;
+}
+{% endfor %}
