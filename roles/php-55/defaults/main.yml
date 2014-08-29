@@ -1,1 +1,16 @@
 disable_default_pool: true
+
+php_error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
+php_display_errors: 'Off'
+php_display_startup_errors: 'Off'
+php_track_errors: 'Off'
+php_mysqlnd_collect_memory_statistics: 'Off'
+
+php_opcache_enable: 1
+php_opcache_memory_consumption: 128
+php_opcache_memory_consumption: 128
+php_opcache_interned_strings_buffer: 8
+php_opcache_max_accelerated_files: 4000
+php_opcache_revalidate_freq: 60
+php_opcache_fast_shutdown: 1
+php_opcache_enable_cli: 1
