@@ -7,3 +7,4 @@ generated_env_vars:
   - secure_auth_salt
   - logged_in_salt
   - nonce_salt
+memcached_sessions: false
