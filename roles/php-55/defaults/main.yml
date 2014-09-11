@@ -1,9 +1,10 @@
 disable_default_pool: true
 
 php_error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
-php_display_errors: 'Off'
+php_display_errors: 'stderr'
 php_display_startup_errors: 'Off'
 php_track_errors: 'Off'
+php_log_errors: 'On'
 php_mysqlnd_collect_memory_statistics: 'Off'
 
 php_opcache_enable: 1
