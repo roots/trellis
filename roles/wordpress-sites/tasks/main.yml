@@ -77,6 +77,6 @@
         minute="*/15"
         user="{{ item.user }}"
         job="curl -s {{ item.env.wp_siteurl }}/wp-cron.php"
-        cron_file="wordpress_{{ item.site_name }}"
+        cron_file="wordpress-{{ item.site_name|replace('.', '_') }}"
   with_items: wordpress_sites
   when: item.system_cron|default(False) == True
