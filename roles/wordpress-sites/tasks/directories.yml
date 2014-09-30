@@ -1,4 +1,10 @@
 ---
+- group: name=somegroup state=present
+- group: name=www-data state=present
+
+- name: add user to group
+  action: user name="{{item.user | default(user)}}" groups=www-data append=true
+
 - name: Create web root of sites
   file: path="{{ www_root }}/{{ item.site_name }}/current/web"
         owner="{{ item.user | default(user) }}"
