@@ -23,7 +23,7 @@ Vagrant.configure('2') do |config|
   # Use NFS for shared folders for better performance
   # Comment this line if you're on a windows machine
   # and uncomment the one below
-  config.vm.synced_folder '../example.dev', '/srv/www/example.dev/current', nfs: true # *nix machines
+  config.vm.synced_folder '../example.dev', '/srv/www/example.dev/current', nfs: true, :linux__nfs_options => ["no_subtree_check","all_squash", "rw"], :map_uid=>0, :map_gid=>0 # *nix machines
   #config.vm.synced_folder '../example.dev', '/srv/www/example.dev/current', owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775'] # windows machines
 
   config.vm.provision :ansible do |ansible|
