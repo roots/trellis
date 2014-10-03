@@ -8,3 +8,7 @@ location ~ \.php$ {
   fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
   fastcgi_pass unix:/var/run/php5-fpm-$site_name.sock;
 }
+
+include h5bp/directive-only/x-ua-compatible.conf;
+include h5bp/location/cross-domain-fonts.conf;
+include h5bp/location/protect-system-files.conf;
