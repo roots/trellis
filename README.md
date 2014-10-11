@@ -43,6 +43,8 @@ You should now have the following directories at the same level somewhere:
 3. Optionally add any dev hostnames to your local `/etc/hosts` file (or use the [hostsupdater plugin](https://github.com/cogitatio/vagrant-hostsupdater)).
 4. Run `vagrant up`.
 
+Tip: If you leave the default `type: 'nfs'` for the synced folder in step 1 above, see the vagrant docs section ["Root Privilege Requirement"](https://docs.vagrantup.com/v2/synced-folders/nfs.html) for how to avoid having to type your password with every `vagrant up`.
+
 ### Servers/Environments
 
 This playbook is setup for development environments by default with its Vagrant integration. However, the following default environments are built in:
@@ -54,8 +56,6 @@ This playbook is setup for development environments by default with its Vagrant 
 **Example** hosts and group_var files for these environment exist and should be modified as needed.
 
 Note: `hosts/development` is there for completeness sake only as Vagrant automatically generates and uses its own.
-
-Production note: the only necessary thing currently missing for full production support is setting a root password for MySQL. Right now no password is set.
 
 ### Passwords
 
@@ -106,7 +106,7 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 * `site_title` (optional) - WP site title (default: `site_name`)
 * `db_import` (optional) - Path to local `sql` dump file which will be imported (default: `false`)
 * `system_cron` (optional) - Disable WP cron and use system's (default: `false`)
-* `run_composer` (optional) - Run `composer install` before WP install (default: `false`)
+* `run_composer` (optional) - Run `composer install` before WP install (default: `true`)
 * `admin_user` (optional) - WP admin user name (default: `admin`)
 * `admin_password` (required if `site_install`) - WP admin user password (default: none)
 * `admin_email` (required if `site_install`) - WP admin email address (default: none)
