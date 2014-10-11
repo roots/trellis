@@ -29,6 +29,7 @@
 
 - name: Install Dependencies with Composer
   command: composer install
+           {% if item.env.wp_env != 'development' %} --no-dev {% endif %}
   args:
     chdir: "{{ www_root }}/{{ item.site_name }}/current/"
   with_items: wordpress_sites
