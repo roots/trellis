@@ -5,6 +5,11 @@ php_display_errors: 'Off'
 php_display_startup_errors: 'Off'
 php_track_errors: 'Off'
 php_mysqlnd_collect_memory_statistics: 'Off'
+php_memory_limit: 96M
+php_max_execution_time: 120
+php_max_input_time: 300
+php_post_max_size: 25M
+php_upload_max_filesize: 25M
 
 php_opcache_enable: 1
 php_opcache_memory_consumption: 128
