@@ -11,7 +11,7 @@ server {
 
   charset utf-8;
 
-  {% if item.env.wp_env | default('development') -%}
+  {% if item.env.wp_env == 'development' -%}
     # See Virtualbox section at http://wiki.nginx.org/Pitfalls
     sendfile off;
   {%- endif %}
