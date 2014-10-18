@@ -13,5 +13,5 @@
     - { role: composer, tags: [composer] }
     - { role: dev-tools, tags: [dev-tools], when: "'development' not in group_names" }
     - { role: wp-cli, tags: [wp-cli] }
-    - { role: capistrano-setup, tags: [wp-cli], when: "'development' not in group_names" }
+    - { role: capistrano-setup, tags: [capistrano-setup], when: "'development' not in group_names" }
     - { role: wordpress-sites, tags: [wordpress-sites] }
