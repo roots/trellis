@@ -19,12 +19,13 @@ Vagrant.configure('2') do |config|
     #config.hostsupdater.aliases = %w(site2.dev)
   end
 
-  # adjust paths relative to Vagrantfile
+  # Adjust '../example.dev' path relative to Vagrantfile
   # Use NFS for shared folders for better performance
-  # Comment this line if you're on a windows machine
-  # and uncomment the one below
-  config.vm.synced_folder '../example.dev', '/srv/www/example.dev/current', type: 'nfs', map_uid: 0, map_gid: 0 # *nix machines
-  #config.vm.synced_folder '../example.dev', '/srv/www/example.dev/current', owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775'] # windows machines
+  # *nix machines: use these two lines
+  config.vm.synced_folder '../example.dev', '/vagrant-nfs', type: 'nfs'
+  config.bindfs.bind_folder '/vagrant-nfs', '/srv/www/example.dev/current', u: 'vagrant', g: 'www-data'
+  # windows machines: uncomment line below, comment both lines above
+  #config.vm.synced_folder '../example.dev', '/srv/www/example.dev/current', owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
 
   config.vm.provision :ansible do |ansible|
     # adjust paths relative to Vagrantfile
