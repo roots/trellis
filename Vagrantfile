@@ -19,13 +19,25 @@ Vagrant.configure('2') do |config|
     #config.hostsupdater.aliases = %w(site2.dev)
   end
 
-  # Adjust '../example.dev' path relative to Vagrantfile
-  # Use NFS for shared folders for better performance
-  # *nix machines: use these two lines
-  config.vm.synced_folder '../example.dev', '/vagrant-nfs', type: 'nfs'
-  config.bindfs.bind_folder '/vagrant-nfs', '/srv/www/example.dev/current', u: 'vagrant', g: 'www-data'
-  # windows machines: uncomment line below, comment both lines above
-  #config.vm.synced_folder '../example.dev', '/srv/www/example.dev/current', owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+  # Define path to bedrock directory on your local host machine
+  #   - relative to Vagrantfile
+  #   - use forward slashes ("/") regardless of your OS
+  bedrock_path = '../example.dev'
+
+  # Sync bedrock directory
+  bedrock_path_server = File.join('/srv/www', File.basename(bedrock_path), 'current')
+
+  if Vagrant::Util::Platform.windows?
+    config.vm.synced_folder bedrock_path, bedrock_path_server, owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+  else
+    if !Vagrant.has_plugin? 'vagrant-bindfs'
+      raise Vagrant::Errors::VagrantError.new,
+        "vagrant-bindfs missing, please install the plugin:\nvagrant plugin install vagrant-bindfs"
+    else
+      config.vm.synced_folder bedrock_path, '/vagrant-nfs', type: 'nfs'
+      config.bindfs.bind_folder '/vagrant-nfs', bedrock_path_server, u: 'vagrant', g: 'www-data'
+    end
+  end
 
   config.vm.provision :ansible do |ansible|
     # adjust paths relative to Vagrantfile
