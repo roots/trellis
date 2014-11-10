@@ -6,8 +6,8 @@
 - name: Add MariaDB MySQL deb and deb-src
   apt_repository: repo="{{ item }}" state=present
   with_items:
-  - "deb http://{{ mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main"
-  - "deb-src http://{{ mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main"
+  - "deb http://{{ mirror }}/mariadb/repo/{{ version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
+  - "deb-src http://{{ mirror }}/mariadb/repo/{{ version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
 
 - name: Install MariaDB MySQL server
   apt: name=mariadb-server state=present
