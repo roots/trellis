@@ -8,7 +8,7 @@
 - name: Grab h5bp/server-configs-nginx
   git:  repo=https://github.com/h5bp/server-configs-nginx.git
         dest=/tmp/server-configs-nginx
-        version="3db5d61f81d7229d12b89e0355629249a49ee4ac"
+        version="1.0.0"
         force=yes
 
 - name: Copy over h5bp configuration
