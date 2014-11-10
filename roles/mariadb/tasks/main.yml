@@ -8,6 +8,14 @@
   with_items:
   - "deb http://{{ mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main"
   - "deb-src http://{{ mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main"
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+
+  - name: Add MariaDB MySQL deb and deb-src Utopic
+    apt_repository: repo="{{ item }}" state=present
+    with_items:
+    - "deb http://{{ mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu trusty main"
+    - "deb-src http://{{ mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu trusty main"
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'utopic'
 
 - name: Install MariaDB MySQL server
   apt: name=mariadb-server state=present
