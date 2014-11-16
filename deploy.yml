@@ -1,0 +1,30 @@
+---
+- name: "Deploy WP site"
+  hosts: web
+  remote_user: vagrant
+  gather_facts: False
+
+  vars:
+    user: vagrant
+    deploy_to: /srv/www/example.dev
+
+  roles:
+    -
+      role: nicolai86.prepare-release
+
+      repo: https://github.com/roots/bedrock.git
+      branch: master
+
+      symlinks:
+        - { src: "{{ shared_path }}/log", dest: "{{ build_path }}/log" }
+        - { src: "{{ shared_path }}/.env", dest: "{{ build_path }}/.env" }
+
+      tags: deploy
+
+    -
+      role: wordpress-deploy
+      tags: deploy
+
+    -
+      role: nicolai86.finalize-release
+      tags: deploy
