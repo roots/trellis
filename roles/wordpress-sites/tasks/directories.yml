@@ -1,32 +1,32 @@
 ---
 - name: Create web root of sites
-  file: path="{{ www_root }}/{{ item.site_name }}/current/web"
-        owner="{{ item.user | default(user) }}"
+  file: path="{{ www_root }}/{{ item.key }}/current/web"
+        owner="{{ item.value.user | default(user) }}"
         group=www-data
         mode=0755
         state=directory
-  with_items: wordpress_sites
+  with_dict: wordpress_sites
 
 - name: Create shared folder of sites
-  file: path="{{ www_root }}/{{ item.site_name }}/shared"
-        owner="{{ item.user | default(user) }}"
+  file: path="{{ www_root }}/{{ item.key }}/shared"
+        owner="{{ item.value.user | default(user) }}"
         group=www-data
         mode=0755
         state=directory
-  with_items: wordpress_sites
+  with_dict: wordpress_sites
 
 - name: Create logs folder of sites
-  file: path="{{ www_root }}/{{ item.site_name }}/logs"
-        owner="{{ item.user | default(user) }}"
+  file: path="{{ www_root }}/{{ item.key }}/logs"
+        owner="{{ item.value.user | default(user) }}"
         group=www-data
         mode=0755
         state=directory
-  with_items: wordpress_sites
+  with_dict: wordpress_sites
 
 - name: Change site owner to user
-  file: path="{{ www_root }}/{{ item.site_name }}"
-        owner="{{ item.user | default(user) }}"
+  file: path="{{ www_root }}/{{ item.key }}"
+        owner="{{ item.value.user | default(user) }}"
         group=www-data
         state=directory
         recurse=yes
-  with_items: wordpress_sites
+  with_dict: wordpress_sites

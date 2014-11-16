@@ -1,7 +1,8 @@
 mysql_root_password: devpw
 
 wordpress_sites:
-  - site_name: example.dev
+  example.dev:
+    repo: https://github.com/roots/bedrock.git
     site_hosts:
       - example.dev
     local_path: '../example.dev' # path targeting local project directory (relative to root/Vagrantfile)

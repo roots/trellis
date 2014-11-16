@@ -1,36 +1,36 @@
 ---
 - name: Create database of sites
-  mysql_db: name="{{ item.env.db_name | default(item.site_name) }}"
+  mysql_db: name="{{ item.value.env.db_name | default(item.key) }}"
             state=present
-            login_host="{{ item.env.db_host | default('localhost') }}"
+            login_host="{{ item.value.env.db_host | default('localhost') }}"
             login_user="{{ mysql_user }}"
             login_password="{{ mysql_root_password }}"
-  with_items: wordpress_sites
+  with_dict: wordpress_sites
   when: item.db_create | default(True)
 
 - name: Create/assign database user to db and grant permissions
-  mysql_user: name="{{ item.env.db_user }}"
-              password="{{ item.env.db_password }}"
-              priv="{{ item.env.db_name | default(item.site_name) }}.*:ALL"
+  mysql_user: name="{{ item.value.env.db_user }}"
+              password="{{ item.value.env.db_password }}"
+              priv="{{ item.value.env.db_name | default(item.key) }}.*:ALL"
               state=present
-              login_host="{{ item.env.db_host | default('localhost') }}"
+              login_host="{{ item.value.env.db_host | default('localhost') }}"
               login_user="{{ mysql_user }}"
               login_password="{{ mysql_root_password }}"
   with_items: wordpress_sites
   when: item.db_create | default(True)
 
 - name: Copy database dump
-  copy: src="{{ item.db_import }}" dest=/tmp
-  with_items: wordpress_sites
+  copy: src="{{ item.value.db_import }}" dest=/tmp
+  with_dict: wordpress_sites
   when: item.db_import | default(False)
 
 - name: Import database
-  mysql_db: name="{{ item.env.db_name | default(item.site_name) }}"
+  mysql_db: name="{{ item.value.env.db_name | default(item.key) }}"
             state=import
-            target="/tmp/{{ item.db_import | basename }}"
-            login_host="{{ item.env.db_host | default('localhost') }}"
-            login_user="{{ item.env.db_user }}"
-            login_password="{{ item.env.db_password }}"
-  with_items: wordpress_sites
+            target="/tmp/{{ item.value.db_import | basename }}"
+            login_host="{{ item.value.env.db_host | default('localhost') }}"
+            login_user="{{ item.value.env.db_user }}"
+            login_password="{{ item.value.env.db_password }}"
+  with_dict: wordpress_sites
   when: item.db_import | default(False)
   notify: reload nginx

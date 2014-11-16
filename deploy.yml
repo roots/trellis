@@ -5,15 +5,15 @@
   gather_facts: False
 
   vars:
-    user: vagrant
-    deploy_to: /srv/www/example.dev
+    user: "{{ wordpress_sites[site].user }}"
+    deploy_to: "{{ www_root }}/{{ site }}"
 
   roles:
     -
       role: nicolai86.prepare-release
 
-      repo: https://github.com/roots/bedrock.git
-      branch: master
+      repo: "{{ wordpress_sites[site].repo }}"
+      branch: "{{ branch | default('master') }}"
 
       symlinks:
         - { src: "{{ shared_path }}/log", dest: "{{ build_path }}/log" }
