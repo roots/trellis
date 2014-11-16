@@ -16,7 +16,7 @@
               login_host="{{ item.value.env.db_host | default('localhost') }}"
               login_user="{{ mysql_user }}"
               login_password="{{ mysql_root_password }}"
-  with_items: wordpress_sites
+  with_dict: wordpress_sites
   when: item.db_create | default(True)
 
 - name: Copy database dump

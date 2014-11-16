@@ -1,8 +1,8 @@
-[{{ item.site_name }}]
-listen = /var/run/php5-fpm-{{ item.site_name }}.sock
+[{{ item.key }}]
+listen = /var/run/php5-fpm-{{ item.key }}.sock
 listen.owner = www-data
 listen.group = www-data
-user = {{ item.user | default(user) }}
+user = {{ item.value.user | default(user) }}
 group = www-data
 pm = dynamic
 pm.max_children = 10
