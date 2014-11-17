@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: php-fpm, when: "php_implementation == 'php-fpm'" }
+  - { role: hhvm, when: "php_implementation == 'hhvm'" }

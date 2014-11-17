@@ -1,3 +1,4 @@
 ---
 www_root: /srv/www
 mariadb_dist: trusty
+php_implementation: php-fpm # options are php-fpm and hhvm

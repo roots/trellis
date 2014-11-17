@@ -1,0 +1,16 @@
+---
+# Refer to meta/main.yml. The appropriate role is loaded first based on which
+# php_implementation is chosen in site.yml. The following tasks are performed
+# after the other roles have been executed.
+
+- name: Disable php-fpm
+  service: name=php5-fpm state=stopped enabled=no
+  when: php_implementation != "php-fpm"
+  ignore_errors: True
+  notify: reload nginx
+
+- name: Disable hhvm
+  service: name=hhvm state=stopped enabled=no
+  when: php_implementation != "hhvm"
+  ignore_errors: True
+  notify: reload nginx

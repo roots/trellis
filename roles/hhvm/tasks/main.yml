@@ -1,0 +1,21 @@
+---
+- name: Add HHVM apt-key
+  apt_key: url="http://dl.hhvm.com/conf/hhvm.gpg.key" state=present
+
+- name: Add HHVM deb
+  apt_repository: repo="deb http://dl.hhvm.com/ubuntu {{ ansible_distribution_release }} main"
+                  state=present
+
+- name: Update apt
+  apt: update_cache=yes
+
+- name: Install HHVM
+  apt: pkg="{{ item }}" state=latest
+  with_items:
+    - hhvm
+
+- name: Link hhvm binary
+  file: src=/usr/bin/hhvm dest=/usr/bin/php state=link force=yes
+
+- name: Start hhvm service
+  service: name=hhvm state=started enabled=true
