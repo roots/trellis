@@ -1,2 +1,3 @@
-nicolai86.prepare-release
-nicolai86.finalize-release
+nicolai86.prepare-release,v0.4.0
+nicolai86.finalize-release,v0.1
+nicolai86.deployment-rollback,v0.1.1

@@ -6,6 +6,7 @@
 
   vars:
     user: "{{ wordpress_sites[site].user }}"
+    group: "{{ wordpress_sites[site].group }}"
     deploy_to: "{{ www_root }}/{{ site }}"
 
   roles:
