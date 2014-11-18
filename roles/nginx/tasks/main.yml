@@ -25,6 +25,8 @@
 
 - name: Create base WordPress config
   template: src=wordpress.conf.j2 dest=/etc/nginx/wordpress.conf
+  notify: reload nginx
 
 - name: Create base WordPress subdirectory Multisite config
   template: src=wordpress_multisite_subdirectories.conf.j2 dest=/etc/nginx/wordpress_multisite_subdirectories.conf
+  notify: reload nginx

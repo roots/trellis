@@ -32,3 +32,10 @@
   template: src="php.ini.j2"
             dest="/etc/php5/fpm/php.ini"
   notify: restart php-fpm
+
+- name: add php-fpm.conf to nginx dir
+  template: src=php-fpm.conf.j2
+            dest=/etc/nginx/php-fpm.conf
+            owner=root
+            group=root
+  notify: reload nginx

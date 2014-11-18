@@ -6,8 +6,7 @@ location ~ \.php$ {
   try_files $uri =404;
   include fastcgi_params;
   fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-  fastcgi_pass unix:/var/run/php5-fpm-$site_name.sock;
-  client_max_body_size 0;
+  fastcgi_pass unix:/var/run/{{ php_implementation }}-$site_name.sock;
 }
 
 include h5bp/directive-only/x-ua-compatible.conf;

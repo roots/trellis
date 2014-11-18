@@ -1,0 +1,22 @@
+; session handling
+{% if memcached_sessions %}
+session.save_handler = memcached
+session.save_path = "tcp://{{ memcached_listen_ip }}:{{ memcached_port }}"
+{% else %}
+session.save_handler = files
+session.save_path = /var/lib/php5
+{% endif %}
+
+; php options
+session.gc_maxlifetime = 1440
+memory_limit = {{ php_memory_limit }}
+max_execution_time = {{ php_max_execution_time }}
+max_input_time = {{ php_max_input_time }}
+post_max_size = {{ php_post_max_size }}
+upload_max_filesize = {{ php_upload_max_filesize }}
+
+; hhvm specific
+hhvm.log.level = {{ hhvm_log_level }}
+hhvm.log.always_log_unhandled_exceptions = true
+hhvm.log.runtime_error_reporting_level = 8191
+hhvm.mysql.typed_results = false

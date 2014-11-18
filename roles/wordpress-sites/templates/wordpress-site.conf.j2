@@ -11,6 +11,8 @@ server {
 
   charset utf-8;
 
+  client_max_body_size 0;
+
   {% if item.env.wp_env == 'development' -%}
     # See Virtualbox section at http://wiki.nginx.org/Pitfalls
     sendfile off;

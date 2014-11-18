@@ -1,0 +1,12 @@
+---
+- name: restart php-fpm
+  service: name=php5-fpm state=restarted
+
+- name: restart hhvm
+  service: name=hhvm state=restarted
+
+- name: reload nginx
+  service: name=nginx state=reloaded
+
+- name: restart memcached
+  service: name=memcached state=restarted
