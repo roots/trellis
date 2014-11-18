@@ -25,7 +25,7 @@ Vagrant.configure('2') do |config|
   bedrock_path = '../example.dev'
 
   # Sync bedrock directory
-  bedrock_path_server = File.join('/srv/www', File.basename(bedrock_path), 'current')
+  bedrock_path_server = File.join('/srv/www', config.vm.hostname, 'current')
 
   if Vagrant::Util::Platform.windows?
     config.vm.synced_folder bedrock_path, bedrock_path_server, owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']

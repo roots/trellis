@@ -39,7 +39,9 @@ You should now have the following directories at the same level somewhere:
 
 ## Usage
 
-1. Edit `Vagrantfile` and set the `bedrock_path` variable so that it points to a local relative path for a Bedrock project from #2 above.
+1. Edit `Vagrantfile`:
+  - Set the `config.vm.hostname` variable to your hostname.
+  - Set the `bedrock_path` variable to a local relative path for a Bedrock project (#2 above).
 2. Edit `group_vars/development` and add your WordPress site(s). See [Options](#options) below for details.
 3. Optionally add any dev hostnames to your local `/etc/hosts` file (or use the [hostsupdater plugin](https://github.com/cogitatio/vagrant-hostsupdater)).
 4. Run `vagrant up`.
