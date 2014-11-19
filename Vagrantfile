@@ -50,7 +50,6 @@ Vagrant.configure('2') do |config|
       ansible_ssh_user: 'vagrant',
       user: 'vagrant'
     }
-    ansible.sudo = true
   end
 
 

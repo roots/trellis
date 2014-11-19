@@ -1,0 +1,11 @@
+---
+ferm_enabled: true
+ferm_limit_portscans: false
+
+ferm_default_policy_input: DROP
+ferm_default_policy_output: ACCEPT
+ferm_default_policy_forward: DROP
+
+ferm_input_list: []
+ferm_input_group_list: []
+ferm_input_host_list: []

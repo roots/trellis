@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+# manual customization of this file is not recommended
+
+FAST=no
+CACHE=no
+OPTIONS=
+ENABLED="{% if ferm_enabled %}yes{% else %}no{% endif %}"

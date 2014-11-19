@@ -83,6 +83,58 @@ The example `Vagrantfile` in this project can be kept in this folder, or moved a
 
 Whenever you move or copy the `Vagrantfile` somewhere else, you need to make sure to adjust the relative paths in it including `config.vm.synced_folder` and `ansible.playbook = './site.yml'`.
 
+## Security
+
+### Locking down `root`
+
+By default, ssh access to the `root` user is allowed on fresh server installs. The `secure-root.yml` playbook does a few things to lock the server down:
+
+* Creates users with `sudo` privileges.
+* Disable ssh root login.
+* Disable password authentication for ssh access.
+* Set better ssh defaults.
+
+There are a few variables to be aware of:
+
+* `sudoers` located in `group_vars/all`
+This variable contains a list of dictionaries of users to create.
+* `sudoer_passwords` located in `vars/sudoer_passwords`. This is a dictionary of user => password pairs used when creating users with sudo privileges.
+
+Here's an example list of `sudoers`:
+```
+sudoers:
+  - user: "admin"
+    groups: ["sudo"]
+  - user: "another_user"
+    groups: ["sudo"]
+```
+
+`user` is the key to be used when creating the user and `groups` is an array used to determine the groups the user belongs to. The first item in the array will be used when setting the user's primary group.
+
+
+Here's an example list of `sudoer_passwords`:
+```
+sudoers:
+  admin: $6$rounds=100000$JUkj1d3hCa6uFp6R$3rZ8jImyCpTP40e4I5APx7SbBvDCM8fB6GP/IGOrsk/GEUTUhl1i/Q2JNOpj9ashLpkgaCxqMqbFKdZdmAh26/
+  another_user: $6$rounds=100000$r3ZZsk/uc31cAxQT$YHMkmKrwgXr3u1YgrSvg0wHZg5IM6MLEzqOraIXqh5o7aWshxD.QaNeCcUX3KInqzTqaqN3qzo9nvc/QI0M1C.
+```
+
+The passwords were generated using the python command [found here](http://docs.ansible.com/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module). The passwords generated here are `example_password` and `another_password`, respectively. The ansible user module doesn't handle any encryption and passwords must be encrypted beforehand. It's also recommended `vars/sudoer_passwords.yml` be encrypted using one of the encryption methods described in the [passwords](#passwords) section of this document. Passwords are stored separately in order to ease the separation of encrypted var files and are looked up based on the user name.
+
+This playbook should be run on remote hosts and is designed to be run once whenever the server is initially created (as the root user will be inaccessible after running and the ansible default user is the [current user](http://docs.ansible.com/intro_configuration.html#remote-user)). To invoke, run `ansible-playbook -i hosts/ENVIRONMENT secure-root.yml`. Because the root user is locked down, remote hosts also need to use a different ssh user. You can set the default remote user in `site.yml` by setting the `remote_user` variable.
+
+### `fail2ban` and `ferm`
+
+> Fail2ban scans log files (e.g. /var/log/apache/error_log) and bans IPs that show the malicious signs -- too many password failures, seeking for exploits, etc.
+
+From http://www.fail2ban.org/wiki/index.php/Main_Page
+
+> ferm is a tool to maintain complex firewalls, without having the trouble to rewrite the complex rules over and over again. ferm allows the entire firewall rule set to be stored in a separate file, and to be loaded with one command.
+
+From http://ferm.foo-projects.org/
+
+You can read the role documentation for `fail2ban` [here](roles/fail2ban/README.md) and `ferm` [here](roles/ferm/README.md).
+
 ## Vagrant Box
 
 By default, the example `Vagrantfile` now uses the `roots/bedrock` box. It's publicly available on the Vagrant Cloud site [here](https://vagrantcloud.com/roots/bedrock).
