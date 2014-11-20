@@ -1,0 +1,16 @@
+---
+- name: ensure fail2ban is installed
+  apt: pkg=fail2ban state=latest update_cache=true cache_valid_time={{ apt_cache_valid_time }}
+  notify:
+    - restart fail2ban
+
+- name: ensure fail2ban is configured
+  template: src={{ item }}.j2 dest=/etc/fail2ban/{{ item }}
+  with_items:
+    - jail.local
+    - fail2ban.local
+  notify:
+    - restart fail2ban
+
+- name: ensure fail2ban starts on a fresh reboot
+  service: name=fail2ban state=started enabled=yes

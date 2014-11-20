@@ -1,0 +1,14 @@
+# {{ ansible_managed }}
+# manual customization of this file is not recommended
+
+protocol {{ item.protocol | default('tcp') }} dport ({{ item.dport | join(' ') }}) {
+{% if item.saddr is defined and item.saddr %}
+  saddr ({{ item.saddr | join(' ') }}) ACCEPT;
+{% else %}
+{% if item.accept_any | default(True) %}
+  ACCEPT;
+{% else %}
+  # connections from any IP address not allowed
+{% endif %}
+{% endif %}
+}
