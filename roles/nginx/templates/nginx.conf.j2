@@ -27,7 +27,7 @@ events {
 # Default error log file
 # (this is only used when you don't override error_log on a server{} level)
 error_log  {{ logs_root }}/error.log warn;
-pid        /var/run/nginx.pid;
+pid        /run/nginx.pid;
 
 http {
 
