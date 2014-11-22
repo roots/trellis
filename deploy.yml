@@ -5,8 +5,9 @@
   gather_facts: False
 
   vars:
-    user: "{{ wordpress_sites[site].user }}"
-    group: "{{ wordpress_sites[site].group }}"
+    site: "{{ wordpress_sites[site] }}"
+    user: "{{ site.user }}"
+    group: "{{ site.group }}"
     deploy_to: "{{ www_root }}/{{ site }}"
 
   roles:
@@ -19,6 +20,9 @@
       symlinks:
         - { src: "{{ shared_path }}/log", dest: "{{ build_path }}/log" }
         - { src: "{{ shared_path }}/.env", dest: "{{ build_path }}/.env" }
+
+      templates:
+        - { src: "roles/wordpress-deploy/templates/env.j2", dest: "{{ shared_path }}/.env" }
 
       tags: deploy
 

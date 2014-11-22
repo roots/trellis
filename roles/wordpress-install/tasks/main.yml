@@ -1,40 +1,4 @@
 ---
-- include: database.yml
-- include: nginx.yml
-#- include: directories.yml
-
-- name: Create .env file of sites
-  dotenv: path="{{ www_root }}/{{ item.key }}/shared/.env"
-          state=present
-          items="{{ item.value.env }}"
-          generate="{{ generated_env_vars | join(',') }}"
-          owner="{{ item.value.user | default(user) }}"
-          group=www-data
-          mode=0755
-  with_dict: wordpress_sites
-
-- name: Link .env file
-  file: src="{{ www_root }}/{{ item.key }}/shared/.env"
-        dest="{{ www_root }}/{{ item.key }}/current/.env"
-        state=link
-        force=yes
-        owner="{{ item.value.user }}"
-        group=www-data
-        mode=0755
-  with_dict: wordpress_sites
-
-- name: Add WP user to www-data group
-  user: name="{{ item.value.user }}" groups=www-data state=present append=yes
-  with_dict: wordpress_sites
-
-- name: Install Dependencies with Composer
-  command: composer install
-           {% if item.value.env.wp_env != 'development' %} --no-dev {% endif %}
-  args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
-  with_dict: wordpress_sites
-  when: item.value.run_composer | default(True) == True
-
 - name: WP installed?
   command: wp core is-installed --allow-root
   args:
@@ -72,12 +36,3 @@
   with_dict: site_statuses.results
   when: item.rc == 1 and item.item.value.site_install == True and item.item.value.multisite.enabled | default(False) == True
   notify: reload nginx
-
-- name: Setup system cron
-  cron: name="{{ item.key }} WordPress cron"
-        minute="*/15"
-        user="{{ item.value.user }}"
-        job="curl -s {{ item.value.env.wp_siteurl }}/wp-cron.php"
-        cron_file="wordpress-{{ item.key|replace('.', '_') }}"
-  with_dict: wordpress_sites
-  when: item.value.system_cron | default(False) == True
