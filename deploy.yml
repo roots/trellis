@@ -14,7 +14,7 @@
     -
       role: nicolai86.prepare-release
 
-      repo: "{{ wordpress_sites[site].repo }}"
+      repo: "{{ site.repo }}"
       branch: "{{ branch | default('master') }}"
 
       symlinks:

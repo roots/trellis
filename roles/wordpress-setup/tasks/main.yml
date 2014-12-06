@@ -1,7 +1,6 @@
 ---
 - include: database.yml
 - include: nginx.yml
-#- include: directories.yml
 
 - name: Add WP user to www-data group
   user: name="{{ item.value.user }}" groups=www-data state=present append=yes

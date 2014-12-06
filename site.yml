@@ -14,5 +14,6 @@
     - { role: memcached, tags: [memcached] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
-    - { role: capistrano-setup, tags: [capistrano-setup], when: "'development' not in group_names" }
-    - { role: wordpress-sites, tags: [wordpress-sites] }
+    - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }
+    - { role: wordpress-deploy, tags: [wordpress, deploy, wordpress-deploy] }
+    - { role: wordpress-install, tags: [wordpress, wordpress-install] }
