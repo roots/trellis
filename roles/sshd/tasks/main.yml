@@ -1,6 +1,9 @@
 ---
 - name: ensure ssh server is installed
-  apt: pkg=openssh-server state=latest update_cache=true cache_valid_time={{ apt_cache_valid_time }}
+  apt: pkg=openssh-server
+       state=latest
+       update_cache=true
+       cache_valid_time="{{ apt_cache_valid_time }}"
   notify:
     - restart ssh
 
