@@ -21,13 +21,6 @@
   notify:
     - restart ferm
 
-- name: ensure ssh access is always allowed by the ansible controller
-  template: src=etc/ferm/filter-input.d/ansible_controller.conf.j2
-            dest=/etc/ferm/filter-input.d/10_ansible_controller.conf
-  when: ansible_controller is defined and ansible_controller
-  notify:
-    - restart ferm
-
 - name: ensure iptables INPUT rules are removed
   file: state=absent
         {% if item.filename is defined and item.filename %}
