@@ -104,33 +104,6 @@ ferm_input_list:
 
 This would be the same as above except it would be scoped to the groups and hosts list.
 
-## Example common plays in your playbook
-
-This role expects an `ansible_controller` fact to be set. Notice how the play is ran without sudo. This is necessary for ansible to populate `ansible_env.SSH_CLIENT`.
-
-What this does is set a rule so that only the computer running the ansible playbook will be able to connect on the ssh port. It is dynamic and completely hands free because if you want to run the playbook from a different machine in the future it will automatically update the IP address.
-
-```
----
-- name: ensure all servers are commonly configured (without sudo)
-  hosts: all:!localhost
-  sudo: false
-
-  tasks:
-    - name: ensure IP address of the ansible controller is set
-      set_fact:
-        ansible_controller: '{{ ansible_env.SSH_CLIENT.split(" ") | first }}/32'
-      when: ansible_controller is undefined and ansible_connection != "local"
-      tags: [ferm]
-
-- name: ensure all servers are commonly configured (with sudo)
-  hosts: all
-  sudo: true
-
-  roles:
-    - { role: ferm, tags: [ferm] }
-```
-
 ## Example app play in your playbook
 
 To open the http/https ports on your server add the following to the appropriate group or host vars file:

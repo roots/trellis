@@ -1,6 +1,0 @@
-# {{ ansible_managed }}
-# manual customization of this file is not recommended
-
-{% if ansible_controller is defined and ansible_controller %}
-protocol tcp dport ssh saddr {{ ansible_controller }} ACCEPT;
-{% endif %}

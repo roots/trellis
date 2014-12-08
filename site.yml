@@ -1,17 +1,4 @@
 ---
-- name: Ensure all servers are commonly configured and set 'ansible_controller'
-  hosts: all:!localhost
-  sudo: false
-  remote_user: admin
-
-  tasks:
-    - name: ensure IP address of the ansible controller is set
-      set_fact:
-        ansible_controller: '{{ ansible_env.SSH_CLIENT.split(" ") | first }}/32'
-      when: ansible_controller is undefined and ansible_connection != "local"
-      tags: [common, ferm]
-    - debug: var=ansible_controller
-
 - name: "WordPress Server: Install LEMP Stack with PHP 5.5 and MariaDB MySQL"
   hosts: web
   sudo: yes
