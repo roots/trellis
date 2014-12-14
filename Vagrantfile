@@ -23,10 +23,10 @@ Vagrant.configure('2') do |config|
 
   main_site, *other_sites = wordpress_sites
 
-  config.vm.hostname = main_site['site_hosts'].first
+  config.vm.hostname = main_site.values['site_hosts'].first
 
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
-    host_aliases = other_sites.flat_map { |site| site['site_hosts'] }
+    host_aliases = other_sites.flat_map { |(_name, site)| site['site_hosts'] }
     config.hostsupdater.aliases = host_aliases - [config.vm.hostname]
   else
     puts 'vagrant-hostsupdater missing, please install the plugin:'
@@ -34,17 +34,17 @@ Vagrant.configure('2') do |config|
   end
 
   if Vagrant::Util::Platform.windows?
-    wordpress_sites.each do |site|
-      config.vm.synced_folder site['local_path'], remote_site_path(site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+    wordpress_sites.each do |(name, site)|
+      config.vm.synced_folder site['local_path'], remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
   else
     if !Vagrant.has_plugin? 'vagrant-bindfs'
       raise Vagrant::Errors::VagrantError.new,
         "vagrant-bindfs missing, please install the plugin:\nvagrant plugin install vagrant-bindfs"
     else
-      wordpress_sites.each do |site|
-        config.vm.synced_folder site['local_path'], nfs_path(site), type: 'nfs'
-        config.bindfs.bind_folder nfs_path(site), remote_site_path(site), u: 'vagrant', g: 'www-data'
+      wordpress_sites.each do |(name, site)|
+        config.vm.synced_folder site['local_path'], nfs_path(name), type: 'nfs'
+        config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data'
       end
     end
   end
@@ -79,10 +79,10 @@ Vagrant.configure('2') do |config|
   end
 end
 
-def nfs_path(site)
-  "/vagrant-nfs-#{site['site_name']}"
+def nfs_path(site_name)
+  "/vagrant-nfs-#{site_name}"
 end
 
-def remote_site_path(site)
-  File.join('/srv/www/', site['site_name'], 'current')
+def remote_site_path(site_name)
+  File.join('/srv/www/', site_name, 'current')
 end

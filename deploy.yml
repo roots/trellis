@@ -4,11 +4,20 @@
   remote_user: vagrant
 
   vars:
-    site: "{{ wordpress_sites[site] }}"
+    project: "{{ wordpress_sites[site] }}"
     project_root: "{{ www_root }}/{{ site }}"
     project_deploy_strategy: git
-    project_git_repo: "{{ site.repo }}"
+    project_git_repo: "{{ project.repo }}"
     project_version: master
+    project_has_composer: true
+    project_composer_binary: composer
+    project_templates:
+      - name: ".env config"
+        src: "roles/wordpress-deploy/templates/env.j2"
+        dest: ".env"
+    project_shared_children:
+      - path: "/web/app/uploads"
+        src: "uploads"
 
   roles:
      - f500.project_deploy
