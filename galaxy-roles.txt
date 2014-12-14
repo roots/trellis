@@ -1,3 +1,1 @@
-nicolai86.prepare-release,v0.4.0
-nicolai86.finalize-release,v0.1
-nicolai86.deployment-rollback,v0.1.1
+f500.project_deploy

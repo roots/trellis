@@ -2,34 +2,13 @@
 - name: "Deploy WP site"
   hosts: web
   remote_user: vagrant
-  gather_facts: False
 
   vars:
     site: "{{ wordpress_sites[site] }}"
-    user: "{{ site.user }}"
-    group: "{{ site.group }}"
-    deploy_to: "{{ www_root }}/{{ site }}"
+    project_root: "{{ www_root }}/{{ site }}"
+    project_deploy_strategy: git
+    project_git_repo: "{{ site.repo }}"
+    project_version: master
 
   roles:
-    -
-      role: nicolai86.prepare-release
-
-      repo: "{{ site.repo }}"
-      branch: "{{ branch | default('master') }}"
-
-      symlinks:
-        - { src: "{{ shared_path }}/log", dest: "{{ build_path }}/log" }
-        - { src: "{{ shared_path }}/.env", dest: "{{ build_path }}/.env" }
-
-      templates:
-        - { src: "roles/wordpress-deploy/templates/env.j2", dest: "{{ shared_path }}/.env" }
-
-      tags: deploy
-
-    -
-      role: wordpress-deploy
-      tags: deploy
-
-    -
-      role: nicolai86.finalize-release
-      tags: deploy
+     - f500.project_deploy
