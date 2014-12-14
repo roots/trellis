@@ -2,7 +2,7 @@
 
 [Ansible](http://www.ansible.com/home) [playbook](http://docs.ansible.com/playbooks.html) designed to be used with [Bedrock](http://roots.io/wordpress-stack/) to configure dev & production servers for Bedrock-based WordPress sites.
 
-This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PHP 5.5 and [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better) on Ubuntu 14.04 Trusty LTS.
+This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PHP 5.6 and [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better) on Ubuntu 14.04 Trusty LTS.
 
 [Vagrant](http://www.vagrantup.com) is used to easily start up a Virtual Machine ready for development.
 
