@@ -50,7 +50,7 @@ Vagrant.configure('2') do |config|
   end
 
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = File.join(ANSIBLE_PATH, 'site.yml')
+    ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
     ansible.groups = {
       'web' => ['default'],
       'development' => ['default']

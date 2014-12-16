@@ -13,7 +13,7 @@
     project_composer_binary: composer
     project_templates:
       - name: ".env config"
-        src: "roles/wordpress-deploy/templates/env.j2"
+        src: "roles/deploy/templates/env.j2"
         dest: ".env"
     project_shared_children:
       - path: "/web/app/uploads"

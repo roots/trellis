@@ -1,5 +1,0 @@
----
-- name: Install Dependencies with Composer
-  command: composer install
-  args:
-    chdir: "{{ build_path }}"

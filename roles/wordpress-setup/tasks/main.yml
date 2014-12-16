@@ -1,5 +1,6 @@
 ---
 - include: database.yml
+- include: directories.yml
 - include: nginx.yml
 
 - name: Add WP user to www-data group

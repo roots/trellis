@@ -1,4 +1,11 @@
 ---
+- name: Create .env file
+  template: src="env.j2"
+            dest="{{ www_root }}/{{ item.key }}/current/.env"
+            owner="{{ item.value.user }}"
+            group="{{ item.value.group }}"
+  with_dict: wordpress_sites
+
 - name: WP installed?
   command: wp core is-installed --allow-root
   args:
