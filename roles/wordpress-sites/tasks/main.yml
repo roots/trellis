@@ -33,7 +33,7 @@
   args:
     chdir: "{{ www_root }}/{{ item.site_name }}/current/"
   with_items: wordpress_sites
-  when: item.run_composer|default(True) == True
+  when: item.run_composer | default(True) == True
 
 - name: WP installed?
   command: wp core is-installed --allow-root
@@ -54,7 +54,7 @@
   args:
     chdir: "{{ www_root }}/{{ item.item.site_name }}/current/"
   with_items: site_statuses.results
-  when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled|default(False) == False
+  when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled | default(False) == False
   notify: reload nginx
 
 - name: Install WP Multisite
@@ -70,7 +70,7 @@
   args:
     chdir: "{{ www_root }}/{{ item.item.site_name }}/current/"
   with_items: site_statuses.results
-  when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled|default(False) == True
+  when: item.rc == 1 and item.item.site_install == True and item.item.multisite.enabled | default(False) == True
   notify: reload nginx
 
 - name: Setup system cron
@@ -80,4 +80,4 @@
         job="curl -s {{ item.env.wp_siteurl }}/wp-cron.php"
         cron_file="wordpress-{{ item.site_name|replace('.', '_') }}"
   with_items: wordpress_sites
-  when: item.system_cron|default(False) == True
+  when: item.system_cron | default(False) == True
