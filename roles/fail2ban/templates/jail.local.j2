@@ -26,7 +26,7 @@ action = %({{ fail2ban_action }})s
 {% for service in fail2ban_services %}
 [{{ service.name }}]
 
-enabled = {{ service.enabled|default("true") }}
+enabled = {{ service.enabled | default("true") }}
 port = {{ service.port }}
 filter = {{ service.filter }}
 logpath = {{ service.logpath }}
