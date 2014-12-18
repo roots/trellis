@@ -29,3 +29,4 @@ php_display_startup_errors: 'On'
 php_track_errors: 'On'
 php_mysqlnd_collect_memory_statistics: 'On'
 php_opcache_enable: 0
+php_max_input_vars: 5000
