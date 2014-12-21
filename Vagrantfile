@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-require "yaml"
+require 'yaml'
 
 ANSIBLE_PATH = '.' # path targeting Ansible directory (relative to Vagrantfile)
 
