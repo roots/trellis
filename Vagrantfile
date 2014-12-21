@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require "yaml"
+
 ANSIBLE_PATH = '.' # path targeting Ansible directory (relative to Vagrantfile)
 
 config_file = File.join(ANSIBLE_PATH, 'group_vars/development')
