@@ -3,7 +3,7 @@
   mysql_db: name="{{ item.env.db_name | default(item.site_name) }}"
             state=present
             login_host="{{ item.env.db_host | default('localhost') }}"
-            login_user=root
+            login_user="{{ mysql_user }}"
             login_password="{{ mysql_root_password }}"
   with_items: wordpress_sites
   when: item.db_create | default(True)
@@ -14,7 +14,7 @@
               priv="{{ item.env.db_name | default(item.site_name) }}.*:ALL"
               state=present
               login_host="{{ item.env.db_host | default('localhost') }}"
-              login_user=root
+              login_user="{{ mysql_user }}"
               login_password="{{ mysql_root_password }}"
   with_items: wordpress_sites
   when: item.db_create | default(True)

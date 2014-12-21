@@ -1,7 +1,7 @@
----
-www_root: /srv/www
-mariadb_dist: trusty
 apt_cache_valid_time: 86400
+mariadb_dist: trusty
+mysql_user: root
+www_root: /srv/www
 
 sudoers:
   - user: "admin"
