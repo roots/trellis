@@ -8,12 +8,13 @@ This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PH
 
 ## Requirements
 
-1. Ansible >= 1.6 - [Installation docs](http://docs.ansible.com/intro_installation.html)
-2. Virtualbox >= 4.3.10 - [Downloads](https://www.virtualbox.org/wiki/Downloads)
-3. Vagrant >= 1.5.4 - [Downloads](http://www.vagrantup.com/downloads.html)
-4. Vagrant-bindfs >= 0.3.1 - [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
+* Ansible >= 1.6 - [Installation docs](http://docs.ansible.com/intro_installation.html)
+* Virtualbox >= 4.3.10 - [Downloads](https://www.virtualbox.org/wiki/Downloads)
+* Vagrant >= 1.5.4 - [Downloads](http://www.vagrantup.com/downloads.html)
+* Vagrant-bindfs >= 0.3.1 - [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
+* Ubuntu 14.04 guest OS
 
-### OS Notes
+### HOST OS Notes
 
 From the Ansible docs:
 
@@ -40,6 +41,8 @@ Note: The full paths to these directories must not contain spaces or else Ansibl
 
 ## Usage
 
+### Development
+
 1. Edit `group_vars/development` and add your WordPress site(s). See [Options](#options) below for details.
 2. Optionally add any dev hostnames to your local `/etc/hosts` file (or use the [hostsupdater plugin](https://github.com/cogitatio/vagrant-hostsupdater)).
 3. Run `vagrant up`.
@@ -50,17 +53,20 @@ You probably don't need to edit your `Vagrantfile` and should avoid it unless yo
 
 Tip: Assuming you leave the default `type: 'nfs'` for `config.vm.synced_folder` (in `Vagrantfile`), see the vagrant docs section ["Root Privilege Requirement"](https://docs.vagrantup.com/v2/synced-folders/nfs.html) for how to avoid having to type your password with every `vagrant up`.
 
-### Servers/Environments
-
-This playbook is setup for development environments by default with its Vagrant integration. However, the following default environments are built in:
-
-* `development`
-* `staging`
-* `production`
-
-**Example** hosts and group_var files for these environment exist and should be modified as needed.
-
 Note: `hosts/development` is there for completeness sake only as Vagrant automatically generates and uses its own.
+
+### Staging/Production/Remote servers
+
+1. Edit `group_vars/<environment/group>` and add your WordPress site(s). See [Options](#options) below for details.
+2. Edit `hosts/<environment/group>` and add your server IP(s)/hostname(s).
+3. Run `ansible-playbook -i hosts/<environment/group> site.yml`.
+
+Staging example:
+
+1. Edit `group_vars/staging`
+2. Edit `hosts/staging`
+3. Run `ansible-playbook -i hosts/staging site.yml`
+
 
 ### Passwords
 
