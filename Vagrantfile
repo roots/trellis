@@ -27,7 +27,7 @@ Vagrant.configure('2') do |config|
 
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
     host_aliases = other_sites.flat_map { |site| site['site_hosts'] }
-    config.hostsupdater.aliases = host_aliases - config.vm.hostname
+    config.hostsupdater.aliases = host_aliases - [config.vm.hostname]
   else
     puts 'vagrant-hostsupdater missing, please install the plugin:'
     puts 'vagrant plugin install vagrant-hostsupdater'
