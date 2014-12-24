@@ -129,7 +129,7 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
   * `wp_home` (required) - `WP_HOME` constant or `home` option (default: none)
   * `wp_siteurl` (required) - `WP_SITEURL` constant or `siteurl` option (default: none)
   * `wp_env` (required) - WordPress environment (default: none)
-  * `domain_current_site` (optional|required for multisite) - sets DOMAIN_CURRENT_SITE for multisite
+  * `domain_current_site` (optional|required for multisite) - sets `DOMAIN_CURRENT_SITE` for multisite
   * `db_name` (optional) - name of database (default: `site_name`)
   * `db_user` (required) - database user name (default: none)
   * `db_password` (required) - database user password (default: none)
@@ -137,9 +137,10 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 
 ## Multisite
 
-This playbook assumes your WordPress configuration already has multisite set up. If not, ensure the following values are placed somewhere in  wp-config.php ( or `config/application.php` if you're using [bedrock](https://github.com/roots/bedrock) ) *before running the `wordpress-sites` role*:
+This playbook assumes your WordPress configuration already has multisite set up. If not, ensure the following values are placed somewhere in  wp-config.php (or `config/application.php` if you're using [bedrock](https://github.com/roots/bedrock)) *before running the `wordpress-sites` role*:
 
 ```
+<?php
 /* Multisite */
 define('WP_ALLOW_MULTISITE', true);
 define('MULTISITE', true);

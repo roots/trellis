@@ -4,6 +4,7 @@
 require 'yaml'
 
 ANSIBLE_PATH = '.' # path targeting Ansible directory (relative to Vagrantfile)
+PRIVATE_IP = '192.168.50.5'
 
 config_file = File.join(ANSIBLE_PATH, 'group_vars/development')
 
@@ -19,7 +20,7 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'roots/bedrock'
 
   # Required for NFS to work, pick any local IP
-  config.vm.network :private_network, ip: '192.168.50.5'
+  config.vm.network :private_network, ip: PRIVATE_IP
 
   main_site, *other_sites = wordpress_sites
 
@@ -27,13 +28,13 @@ Vagrant.configure('2') do |config|
 
   if Vagrant.has_plugin? 'landrush'
     config.landrush.enabled = true
-    config.landrush.tld = main_site['site_hosts'].first
+    config.landrush.tld = config.vm.hostname
 
-    host_aliases = wordpress_sites.flat_map { |site| site['site_hosts'] }
-    host_aliases.each do |site|
-      if site != main_site['site_hosts'].first and !site.include? "*"
-        config.landrush.host site, '192.168.50.5'
-      end
+    host_aliases = other_sites.flat_map { |site| site['site_hosts'] }
+    host_aliases = (host_aliases - [config.vm.hostname]).reject { |hostname| hostname.starts_with? '*' }
+
+    host_aliases.each do |hostname|
+      config.landrush.host hostname, PRIVATE_IP
     end
   else
     puts 'landrush missing, please install the plugin:'
