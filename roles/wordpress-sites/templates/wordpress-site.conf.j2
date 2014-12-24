@@ -1,7 +1,8 @@
 server {
   set $site_name {{ item.site_name }};
 
-  listen *:80;
+  listen 80;
+
   server_name  {{ item.site_hosts | join(' ') }};
   access_log   {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.access.log;
   error_log    {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.error.log;
@@ -11,21 +12,28 @@ server {
 
   charset utf-8;
 
-  {% if item.env.wp_env == 'development' -%}
-    # See Virtualbox section at http://wiki.nginx.org/Pitfalls
-    sendfile off;
-  {%- endif %}
+{% if item.env.wp_env == 'development' -%}
+  # See Virtualbox section at http://wiki.nginx.org/Pitfalls
+  sendfile off;
+{%- endif %}
 
-  {% if item.multisite.enabled | default(false) -%}
-    include wordpress_multisite_subdirectories.conf;
+{% if item.multisite.enabled | default(false) %}
+  {% if item.multisite.subdomains | default(false) %}
+
+  rewrite ^/(wp-.*.php)$ /wp/$1 last;
+  rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
+  {%- else %}
+  include wordpress_multisite_subdirectories.conf;
   {%- endif %}
+{%- endif %}
+
 
   include wordpress.conf;
 }
 
-{% for host in item.site_hosts if strip_www %}
+{% for host in item.site_hosts if strip_www and host.split('.')[0] != '*' %}
 server {
-  listen *:80;
+  listen 80;
   server_name www.{{ host }};
   return 301 $scheme://{{ host }}$request_uri;
 }

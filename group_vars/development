@@ -4,6 +4,7 @@ wordpress_sites:
   - site_name: example.dev
     site_hosts:
       - example.dev
+      - '*.example.dev' # remove if using a subdirectory multisite install
     local_path: '../example.dev' # path targeting local project directory (relative to root/Vagrantfile)
     user: vagrant
     group: www-data
@@ -14,7 +15,8 @@ wordpress_sites:
     admin_email: admin@example.dev
     system_cron: true
     multisite:
-      enabled: false
+      enabled: true
+      subdomain: true
     env:
       wp_home: http://example.dev
       wp_siteurl: http://example.dev/wp
@@ -22,6 +24,7 @@ wordpress_sites:
       db_name: example_dev
       db_user: example_dbuser
       db_password: example_dbpassword
+      domain_current_site: example.dev # required for multisite
 
 php_error_reporting: 'E_ALL'
 php_display_errors: 'On'

@@ -44,8 +44,7 @@ Note: The full paths to these directories must not contain spaces or else Ansibl
 ### Development
 
 1. Edit `group_vars/development` and add your WordPress site(s). See [Options](#options) below for details.
-2. Optionally add any dev hostnames to your local `/etc/hosts` file (or use the [hostsupdater plugin](https://github.com/cogitatio/vagrant-hostsupdater)).
-3. Run `vagrant up`.
+2. Run `vagrant up`.
 
 Vagrant automatically reads `group_vars/development` and creates a synced folder for each of the sites.
 
@@ -130,10 +129,26 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
   * `wp_home` (required) - `WP_HOME` constant or `home` option (default: none)
   * `wp_siteurl` (required) - `WP_SITEURL` constant or `siteurl` option (default: none)
   * `wp_env` (required) - WordPress environment (default: none)
+  * `domain_current_site` (optional|required for multisite) - sets DOMAIN_CURRENT_SITE for multisite
   * `db_name` (optional) - name of database (default: `site_name`)
   * `db_user` (required) - database user name (default: none)
   * `db_password` (required) - database user password (default: none)
   * `db_host` (required) - database host (default: `localhost`)
+
+## Multisite
+
+This playbook assumes your WordPress configuration already has multisite set up. If not, ensure the following values are placed somewhere in  wp-config.php ( or `config/application.php` if you're using [bedrock](https://github.com/roots/bedrock) ) *before running the `wordpress-sites` role*:
+
+```
+/* Multisite */
+define('WP_ALLOW_MULTISITE', true);
+define('MULTISITE', true);
+define('SUBDOMAIN_INSTALL', true); // Set to false if using subdirectories
+define('DOMAIN_CURRENT_SITE', getenv('DOMAIN_CURRENT_SITE'));
+define('PATH_CURRENT_SITE', '/');
+define('SITE_ID_CURRENT_SITE', 1);
+define('BLOG_ID_CURRENT_SITE', 1);
+```
 
 ## Security
 
@@ -191,5 +206,4 @@ You can read the role documentation for `fail2ban` [here](roles/fail2ban/README.
 
 ## Todo
 
-* Multisite: basic support is included but not yet complete. There are issues with doing a network install from scratch via WP-CLI.
-* Nginx: configuration needs more options and advanced setups like static files and subdomain multisite support.
+* Nginx: configuration needs more options and advanced setups like static files.

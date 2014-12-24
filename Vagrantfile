@@ -25,12 +25,19 @@ Vagrant.configure('2') do |config|
 
   config.vm.hostname = main_site['site_hosts'].first
 
-  if Vagrant.has_plugin? 'vagrant-hostsupdater'
-    host_aliases = other_sites.flat_map { |site| site['site_hosts'] }
-    config.hostsupdater.aliases = host_aliases - [config.vm.hostname]
+  if Vagrant.has_plugin? 'landrush'
+    config.landrush.enabled = true
+    config.landrush.tld = main_site['site_hosts'].first
+
+    host_aliases = wordpress_sites.flat_map { |site| site['site_hosts'] }
+    host_aliases.each do |site|
+      if site != main_site['site_hosts'].first and !site.include? "*"
+        config.landrush.host site, '192.168.50.5'
+      end
+    end
   else
-    puts 'vagrant-hostsupdater missing, please install the plugin:'
-    puts 'vagrant plugin install vagrant-hostsupdater'
+    puts 'landrush missing, please install the plugin:'
+    puts 'vagrant plugin install landrush'
   end
 
   if Vagrant::Util::Platform.windows?
