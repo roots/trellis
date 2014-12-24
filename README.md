@@ -139,8 +139,7 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 
 This playbook assumes your WordPress configuration already has multisite set up. If not, ensure the following values are placed somewhere in  wp-config.php (or `config/application.php` if you're using [bedrock](https://github.com/roots/bedrock)) *before running the `wordpress-sites` role*:
 
-```
-<?php
+```php
 /* Multisite */
 define('WP_ALLOW_MULTISITE', true);
 define('MULTISITE', true);
