@@ -1,0 +1,31 @@
+mysql_root_password: devpw
+
+wordpress_sites:
+  - site_name: example.dev
+    site_hosts:
+      - example.dev
+    local_path: '../example.dev' # path targeting local project directory (relative to root/Vagrantfile)
+    user: vagrant
+    group: www-data
+    site_install: true
+    site_title: Example Site
+    admin_user: admin
+    admin_password: admin
+    admin_email: admin@example.dev
+    system_cron: true
+    multisite:
+      enabled: false
+    env:
+      wp_home: http://example.dev
+      wp_siteurl: http://example.dev/wp
+      wp_env: development
+      db_name: example_dev
+      db_user: example_dbuser
+      db_password: example_dbpassword
+
+php_error_reporting: 'E_ALL'
+php_display_errors: 'On'
+php_display_startup_errors: 'On'
+php_track_errors: 'On'
+php_mysqlnd_collect_memory_statistics: 'On'
+php_opcache_enable: 0

@@ -1,0 +1,18 @@
+---
+www_root: /srv/www
+mariadb_dist: trusty
+apt_cache_valid_time: 86400
+
+sudoers:
+  - user: "admin"
+    groups: ["sudo"]
+
+ferm_input_list:
+  - type: "dport_accept"
+    dport: ["http", "https"]
+    filename: "nginx_accept"
+  - type: "dport_limit"
+    dport: ["ssh"]
+    seconds: "300"
+    hits: "5"
+    disabled: false
