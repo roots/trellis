@@ -1,0 +1,24 @@
+mysql_root_password: stagingpw
+
+wordpress_sites:
+  - site_name: staging.example.com
+    site_hosts:
+      - staging.example.com
+      - 192.168.50.5
+    user: deploy
+    group: www-data
+    site_install: true
+    site_title: Example Staging Site
+    admin_user: admin
+    admin_password: admin
+    admin_email: admin@staging.example.com
+    system_cron: true
+    multisite:
+      enabled: false
+    env:
+      wp_home: http://staging.example.com
+      wp_siteurl: http://staging.example.com/wp
+      wp_env: staging
+      db_name: example_staging
+      db_user: example_dbuser
+      db_password: example_dbpassword

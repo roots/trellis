@@ -1,1 +1,5 @@
+# Group Vars
+group_vars/*
+!group_vars/*.example
+
 .vagrant

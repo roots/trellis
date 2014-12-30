@@ -1,0 +1,24 @@
+mysql_root_password: productionpw
+
+wordpress_sites:
+  - site_name: example.com
+    site_hosts:
+      - example.com
+      - 192.168.50.5
+    user: deploy
+    group: www-data
+    site_install: true
+    site_title: Example Production Site
+    admin_user: admin
+    admin_password: admin
+    admin_email: admin@example.com
+    system_cron: true
+    multisite:
+      enabled: false
+    env:
+      wp_home: http://example.com
+      wp_siteurl: http://example.com/wp
+      wp_env: production
+      db_name: example_prod
+      db_user: example_dbuser
+      db_password: example_dbpassword
