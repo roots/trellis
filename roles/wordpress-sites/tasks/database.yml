@@ -17,7 +17,7 @@
               login_user=root
               login_password="{{ mysql_root_password }}"
   with_items: wordpress_sites
-  when: item.db_create | default(True)
+  when: item.env.db_user != 'root' and ( item.db_create | default(True) )
 
 - name: Copy database dump
   copy: src="{{ item.db_import }}" dest=/tmp
