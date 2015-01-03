@@ -1,14 +1,35 @@
 mysql_root_password: devpw
 
 wordpress_sites:
-  - site_name: example.dev
+  - site_name: jeffstieler.dev
     site_hosts:
-      - example.dev
-    local_path: '../example.dev' # path targeting local project directory (relative to root/Vagrantfile)
+      - jeffstieler.dev
+    local_path: '../jeffstieler_com' # path targeting local project directory (relative to root/Vagrantfile)
     user: vagrant
     group: www-data
     site_install: true
-    site_title: Example Site
+    site_title: Jeff Stieler [dev]
+    admin_user: admin
+    admin_password: admin
+    admin_email: admin@example.dev
+    system_cron: true
+    multisite:
+      enabled: false
+    env:
+      wp_home: http://jeffstieler.dev
+      wp_siteurl: http://jeffstieler.dev/wp
+      wp_env: development
+      db_name: jeffstieler_com
+      db_user: root
+      db_password: devpw
+  - site_name: example.dev
+    site_hosts:
+      - example.dev
+    local_path: '../example_com' # path targeting local project directory (relative to root/Vagrantfile)
+    user: vagrant
+    group: www-data
+    site_install: true
+    site_title: Example Site [dev]
     admin_user: admin
     admin_password: admin
     admin_email: admin@example.dev
@@ -19,9 +40,9 @@ wordpress_sites:
       wp_home: http://example.dev
       wp_siteurl: http://example.dev/wp
       wp_env: development
-      db_name: example_dev
-      db_user: example_dbuser
-      db_password: example_dbpassword
+      db_name: example_com
+      db_user: root
+      db_password: devpw
 
 php_error_reporting: 'E_ALL'
 php_display_errors: 'On'
