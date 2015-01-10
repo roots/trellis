@@ -4,7 +4,6 @@
   with_items:
   - python-selinux
   - memcached
-  - php5-memcache
   - php5-memcached
 
 - name: Copy the client configuration file
