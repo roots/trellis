@@ -19,7 +19,7 @@
   mysql_user: name=root
               password="{{ mysql_root_password }}"
               check_implicit_admin=yes
-              login_user=root
+              login_user="{{ mysql_user }}"
               login_password="{{ mysql_root_password }}"
               state=present
   with_items:
@@ -32,17 +32,17 @@
   mysql_user: user=""
               host="{{ ansible_hostname }}"
               state=absent
-              login_user=root
+              login_user="{{ mysql_user }}"
               login_password="{{ mysql_root_password }}"
 
 - name: Delete anonymous MySQL server user for localhost
   mysql_user: user=""
               state=absent
-              login_user=root
+              login_user="{{ mysql_user }}"
               login_password="{{ mysql_root_password }}"
 
 - name: Remove the test database
   mysql_db: name=test
             state=absent
-            login_user=root
+            login_user="{{ mysql_user }}"
             login_password="{{ mysql_root_password }}"
