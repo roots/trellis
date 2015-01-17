@@ -8,6 +8,26 @@ This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PH
 
 [Vagrant](http://www.vagrantup.com) is used to easily start up a Virtual Machine ready for development.
 
+# ToC
+
+* [Requirements](#requirements)
+  * [Host OS Notes](#host-os-notes)
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Development](#development)
+  * [Staging/Production/Remote servers](#stagingproductionremote-servers)
+  * [Passwords](#passwords)
+  * [Vagrantfile](#vagrantfile)
+* [Vagrant Box](#vagrant-box)
+* [Options](#options)
+  * [WP Sites](#wp-sites)
+  * [Mail](#mail)
+* [Security](#security)
+  * [Locking Down Root](#locking-down-root)
+  * [Configuration Files](#configuration-files)
+  * [fail2ban and ferm](#fail2ban-and-ferm)
+* [Todo](#todo)
+
 ## Requirements
 
 * Ansible >= 1.6 - [Installation docs](http://docs.ansible.com/intro_installation.html)
@@ -16,7 +36,7 @@ This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PH
 * Vagrant-bindfs >= 0.3.1 - [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
 * Ubuntu 14.04 guest OS
 
-### HOST OS Notes
+### Host OS Notes
 
 From the Ansible docs:
 
@@ -109,6 +129,8 @@ Note: you can always set the box back to the base Ubuntu one if you prefer with 
 
 All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 
+### WP Sites
+
 `wordpress_sites` is the top level array used to define the WordPress sites/virtual hosts that will be created.
 
 * `site_name` (required) - name used to identify site (commonly the domain name) (default: none)
@@ -136,6 +158,26 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
   * `db_user` (required) - database user name (default: none)
   * `db_password` (required) - database user password (default: none)
   * `db_host` (required) - database host (default: `localhost`)
+
+### Mail
+
+Outgoing mail is done by the ssmtp role. ssmtp is a lightweight SMTP mail relay basically. In order to send external emails, you'll need to configure an SMTP server.
+
+We always suggest using an external email service rather than your own because it's very difficult to setup a proper email server.
+
+Some suggested services:
+
+* [Mandrill](http://mandrill.com/)
+* [Sendgrid](https://sendgrid.com/)
+* [Mailgun](http://www.mailgun.com/)
+* [Amazon SES](http://aws.amazon.com/ses/)
+
+All of these offer around 10k+ emails for free per month. Once you have SMTP credentials, configure them in `group_vars/all`.
+
+* `mail_smtp_server`: hostname:port
+* `mail_hostname`: hostname for mail delivery
+* `mail_user`: username
+* `mail_password`: password (or API key)
 
 ## Security
 
