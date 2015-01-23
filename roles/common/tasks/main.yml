@@ -13,3 +13,9 @@
   - git-core
   - npm
   - nodejs-legacy
+
+- name: Install bower
+  npm: name=bower global=yes state=present
+
+- name: Install grunt
+  npm: name=grunt-cli global=yes state=present
