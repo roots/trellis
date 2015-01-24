@@ -1,0 +1,4 @@
+---
+- name: Setup "real" wp-cron
+  cron: name="wp-cron" minute="5" job="curl http://{{ item.env.wp_home }}/wp/wp-cron.php"
+  with_items: wordpress_sites
