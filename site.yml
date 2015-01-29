@@ -2,7 +2,7 @@
 - name: "WordPress Server: Install LEMP Stack with PHP 5.6 and MariaDB MySQL"
   hosts: web
   sudo: yes
-  remote_user: admin
+  remote_user: root
 
   roles:
     - { role: common, tags: [common] }
