@@ -13,6 +13,7 @@
   - git-core
   - npm
   - nodejs-legacy
+  - mailutils
 
 - name: Install bower
   npm: name=bower global=yes state=present
