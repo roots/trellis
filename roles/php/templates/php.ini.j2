@@ -23,3 +23,9 @@ opcache.interned_strings_buffer = {{ php_opcache_interned_strings_buffer }}
 opcache.max_accelerated_files = {{ php_opcache_max_accelerated_files }}
 opcache.revalidate_freq = {{ php_opcache_revalidate_freq }}
 opcache.fast_shutdown = {{ php_opcache_fast_shutdown }}
+
+[hhvm]
+hhvm.log.level = Warning
+hhvm.log.always_log_unhandled_exceptions = true
+hhvm.log.runtime_error_reporting_level = 8191
+hhvm.mysql.typed_results = false

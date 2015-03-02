@@ -10,7 +10,8 @@
     - { role: ferm, tags: [ferm] }
     - { role: mariadb, tags: [mariadb] }
     - { role: ssmtp, tags: [ssmtp mail] }
-    - { role: php, tags: [php] }
+    - { role: php, when: not hhvm, tags: [php] }
+    - { role: hhvm, when: hhvm, tags: [hhvm] }
     - { role: nginx, tags: [nginx] }
     - { role: memcached, tags: [memcached] }
     - { role: composer, tags: [composer] }
