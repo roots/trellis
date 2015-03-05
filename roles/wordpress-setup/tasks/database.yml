@@ -8,6 +8,18 @@
   with_dict: wordpress_sites
   when: item.value.db_create | default(True)
 
+- name: Allow remote connections for root database user
+  mysql_user: name="{{ mysql_user }}"
+              password="{{ mysql_root_password }}"
+              priv="*.*:ALL"
+              state=present
+              login_host="{{ item.value.env.db_host | default('localhost') }}"
+              login_user="{{ mysql_user }}"
+              login_password="{{ mysql_root_password }}"
+              host="%"
+  with_dict: wordpress_sites
+  when: db_remote_allow | default(False) and item.value.db_create | default(True)
+
 - name: Create/assign database user to db and grant permissions
   mysql_user: name="{{ item.value.env.db_user }}"
               password="{{ item.value.env.db_password }}"
@@ -18,6 +30,18 @@
               login_password="{{ mysql_root_password }}"
   with_dict: wordpress_sites
   when: item.value.db_create | default(True)
+
+- name: Allow remote connections for database user
+  mysql_user: name="{{ item.value.env.db_user }}"
+              password="{{ item.value.env.db_password }}"
+              priv="{{ item.value.env.db_name | default(item.site_name) }}.*:ALL"
+              state=present
+              login_host="{{ item.value.env.db_host | default('localhost') }}"
+              login_user="{{ mysql_user }}"
+              login_password="{{ mysql_root_password }}"
+              host="%"
+  with_dict: wordpress_sites
+  when: db_remote_allow | default(False) and item.value.db_create | default(True)
 
 - name: Copy database dump
   copy: src="{{ item.value.db_import }}" dest=/tmp

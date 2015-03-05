@@ -12,6 +12,16 @@
 - name: Install MariaDB MySQL server
   apt: name=mariadb-server state=present
 
+- name: Ensure MySQL will listen on all ip interfaces (bind to 0.0.0.0)
+  lineinfile: dest=/etc/mysql/my.cnf
+    regexp='bind-address\s*=\s*127\.0\.0\.1\s*'
+    line='bind-address   = 0.0.0.0'
+    state=present
+    backrefs=yes
+  when: db_remote_allow | default(False)
+  notify:
+    - restart mariadb
+
 - name: Start MariaDB MySQL Server
   service: name=mysql state=started enabled=true
 
