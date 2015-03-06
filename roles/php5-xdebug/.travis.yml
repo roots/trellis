@@ -1,0 +1,21 @@
+language: php
+
+php:
+  - 5.5
+
+before_install:
+  - sudo apt-get update  -y -q
+
+install:
+  - sudo apt-get install python-pip -y
+  - sudo pip install ansible==1.4.0
+
+script:
+  - cd tests
+  - ansible-playbook -i inventory playbook.yml --syntax-check
+  - ansible-playbook -i inventory playbook.yml --connection=local --sudo
+  - >
+    ansible-playbook -i inventory playbook.yml --connection=local --sudo
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)

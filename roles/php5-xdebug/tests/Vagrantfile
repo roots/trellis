@@ -1,0 +1,12 @@
+$VM_BOX = ENV.has_key?('VM_BOX') ? ENV['VM_BOX'] : 'ubuntu/trusty64'
+
+Vagrant.configure('2') do |config|
+  config.vm.box = $VM_BOX
+
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = 'playbook.yml'
+    ansible.extra_vars = { ansible_ssh_user: 'vagrant', vagrant: true }
+
+    ansible.verbose = 'v'
+  end
+end
