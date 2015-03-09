@@ -9,15 +9,15 @@ mail_user: smtp_user
 mail_password: smtp_password
 
 sudoers:
-  - user: "admin"
-    groups: ["sudo"]
+  - user: admin
+    groups: [sudo]
 
 ferm_input_list:
-  - type: "dport_accept"
-    dport: ["http", "https"]
-    filename: "nginx_accept"
-  - type: "dport_limit"
-    dport: ["ssh"]
-    seconds: "300"
-    hits: "5"
+  - type: dport_accept
+    dport: [http, https]
+    filename: nginx_accept
+  - type: dport_limit
+    dport: [ssh]
+    seconds: 300
+    hits: 20
     disabled: false
