@@ -1,0 +1,17 @@
+---
+- name: php5 - install xdebug
+  apt: pkg=php5-xdebug state=latest update_cache=yes
+
+- name: Copy xdebug INI into mods-available folder.
+  template: >
+    src=xdebug.ini.j2
+    dest=/etc/php5/mods-available/xdebug.ini
+    owner=root group=root mode=644
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+
+- name: Copy xdebug INI into conf.d folder.
+  template: >
+    src=xdebug.ini.j2
+    dest=/etc/php5/conf.d/xdebug.ini
+    owner=root group=root mode=644
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'precise'

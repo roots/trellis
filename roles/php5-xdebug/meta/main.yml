@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Maxime Thoonsen
+  description: PHP XDebug for Ubuntu Trusty and Precise
+  company: "Theodo"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - Trusty
+    - Precise
+  categories:
+    - development
+    - web

@@ -1,0 +1,8 @@
+---
+php_xdebug_remote_enable: "false"
+php_xdebug_remote_connect_back: "false"
+php_xdebug_remote_host: localhost
+php_xdebug_remote_port: "9000"
+php_xdebug_remote_log: /tmp/xdebug.log
+php_xdebug_idekey: XDEBUG
+php_max_nesting_level: 200
