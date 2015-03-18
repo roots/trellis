@@ -9,6 +9,7 @@
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
     - { role: mariadb, tags: [mariadb] }
+    - { role: ssmtp, tags: [ssmtp mail] }
     - { role: php, tags: [php] }
     - { role: nginx, tags: [nginx] }
     - { role: memcached, tags: [memcached] }

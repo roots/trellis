@@ -1,0 +1,4 @@
+ssmtp_auth_method: LOGIN
+ssmtp_from_override: 'Yes'
+ssmtp_start_tls: 'Yes'
+ssmtp_tls: 'Yes'
