@@ -15,4 +15,6 @@
     - { role: memcached, tags: [memcached] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
-    - { role: wordpress-sites, tags: [wordpress-sites] }
+    - { role: deploy, tags: [deploy] }
+    - { role: bfmartin.ssh_known_hosts, host: github.com, dest: "/home/{{ deploy_user }}/.ssh/known_hosts" }
+    - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }

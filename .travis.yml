@@ -5,4 +5,5 @@ cache: pip
 install:
   - pip install ansible
 script:
+  - ansible-galaxy install --force -r galaxy-roles.txt -p roles/
   - ansible-playbook --syntax-check -i hosts/development site.yml

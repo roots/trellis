@@ -1,1 +1,4 @@
 .vagrant
+roles/bfmartin.ssh_known_hosts
+roles/f500.project_deploy
+roles/f500.project_deploy_module

@@ -1,17 +1,23 @@
 ---
 - include: database.yml
-- include: directories.yml
 - include: nginx.yml
 
+- name: Create www root
+  file: path="{{ www_root }}"
+        owner=deploy
+        group=www-data
+        mode=0755
+        state=directory
+
 - name: Add WP user to www-data group
-  user: name="{{ item.value.user }}" groups=www-data state=present append=yes
-  with_dict: wordpress_sites
+  user: name="{{ item.user }}" groups=www-data state=present append=yes
+  with_items: wordpress_sites
 
 - name: Setup system cron
-  cron: name="{{ item.key }} WordPress cron"
+  cron: name="{{ item.site_name }} WordPress cron"
         minute="*/15"
-        user="{{ item.value.user }}"
-        job="curl -s {{ item.value.env.wp_siteurl }}/wp-cron.php"
-        cron_file="wordpress-{{ item.key|replace('.', '_') }}"
-  with_dict: wordpress_sites
-  when: item.value.system_cron|default(False) == True
+        user="{{ item.user }}"
+        job="curl -s {{ item.env.wp_siteurl }}/wp-cron.php"
+        cron_file="wordpress-{{ item.site_name | replace('.', '_') }}"
+  with_items: wordpress_sites
+  when: item.system_cron|default(False) == True

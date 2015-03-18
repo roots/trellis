@@ -3,8 +3,8 @@ server {
 
   listen *:80;
   server_name  {{ item.site_hosts | join(' ') }};
-  access_log   {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.access.log;
-  error_log    {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.error.log;
+  access_log   {{ www_root }}/{{ item.site_name }}/shared/logs/{{ item.site_name }}.access.log;
+  error_log    {{ www_root }}/{{ item.site_name }}/shared/logs/{{ item.site_name }}.error.log;
 
   root  {{ www_root }}/{{ item.site_name }}/current/web;
   index index.php;
@@ -21,6 +21,7 @@ server {
   {%- endif %}
 
   include wordpress.conf;
+  include sendy.conf;
 }
 
 {% for host in item.site_hosts if strip_www %}

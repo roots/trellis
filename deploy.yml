@@ -1,16 +1,18 @@
 ---
-- name: "Deploy WP site"
+- name: Deploy WP site
   hosts: web
-  remote_user: vagrant
+  remote_user: deploy
 
   vars:
-    project: "{{ wordpress_sites[site] }}"
-    project_root: "{{ www_root }}/{{ site }}"
+    project: "{{ wordpress_sites[0] }}"
+    project_root: "{{ www_root }}/{{ project.site_name }}"
     project_deploy_strategy: git
     project_git_repo: "{{ project.repo }}"
+    project_unwanted_items: ['.git']
     project_version: master
     project_has_composer: true
     project_composer_binary: composer
+    project_copy_previous_composer_vendors: true
     project_templates:
       - name: ".env config"
         src: "roles/deploy/templates/env.j2"
@@ -18,6 +20,8 @@
     project_shared_children:
       - path: "/web/app/uploads"
         src: "uploads"
+      - path: "/web/app/logs"
+        src: "logs"
 
   roles:
-     - f500.project_deploy
+    - deploy
