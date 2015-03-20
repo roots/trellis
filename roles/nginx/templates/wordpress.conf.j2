@@ -7,7 +7,11 @@ location ~ \.php$ {
   include fastcgi_params;
   fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
   fastcgi_param DOCUMENT_ROOT $realpath_root;
-  fastcgi_pass unix:/var/run/php5-fpm-$site_name.sock;
+  {% if hhvm %}
+  fastcgi_pass unix:/var/run/hhvm/hhvm.sock;
+  {% else %}
+  fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
+  {% endif %}
   client_max_body_size 0;
 }
 

@@ -13,11 +13,5 @@
   with_items: wordpress_sites
 
 - name: Enable better default site to drop unknown requests
-  command: > 
+  command: >
     cp /tmp/server-configs-nginx/sites-available/no-default /etc/nginx/sites-enabled/no-default.conf
-
-- name: Copy php-fpm configuration
-  template: src="php-fpm.conf.j2"
-            dest="/etc/php5/fpm/pool.d/{{ item.site_name }}.conf"
-  with_items: wordpress_sites
-  notify: restart php-fpm

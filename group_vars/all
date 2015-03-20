@@ -8,6 +8,8 @@ mail_hostname: example.dev
 mail_user: smtp_user
 mail_password: smtp_password
 
+hhvm: false
+
 sudoers:
   - user: admin
     groups: [sudo]

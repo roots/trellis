@@ -4,7 +4,7 @@
 
 [Ansible](http://www.ansible.com/home) [playbook](http://docs.ansible.com/playbooks.html) designed to be used with [Bedrock](http://roots.io/wordpress-stack/) to configure dev & production servers for Bedrock-based WordPress sites.
 
-This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PHP 5.6 and [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better) on Ubuntu 14.04 Trusty LTS.
+This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PHP 5.6 (or HHVM) and [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better) on Ubuntu 14.04 Trusty LTS.
 
 [Vagrant](http://www.vagrantup.com) is used to easily start up a Virtual Machine ready for development.
 
@@ -22,6 +22,7 @@ This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PH
 * [Options](#options)
   * [WP Sites](#wp-sites)
   * [Mail](#mail)
+* [HHVM](#hhvm)
 * [Security](#security)
   * [Locking Down Root](#locking-down-root)
   * [Configuration Files](#configuration-files)
@@ -89,7 +90,6 @@ Staging example:
 2. Edit `hosts/staging`
 3. Run `ansible-playbook -i hosts/staging site.yml`
 
-
 ### Passwords
 
 There a few places you'll want to set/change passwords:
@@ -124,6 +124,14 @@ The `roots/bedrock` box is simply the regular `ubuntu/trusty64` base box already
 Vagrant Cloud offers releases/versions for the boxes, so the `roots/bedrock` box versions will be kept in sync with this project. You can see if there's updates by running `vagrant box outdated` and update it with `vagrant box update`.
 
 Note: you can always set the box back to the base Ubuntu one if you prefer with `config.vm.box = 'ubuntu/trusty64'`
+
+## HHVM
+
+[HHVM](http://hhvm.com/) can be used instead of PHP 5.6 by setting `hhvm: true` in `group_vars/all`.
+
+The only caveat is that it's not set up to seamlessly switch between the two on already provisioned machines. You'll either need to do some manual cleanup (like removing php5.6) or just re-create your machine.
+
+See `roles/hhvm/README.md` for more information on running HHVM with WordPress.
 
 ## Options
 
