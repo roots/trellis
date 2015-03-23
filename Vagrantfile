@@ -24,7 +24,7 @@ Vagrant.configure('2') do |config|
 
   main_site, *other_sites = wordpress_sites
 
-  config.vm.hostname = main_site.values['site_hosts'].first
+  config.vm.hostname = main_site.values.first['site_hosts'].first
 
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
     host_aliases = other_sites.flat_map { |(_name, site)| site['site_hosts'] }

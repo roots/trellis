@@ -2,7 +2,6 @@ mysql_root_password: devpw
 
 wordpress_sites:
   example.dev:
-    repo: https://github.com/roots/bedrock.git
     site_hosts:
       - example.dev
     repo: https://github.com/roots/bedrock.git
