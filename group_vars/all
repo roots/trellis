@@ -1,7 +1,8 @@
-apt_cache_valid_time: 86400
+---
+www_root: /srv/www
 mariadb_dist: trusty
 mysql_user: root
-www_root: /srv/www
+apt_cache_valid_time: 86400
 mail_smtp_server: smtp.mandrillapp.com:587
 mail_admin: admin@example.dev
 mail_hostname: example.dev
@@ -9,6 +10,10 @@ mail_user: smtp_user
 mail_password: smtp_password
 
 hhvm: false
+
+deploy_user: deploy
+deploy_group: deploy
+deploy_groups: www-data
 
 sudoers:
   - user: admin

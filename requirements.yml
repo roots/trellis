@@ -1,0 +1,4 @@
+- src: bfmartin.ssh_known_hosts
+  name: ssh-known-hosts
+
+- src: f500.project_deploy_module
