@@ -1,0 +1,20 @@
+---
+- name: Deploy WP site
+  hosts: web
+  remote_user: "{{ web_user }}"
+
+  vars:
+    project: "{{ wordpress_sites[site] }}"
+    project_root: "{{ www_root }}/{{ site }}"
+    project_git_repo: "{{ project.repo }}"
+    project_version: "{{ branch | default('master') }}"
+    project_templates:
+      - name: .env config
+        src: roles/deploy/templates/env.j2
+        dest: .env
+    project_shared_children:
+      - path: /web/app/uploads
+        src: uploads
+
+  roles:
+    - deploy

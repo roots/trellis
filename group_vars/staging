@@ -1,17 +1,11 @@
 mysql_root_password: stagingpw
 
 wordpress_sites:
-  - site_name: staging.example.com
+  staging.example.com:
     site_hosts:
       - staging.example.com
       - 192.168.50.5
-    user: deploy
-    group: www-data
-    site_install: true
-    site_title: Example Staging Site
-    admin_user: admin
-    admin_password: admin
-    admin_email: admin@staging.example.com
+    repo: git@github.com:roots/bedrock.git
     system_cron: true
     multisite:
       enabled: false
@@ -22,3 +16,11 @@ wordpress_sites:
       db_name: example_staging
       db_user: example_dbuser
       db_password: example_dbpassword
+      auth_key: "generateme"
+      auth_salt: "generateme"
+      logged_in_key: "generateme"
+      logged_in_salt: "generateme"
+      nonce_key: "generateme"
+      nonce_salt: "generateme"
+      secure_auth_key: "generateme"
+      secure_auth_salt: "generateme"

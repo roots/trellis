@@ -1,7 +1,9 @@
+; {{ ansible_managed }}
+
 [wordpress]
 listen = /var/run/php5-fpm-wordpress.sock
-listen.owner = www-data
-listen.group = www-data
+listen.owner = {{ web_user }}
+listen.group = {{ web_group }}
 user = www-data
 group = www-data
 pm = dynamic

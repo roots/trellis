@@ -29,6 +29,10 @@
 - name: Start HHVM service
   service: name=hhvm state=started enabled=true
 
+- name: HHVM server.ini
+  template: src=server.ini.j2 dest=/etc/hhvm/server.ini
+  notify: restart hhvm
+
 - name: Create cron job to restart HHVM service daily
   cron: name="Restart HHVM daily"
         hour="{{ hhvm_daily_restart_hour }}"

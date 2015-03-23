@@ -1,0 +1,32 @@
+# {{ ansible_managed }}
+
+server {
+  listen *:80;
+  server_name  {{ item.value.site_hosts | join(' ') }};
+  access_log   {{ www_root }}/{{ item.key }}/logs/{{ item.key }}.access.log;
+  error_log    {{ www_root }}/{{ item.key }}/logs/{{ item.key }}.error.log;
+
+  root  {{ www_root }}/{{ item.key }}/current/web;
+  index index.php;
+
+  charset utf-8;
+
+  {% if item.value.env.wp_env == 'development' -%}
+    # See Virtualbox section at http://wiki.nginx.org/Pitfalls
+    sendfile off;
+  {%- endif %}
+
+  {% if item.value.multisite.enabled | default(false) -%}
+    include wordpress_multisite_subdirectories.conf;
+  {%- endif %}
+
+  include wordpress.conf;
+}
+
+{% for host in item.value.site_hosts if strip_www %}
+server {
+  listen *:80;
+  server_name www.{{ host }};
+  return 301 $scheme://{{ host }}$request_uri;
+}
+{% endfor %}

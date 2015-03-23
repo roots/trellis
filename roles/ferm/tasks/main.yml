@@ -1,20 +1,20 @@
 ---
 - name: ensure ferm status is in debconf
-  debconf: name=ferm question=ferm/enable vtype=boolean value={{ ferm_enabled | lower }}
+  debconf: name=ferm question=ferm/enable vtype=boolean value="{{ ferm_enabled | lower }}"
 
 - name: ensure ferm is installed
-  apt: pkg=ferm state=latest update_cache=true cache_valid_time={{ apt_cache_valid_time }} install_recommends=no
+  apt: pkg=ferm state=latest update_cache=true cache_valid_time="{{ apt_cache_valid_time }}" install_recommends=no
   notify:
     - restart ferm
 
 - name: ensure configuration directories exist
-  file: path={{ item }} state=directory mode=0750
+  file: path="{{ item }}" state=directory mode=0750
   with_items:
     - /etc/ferm/ferm.d
     - /etc/ferm/filter-input.d
 
 - name: ensure firewall is configured
-  template: src={{ item }}.j2 dest=/{{ item }}
+  template: src="{{ item }}.j2" dest=/{{ item }}
   with_items:
     - etc/default/ferm
     - etc/ferm/ferm.conf

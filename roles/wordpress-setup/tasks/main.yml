@@ -1,0 +1,28 @@
+---
+- include: database.yml
+- include: nginx.yml
+
+- name: Create web root
+  file: path="{{ www_root }}"
+        owner="{{ web_user }}"
+        group="{{ web_group }}"
+        mode=0755
+        state=directory
+  with_dict: wordpress_sites
+
+- name: Create logs folder of sites
+  file: path="{{ www_root }}/{{ item.key }}/logs"
+        owner="{{ web_user }}"
+        group="{{ web_group }}"
+        mode=0755
+        state=directory
+  with_dict: wordpress_sites
+
+- name: Setup system cron
+  cron: name="{{ item.key }} WordPress cron"
+        minute="*/15"
+        user="{{ web_user }}"
+        job="curl -s {{ item.value.env.wp_siteurl }}/wp-cron.php"
+        cron_file="wordpress-{{ item.key | replace('.', '_') }}"
+  with_dict: wordpress_sites
+  when: item.value.system_cron | default(False) == True
