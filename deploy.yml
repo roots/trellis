@@ -19,8 +19,6 @@
     project_shared_children:
       - path: "/web/app/uploads"
         src: "uploads"
-      - path: "/web/app/logs"
-        src: "logs"
 
   roles:
     - deploy

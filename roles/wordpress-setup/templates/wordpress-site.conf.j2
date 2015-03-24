@@ -1,8 +1,8 @@
 server {
   listen *:80;
   server_name  {{ item.value.site_hosts | join(' ') }};
-  access_log   {{ www_root }}/{{ item.key }}/shared/logs/{{ item.key }}.access.log;
-  error_log    {{ www_root }}/{{ item.key }}/shared/logs/{{ item.key }}.error.log;
+  access_log   {{ www_root }}/{{ item.key }}/logs/{{ item.key }}.access.log;
+  error_log    {{ www_root }}/{{ item.key }}/logs/{{ item.key }}.error.log;
 
   root  {{ www_root }}/{{ item.key }}/current/web;
   index index.php;
