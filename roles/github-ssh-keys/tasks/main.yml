@@ -7,5 +7,5 @@
 - name: Add SSH keys
   authorized_key: user="{{ item.1 }}" key="{{ lookup('file', '/tmp/' + item.0.username + '.keys') }}"
   with_subelements:
-     - github_ssh_keys
+     - github_ssh_keys | default([])
      - authorized

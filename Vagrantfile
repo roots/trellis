@@ -56,10 +56,7 @@ Vagrant.configure('2') do |config|
       'web' => ['default'],
       'development' => ['default']
     }
-    ansible.extra_vars = {
-      ansible_ssh_user: 'vagrant',
-      user: 'vagrant'
-    }
+    ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
   end
 
   config.vm.provider 'virtualbox' do |vb|
