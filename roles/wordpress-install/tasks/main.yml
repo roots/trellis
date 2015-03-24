@@ -4,8 +4,8 @@
 - name: Create .env file
   template: src="env.j2"
             dest="{{ www_root }}/{{ item.key }}/current/.env"
-            owner="{{ item.value.user }}"
-            group="{{ item.value.group }}"
+            owner="{{ deploy_user }}"
+            group=www-data
   with_dict: wordpress_sites
 
 - name: WP installed?
