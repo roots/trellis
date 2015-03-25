@@ -17,5 +17,4 @@
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: github-ssh-keys, tags: [github-ssh-keys], when: github_ssh_keys is defined }
-    - { role: ssh-known-hosts, host: github.com, dest: "/home/{{ deploy_user }}/.ssh/known_hosts", tags: [ssh-known-hosts] }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }

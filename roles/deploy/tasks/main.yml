@@ -3,7 +3,10 @@
   deploy_helper: path="{{ project_root }}" state=present
 
 - name: Clone project files
-  git: repo="{{ project_git_repo }}" dest="{{ project_source_path }}" version="{{ project_version }}"
+  git: repo="{{ project_git_repo }}"
+       dest="{{ project_source_path }}"
+       version="{{ project_version }}"
+       accept_hostkey=yes
 
 - name: write unfinished file
   file: path="{{ project_source_path }}/{{ deploy_helper.unfinished_filename }}" state=touch
