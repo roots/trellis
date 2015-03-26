@@ -10,6 +10,14 @@
         state=directory
   with_dict: wordpress_sites
 
+- name: Create logs folder of sites
+  file: path="{{ www_root }}/{{ item.key }}/logs"
+        owner="{{ deploy_user }}"
+        group=www-data
+        mode=0755
+        state=directory
+  with_dict: wordpress_sites
+
 - name: Setup system cron
   cron: name="{{ item.key }} WordPress cron"
         minute="*/15"
