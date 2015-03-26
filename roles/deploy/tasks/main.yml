@@ -66,7 +66,9 @@
   with_items: project_shared_children
 
 - name: Run post_build_commands in the new_release_path
-  command: "{{ item }} chdir={{ deploy_helper.new_release_path }}"
+  command: "{{ item }}"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
   with_items: project_post_build_commands
   environment: project_environment
 
@@ -75,5 +77,4 @@
   when: project_finalize
 
 - name: Reload php-fpm
-  service: name=php5-fpm state=reloaded
-  sudo: True
+  shell: "sudo service php5-fpm reload"

@@ -11,3 +11,13 @@
 
 - name: Add deploy user to www-data group
   user: name="{{ deploy_user }}" groups=www-data state=present append=yes
+
+- name: Add deploy user sudoers items for services
+  template:
+    src: sudoers.d.j2
+    dest: "/etc/sudoers.d/{{ deploy_user }}-services"
+    mode: 0440
+    owner: root
+    group: root
+    validate: "/usr/sbin/visudo -cf %s"
+  when: deploy_sudoers

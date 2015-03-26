@@ -14,6 +14,8 @@ hhvm: false
 deploy_user: deploy
 deploy_group: deploy
 deploy_groups: www-data
+deploy_sudoers:
+  - "/usr/sbin/service php5-fpm *"
 
 sudoers:
   - user: admin
