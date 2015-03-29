@@ -8,17 +8,12 @@
 # - you can set the git ref to deploy (can be a branch, tag or commit hash)
 project_version: "master"
 
-# DEPRECATED
-# For git, the .git folder is automatically removed
-#project_remove_git_folder: true
-
 # If you use the "rsync" strategy:
 # - you can set a timeout for the synchonize module
 project_deploy_synchronize_timeout: 30
 # - you can also delete files that don't exist on source after synchronizing
 project_deploy_synchronize_delete: false
-# - you must set the path to your local source (the default assumes your playbook is located in /ansible/ )
-project_local_path: "../"
+# - you must set the path to your local source (the default assumes your playbook is located in /ansible/ ) project_local_path: "../"
 
 # The source_path is used to fetch the tags from git, or synchronise via rsync. This way
 # you do not have to download/sync the entire project on every deploy
@@ -27,17 +22,10 @@ project_source_path: "{{ project_root }}/shared/source"
 # Files or folders to remove from the source when deploying
 project_unwanted_items: [ '.git' ]
 
-# DEPRECATED
-# The build_path is used to build your project in, prior to moving it to the release folder.
-# If it exists, this path will be deleted before a new build is started
-# (under the assumption that it contains a failed previous build)
-# project_build_path: "{{ project_root }}/build"
-
-# The project does not assume any package manager, you can enable whichever one(s) you use.
-project_has_composer: false
+project_has_composer: true
 
 # Default values to run composer install
-project_composer_binary: composer.phar
+project_composer_binary: composer
 project_command_for_composer_install: "{{ project_composer_binary }} install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts"
 # When set to true the old vendor dir is copied to the new release to speed up composer install
 project_copy_previous_composer_vendors: false
@@ -73,17 +61,17 @@ project_shared_children: []
 # The project_environment is a list of environment variables added to the various *_commands
 # Example:
 # project_environment:
-#   SYMFONY_ENV: "prod"
+#   WP_ENV: "production"
 project_environment: {}
 
 # There are a few moments in this role where arbitrary command(s) can be run. These commands receive
-# the "project_environment" so deploys for different stages can be done by changing this .
+# the "project_environment" so deploys for different stages can be done by changing this.
+# Each command is a dict with a `cmd` and an optional `path` which is relative to the `new_release_path`.
 # Example:
 # project_post_build_commands:
-#   - "app/console cache:clear"
-#   - "app/console doctrine:migrations:migrate --no-interaction"
-#   - "app/console assets:install"
-#   - "app/console assetic:dump"
+#   - path: web/app/themes/mytheme
+#     cmd: npm install && gulp --production
+#   - cmd: wp db import posts.sql
 project_pre_build_commands: []
 project_post_build_commands: []
 
