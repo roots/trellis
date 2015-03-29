@@ -1,7 +1,7 @@
 ---
 - name: Deploy WP site
   hosts: web
-  remote_user: deploy
+  remote_user: "{{ web_user }}"
 
   vars:
     project: "{{ wordpress_sites[site] }}"

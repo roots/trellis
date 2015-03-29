@@ -1,8 +1,9 @@
 ---
-www_root: /srv/www
+apt_cache_valid_time: 86400
 mariadb_dist: trusty
 mysql_user: root
-apt_cache_valid_time: 86400
+www_root: /srv/www
+
 mail_smtp_server: smtp.mandrillapp.com:587
 mail_admin: admin@example.dev
 mail_hostname: example.dev
@@ -11,10 +12,9 @@ mail_password: smtp_password
 
 hhvm: false
 
-deploy_user: deploy
-deploy_group: deploy
-deploy_groups: www-data
-deploy_sudoers:
+web_user: web
+web_group: www-data
+web_sudoers:
   - "/usr/sbin/service php5-fpm *"
 
 sudoers:

@@ -1,23 +1,19 @@
 ---
-- name: Setup deploy group
-  group: name="{{ deploy_group }}" state=present
-
-- name: Setup deploy user
-  user: name="{{ deploy_user }}"
-        group="{{ deploy_group }}"
-        groups="{{ deploy_groups }}"
+- name: Setup web user
+  user: name="{{ web_user }}"
+        group="{{ web_group }}"
         state=present
         shell=/bin/bash
 
-- name: Add deploy user to www-data group
-  user: name="{{ deploy_user }}" groups=www-data state=present append=yes
+- name: Add web user to www-data group
+  user: name="{{ web_user }}" groups=www-data state=present append=yes
 
-- name: Add deploy user sudoers items for services
+- name: Add web user sudoers items for services
   template:
     src: sudoers.d.j2
-    dest: "/etc/sudoers.d/{{ deploy_user }}-services"
+    dest: "/etc/sudoers.d/{{ web_user }}-services"
     mode: 0440
     owner: root
     group: root
     validate: "/usr/sbin/visudo -cf %s"
-  when: deploy_sudoers
+  when: web_sudoers

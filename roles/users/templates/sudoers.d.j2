@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
 
-{% for service in deploy_sudoers %}
-{{ deploy_user }} ALL=(ROOT) NOPASSWD: {{ service }}
+{% for service in web_sudoers %}
+{{ web_user }} ALL=(ROOT) NOPASSWD: {{ service }}
 {% endfor %}

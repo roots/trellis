@@ -1,6 +1,6 @@
 mysql_root_password: devpw
 
-deploy_user: vagrant
+web_user: vagrant
 
 wordpress_sites:
   example.dev:
