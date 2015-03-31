@@ -105,7 +105,7 @@ You may be concerned about setting plaintext passwords in a Git repository, and 
 Even then it's still best to try avoid it if possible, so you have few options:
 
 * Use [Ansible Vault](http://docs.ansible.com/playbooks_vault.html)
-* Use [Git Encrytpt](https://github.com/shadowhand/git-encrypt)
+* Use [Git Encrypt](https://github.com/shadowhand/git-encrypt)
 
 Note: if you're mostly using this for development environments only, you probably don't need to worry about any of this as everything is just run locally.
 
