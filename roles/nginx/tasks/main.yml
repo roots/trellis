@@ -25,6 +25,17 @@
   file: path=/etc/nginx/sites-enabled/default state=absent
   notify: reload nginx
 
+- name: ensure nginx ssl directory is created
+  file: path=/etc/nginx/ssl state=directory
+  when: ssl
+
+- name: ensure nginx ssl certificate and key are created
+  copy: src={{ nginx_ssl_local_path }}/{{ item }} dest=/etc/nginx/ssl/{{ item }} mode=0600
+  with_items:
+    - "{{ nginx_ssl_crt }}"
+    - "{{ nginx_ssl_key }}"
+  when: ssl
+
 - name: Enable better default site to drop unknown requests
   command: cp /tmp/server-configs-nginx/sites-available/no-default /etc/nginx/sites-enabled/no-default.conf
   notify: reload nginx
