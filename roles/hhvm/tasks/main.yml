@@ -30,7 +30,7 @@
   file: src=/var/run/mysqld/mysqld.sock dest=/tmp/mysql.sock owner=mysql group=mysql state=link force=yes
 
 - name: Start HHVM service
-  service: name=hhvm state=started enabled=true
+  service: name=hhvm state=restarted enabled=true
 
 - name: Create cron job to restart HHVM service daily
   cron: name="Restart HHVM daily"
