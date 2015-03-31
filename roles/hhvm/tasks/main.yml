@@ -26,6 +26,9 @@
 - name: Symlink mysql.sock for HHVM
   file: src=/var/run/mysqld/mysqld.sock dest=/tmp/mysql.sock owner=mysql group=mysql state=link force=yes
 
+- name: Change the HHVM user to the current web user
+  lineinfile: dest=/etc/default/hhvm line="RUN_AS_USER={{ web_user }}"
+
 - name: Start HHVM service
   service: name=hhvm state=started enabled=true
 
