@@ -23,6 +23,7 @@ This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PH
   * [WP Sites](#wp-sites)
   * [Mail](#mail)
 * [HHVM](#hhvm)
+* [SSL Support](#ssl)
 * [Security](#security)
   * [Locking Down Root](#locking-down-root)
   * [Configuration Files](#configuration-files)
@@ -132,6 +133,10 @@ Note: you can always set the box back to the base Ubuntu one if you prefer with 
 The only caveat is that it's not set up to seamlessly switch between the two on already provisioned machines. You'll either need to do some manual cleanup (like removing php5.6) or just re-create your machine.
 
 See `roles/hhvm/README.md` for more information on running HHVM with WordPress.
+
+## SSL Support
+
+You can enable the SSL support setting SSL to true in `group_vars/all` where you can also specify the .key and .crt files's local path and names.
 
 ## Options
 
