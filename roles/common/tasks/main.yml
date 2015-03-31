@@ -11,3 +11,10 @@
   - python-mysqldb
   - curl
   - git-core
+  - unzip
+  - subversion
+  - htop
+
+- name: Fixing an issue with hhvmi cli
+  lineinfile: dest=/etc/default/locale line='LC_CTYPE="en_US.UTF-8"'
+  lineinfile: dest=/etc/default/locale line='LC_ALL="en_US.UTF-8"'
