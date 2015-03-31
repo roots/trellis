@@ -10,7 +10,14 @@ mail_hostname: example.dev
 mail_user: smtp_user
 mail_password: smtp_password
 
-hhvm: false
+hhvm: true
+
+swap: false
+
+ssl: true
+nginx_ssl_local_path: ~/keys/
+nginx_ssl_crt: sslkey.crt
+nginx_ssl_key: sslkey.key
 
 web_user: web
 web_group: www-data
