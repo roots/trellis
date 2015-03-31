@@ -10,6 +10,8 @@ mail_password: smtp_password
 
 hhvm: false
 
+swap: false
+
 sudoers:
   - user: admin
     groups: [sudo]
