@@ -6,7 +6,9 @@ pid = /var/run/hhvm/pid
 
 ; hhvm specific
 
-hhvm.server.file_socket=/var/run/hhvm/hhvm.sock
+hhvm.server.user = {{ web_user }}
+hhvm.server.ip = 127.0.0.1
+hhvm.server.port = 9000
 hhvm.server.type = fastcgi
 hhvm.server.default_document = index.php
 hhvm.log.use_log_file = true
