@@ -1,7 +1,7 @@
 ; {{ ansible_managed }}
 
 [wordpress]
-listen = /var/run/php5-fpm-wordpress.sock
+listen = 127.0.0.1:9000
 listen.owner = {{ web_user }}
 listen.group = {{ web_group }}
 user = www-data
