@@ -1,5 +1,9 @@
 server {
-  listen *:80;
+  {% if ssl %}
+  listen 443 ssl;
+  {% else %}
+  listen 80;
+  {% endif %}
   server_name  {{ item.site_hosts | join(' ') }};
   access_log   {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.access.log;
   error_log    {{ www_root }}/{{ item.site_name }}/logs/{{ item.site_name }}.error.log;
@@ -8,6 +12,12 @@ server {
   index index.php;
 
   charset utf-8;
+
+  {% if ssl %}
+  include /etc/nginx/h5bp/directive-only/ssl.conf;
+  ssl_certificate           /etc/nginx/ssl/{{ nginx_ssl_crt }};
+  ssl_certificate_key       /etc/nginx/ssl/{{ nginx_ssl_key }};
+  {% endif %}
 
   {% if item.env.wp_env == 'development' -%}
     # See Virtualbox section at http://wiki.nginx.org/Pitfalls
@@ -23,8 +33,22 @@ server {
 
 {% for host in item.site_hosts if strip_www %}
 server {
-  listen *:80;
+  {% if ssl %}
+  listen 443 ssl;
+  ssl_certificate           /etc/nginx/ssl/{{ nginx_ssl_crt }};
+  ssl_certificate_key       /etc/nginx/ssl/{{ nginx_ssl_key }};
+  {% else %}
+  listen 80;
+  {% endif %}
   server_name www.{{ host }};
   return 301 $scheme://{{ host }}$request_uri;
 }
 {% endfor %}
+
+{% if ssl %}
+server {
+  listen 80;
+  server_name {{ host }};
+  return 301 https://$host$request_uri;
+}
+{% endif %}
