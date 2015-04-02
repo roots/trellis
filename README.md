@@ -2,11 +2,31 @@
 
 [![Build Status](https://travis-ci.org/roots/bedrock-ansible.svg)](https://travis-ci.org/roots/bedrock-ansible)
 
-[Ansible](http://www.ansible.com/home) [playbook](http://docs.ansible.com/playbooks.html) designed to be used with [Bedrock](http://roots.io/wordpress-stack/) to configure dev & production servers for Bedrock-based WordPress sites.
+bedrock-ansible is a set of [Ansible](http://www.ansible.com/home) [playbooks](http://docs.ansible.com/playbooks.html) designed to be used with [Bedrock](http://roots.io/wordpress-stack/) to configure development & production servers for Bedrock-based WordPress sites.
 
-This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PHP 5.6 (or HHVM) and [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better) on Ubuntu 14.04 Trusty LTS.
+This project will let you configure complete WordPress ready servers with a single command:
 
-[Vagrant](http://www.vagrantup.com) is used to easily start up a Virtual Machine ready for development.
+**Development**
+`vagrant up`
+
+**Staging/Production**
+`ansible-playbook -i hosts/production server.yml`
+
+**Deploying**
+`./deploy production example.com`
+
+## What You Get
+
+bedrock-ansible will configure you a server with the following and more:
+
+* Ubuntu 14.04 Trusty LTS
+* Nginx
+* PHP 5.6 (or [HHVM](http://hhvm.com/))
+* [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better)
+* SSMTP (mail delivery)
+* Memcached
+* Composer
+* WP-CLI
 
 # ToC
 
@@ -35,7 +55,6 @@ This playbook will install the common LEMP (Linux/Nginx/MySQL/PHP) stack with PH
 * Virtualbox >= 4.3.10 - [Downloads](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Downloads](http://www.vagrantup.com/downloads.html)
 * Vagrant-bindfs >= 0.3.1 - [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
-* Ubuntu 14.04 guest OS
 
 ### Host OS Notes
 
@@ -51,20 +70,35 @@ Example `Vagrantfile` for Windows can be found [here](https://gist.github.com/st
 ## Installation
 
 1. Download/fork/clone this repo to your local machine.
-2. Download/fork/clone [Bedrock](https://github.com/roots/bedrock) or have an existing Bedrock-based site ready.
+2. Run `ansible-galaxy -r requirements.yml` to install external Ansible roles/packages.
+3. Download/fork/clone [Bedrock](https://github.com/roots/bedrock) or have an existing Bedrock-based site ready.
 
 You should now have the following directories at the same level somewhere:
 
 ```
-- bedrock-ansible/
-- example.dev/
+project/
+  - bedrock-ansible/
+  - example.dev/
 ```
 
 Note: The full paths to these directories must not contain spaces or else Ansible will fail. See https://github.com/ansible/ansible/issues/8555.
 
+## Playbooks
+
+There are 4 playbooks in this project:
+
+* `dev.yml`: run by Vagrant to provision your development Virtual Machine.
+* `server.yml`: provision remote servers for staging, production, etc.
+* `deploy.yml`: deploy your site to a remote server.
+* `rollback.yml`: rollback a deploy.
+
 ## Usage
 
+Usage varies a little between development and remote (staging/production) servers.
+
 ### Development
+
+In development, you can expect the `vagrant up` command to create a server, set up your WP sites *and* install WordPress automatically.
 
 1. Edit `group_vars/development` and add your WordPress site(s). See [Options](#options) below for details.
 2. Optionally add any dev hostnames to your local `/etc/hosts` file (or use the [hostsupdater plugin](https://github.com/cogitatio/vagrant-hostsupdater)).
@@ -76,21 +110,43 @@ You probably don't need to edit your `Vagrantfile` and should avoid it unless yo
 
 Tip: Assuming you leave the default `type: 'nfs'` for `config.vm.synced_folder` (in `Vagrantfile`), see the vagrant docs section ["Root Privilege Requirement"](https://docs.vagrantup.com/v2/synced-folders/nfs.html) for how to avoid having to type your password with every `vagrant up`.
 
-Note: `hosts/development` is there for completeness sake only as Vagrant automatically generates and uses its own.
+Note: `hosts/development` is there for completeness sake only as Vagrant automatically generates one and uses its own.
 
-### Staging/Production/Remote servers
+### Remote Servers (staging/production)
+
+For remote servers, bedrock-ansible won't automatically create the server for you. You'll need to have a base Ubuntu 14.04 server already created.
+
+Remote servers also won't get your WP sites automatically installed. This is because your codebase doesn't exist on the server until you deploy it.
 
 1. Edit `group_vars/<environment/group>` and add your WordPress site(s). See [Options](#options) below for details.
 2. Edit `hosts/<environment/group>` and add your server IP(s)/hostname(s).
-3. Run `ansible-playbook -i hosts/<environment/group> site.yml`.
+3. Run `ansible-playbook -i hosts/<environment/group> server.yml`.
 
 Staging example:
 
 1. Edit `group_vars/staging`
 2. Edit `hosts/staging`
-3. Run `ansible-playbook -i hosts/staging site.yml`
+3. Run `ansible-playbook -i hosts/staging server.yml`
 
-### Passwords
+### Deploying
+
+Deploying a WP site consists of cloning a Git repository on the remote server and optionally running pre/post build commands (such as compiling assets).
+
+1. Run `./deploy <environment> <site name>`
+
+Example: `./deploy production example.com`
+
+`./deploy` is a simple Bash script which wraps the more verbose Ansible command. If you need to tweak more options, use this command:
+
+`ansible-playbook -i hosts/<environment> --extra-vars="site=example.com"`
+
+### Roll back a deploy
+
+If you need to roll back a deploy, a separate playbook is used:
+
+1. Run `ansible-playbook -i hosts/<environment> rollback.yml --extra-vars="site=<site name>"`
+
+## Passwords
 
 There a few places you'll want to set/change passwords:
 
@@ -109,7 +165,7 @@ Even then it's still best to try avoid it if possible, so you have few options:
 
 Note: if you're mostly using this for development environments only, you probably don't need to worry about any of this as everything is just run locally.
 
-### `Vagrantfile`
+## `Vagrantfile`
 
 The example `Vagrantfile` in this project can be kept in this folder, or moved anywhere else such as a project/site folder. Generally if you want to have multiple sites on 1 Vagrant VM, you should keep the `Vagrantfile` where it is (in the bedrock-ansible dir). If you want to have 1 Vagrant VM *PER* project/site, you should make copies of the `Vagrantfile` and put them into each project's dir. You'd then run `vagrant up` from the project specific directory.
 
@@ -139,9 +195,8 @@ All Ansible configuration is done in [YAML](http://en.wikipedia.org/wiki/YAML).
 
 ### WP Sites
 
-`wordpress_sites` is the top level array used to define the WordPress sites/virtual hosts that will be created.
+`wordpress_sites` is the top level dictionary used to define the WordPress sites/virtual hosts that will be created.
 
-* `site_name` (required) - name used to identify site (commonly the domain name) (default: none)
 * `site_hosts` (required) - array of hosts that Nginx will listen on (default: none)
 * `user` (optional) - user owner of site directories/files (default: `root` | `user` in `site.yml`)
 * `group` (optional) - group owner of site directories/files (default: `www-data`)
