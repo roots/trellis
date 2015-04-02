@@ -1,0 +1,31 @@
+---
+- name: create swap space
+  command: fallocate -l 2G /swapfile
+  when: ansible_swaptotal_mb < 1
+
+- name: change permissions
+  file: path=/swapfile owner=root group=root mode=600 state=file
+
+- name: make swap
+  command: mkswap /swapfile
+  when: ansible_swaptotal_mb < 1
+
+- name: add to fstab
+  lineinfile:
+    dest=/etc/fstab
+    regexp="swapfile"
+    line="/swapfile none swap sw 0 0"
+    state=present
+  register: swap_fstab
+
+- name: turn swap on
+  command: swapon -a
+  when: swap_fstab|changed
+
+- name: set swapiness
+  lineinfile:
+    dest=/etc/sysctl.conf
+    regexp="^vm.swappiness"
+    line="vm.swappiness = 10"
+    state=present
+  notify: reload sysctl.conf
