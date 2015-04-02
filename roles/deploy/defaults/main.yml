@@ -37,9 +37,9 @@ project_composer_vendor_path: vendor
 #   - name: "some_file"           // <- optional, for your own reference and readability
 #     src: "local-path-to-file"   // <- relative or absolute, just like Ansible
 #     dest: "remote-path-to-file"
-#   - name: "some_other_file"
-#     src: "local-path-to-other-file"
-#     dest: "remote-path-to-other-file"
+#   - name: compiled theme assets
+#     src: ../example.dev/web/app/themes/sage/dist
+#     dest: web/app/themes/sage
 project_files: []
 
 # All the templates to copy to the remote system on deploy. These could contain config files.
@@ -66,12 +66,18 @@ project_environment: {}
 
 # There are a few moments in this role where arbitrary command(s) can be run. These commands receive
 # the "project_environment" so deploys for different stages can be done by changing this.
-# Each command is a dict with a `cmd` and an optional `path` which is relative to the `new_release_path`.
-# Example:
+# Each command is a dict with a `cmd` and an optional `path`. The `path` is relative to the
+# local bedrock-ansible directory (for `project_pre_build_commands_local`) or relative to the
+# `new_release_path` on the remote server (for `project_pre_build_commands` and `project_post_build_commands`).
+# Examples:
+# project_pre_build_commands_local:
+#   - path: ../example.dev/web/app/themes/sage
+#     cmd: gulp --production
 # project_post_build_commands:
 #   - path: web/app/themes/mytheme
 #     cmd: npm install && gulp --production
 #   - cmd: wp db import posts.sql
+project_pre_build_commands_local: []
 project_pre_build_commands: []
 project_post_build_commands: []
 

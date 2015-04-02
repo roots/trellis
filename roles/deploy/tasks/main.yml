@@ -22,8 +22,14 @@
   file: path="{{ deploy_helper.new_release_path }}/{{ item }}" state=absent
   with_items: project_unwanted_items
 
+- name: Run pre_build_commands_local on Ansible host
+  local_action: "command {{ item.cmd }}"
+  args:
+    chdir: "{{ item.path }}"
+  with_items: project_pre_build_commands_local
+
 - name: Copy project files
-  copy: src="{{ item.src }}" dest="{{ deploy_helper.new_release_path }}/{{ item.dest }}" mode="{{ item.mode | default('0644') }}"
+  synchronize: src="{{ item.src }}" dest="{{ deploy_helper.new_release_path }}/{{ item.dest }}"
   with_items: project_files
 
 - name: Copy project templates
