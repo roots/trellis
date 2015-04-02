@@ -1,0 +1,18 @@
+---
+- include: user-release.yml
+  when: release is defined
+
+- include: prior-release.yml
+  when: release is not defined
+
+- name: Check whether target release was from a successful deploy
+  stat: path="{{ new_release_path }}/DEPLOY_UNFINISHED"
+  register: target
+
+- name: Fail if target release was from failed deploy
+  fail: msg="Cannot switch to release at {{ new_release_path }}. It is from an unfinished deploy.
+        You may manually specify a different release using --extra-vars='release=12345678901234'."
+  when: target.stat.exists | default(False)
+
+- name: Link 'current' directory to target release
+  file: path="{{ project_root }}/current" src="{{ new_release_path }}" state=link

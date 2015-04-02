@@ -1,0 +1,21 @@
+---
+- name: Get list position of current symlinked release
+  shell: "ls releases | grep -n $(basename $(readlink current)) | cut -f1 -d:"
+  args:
+    chdir: "{{ project_root }}"
+  register: current_release_position
+
+- name: Fail if current release is the oldest available release
+  fail: msg="Currently symlinked to earliest available release. Cannot rollback.
+        You may manually specify a different release using --extra-vars='release=12345678901234'."
+  when: current_release_position.stdout_lines[0] == "1"
+
+- name: Collect list of releases
+  command: ls releases
+  args:
+    chdir: "{{ project_root }}"
+  register: releases
+
+- name: Create new_release_path variable
+  set_fact:
+    new_release_path: "{{ project_root }}/releases/{{ releases.stdout_lines[(current_release_position.stdout_lines[0] | int - 2)] }}"
