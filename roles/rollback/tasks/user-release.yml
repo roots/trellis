@@ -1,0 +1,18 @@
+---
+- name: Check whether user-specified release exists
+  stat: path="{{ project_root }}/releases/{{ release }}"
+  register: specified
+
+- name: Get name of current symlinked release
+  shell: "basename $(readlink current)"
+  args:
+    chdir: "{{ project_root }}"
+  register: current_release
+
+- name: Fail if user-specified release doesn't exist or is already active
+  fail: msg="Cannot switch to release {{ release }}. Either it does not exist or it is the active release."
+  when: specified.stat.isdir | default(False) == False or current_release.stdout_lines[0] == release
+
+- name: Create new_release_path variable
+  set_fact:
+    new_release_path: "{{ project_root }}/releases/{{ release }}"
