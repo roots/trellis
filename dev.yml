@@ -5,6 +5,7 @@
   remote_user: vagrant
 
   roles:
+    - { role: kamaln7.swapfile, swapfile_size: 1GB, swapfile_swappiness: 10, when: swap, tags: [swap] }
     - { role: common, tags: [common] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }

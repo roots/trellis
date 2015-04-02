@@ -1,7 +1,11 @@
 # {{ ansible_managed }}
 
 server {
-  listen *:80;
+  {% if ssl %}
+  listen 443 ssl;
+  {% else %}
+  listen 80;
+  {% endif %}
   server_name  {{ item.value.site_hosts | join(' ') }};
   access_log   {{ www_root }}/{{ item.key }}/logs/{{ item.key }}.access.log;
   error_log    {{ www_root }}/{{ item.key }}/logs/{{ item.key }}.error.log;
@@ -10,6 +14,12 @@ server {
   index index.php;
 
   charset utf-8;
+
+  {% if ssl %}
+  include /etc/nginx/h5bp/directive-only/ssl.conf;
+  ssl_certificate           /etc/nginx/ssl/{{ nginx_ssl_crt }};
+  ssl_certificate_key       /etc/nginx/ssl/{{ nginx_ssl_key }};
+  {% endif %}
 
   {% if item.value.env.wp_env == 'development' -%}
     # See Virtualbox section at http://wiki.nginx.org/Pitfalls
@@ -28,5 +38,13 @@ server {
   listen *:80;
   server_name www.{{ host }};
   return 301 $scheme://{{ host }}$request_uri;
+}
+{% endfor %}
+
+{% for host in item.value.site_hosts if ssl %}
+server {
+  listen 80;
+  server_name {{ host }};
+  return 301 https://{{ host }}$request_uri;
 }
 {% endfor %}

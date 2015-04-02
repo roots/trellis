@@ -1,9 +1,14 @@
 ; {{ ansible_managed }}
 
 ; php options
+{% if memcached_sessions %}
+session.save_handler = memcached
+session.save_path = "tcp://{{ memcached_listen_ip }}:{{ memcached_port }}"
+{% else %}
 session.save_handler = files
 session.save_path = /var/lib/php5
 session.gc_maxlifetime = 1440
+{% endif %}
 
 ; hhvm specific
 hhvm.log.level = Warning

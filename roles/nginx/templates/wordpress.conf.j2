@@ -4,16 +4,12 @@ location / {
   try_files $uri $uri/ /index.php?$args;
 }
 
-location ~ \.php$ {
+location ~ \.(hh|php)$ {
   try_files $uri =404;
   include fastcgi_params;
   fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
   fastcgi_param DOCUMENT_ROOT $realpath_root;
-  {% if hhvm %}
-  fastcgi_pass unix:/var/run/hhvm/hhvm.sock;
-  {% else %}
-  fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
-  {% endif %}
+  fastcgi_pass 127.0.0.1:9000;
   client_max_body_size 0;
 }
 
