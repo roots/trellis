@@ -23,6 +23,17 @@
 - name: Disable default server
   file: path=/etc/nginx/sites-enabled/default state=absent
 
+- name: ensure nginx ssl directory is created
+  file: path=/etc/nginx/ssl state=directory
+  when: ssl
+
+- name: ensure nginx ssl certificate and key are created
+  copy: src={{ nginx_ssl_local_path }}/{{ item }} dest=/etc/nginx/ssl/{{ item }} mode=0600
+  with_items:
+    - "{{ nginx_ssl_crt }}"
+    - "{{ nginx_ssl_key }}"
+  when: ssl
+  
 - name: Create base WordPress config
   template: src=wordpress.conf.j2 dest=/etc/nginx/wordpress.conf
 

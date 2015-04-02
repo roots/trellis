@@ -10,6 +10,11 @@ mail_password: smtp_password
 
 hhvm: false
 
+ssl: true
+nginx_ssl_local_path: ~/keys/
+nginx_ssl_crt: sslkey.crt
+nginx_ssl_key: sslkey.key
+
 sudoers:
   - user: admin
     groups: [sudo]
