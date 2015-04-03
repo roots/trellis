@@ -10,7 +10,7 @@ Configure complete [Bedrock](https://roots.io/bedrock/)-based WordPress ready se
 | ---------------------- | ------------------------------------------------ |
 | **Development**        | `vagrant up`                                     |
 | **Staging/Production** |`ansible-playbook -i hosts/production server.yml` |
-| **Deploying**          | `./deploy production example.com`                |
+| **Deploying**          | `./deploy.sh production example.com`             |
 
 ## What's included
 
@@ -65,7 +65,7 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 ## Deploying to remote servers
 
-1. Run `./deploy <environment> <site name>`
+1. Run `./deploy.sh <environment> <site name>`
 2. To rollback a deploy, run `ansible-playbook -i hosts/<environment> rollback.yml --extra-vars="site=<site name>"`
 
 ## Options
