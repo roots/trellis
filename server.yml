@@ -7,6 +7,7 @@
     - { role: common, tags: [common] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
+    - { role: ntp }
     - { role: users, tags: [users] }
     - { role: mariadb, tags: [mariadb] }
     - { role: ssmtp, tags: [ssmtp mail] }
