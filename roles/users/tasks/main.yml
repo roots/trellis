@@ -1,0 +1,19 @@
+---
+- name: Setup web user
+  user: name="{{ web_user }}"
+        group="{{ web_group }}"
+        state=present
+        shell=/bin/bash
+
+- name: Add web user to www-data group
+  user: name="{{ web_user }}" groups=www-data state=present append=yes
+
+- name: Add web user sudoers items for services
+  template:
+    src: sudoers.d.j2
+    dest: "/etc/sudoers.d/{{ web_user }}-services"
+    mode: 0440
+    owner: root
+    group: root
+    validate: "/usr/sbin/visudo -cf %s"
+  when: web_sudoers

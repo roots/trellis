@@ -1,6 +1,6 @@
 # Not used. Vagrant generates its own hosts file automatically and uses it
 [web]
-vagrant ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200
+vagrant ansible_ssh_host=127.0.0.1 ansible_ssh_port=2200 ansible_ssh_private_key_file='~/.vagrant.d/insecure_private_key'
 
 [development:children]
 web

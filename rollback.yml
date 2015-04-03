@@ -1,0 +1,10 @@
+---
+- name: Rollback a Deploy
+  hosts: web
+  remote_user: "{{ web_user }}"
+
+  vars:
+    project_root: "{{ www_root }}/{{ site }}"
+
+  roles:
+    - rollback

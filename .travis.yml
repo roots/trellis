@@ -1,8 +1,12 @@
 language: python
-python: "2.7"
+python: 2.7
 sudo: false
 cache: pip
 install:
   - pip install ansible
 script:
-  - ansible-playbook --syntax-check -i hosts/development site.yml
+  - ansible-galaxy install --force -r requirements.yml -p vendor/roles
+  - ansible-playbook --syntax-check -i hosts/development deploy.yml
+  - ansible-playbook --syntax-check -i hosts/development dev.yml
+  - ansible-playbook --syntax-check -i hosts/development secure-root.yml
+  - ansible-playbook --syntax-check -i hosts/development server.yml

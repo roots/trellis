@@ -1,12 +1,12 @@
 mysql_root_password: devpw
 
+web_user: vagrant
+
 wordpress_sites:
-  - site_name: example.dev
+  example.dev:
     site_hosts:
       - example.dev
     local_path: '../example.dev' # path targeting local project directory (relative to root/Vagrantfile)
-    user: vagrant
-    group: www-data
     site_install: true
     site_title: Example Site
     admin_user: admin

@@ -1,0 +1,24 @@
+---
+- name: Create web root of sites
+  file: path="{{ www_root }}/{{ item.key }}/current/web"
+        owner="{{ web_user }}"
+        group="{{ web_group }}"
+        mode=0755
+        state=directory
+  with_dict: wordpress_sites
+
+- name: Create shared folder of sites
+  file: path="{{ www_root }}/{{ item.key }}/shared"
+        owner="{{ web_user }}"
+        group="{{ web_group }}"
+        mode=0755
+        state=directory
+  with_dict: wordpress_sites
+
+- name: Change site owner to user
+  file: path="{{ www_root }}/{{ item.key }}"
+        owner="{{ web_user }}"
+        group="{{ web_group }}"
+        state=directory
+        recurse=yes
+  with_dict: wordpress_sites

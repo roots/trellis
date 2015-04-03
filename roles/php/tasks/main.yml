@@ -26,6 +26,7 @@
 - name: Disable default pool
   command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.disabled creates=/etc/php5/fpm/pool.d/www.disabled
   when: disable_default_pool
+  notify: reload php-fpm
 
 - name: Add php.ini template
   template: src=php.ini.j2 dest=/etc/php5/fpm/php.ini

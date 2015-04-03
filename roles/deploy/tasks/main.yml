@@ -1,0 +1,86 @@
+---
+- name: Initialize
+  deploy_helper: path="{{ project_root }}" state=present
+
+- name: Clone project files
+  git: repo="{{ project_git_repo }}"
+       dest="{{ project_source_path }}"
+       version="{{ project_version }}"
+       accept_hostkey=yes
+
+- name: write unfinished file
+  file: path="{{ project_source_path }}/{{ deploy_helper.unfinished_filename }}" state=touch
+
+- name: Copy files to new build dir
+  command: cp -pr {{ project_source_path }} {{ deploy_helper.new_release_path }}
+
+- name: Move site into root
+  shell: mv {{ deploy_helper.new_release_path }}/{{ project_subtree }}/* {{ deploy_helper.new_release_path }}
+  when: project_subtree is defined
+
+- name: Remove unwanted files/folders from new release
+  file: path="{{ deploy_helper.new_release_path }}/{{ item }}" state=absent
+  with_items: project_unwanted_items
+
+- name: Run pre_build_commands_local on Ansible host
+  local_action: "command {{ item.cmd }}"
+  args:
+    chdir: "{{ item.path }}"
+  with_items: project_pre_build_commands_local
+
+- name: Copy project files
+  synchronize: src="{{ item.src }}" dest="{{ deploy_helper.new_release_path }}/{{ item.dest }}"
+  with_items: project_files
+
+- name: Copy project templates
+  template: src="{{ item.src }}" dest="{{ deploy_helper.new_release_path }}/{{ item.dest }}" mode="{{ item.mode | default('0644') }}"
+  with_items: project_templates
+
+- name: Run pre_build_commands in the new_release_path
+  command: "{{ item.cmd }}"
+  args:
+    chdir: "{{ [deploy_helper.new_release_path, item.path] | select('defined') | join('/') }}"
+  with_items: project_pre_build_commands
+  environment: project_environment
+
+- name: Check if vendor dir exists
+  stat: path="{{ deploy_helper.current_path }}/{{ project_composer_vendor_path }}"
+  register: check_composer_vendor_path
+  when: project_copy_previous_composer_vendors | default(True)
+
+- name: Copy vendor dir if exists to speed up composer
+  command: cp -rp {{ deploy_helper.current_path }}/{{ project_composer_vendor_path }} {{ deploy_helper.new_release_path }}/{{ project_composer_vendor_path }}
+  when: project_copy_previous_composer_vendors and check_composer_vendor_path.stat.exists
+
+- name: Do composer install
+  command: "{{ project_command_for_composer_install }}"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  environment: project_environment
+  when: project_has_composer
+
+- name: Ensure shared sources are present
+  file: path="{{ deploy_helper.shared_path }}/{{ item.src }}" state="{{ item.type | default('directory') }}"
+  with_items: project_shared_children
+
+- name: Ensure shared paths are absent
+  file: path="{{ deploy_helper.new_release_path }}/{{ item.path }}" state=absent
+  with_items: project_shared_children
+
+- name: Create shared symlinks
+  file: path="{{ deploy_helper.new_release_path }}/{{ item.path }}" src="{{ deploy_helper.shared_path }}/{{ item.src }}" state=link
+  with_items: project_shared_children
+
+- name: Run post_build_commands in the new_release_path
+  command: "{{ item.cmd }}"
+  args:
+    chdir: "{{ [deploy_helper.new_release_path, item.path] | select('defined') | join('/') }}"
+  with_items: project_post_build_commands
+  environment: project_environment
+
+- name: Finalize the deploy
+  deploy_helper: path="{{ project_root }}" release="{{ deploy_helper.new_release }}" state=finalize
+  when: project_finalize
+
+- name: Reload php-fpm
+  shell: sudo service php5-fpm reload
