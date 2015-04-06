@@ -17,6 +17,7 @@
 
 - name: Set root user password
   mysql_user: name=root
+              host="{{ item }}"
               password="{{ mysql_root_password }}"
               check_implicit_admin=yes
               login_user="{{ mysql_user }}"
