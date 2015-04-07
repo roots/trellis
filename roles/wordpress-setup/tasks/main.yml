@@ -18,6 +18,11 @@
         state=directory
   with_dict: wordpress_sites
 
+- name: Create deploy history log
+  template: src="revisions.conf.j2"
+            dest="{{ www_root }}/{{ item.key }}/logs/revisions.log"
+  with_dict: wordpress_sites
+
 - name: Setup system cron
   cron: name="{{ item.key }} WordPress cron"
         minute="*/15"

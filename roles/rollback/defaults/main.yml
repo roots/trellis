@@ -1,0 +1,185 @@
+# -----------------------------------------------
+# Default variables
+
+current_path: "{{ project_root }}/current"
+releases_path: "{{ project_root }}/releases"
+deploy_log_name: revisions.log
+deploy_log: "{{ project_root }}/logs/{{ deploy_log_name }}"
+deploy_user: "{{ (lookup('env', 'USER').ljust(10) | truncate(10, true, '')) }}"
+
+# Which deploy statuses qualify a release as a candidate for rollback?
+# (in the deploy log, each release/deploy was given a status at time of deployment/rollback)
+# acceptable_statuses:
+#   - ok       (obviously good to include)
+#   - force    (maybe include, if you expect forced rollbacks/deploys to be functional)
+#   - fail     (probably should not include)
+acceptable_statuses:
+  - ok
+
+
+# -----------------------------------------------
+# --extra-vars variables
+
+# version -- various logic throughout depends on '' (empty string) as default
+u_version: "{{ version | default('') }}"
+
+# Whether auto-rollback chooses prior release in terms of creation or activation
+# Imagine you create release A then B then C, then rollback to B, then create D, and now want to auto-rollback.
+#   - summary: A -> B -> C -> B -> D -> ?
+#   - which prior release should be used for auto-rollback?
+#     - B is the prior release in terms of activation
+#     - C is the prior release in terms of creation
+# choose 'activation' or 'creation'
+u_priorby: "{{ priorby | default('activation') }}"
+
+# Should current release be marked with 'fail' status?
+# You might be rolling back because the release a problem, so you want to mark the current version as fail.
+# It's probably best to leave the default false to avoid a deploy log full of apparently failed deploys,
+# which would leave no valid candidates for rollback
+u_markfail: "{{ markfail | default(false) }}"
+
+# If true, skips all checks against deploy log and just creates the new symlink. False is recommended default.
+u_force: "{{ (force | default(false)) | lower | bool }}"
+
+
+# -----------------------------------------------
+# Messages
+
+# Message -- general info (when user specifies version in ['list', 'info', 'help'])
+msg_general:
+  - "{% if log_format_corrupt | bool and show_available_releases | bool %}{{ [msg_log_format_corrupt] }}{% endif %}"
+  - "{{ msg_log_excerpt_intro }}"
+  - "{{ log_excerpt.stdout_lines[3:] | sort }}"
+  - "{{ msg_current_entry }}"
+  - "{{ msg_unlogged_releases }}"
+  - "{{ msg_full_log_path }}"
+  - "{{ msg_param_version }}"
+  - "{{ msg_param_priorby }}"
+  - "{{ msg_param_markfail }}"
+
+msg_log_excerpt_intro: ["Here are the most recent deploy log entries for the releases that exist on the server... "]
+msg_current_entry: "['Currently active release ({% if old_entry == '' %}NOT {% endif %}included above) is...'] + {{ [current_entry] }}"
+msg_unlogged_releases: "{% if unlogged_releases_exist | bool %}{{ ['Note - The following directories are in releases_path but are not in the deploy log.'] + unlogged_releases.stdout_lines }}{% endif %}"
+msg_full_log_path: ["A full deploy history log is available at `{{ deploy_log }}`", "Note. If the formatting of `{{ deploy_log_name }}` becomes corrupted, rollbacks may fail."]
+unlogged_releases_exist: "{{ unlogged_releases.stdout_lines | count != 0 }}"
+msg_param_version: ["VERSION. You may specify a rollback version using --extra-vars 'version=MYRELEASE'.", "The 'version' parameter accepts RELEASE, SHA, or VERSION from the NEW columns below, where STATUS is ok.", "Using a RELEASE value is most reliable. Avoid specifying a non-unique value", "(e.g., 'master' probably appears more than once in the log).","Use --extra-vars 'version=list' list to see a list of the most recent deploy log entries for the releases that exist on the server."]
+msg_param_priorby: ["PRIORBY. You may use --extra-vars 'priorby=activation' to auto-rollback to the version that was", "prior in terms of how recently it was active, or --extra-vars 'priorby=creation' to auto-rollback to the version that was", "prior in terms of when it was created (based on the release name timestamps)."]
+msg_param_markfail: ["MARKFAIL. You may use --extra-vars 'markfail=true' to set the status of the currently active release to 'fail'", "in the deploy log before you rollback. For example, maybe the current release had a problem", "and you would like it excluded as a candidate for future auto-rollback."]
+
+# Message -- success report
+msg_log_entry: "{{ log_excerpt.stdout_lines[3:6] + [deploy_log_entry_final] }}"
+
+# Message -- fail diagnostics
+msg_fail: "{% if show_available_releases | bool %}
+            {{ msg_see_version_info_above }}{{ br }}
+            {% if force_and_show_available_releases    | bool %}{{ msg_force_and_show_available_releases  }}{{ br }}{% endif %}
+          {% else %}
+            Deploy aborted. {{ br }}{{ br }}
+            {% if log_format_corrupt                   | bool %}{{ msg_log_format_corrupt                 }}{{ br }}{{ br }}{% endif %}
+            {% if user_version_exists_but_not_in_log   | bool %}{{ msg_user_version_exists_but_not_in_log }}{{ br }}{% endif %}
+            {% if user_version_does_not_exist          | bool %}{{ msg_user_version_does_not_exist        }}{{ br }}{% endif %}
+            {% if user_version_non_unique              | bool %}{{ msg_user_version_non_unique            }}{{ br }}{% endif %}
+            {% if user_version_already_active          | bool %}{{ msg_user_version_already_active        }}{{ br }}{% endif %}
+            {% if user_version_status_unaccepted       | bool %}{{ msg_user_version_status_unaccepted     }}{{ br }}{% endif %}
+            {% if no_prior_version_available           | bool %}{{ msg_no_prior_version_available         }}{{ br }}{% endif %}
+            {% if prior_unknown | bool or cannot_force | bool %}{{ msg_prior_unknown                      }}{{ br }}{% endif %}{{ br }}
+            {{ msg_aborted_release_info   }}{{ br }}{{ br }}
+            {{ msg_see_version_info_above }}{{ br }}{{ br }}
+            {{ msg_force_option           }}{{ br }}{{ br }}
+            {{ msg_manual_rollback        }}
+          {% endif %}"
+
+br: " \n"
+msg_log_format_corrupt: "WARNING: Your deploy log at `{{ deploy_log }}` appears to have formatting corruption which could compromise the proper functioning of any rollback. You may use --extra-vars 'version=RELEASE and force=true' if you are very confident the release exists and is functional. "
+msg_user_version_exists_but_not_in_log: "The 'version' you specified ('{{ u_version }}') is untrusted because it is not in the deploy log (but it appears to exist on the server). "
+msg_user_version_does_not_exist: "The 'version' you specified ('{{ u_version }}') does not exist. "
+msg_user_version_non_unique: "There are multiple releases matching the 'version' you specified ('{{ u_version }}'; see output above). Pass into the 'version' parameter the RELEASE name because it is most likely to be unique (whereas SHA and VERSION are likely to be duplicated across releases). "
+msg_user_version_already_active: "The 'version' you specified ('{{ u_version }}') appears to be the currently active version. "
+msg_user_version_status_unaccepted: "The most recent deployment of the 'version' you specified ('{{ u_version }}') has the status '{{ (user_entry[44:49] | trim) }}', which is not an accepted status for rollback. If you still want to rollback to this version, you may use --extra-vars 'force=true'. Alternatively, you could add '{{ (user_entry[44:49] | trim) }}' to the list of 'acceptable_statuses'. "
+msg_no_prior_version_available: "There are no versions available that are older than the currently active release. You may have to specify a different release using --extra-vars 'version=MYRELEASE'. {{ br }}{{ br }}Note that you may use --extra-vars 'priorby=activation' to auto-rollback to the version that was prior in terms of how recently it was active, or --extra-vars 'priorby=creation' to auto-rollback to the prior version in terms of when it was created (based on the release name timestamps). "
+msg_prior_unknown: "Unable to automatically determine the prior release because the currently active release is not listed in the deploy log. You may have to manually specify a release using --extra-vars 'version=MYRELEASE'. "
+
+# Message -- general troubleshooting
+msg_aborted_release_info: "If the problem is unclear, you may be able to learn more by comparing the following aborted deployment information with the actual log entries in the output above.{{ br }}{{ br }}{% for item in log_excerpt.stdout_lines[3:6] %}{{ item }}{{ br }}{% endfor %}{{ deploy_log_entry_placeholder }}"
+msg_see_version_info_above: "See output above for information about available releases. "
+msg_force_option: "You may force the rollback with --extra-vars 'force=true', but this is risky. Only do this if you are certain the 'version' you specify exists and is functional. "
+msg_manual_rollback: "If you need to rollback manually, ssh into your server, go to your project root at `{{ project_root }}` and create a new symlink from a valid release to your `current` directory, like this{{ br }}sudo ln -sfn {{ releases_path | basename }}/newReleaseName {{ current_path | basename }} "
+msg_force_and_show_available_releases: "Note. 'force=true' will not have effect if 'version' = 'list', 'info', or 'help'. "
+
+
+# -----------------------------------------------
+# Fail Conditions -- logic
+
+# Fail Conditions -- all combined
+deploy_failed: "{{ log_format_corrupt | bool or user_version_exists_but_not_in_log | bool or user_version_does_not_exist | bool or user_version_already_active | bool or user_version_non_unique | bool or no_prior_version_available | bool or prior_unknown | bool or user_version_status_unaccepted | bool }}"
+
+# Fail Conditions -- general
+show_available_releases: "{{ u_version in ['list','info','help'] }}"
+force_and_show_available_releases: "{{ show_available_releases | bool and u_force | bool }}"
+
+# Fail Conditions -- auto-rollback (when no 'version' parameter specified)
+no_prior_version_available: "{% if u_version == '' and old_entry != '' %}{{ candidate_cutoff | int == 0 }}{% else %}false{% endif %}"
+prior_unknown: "{{ u_version == '' and old_entry == '' }}"
+cannot_force: "{{ u_force | bool and u_version == '' and prior_unknown | bool }}"
+
+# Fail Conditions -- when user specifies 'version' parameter
+user_version_exists_but_not_in_log: "{{ u_version in unlogged_releases.stdout_lines }}"
+user_version_does_not_exist: "{{ u_version != '' and user_entry == '' and not user_version_exists_but_not_in_log | bool }}"
+user_version_non_unique: "{{ user_version_entries | count > 1 }}"
+user_version_already_active: "{{ u_version != '' and old_release == new_release }}"
+user_version_status_unaccepted: "{{ u_version != '' and not user_version_does_not_exist | bool and not user_version_exists_but_not_in_log | bool and (user_entry[44:49] | trim) not in acceptable_statuses }}"
+
+# Log Formatting Check -- verify that certain columns in log file do or don't have spaces
+spaces: "{% for item in log_tail.stdout_lines[6:] %}{{ item[10:12] }} {{ item[20:22] }} {{ item[32:34] }} {{ item[42:44] }} {{ item[49:51] }} {{ item[65:67] }} {{ item[74:76] }} {{ item[83:84] }} {{ item[85:86] }} {{ item[88:89] }} {{ item[103:105] }} {{ item[112:114] }} {% endfor %}"
+non_spaces: "[{% for item in log_tail.stdout_lines[6:] %}{{ ([item[:10], item[12:20], item[67:74], item[105:112]] | join | replace(' ', '') | length - 32) | abs }},{% endfor %}]"
+log_format_corrupt: "{{ (spaces | join | trim | length != 0)  or (non_spaces | sum != 0) }}"
+
+
+# -----------------------------------------------
+# Log Variables and Logic
+
+# You most likely don't need to edit the variables below. Be very cautious in doing so.
+# Variables have multiple safeguards for character length, to preserve the vital log formatting
+# Find helpful jinja2 tips at
+#   - http://docs.ansible.com/playbooks_filters.html
+#   - http://jinja.pocoo.org/docs/dev/templates
+
+# Log Entries -- sorted by u_priorby variable
+# Note: log_excerpt.stdout_lines will already be sorted by timestamp directory names for releases
+log_entries: "{% if u_priorby == 'activation' %}{{ log_excerpt.stdout_lines[6:] | sort }}{% else %}{{ log_excerpt.stdout_lines[6:] }}{% endif %}"
+
+# Log Entries -- with status acceptable for auto-rollback
+auto_rollback_candidates: "[{% for item in log_entries if (item[44:49] | trim) in acceptable_statuses or item == old_entry %}'{{ item }}',{% endfor %}]"
+candidate_cutoff: "{% for item in auto_rollback_candidates %}{% if item == old_entry %}{{ loop.index0 }}{% endif %}{% endfor %}"
+
+# Log Entries -- entries matching user-specified version (excluding the currently active release)
+user_version_entries: "[{% for item in log_entries if item[76:83] == u_version.ljust(7) and item != old_entry %}'{{ item }}',{% endfor %}]"
+
+# Old Release -- values -- uses output from "Get name of current symlinked release" task to extract vars for current release
+old_release: "{% if symlink.stdout_lines[0] != '' %}{{ symlink.stdout_lines[0].ljust(14) | truncate(14, true, '') }}{% else %}??????????????{% endif %}"
+old_entry: "{% for item in log_entries if item[51:65] == old_release %}{{ item }}{% endfor %}"
+old_sha: "{% if old_entry[67:74] != '' %}{{ old_entry[67:74].ljust(7) | truncate(7, true, '') }}{% else %}???????{% endif %}"
+old_version: "{% if old_entry[76:83] != '' %}{{ old_entry[76:83].ljust(7) | truncate(7, true, '') }}{% else %}???????{% endif %}"
+current_entry: "{% if old_entry != '' %}{{ old_entry }}{% else %}{{ old_release }}{% endif %}"
+old_release_markfail: "{{ old_entry[:44] }}fail {{ old_entry[49:84] }}X{{ old_entry[85:] }}"
+
+# New Release -- potential entries
+user_entry: "{% for item in log_entries if u_version != '' and u_version in [item[51:65], item[67:74], item[76:83] | trim] %}{{ item }}{% endfor %}"
+auto_entry: "{% if old_entry != '' and candidate_cutoff | int != 0 %}{{ auto_rollback_candidates[candidate_cutoff | int - 1] }}{% endif %}"
+
+# New Release -- values
+new_entry: "{% if u_version != '' %}{{ user_entry }}{% else %}{{ auto_entry }}{% endif %}"
+new_release: "{% if u_version != '' and user_entry[76:83] == '' %}{{ u_version.ljust(14) | truncate(14, true, '') }}{% elif new_entry[51:65] != '' %}{{ new_entry[51:65].ljust(14) | truncate(14, true, '') }}{% else %}??????????????{% endif %}"
+new_sha: "{% if new_entry[67:74] != '' %}{{ new_entry[67:74].ljust(7) | truncate(7, true, '') }}{% else %}???????{% endif %}"
+new_version: "{% if new_entry[76:83] != '' %}{{ new_entry[76:83].ljust(7) | truncate(7, true, '') }}{% else %}???????{% endif %}"
+
+# Deploy status -- variable must be 5 characters, hence the 3 spaces after 'ok'
+deploy_status: "{% if u_force | bool %}force{% else %}ok   {% endif %}"
+
+
+# -----------------------------------------------
+# Log entry templates
+
+# EXACT spacing is critical!
+deploy_log_entry_placeholder: "{{ deploy_time }}  {{ deploy_user }}  rollback  fail   {{ new_release }}  {{ new_sha }}  {{ new_version }} X <- {{ old_release }}  {{ old_sha }}  {{ old_version }}"
+deploy_log_entry_final: "{{ deploy_time }}  {{ deploy_user }}  rollback  {{ deploy_status }}  {{ new_release }}  {{ new_sha }}  {{ new_version }}   <- {{ old_release }}  {{ old_sha }}  {{ old_version }}"
