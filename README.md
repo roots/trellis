@@ -88,6 +88,7 @@ In the environment files inside the `group_vars` directory, `wordpress_sites` is
   * `db_user` - database username
   * `db_password` - database password
   * `db_host` - database hostname
+  * `domain_current_site` (required for multisite)
 
 Additional options:
 
