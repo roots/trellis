@@ -16,8 +16,13 @@ server {
     sendfile off;
   {%- endif %}
 
-  {% if item.value.multisite.enabled | default(false) -%}
-    include wordpress_multisite_subdirectories.conf;
+  {% if item.value.multisite | default(false) %}
+    {% if item.value.multisite.subdomains | default(false) %}
+      rewrite ^/(wp-.*.php)$ /wp/$1 last;
+      rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
+    {%- else %}
+      include wordpress_multisite_subdirectories.conf;
+    {%- endif %}
   {%- endif %}
 
   include wordpress.conf;
