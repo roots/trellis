@@ -8,6 +8,12 @@
             group="{{ web_group }}"
   with_dict: wordpress_sites
 
+- name: Install Dependencies with Composer
+  command: composer install
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/current/"
+  with_dict: wordpress_sites
+
 - name: WP installed?
   command: wp core is-installed --allow-root
   args:
