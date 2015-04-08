@@ -26,6 +26,7 @@ bedrock-ansible will configure a server with the following and more:
 * WP-CLI
 * Fail2ban
 * ferm
+* SSL support
 
 ## Requirements
 
@@ -69,7 +70,7 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 1. Run `./deploy.sh <environment> <site name>`
 2. To rollback a deploy, run `ansible-playbook -i hosts/<environment> rollback.yml --extra-vars="site=<site name>"`
 
-## Options
+## Configuration
 
 ### HHVM
 
@@ -81,6 +82,10 @@ In the environment files inside the `group_vars` directory, `wordpress_sites` is
 
 * `site_hosts` - hosts that Nginx will listen on
 * `local_path` - path targeting Bedrock-based site directory
+* `ssl` - enable SSL and set paths
+  * `enabled` - `true` or `false` (defaults to `false`)
+  * `key` - local relative path to private key
+  * `cert` - local relative path to certificate
 * `env` - environment variables
   * `wp_home` - `WP_HOME` constant
   * `wp_siteurl` - `WP_SITEURL` constant
@@ -110,10 +115,14 @@ Additional options:
 
 Outgoing mail is done by the sSMTP role. Configure SMTP credentials in `group_vars/all`.
 
+## SSL
+
+Full SSL support is available for your WordPress sites. Note that this will configure your site to be HTTPS **only** by default.
+
+Our HTTPS implementation has all the best practices for performance and security.
+
+Read the Wiki section on [SSL](https://github.com/roots/bedrock-ansible/wiki/SSL) for more documentation.
+
 ## Security
 
 The `secure-root.yml` playbook is provided to help secure your remote servers including better SSH security. See the Wiki for [Locking down root](https://github.com/roots/bedrock-ansible/wiki/Security#locking-down-root).
-
-## Additional documentation
-
-See the [bedrock-ansible Wiki](https://github.com/roots/bedrock-ansible/wiki).

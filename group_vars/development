@@ -13,10 +13,10 @@ wordpress_sites:
     admin_user: admin
     admin_password: admin
     admin_email: admin@example.dev
-    system_cron: true
     multisite:
       enabled: false
       subdomains: false
+    system_cron: true
     env:
       wp_home: http://example.dev
       wp_siteurl: http://example.dev/wp
