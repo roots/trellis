@@ -1,3 +1,5 @@
 - src: f500.project_deploy_module
 - name: ntp
   src: resmo.ntp
+- name: logrotate
+  src: nickhammond.logrotate
