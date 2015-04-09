@@ -2,10 +2,10 @@
 
 [wordpress]
 listen = /var/run/php5-fpm-wordpress.sock
-listen.owner = {{ web_user }}
-listen.group = {{ web_group }}
-user = www-data
-group = www-data
+listen.owner = www-data
+listen.group = www-data
+user = {{ web_user }}
+group = {{ web_group }}
 pm = dynamic
 pm.max_children = 10
 pm.start_servers = 1
