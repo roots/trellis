@@ -9,8 +9,9 @@ config_file = File.join(ANSIBLE_PATH, 'group_vars/development')
 
 if File.exists?(config_file)
   wordpress_sites = YAML.load_file(config_file)['wordpress_sites']
+  raise "no sites found in #{config_file}" if wordpress_sites.to_h.empty?
 else
-  raise 'group_vars/development file not found. Please set `ANSIBLE_PATH` in Vagrantfile'
+  raise "#{config_file} file not found. Please set `ANSIBLE_PATH` in Vagrantfile"
 end
 
 Vagrant.require_version '>= 1.5.1'
