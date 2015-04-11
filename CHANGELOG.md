@@ -1,4 +1,8 @@
 ### HEAD
+* WP subdomain multisite support
+* Add xdebug role
+* Add logrotate role
+* Add ntpd role
 * Ansible deploys
 * HHVM implementation
 * Add SMTP role
