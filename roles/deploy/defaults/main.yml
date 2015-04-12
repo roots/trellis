@@ -87,3 +87,23 @@ project_post_build_commands: []
 # - file: path="{{ deploy.new_release_path }}/{{ deploy.unfinished_filename }}" state=absent
 # - file: src="{{ deploy.new_release_path }} dest={{ deploy.current_path }}" state=link
 project_finalize: true
+
+# Deploy log -- general variables
+deploy_user: "{{ (lookup('env', 'USER').ljust(10) | truncate(10, true, '')) }}"
+deploy_log_name: revisions.log
+deploy_log: "{{ project_root }}/logs/{{ deploy_log_name }}"
+msg_log_entry: "{{ log_excerpt.stdout_lines[3:6] + [deploy_log_entry_final] }}"
+
+# Deploy log -- values for prior release
+old_release: "{% if deploy_helper.previous_release %}{{ deploy_helper.previous_release.ljust(14) | truncate(14, true, '') }}{% else %}??????????????{% endif %}"
+old_sha: "{% if deploy_helper.previous_release and log_excerpt.stdout_lines[6] is defined and log_excerpt.stdout_lines[6][67:74] != '' %}{{ log_excerpt.stdout_lines[6][67:74].ljust(7) | truncate(7, true, '') }}{% else %}???????{% endif %}"
+old_version: "{% if deploy_helper.previous_release and log_excerpt.stdout_lines[6] is defined and log_excerpt.stdout_lines[6][76:83] != '' %}{{ log_excerpt.stdout_lines[6][76:83].ljust(7) | truncate(7, true, '') }}{% else %}???????{% endif %}"
+
+# Deploy log -- values for new release
+new_release: "{% if deploy_helper.new_release %}{{ deploy_helper.new_release.ljust(14) | truncate(14, true, '') }}{% else %}??????????????{% endif %}"
+new_sha: "{% if project_git_repo_sha.after is defined %}{{ project_git_repo_sha.after.ljust(7) | truncate(7, true, '') }}{% else %}???????{% endif %}"
+new_version: "{% if project_version is defined %}{{ project_version.ljust(7) | truncate(7, true, '') }}{% else %}???????{% endif %}"
+
+# Deploy log -- templates for log entries -- EXACT spacing is critical!
+deploy_log_entry_placeholder: "{{ deploy_time }}  {{ deploy_user }}  deploy    fail   {{ new_release }}  {{ new_sha }}  {{ new_version }} X <- {{ old_release }}  {{ old_sha }}  {{ old_version }}"
+deploy_log_entry_final: "{{ deploy_time }}  {{ deploy_user }}  deploy    ok     {{ new_release }}  {{ new_sha }}  {{ new_version }}   <- {{ old_release }}  {{ old_sha }}  {{ old_version }}"

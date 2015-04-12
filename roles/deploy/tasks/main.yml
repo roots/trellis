@@ -1,12 +1,29 @@
 ---
+- name: Get deploy time
+  set_fact:
+    deploy_time: "{{ lookup('pipe', 'date -u +%Y-%m-%d') }}  {{ lookup('pipe', 'date -u +%H:%M:%S') }}"
+    release_timestamp: "{{ lookup('pipe', 'date -u +%Y%m%d%H%M%S') }}"
+
 - name: Initialize
-  deploy_helper: path="{{ project_root }}" state=present
+  deploy_helper: path="{{ project_root }}" state=present release="{{ release_timestamp }}"
 
 - name: Clone project files
   git: repo="{{ project_git_repo }}"
        dest="{{ project_source_path }}"
        version="{{ project_version }}"
        accept_hostkey=yes
+  register: project_git_repo_sha
+
+- name: Get most recent deploy log entry for current release
+  shell: 'head -n6 {{ deploy_log }} && tac {{ deploy_log }} | egrep -m 1 "{{ old_release }} (.*)<-" || :'
+  args:
+    chdir: "{{ deploy_helper.releases_path }}"
+  register: log_excerpt
+
+- name: Add placeholder entry to deploy log before deploying new realease
+  lineinfile:
+    dest: "{{ deploy_log }}"
+    line: "{{ deploy_log_entry_placeholder }}"
 
 - name: write unfinished file
   file: path="{{ project_source_path }}/{{ deploy_helper.unfinished_filename }}" state=touch
@@ -84,3 +101,15 @@
 
 - name: Reload php-fpm
   shell: sudo service php5-fpm reload
+
+- name: Finalize entry in deploy log (switch status to 'ok')
+  lineinfile:
+    dest: "{{ deploy_log }}"
+    state: present
+    regexp: "^{{ deploy_time }}"
+    line: "{{ deploy_log_entry_final }}"
+
+- name: Show new entry in deploy log
+  debug:
+    var: msg_log_entry
+

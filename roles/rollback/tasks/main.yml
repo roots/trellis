@@ -1,18 +1,61 @@
 ---
-- include: user-release.yml
-  when: release is defined
+- name: Get deploy time
+  set_fact:
+    deploy_time: "{{ lookup('pipe', 'date -u +%Y-%m-%d') }}  {{ lookup('pipe', 'date -u +%H:%M:%S') }}"
 
-- include: prior-release.yml
-  when: release is not defined
+- name: Get name of current symlinked release
+  shell: "basename $(readlink {{ current_path }})"
+  register: symlink
 
-- name: Check whether target release was from a successful deploy
-  stat: path="{{ new_release_path }}/DEPLOY_UNFINISHED"
-  register: target
+- name: Get most recent deploy log entry for each available release
+  shell: 'head -n6 {{ deploy_log }} && for match in */; do tac {{ deploy_log }} | egrep -m 1 "${match%?} (.*)<-"; done || :'
+  args:
+    chdir: "{{ releases_path }}"
+  register: log_excerpt
 
-- name: Fail if target release was from failed deploy
-  fail: msg="Cannot switch to release at {{ new_release_path }}. It is from an unfinished deploy.
-        You may manually specify a different release using --extra-vars='release=12345678901234'."
-  when: target.stat.exists | default(False)
+- name: Identify potential releases missing from deploy log
+  shell: 'for i in */; do grep -q ${i%?} ../logs/revisions.log || echo ${i%?}; done'
+  args:
+    chdir: "{{ releases_path }}"
+  register: unlogged_releases
 
-- name: Link 'current' directory to target release
-  file: path="{{ project_root }}/current" src="{{ new_release_path }}" state=link
+- name: Check the formatting integrity of the deploy log
+  command: "tail -n 26 {{ deploy_log }}"
+  register: log_tail
+
+- name: Show available releases when --extra-vars "version=list"
+  debug:
+    var: msg_general
+  when: show_available_releases | bool or deploy_failed | bool and (not u_force | bool or cannot_force | bool)
+
+- name: Fail and display information if there may be a problem with deploy
+  fail:
+    msg: "{{ msg_fail }}"
+  when: deploy_failed | bool and (not u_force | bool or cannot_force | bool) or show_available_releases | bool
+
+- name: Add placeholder entry to deploy log before symlinking new realease
+  lineinfile:
+    dest: "{{ deploy_log }}"
+    line: "{{ deploy_log_entry_placeholder }}"
+
+- name: Link 'current' directory to new release
+  file: path="{{ current_path }}" src="{{ releases_path }}/{{ new_release }}" state=link force="{{ u_force }}"
+
+- name: Finalize entry in deploy log (switch status to 'ok' or 'force')
+  lineinfile:
+    dest: "{{ deploy_log }}"
+    state: present
+    regexp: "^{{ deploy_time }}"
+    line: "{{ deploy_log_entry_final }}"
+
+- name: Optionally mark old release as fail (if --extra-vars "markfail=true")
+  lineinfile:
+    dest: "{{ deploy_log }}"
+    state: present
+    regexp: "^{{ old_release_markfail[:20] }}"
+    line: "{{ old_release_markfail }}"
+  when: u_markfail | bool and old_release_markfail != ''
+
+- name: Show new entry in deploy log
+  debug:
+    var: msg_log_entry
