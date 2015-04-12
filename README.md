@@ -44,7 +44,7 @@ You should now have the following directories at the same level somewhere:
 
 ```
 project/                - Primary folder for the project
-├── bedrock-ansible/    - This repo
+├── bedrock-ansible/    - Your version of this repo
 └── example.com/        - A Bedrock-based site
 ```
 
