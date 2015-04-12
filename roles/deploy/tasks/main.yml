@@ -7,6 +7,7 @@
        dest="{{ project_source_path }}"
        version="{{ project_version }}"
        accept_hostkey=yes
+  register: git_commit
 
 - name: write unfinished file
   file: path="{{ project_source_path }}/{{ deploy_helper.unfinished_filename }}" state=touch
@@ -14,7 +15,7 @@
 - name: Copy files to new build dir
   command: cp -pr {{ project_source_path }} {{ deploy_helper.new_release_path }}
 
-- name: Move site into root
+- name: Move project subtree into root folder
   shell: mv {{ deploy_helper.new_release_path }}/{{ project_subtree }}/* {{ deploy_helper.new_release_path }}
   when: project_subtree is defined
 
@@ -28,9 +29,9 @@
     chdir: "{{ item.path }}"
   with_items: project_pre_build_commands_local
 
-- name: Copy project files
+- name: Copy project local files
   synchronize: src="{{ item.src }}" dest="{{ deploy_helper.new_release_path }}/{{ item.dest }}"
-  with_items: project_files
+  with_items: project_local_files
 
 - name: Copy project templates
   template: src="{{ item.src }}" dest="{{ deploy_helper.new_release_path }}/{{ item.dest }}" mode="{{ item.mode | default('0644') }}"
@@ -43,21 +44,15 @@
   with_items: project_pre_build_commands
   environment: project_environment
 
-- name: Check if vendor dir exists
-  stat: path="{{ deploy_helper.current_path }}/{{ project_composer_vendor_path }}"
-  register: check_composer_vendor_path
-  when: project_copy_previous_composer_vendors | default(True)
+- name: Check if project folders exist
+  stat: path="{{ deploy_helper.current_path }}/{{ item }}"
+  register: project_folder_paths
+  with_items: project_copy_folders
 
-- name: Copy vendor dir if exists to speed up composer
-  command: cp -rp {{ deploy_helper.current_path }}/{{ project_composer_vendor_path }} {{ deploy_helper.new_release_path }}/{{ project_composer_vendor_path }}
-  when: project_copy_previous_composer_vendors and check_composer_vendor_path.stat.exists
-
-- name: Do composer install
-  command: "{{ project_command_for_composer_install }}"
-  args:
-    chdir: "{{ deploy_helper.new_release_path }}"
-  environment: project_environment
-  when: project_has_composer
+- name: Copy project folders
+  command: cp -rp {{ deploy_helper.current_path }}/{{ item.item }} {{ deploy_helper.new_release_path }}/{{ item.item }}
+  with_items: project_folder_paths.results
+  when: item.stat.exists == True
 
 - name: Ensure shared sources are present
   file: path="{{ deploy_helper.shared_path }}/{{ item.src }}" state="{{ item.type | default('directory') }}"
@@ -82,5 +77,11 @@
   deploy_helper: path="{{ project_root }}" release="{{ deploy_helper.new_release }}" state=finalize
   when: project_finalize
 
-- name: Reload php-fpm
-  shell: sudo service php5-fpm reload
+- name: Run post_finalize_commands
+  shell: "{{ item }}"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  with_items: project_post_finalize_commands
+
+- debug:
+    msg: "{{ project_version }}@{{ git_commit.after | truncate(7, True, '') }} deployed as release {{ deploy_helper.new_release }}"

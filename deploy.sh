@@ -16,7 +16,7 @@ Available environments:
 `( IFS=$'\n'; echo "${ENVIRONMENTS[*]}" )`
 
 Examples:
-  deploy staging example.dev
+  deploy staging example.com
   deploy production example.com
 "
 }
