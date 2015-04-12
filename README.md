@@ -10,7 +10,7 @@ Configure complete [Bedrock](https://roots.io/bedrock/)-based WordPress ready se
 | ---------------------- | ------------------------------------------------ |
 | **Development**        | `vagrant up`                                     |
 | **Staging/Production** |`ansible-playbook -i hosts/production server.yml` |
-| **Deploying**          | `./deploy.sh production example.com`             |
+| **Deploying**          | `./deploy.sh production <site name>`             |
 
 ## What's included
 
