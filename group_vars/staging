@@ -4,7 +4,6 @@ wordpress_sites:
   example.com:
     site_hosts:
       - staging.example.com
-      - 192.168.50.5
     local_path: '../example.com' # path targeting local Bedrock project directory (relative to Ansible root)
     repo: git@github.com:roots/bedrock.git
     system_cron: true
