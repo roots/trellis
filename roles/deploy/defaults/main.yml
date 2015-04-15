@@ -47,11 +47,11 @@ project_templates:
 # specified in the `type` key (file or directory).
 # Example:
 # project_shared_children:
-#   - path: "/app/sessions"
+#   - path: "app/sessions"
 #     src: "sessions"
 #     type: "file" / "directory"  // <- optional, defaults to "directory"
 project_shared_children:
-  - path: /web/app/uploads
+  - path: web/app/uploads
     src: uploads
 
 # The project_environment is a list of environment variables added to the various *_commands
