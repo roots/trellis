@@ -1,6 +1,7 @@
 # If you use the "git" strategy:
 # - you must set a repository (no default)
 project_git_repo: "{{ project.repo }}"
+project_subtree: "{{ project.subtree | default(False) }}"
 # - you can set the git ref to deploy (can be a branch, tag or commit hash)
 project_version: "{{ branch | default('master') }}"
 
