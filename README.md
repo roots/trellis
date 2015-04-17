@@ -61,7 +61,8 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 1. Edit `group_vars/<environment>` and add your WordPress sites
 2. Edit `hosts/<environment>` and add your server IP/hostnames
-3. Run `ansible-playbook -i hosts/<environment> server.yml`
+3. Set up SSH keys. See the [Wiki page](https://github.com/roots/bedrock-ansible/wiki/SSH-Keys)
+4. Run `ansible-playbook -i hosts/<environment> server.yml`
 
 ## Deploying to remote servers
 
