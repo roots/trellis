@@ -35,8 +35,6 @@
   with_items: site_statuses.results
   when: item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == False)
 
-  notify: reload nginx
-
 - name: Install WP Multisite
   command: wp core multisite-install
            --allow-root
@@ -51,4 +49,7 @@
     chdir: "{{ www_root }}/{{ item.item.key }}/current/"
   with_items: site_statuses.results
   when: item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == True)
-  notify: reload nginx
+
+- name: Restart HHVM
+  service: name=hhvm state=restarted
+  when: hhvm | default(False)
