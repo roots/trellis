@@ -38,7 +38,7 @@ Vagrant.configure('2') do |config|
 
   if Vagrant::Util::Platform.windows?
     wordpress_sites.each do |(name, site)|
-      config.vm.synced_folder site['local_path'], remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      config.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
   else
     if !Vagrant.has_plugin? 'vagrant-bindfs'
@@ -46,7 +46,7 @@ Vagrant.configure('2') do |config|
         "vagrant-bindfs missing, please install the plugin:\nvagrant plugin install vagrant-bindfs"
     else
       wordpress_sites.each do |(name, site)|
-        config.vm.synced_folder site['local_path'], nfs_path(name), type: 'nfs'
+        config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
         config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data'
       end
     end
@@ -77,6 +77,10 @@ Vagrant.configure('2') do |config|
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
     vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
   end
+end
+
+def local_site_path(site)
+  File.expand_path(site['local_path'], ANSIBLE_PATH)
 end
 
 def nfs_path(site_name)
