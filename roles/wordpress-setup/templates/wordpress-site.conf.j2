@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 server {
-  {% if item.value.ssl | default(false) %}
+  {% if item.value.ssl.enabled | default(false) %}
   listen 443 ssl spdy;
   {% else %}
   listen 80;
@@ -30,7 +30,7 @@ server {
     {%- endif %}
   {%- endif %}
 
-  {% if item.value.ssl | default(false) %}
+  {% if item.value.ssl.enabled | default(false) %}
   include ssl.conf;
   include ssl-stapling.conf;
 
@@ -45,7 +45,7 @@ server {
   include wordpress.conf;
 }
 
-{% for host in item.value.site_hosts if item.value.ssl | default(False) %}
+{% for host in item.value.site_hosts if item.value.ssl.enabled | default(False) %}
 server {
   listen 80;
   server_name {{ host }} www.{{ host }};

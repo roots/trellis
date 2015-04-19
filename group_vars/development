@@ -16,6 +16,8 @@ wordpress_sites:
     multisite:
       enabled: false
       subdomains: false
+    ssl:
+     enabled: false
     system_cron: true
     env:
       wp_home: http://example.dev
