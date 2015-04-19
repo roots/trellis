@@ -58,7 +58,11 @@ Vagrant.configure('2') do |config|
       'web' => ['default'],
       'development' => ['default']
     }
-    ansible.extra_vars = { ansible_ssh_user: 'vagrant' }
+
+    if vars = ENV['ANSIBLE_VARS']
+      extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
+      ansible.extra_vars = extra_vars
+    end
   end
 
   config.vm.provider 'virtualbox' do |vb|
