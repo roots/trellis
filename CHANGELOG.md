@@ -1,4 +1,5 @@
 ### HEAD
+* SSL support
 * WP subdomain multisite support
 * Add xdebug role
 * Add logrotate role

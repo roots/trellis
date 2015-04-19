@@ -1,7 +1,12 @@
 # {{ ansible_managed }}
 
 server {
-  listen *:80;
+  {% if item.value.ssl | default(false) %}
+  listen 443 ssl spdy;
+  {% else %}
+  listen 80;
+  {% endif %}
+
   server_name  {{ item.value.site_hosts | join(' ') }};
   access_log   {{ www_root }}/{{ item.key }}/logs/{{ item.key }}.access.log;
   error_log    {{ www_root }}/{{ item.key }}/logs/{{ item.key }}.error.log;
@@ -12,8 +17,8 @@ server {
   charset utf-8;
 
   {% if item.value.env.wp_env == 'development' -%}
-    # See Virtualbox section at http://wiki.nginx.org/Pitfalls
-    sendfile off;
+  # See Virtualbox section at http://wiki.nginx.org/Pitfalls
+  sendfile off;
   {%- endif %}
 
   {% if item.value.multisite | default(false) %}
@@ -25,13 +30,26 @@ server {
     {%- endif %}
   {%- endif %}
 
+  {% if item.value.ssl | default(false) %}
+  include ssl.conf;
+  include ssl-stapling.conf;
+
+  add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
+  add_header X-Frame-Options SAMEORIGIN;
+
+  ssl_certificate         /etc/nginx/ssl/{{ item.value.ssl.cert | basename }};
+  ssl_trusted_certificate /etc/nginx/ssl/{{ item.value.ssl.cert | basename }};
+  ssl_certificate_key     /etc/nginx/ssl/{{ item.value.ssl.key | basename }};
+  {% endif %}
+
   include wordpress.conf;
 }
 
-{% for host in item.value.site_hosts if strip_www %}
+{% for host in item.value.site_hosts if item.value.ssl | default(False) %}
 server {
-  listen *:80;
-  server_name www.{{ host }};
-  return 301 $scheme://{{ host }}$request_uri;
+  listen 80;
+  server_name {{ host }} www.{{ host }};
+  add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
+  return 301 https://{{ host }}$request_uri;
 }
 {% endfor %}

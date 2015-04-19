@@ -17,6 +17,10 @@
     - mime.types
     - h5bp/
 
+- name: Copy SSL conf files
+  copy: src="{{ item }}" dest=/etc/nginx/{{ item | basename }} mode=644
+  with_fileglob: '*'
+
 - name: Create nginx.conf
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
   notify: reload nginx

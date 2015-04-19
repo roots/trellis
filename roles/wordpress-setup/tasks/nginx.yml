@@ -1,4 +1,17 @@
 ---
+- name: Create SSL directory
+  file: dest=/etc/nginx/ssl state=directory
+
+- name: Copy SSL cert
+  copy: src="{{ item.value.ssl.cert }}" dest=/etc/nginx/ssl/{{ item.value.ssl.cert | basename }} mode=0640
+  with_dict: wordpress_sites
+  when: item.value.ssl.enabled | default(False)
+
+- name: Copy SSL key
+  copy: src="{{ item.value.ssl.key }}" dest=/etc/nginx/ssl/{{ item.value.ssl.key | basename }} mode=0600
+  with_dict: wordpress_sites
+  when: item.value.ssl.enabled | default(False)
+
 - name: Create WordPress configuration for Nginx
   template: src="wordpress-site.conf.j2"
             dest="/etc/nginx/sites-available/{{ item.key }}.conf"
