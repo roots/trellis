@@ -49,6 +49,8 @@ project/                - Primary folder for the project
 └── example.com/        - A Bedrock-based site
 ```
 
+If you would like to use bedrock-ansible for multiple projects, then you can place bedrock-ansible in a folder separate from  your project and reference the absolute folder under Development setup.
+
 Note: The full paths to these directories must not contain spaces or else [Ansible will fail](https://github.com/ansible/ansible/issues/8555).
 
 ## Development setup
