@@ -78,7 +78,7 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 ### WP Sites
 
-In the environment files inside the `group_vars` directory, `wordpress_sites` is the top level dictionary used to define the WordPress sites/virtual hosts that will be created.
+In the environment files inside the `group_vars` directory, `app_config` is the top level dictionary used to define the WordPress sites/virtual hosts that will be created.
 
 * `site_hosts` - hosts that Nginx will listen on
 * `local_path` - path targeting Bedrock-based site directory

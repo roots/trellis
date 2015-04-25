@@ -2,7 +2,7 @@ mysql_root_password: devpw
 
 web_user: vagrant
 
-wordpress_sites:
+app_config:
   example.com:
     site_hosts:
       - example.dev

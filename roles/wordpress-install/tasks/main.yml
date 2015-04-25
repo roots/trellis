@@ -6,13 +6,13 @@
             dest="{{ www_root }}/{{ item.key }}/current/.env"
             owner="{{ web_user }}"
             group="{{ web_group }}"
-  with_dict: wordpress_sites
+  with_dict: app_config
 
 - name: Install Dependencies with Composer
   command: composer install
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
-  with_dict: wordpress_sites
+  with_dict: app_config
 
 - name: WP installed?
   command: wp core is-installed --allow-root
@@ -20,7 +20,7 @@
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   register: site_statuses
   ignore_errors: True
-  with_dict: wordpress_sites
+  with_dict: app_config
 
 - name: Install WP
   command: wp core install
