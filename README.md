@@ -47,10 +47,12 @@ Note on `.env` files: You **do not** need a configured `.env` file. bedrock-ansi
 You should now have the following directories at the same level somewhere:
 
 ```
-project/                - Primary folder for the project
-├── bedrock-ansible/    - Your version of this repo
-└── example.com/        - A Bedrock-based site
+example.com/    - Primary folder for the project
+├── ansible/    - Your version of this repo (renamed to just `ansible`)
+└── site/       - A Bedrock-based site (suggested to name this the generic `site` since your project name is already at the top level)
 ```
+
+To see a complete working example of this, visit the [roots-example-project.com repo](https://github.com/roots/roots-example-project.com).
 
 Note: The full paths to these directories must not contain spaces or else [Ansible will fail](https://github.com/ansible/ansible/issues/8555).
 
