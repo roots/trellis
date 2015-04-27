@@ -6,7 +6,7 @@ wordpress_sites:
   example.com:
     site_hosts:
       - example.dev
-    local_path: '../example.com' # path targeting local Bedrock project directory (relative to Ansible root)
+    local_path: '../site' # path targeting local Bedrock site directory (relative to Ansible root)
     repo: git@github.com:roots/bedrock.git
     site_install: true
     site_title: Example Site
