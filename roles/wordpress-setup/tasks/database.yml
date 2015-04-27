@@ -5,7 +5,7 @@
             login_host="{{ item.value.env.db_host | default('localhost') }}"
             login_user="{{ mysql_user }}"
             login_password="{{ mysql_root_password }}"
-  with_dict: wordpress_sites
+  with_dict: app_config
   when: item.value.db_create | default(True)
 
 - name: Create/assign database user to db and grant permissions
@@ -16,12 +16,12 @@
               login_host="{{ item.value.env.db_host | default('localhost') }}"
               login_user="{{ mysql_user }}"
               login_password="{{ mysql_root_password }}"
-  with_dict: wordpress_sites
+  with_dict: app_config
   when: item.value.db_create | default(True)
 
 - name: Copy database dump
   copy: src="{{ item.value.db_import }}" dest=/tmp
-  with_dict: wordpress_sites
+  with_dict: app_config
   when: item.value.db_import | default(False)
 
 - name: Import database
@@ -31,6 +31,6 @@
             login_host="{{ item.value.env.db_host | default('localhost') }}"
             login_user="{{ item.value.env.db_user }}"
             login_password="{{ item.value.env.db_password }}"
-  with_dict: wordpress_sites
+  with_dict: app_config
   when: item.value.db_import | default(False)
   notify: reload nginx

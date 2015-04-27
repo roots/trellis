@@ -10,7 +10,7 @@ show_usage() {
   echo "Usage: deploy <environment> <site name>
 
 <environment> is the environment to deploy to ("staging", "production", etc)
-<site name> is the WordPress site to deploy (name defined in "wordpress_sites")
+<site name> is the WordPress site to deploy (name defined in "app_config")
 
 Available environments:
 `( IFS=$'\n'; echo "${ENVIRONMENTS[*]}" )`

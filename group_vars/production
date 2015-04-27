@@ -1,6 +1,6 @@
 mysql_root_password: productionpw
 
-wordpress_sites:
+app_config:
   example.com:
     site_hosts:
       - example.com
