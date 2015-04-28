@@ -19,6 +19,7 @@ wordpress_sites:
       db_name: example_staging
       db_user: example_dbuser
       db_password: example_dbpassword
+      # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/
       auth_key: "generateme"
       auth_salt: "generateme"
       logged_in_key: "generateme"

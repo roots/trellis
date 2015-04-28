@@ -100,6 +100,7 @@ In the environment files inside the `group_vars` directory, `wordpress_sites` is
   * `db_password` - database password
   * `db_host` - database hostname
   * `domain_current_site` (required for multisite)
+  * `generateme` - salt keys to generate from [wordpress_api](https://api.wordpress.org/secret-key/1.1/salt/)
 
 Additional options:
 
