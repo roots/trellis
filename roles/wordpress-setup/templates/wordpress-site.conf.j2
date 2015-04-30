@@ -49,7 +49,6 @@ server {
 server {
   listen 80;
   server_name {{ host }} www.{{ host }};
-  add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
   return 301 https://{{ host }}$request_uri;
 }
 {% endfor %}
