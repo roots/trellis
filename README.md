@@ -30,11 +30,11 @@ bedrock-ansible will configure a server with the following and more:
 
 ## Requirements
 
-* Ansible >= 1.8 - [Installation docs](http://docs.ansible.com/intro_installation.html)
-* Virtualbox >= 4.3.10 - [Downloads](https://www.virtualbox.org/wiki/Downloads)
-* Vagrant >= 1.5.4 - [Downloads](http://www.vagrantup.com/downloads.html)
-* vagrant-bindfs >= 0.3.1 - [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
-* vagrant-hostsupdater - https://github.com/cogitatio/vagrant-hostsupdater
+* Ansible >= 1.8 - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/)
+* Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
+* Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
+* vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
+* vagrant-hostsupdater - [Install](https://github.com/cogitatio/vagrant-hostsupdater#installation) • [Docs](https://github.com/cogitatio/vagrant-hostsupdater)
 
 ## Installation
 
