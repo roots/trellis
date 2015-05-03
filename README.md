@@ -83,7 +83,7 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 [HHVM](http://hhvm.com/) can be used instead of PHP 5.6 by setting `hhvm: true` in `group_vars/all`.
 
-### WP Sites
+### WordPress Sites
 
 Since bedrock-ansible is all about automatically creating servers for your WordPress sites, you need to configure your sites before anything else.
 
