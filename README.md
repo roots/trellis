@@ -39,7 +39,7 @@ bedrock-ansible will configure a server with the following and more:
 ## Installation
 
 1. Download/fork/clone this repo to your local machine.
-2. Run `ansible-galaxy install -r requirements.yml -p vendor/roles` to install external Ansible roles/packages.
+2. Run `ansible-galaxy install -r requirements.yml` to install external Ansible roles/packages.
 3. Download/fork/clone [Bedrock](https://github.com/roots/bedrock) or have an existing Bedrock-based site ready.
 
 Note on `.env` files: You **do not** need a configured `.env` file. bedrock-ansible will automatically create and configure one.
