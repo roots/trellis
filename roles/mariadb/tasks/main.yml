@@ -24,23 +24,21 @@
               login_password="{{ mysql_root_password }}"
               state=present
   with_items:
-    - "{{ ansible_hostname }}"
+    - "{{ inventory_hostname }}"
     - 127.0.0.1
     - ::1
     - localhost
 
-- name: Delete anonymous MySQL server user for current hostname
+- name: Delete anonymous MySQL server users
   mysql_user: user=""
-              host="{{ ansible_hostname }}"
-              state=absent
+              host="{{ item }}"
               login_user="{{ mysql_user }}"
               login_password="{{ mysql_root_password }}"
-
-- name: Delete anonymous MySQL server user for localhost
-  mysql_user: user=""
               state=absent
-              login_user="{{ mysql_user }}"
-              login_password="{{ mysql_root_password }}"
+  with_items:
+    - localhost
+    - "{{ inventory_hostname }}"
+    - "{{ ansible_hostname }}"
 
 - name: Remove the test database
   mysql_db: name=test
