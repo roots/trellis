@@ -29,7 +29,6 @@ ferm_input_list:
     dport: [ssh]
     seconds: 300
     hits: 20
-    disabled: false
 
 logrotate_scripts:
   - name: wordpress-sites
