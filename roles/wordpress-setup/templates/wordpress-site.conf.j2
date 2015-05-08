@@ -45,10 +45,10 @@ server {
   include wordpress.conf;
 }
 
-{% for host in item.value.site_hosts if item.value.ssl is defined and item.value.ssl.enabled | default(False) %}
+{% if item.value.ssl is defined and item.value.ssl.enabled | default(False) %}
 server {
   listen 80;
-  server_name {{ host }} www.{{ host }};
-  return 301 https://{{ host }}$request_uri;
+  server_name {{ item.value.site_hosts | join(' ') }};
+  return 301 https://$host$request_uri;
 }
-{% endfor %}
+{% endif %}
