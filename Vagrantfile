@@ -55,16 +55,23 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
-    ansible.groups = {
-      'web' => ['default'],
-      'development' => ['default']
-    }
+  if Vagrant::Util::Platform.windows?
+    config.vm.provision :shell do |sh|
+      sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
+      sh.args = ANSIBLE_PATH
+    end
+  else
+    config.vm.provision :ansible do |ansible|
+      ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
+      ansible.groups = {
+        'web' => ['default'],
+        'development' => ['default']
+      }
 
-    if vars = ENV['ANSIBLE_VARS']
-      extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
-      ansible.extra_vars = extra_vars
+      if vars = ENV['ANSIBLE_VARS']
+        extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
+        ansible.extra_vars = extra_vars
+      end
     end
   end
 
