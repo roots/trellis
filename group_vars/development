@@ -26,29 +26,6 @@ wordpress_sites:
       db_name: example_dev
       db_user: example_dbuser
       db_password: example_dbpassword
-  example2.com:
-    site_hosts:
-      - example2.dev
-    local_path: '../site' # path targeting local Bedrock site directory (relative to Ansible root)
-    repo: git@github.com:roots/bedrock.git
-    site_install: true
-    site_title: Example Site
-    admin_user: admin
-    admin_password: admin
-    admin_email: admin@example.dev
-    multisite:
-      enabled: false
-      subdomains: false
-    ssl:
-      enabled: false
-    system_cron: true
-    env:
-      wp_home: http://example2.dev
-      wp_siteurl: http://example2.dev/wp
-      wp_env: development
-      db_name: example2_dev
-      db_user: example2_dbuser
-      db_password: example2_dbpassword
 
 php_error_reporting: 'E_ALL'
 php_display_errors: 'On'
