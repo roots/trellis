@@ -7,15 +7,9 @@
 
 - name: Grab h5bp/server-configs-nginx
   git: repo="https://github.com/h5bp/server-configs-nginx.git"
-       dest=/tmp/server-configs-nginx
-       version="1.0.0"
+       dest=/etc/nginx/h5bp
+       version=b674df55453988a837e94dc1f71c9a35e8d77528
        force=yes
-
-- name: Copy over h5bp configuration
-  command: cp -r /tmp/server-configs-nginx/{{ item }} /etc/nginx/{{ item }}
-  with_items:
-    - mime.types
-    - h5bp/
 
 - name: Copy SSL conf files
   copy: src="{{ item }}" dest=/etc/nginx/{{ item | basename }} mode=644
@@ -30,7 +24,7 @@
   notify: reload nginx
 
 - name: Enable better default site to drop unknown requests
-  command: cp /tmp/server-configs-nginx/sites-available/no-default /etc/nginx/sites-enabled/no-default.conf
+  command: creates=/etc/nginx/sites-enabled/no-default.conf cp /etc/nginx/h5bp/sites-available/no-default /etc/nginx/sites-enabled/no-default.conf
   notify: reload nginx
 
 - name: Create base WordPress config
