@@ -17,7 +17,7 @@
 
 - name: Move project subtree into root folder
   shell: mv {{ deploy_helper.new_release_path }}/{{ project_subtree }}/* {{ deploy_helper.new_release_path }}
-  when: project_subtree is defined
+  when: project_subtree != 'False'
 
 - name: Remove unwanted files/folders from new release
   file: path="{{ deploy_helper.new_release_path }}/{{ item }}" state=absent
