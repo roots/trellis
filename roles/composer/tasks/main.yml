@@ -6,4 +6,6 @@
   apt: name=php5-composer state=present force=yes
 
 - name: Composer self update
-  shell: composer self-update
+  command: composer self-update
+  register: composer_update_result
+  changed_when: composer_update_result.rc == 0 and 'already using composer version' not in composer_update_result.stderr
