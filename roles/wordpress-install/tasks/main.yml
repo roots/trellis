@@ -8,23 +8,26 @@
             group="{{ web_group }}"
   with_dict: wordpress_sites
 
-- name: Move .env file into web root
-  command: mv /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/current/.env
+- name: Copy .env file into web root
+  command: creates="{{ www_root }}/{{ item.key }}/current/.env" cp /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/current/.env
   with_dict: wordpress_sites
 
 - name: Install Dependencies with Composer
   command: composer install
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
+  register: composer_results
   with_dict: wordpress_sites
+  changed_when: "'Nothing to install or update' not in composer_results.stderr"
 
 - name: WP installed?
   command: wp core is-installed --allow-root
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   register: site_statuses
-  ignore_errors: True
   with_dict: wordpress_sites
+  changed_when: False
+  failed_when: site_statuses.stderr != ""
 
 - name: Install WP
   command: wp core install
