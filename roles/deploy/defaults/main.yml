@@ -66,7 +66,7 @@ project_environment:
 # There are a few moments in this role where arbitrary command(s) can be run. These commands receive
 # the "project_environment" so deploys for different stages can be done by changing this.
 # Each command is a dict with a `cmd` and an optional `path`. The `path` is relative to the
-# local bedrock-ansible directory (for `project_pre_build_commands_local`) or relative to the
+# local Trellis directory (for `project_pre_build_commands_local`) or relative to the
 # `new_release_path` on the remote server (for `project_pre_build_commands` and `project_post_build_commands`).
 # Examples:
 # project_pre_build_commands_local:

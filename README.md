@@ -1,8 +1,8 @@
-# bedrock-ansible
+# Trellis
 
-[![Build Status](https://travis-ci.org/roots/bedrock-ansible.svg)](https://travis-ci.org/roots/bedrock-ansible)
+[![Build Status](https://travis-ci.org/roots/trellis.svg)](https://travis-ci.org/roots/trellis)
 
-bedrock-ansible is a set of [Ansible](http://www.ansible.com/home) [playbooks](http://docs.ansible.com/playbooks.html) to automatically configure servers and deploy WordPress sites. It easily creates development environments with Vagrant to help achieve development & production parity.
+Trellis is a set of [Ansible](http://www.ansible.com/home) [playbooks](http://docs.ansible.com/playbooks.html) to automatically configure servers and deploy WordPress sites. It easily creates development environments with Vagrant to help achieve development & production parity.
 
 Configure complete [Bedrock](https://roots.io/bedrock/)-based WordPress ready servers with a single command:
 
@@ -14,7 +14,7 @@ Configure complete [Bedrock](https://roots.io/bedrock/)-based WordPress ready se
 
 ## What's included
 
-bedrock-ansible will configure a server with the following and more:
+Trellis will configure a server with the following and more:
 
 * Ubuntu 14.04 Trusty LTS
 * Nginx (with optional FastCGI micro-caching)
@@ -30,7 +30,7 @@ bedrock-ansible will configure a server with the following and more:
 
 ## Requirements
 
-* Ansible >= 1.9 (except 1.9.1 - see this [bug](https://github.com/roots/bedrock-ansible/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/)
+* Ansible >= 1.9 (except 1.9.1 - see this [bug](https://github.com/roots/trellis/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/)
 * Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
 * vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
@@ -42,7 +42,7 @@ bedrock-ansible will configure a server with the following and more:
 2. Run `ansible-galaxy install -r requirements.yml` to install external Ansible roles/packages.
 3. Download/fork/clone [Bedrock](https://github.com/roots/bedrock) or have an existing Bedrock-based site ready.
 
-Note on `.env` files: You **do not** need a configured `.env` file. bedrock-ansible will automatically create and configure one.
+Note on `.env` files: You **do not** need a configured `.env` file. Trellis will automatically create and configure one.
 
 You should now have the following directories at the same level somewhere:
 
@@ -67,7 +67,7 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 1. Edit `group_vars/<environment>` and add your WordPress sites
 2. Edit `hosts/<environment>` and add your server IP/hostnames
-3. Add SSH keys to `users` in `group_vars/all`. See the [Wiki page](https://github.com/roots/bedrock-ansible/wiki/SSH-Keys)
+3. Add SSH keys to `users` in `group_vars/all`. See the [Wiki page](https://github.com/roots/trellis/wiki/SSH-Keys)
 4. Run `ansible-playbook -i hosts/<environment> server.yml`
 
 ## Deploying to remote servers
@@ -85,7 +85,7 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 ### WordPress Sites
 
-Since bedrock-ansible is all about automatically creating servers for your WordPress sites, you need to configure your sites before anything else.
+Since Trellis is all about automatically creating servers for your WordPress sites, you need to configure your sites before anything else.
 
 This configuration is done in the environment files inside the `group_vars` directory. The `group_vars` files are in [YAML](http://en.wikipedia.org/wiki/YAML) format.
 
@@ -139,12 +139,12 @@ Full SSL support is available for your WordPress sites. Note that this will conf
 
 Our HTTPS implementation has all the best practices for performance and security.
 
-Read the Wiki section on [SSL](https://github.com/roots/bedrock-ansible/wiki/SSL) for more documentation.
+Read the Wiki section on [SSL](https://github.com/roots/trellis/wiki/SSL) for more documentation.
 
 ## Caching
 
-You can enable FastCGI caching on a per site basis. The cache is a low duration, "micro-cache" type setup. More info on how to configure the different options can be found in the [FastCGI caching](https://github.com/roots/bedrock-ansible/wiki/FastCGI-caching) wiki page.
+You can enable FastCGI caching on a per site basis. The cache is a low duration, "micro-cache" type setup. More info on how to configure the different options can be found in the [FastCGI caching](https://github.com/roots/trellis/wiki/FastCGI-caching) wiki page.
 
 ## Security
 
-The `secure-root.yml` playbook is provided to help secure your remote servers including better SSH security. See the Wiki for [Locking down root](https://github.com/roots/bedrock-ansible/wiki/Security#locking-down-root).
+The `secure-root.yml` playbook is provided to help secure your remote servers including better SSH security. See the Wiki for [Locking down root](https://github.com/roots/trellis/wiki/Security#locking-down-root).
