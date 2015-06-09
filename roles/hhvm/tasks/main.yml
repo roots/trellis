@@ -36,7 +36,8 @@
 - name: Create cron job to restart HHVM service daily
   cron: name="Restart HHVM daily"
         hour="{{ hhvm_daily_restart_hour }}"
-        job="service hhvm restart"
+        minute="{{ hhvm_daily_restart_minute }}"
+        job="/usr/sbin/service hhvm restart >/dev/null >2&1"
         user=root
         cron_file=hhvm-daily-restart
   when: hhvm_daily_restart | default(True)
