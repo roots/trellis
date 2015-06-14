@@ -42,6 +42,7 @@ server {
   ssl_certificate_key     /etc/nginx/ssl/{{ item.value.ssl.key | basename }};
   {% endif %}
 
+  include includes.d/{{ item.key }}/*.conf;
   include wordpress.conf;
 }
 
