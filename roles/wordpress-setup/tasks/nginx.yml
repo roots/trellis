@@ -12,6 +12,10 @@
   with_dict: wordpress_sites
   when: item.value.ssl.enabled | default(False)
 
+- name: Create includes.d directories
+  file: path="/etc/nginx/includes.d/{{ item.key }}" state=directory mode=0755
+  with_dict: wordpress_sites
+
 - name: Create WordPress configuration for Nginx
   template: src="wordpress-site.conf.j2"
             dest="/etc/nginx/sites-available/{{ item.key }}.conf"
