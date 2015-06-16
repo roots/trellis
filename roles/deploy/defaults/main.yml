@@ -50,7 +50,7 @@ project_templates:
 # project_shared_children:
 #   - path: "app/sessions"
 #     src: "sessions"
-#     mode: 0755
+#     mode: "0755"
 #     type: "file" / "directory"  // <- optional, defaults to "directory"
 project_shared_children:
   - path: web/app/uploads
