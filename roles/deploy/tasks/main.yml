@@ -55,7 +55,7 @@
   when: item.stat.exists == True
 
 - name: Ensure shared sources are present
-  file: path="{{ deploy_helper.shared_path }}/{{ item.src }}" state="{{ item.type | default('directory') }}"
+  file: path="{{ deploy_helper.shared_path }}/{{ item.src }}" state="{{ item.type | default('directory') }}" mode="{{ item.mode | default('0755') }}"
   with_items: project_shared_children
 
 - name: Ensure shared paths are absent
