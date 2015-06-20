@@ -17,7 +17,7 @@ Configure complete [Bedrock](https://roots.io/bedrock/)-based WordPress ready se
 bedrock-ansible will configure a server with the following and more:
 
 * Ubuntu 14.04 Trusty LTS
-* Nginx
+* Nginx (with optional FastCGI caching)
 * PHP 5.6 (or [HHVM](http://hhvm.com/))
 * [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better)
 * sSMTP (mail delivery)
@@ -116,6 +116,9 @@ For a complete, working example you can see our [example project](https://github
   * `enabled` - Multisite enabled flag (required, set to `false`)
   * `subdomains` - subdomains option
   * `base_path` - base path/current site path
+* `cache` - hash of cache options
+  * `enabled` - Cache enabled flag (required, set to `false`)
+  * `duration` - Duration of the cache (default: `30s`)
 * `env` - environment variables
   * `wp_home` - `WP_HOME` constant (required)
   * `wp_siteurl` - `WP_SITEURL` constant (required)
@@ -137,6 +140,10 @@ Full SSL support is available for your WordPress sites. Note that this will conf
 Our HTTPS implementation has all the best practices for performance and security.
 
 Read the Wiki section on [SSL](https://github.com/roots/bedrock-ansible/wiki/SSL) for more documentation.
+
+## Caching
+
+You can enable FastCGI caching on a per site basis. The cache is a low duration, "micro-cache" type setup. More info on how to configure the different options can be found in the [FastCGI caching](https://github.com/roots/bedrock-ansible/wiki/FastCGI-caching) wiki page.
 
 ## Security
 

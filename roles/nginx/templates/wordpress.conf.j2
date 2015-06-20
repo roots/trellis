@@ -4,19 +4,6 @@ location / {
   try_files $uri $uri/ /index.php?$args;
 }
 
-location ~ \.php$ {
-  try_files $uri =404;
-  include fastcgi_params;
-  fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-  fastcgi_param DOCUMENT_ROOT $realpath_root;
-  {% if hhvm %}
-  fastcgi_pass unix:/var/run/hhvm/hhvm.sock;
-  {% else %}
-  fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
-  {% endif %}
-  client_max_body_size 0;
-}
-
 include h5bp/directive-only/x-ua-compatible.conf;
 include h5bp/location/cross-domain-fonts.conf;
 include h5bp/location/protect-system-files.conf;

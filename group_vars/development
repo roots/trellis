@@ -18,6 +18,9 @@ wordpress_sites:
       subdomains: false
     ssl:
       enabled: false
+    cache:
+      enabled: false
+      duration: 30s
     system_cron: true
     env:
       wp_home: http://example.dev

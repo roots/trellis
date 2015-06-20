@@ -2,3 +2,12 @@
 logs_root: /var/log/nginx/
 nginx_user: www-data
 strip_www: true
+
+# Fastcgi cache params
+nginx_cache_path: /var/cache/nginx
+nginx_cache_duration: 30s
+nginx_cache_key_storage_size: 10m
+nginx_cache_size: 250m
+nginx_cache_inactive: 1h
+nginx_skip_cache_uri: /wp-admin/|/xmlrpc.php|wp-.*.php|/feed/|index.php|sitemap(_index)?.xml
+nginx_skip_cache_cookie: comment_author|wordpress_[a-f0-9]+|wp-postpass|wordpress_no_cache|wordpress_logged_in

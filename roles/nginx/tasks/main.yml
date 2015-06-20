@@ -14,7 +14,7 @@
 - name: Move h5bp configs
   command: creates=/etc/nginx/h5bp/ cp -R /etc/nginx/h5bp-server-configs/h5bp /etc/nginx/h5bp
 
-- name: Copy SSL conf files
+- name: Copy conf files
   copy: src="{{ item }}" dest=/etc/nginx/{{ item | basename }} mode=644
   with_fileglob: '*'
 

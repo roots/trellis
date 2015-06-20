@@ -3,7 +3,7 @@
 server {
   {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
   listen 443 ssl spdy;
-  {% else %}
+  {% else -%}
   listen 80;
   {% endif %}
 
@@ -21,11 +21,11 @@ server {
   sendfile off;
   {%- endif %}
 
-  {% if item.value.multisite | default(false) %}
-    {% if item.value.multisite.subdomains | default(false) %}
+  {% if item.value.multisite | default(false) -%}
+    {% if item.value.multisite.subdomains | default(false) -%}
       rewrite ^/(wp-.*.php)$ /wp/$1 last;
       rewrite ^/(wp-(content|admin|includes)/.*) /wp/$1 last;
-    {%- else %}
+    {%- else -%}
       include wordpress_multisite_subdirectories.conf;
     {%- endif %}
   {%- endif %}
@@ -44,6 +44,42 @@ server {
 
   include includes.d/{{ item.key }}/*.conf;
   include wordpress.conf;
+
+  location ~ \.php$ {
+    try_files $uri =404;
+    {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+    add_header Fastcgi-Cache $upstream_cache_status;
+    set $skip_cache 0;
+
+    if ($query_string != "") {
+      set $skip_cache 1;
+    }
+
+    # Don't cache uris containing the following segments
+    if ($request_uri ~* "{{ item.value.cache.skip_cache_uri | default(nginx_skip_cache_uri) }}") {
+      set $skip_cache 1;
+    }
+
+    # Don't use the cache if cookies includes the following
+    if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
+      set $skip_cache 1;
+    }
+
+    fastcgi_cache wordpress;
+    fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
+    fastcgi_cache_bypass $skip_cache;
+    fastcgi_no_cache $skip_cache;
+    {% endif -%}
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    fastcgi_param DOCUMENT_ROOT $realpath_root;
+    {% if hhvm -%}
+    fastcgi_pass unix:/var/run/hhvm/hhvm.sock;
+    {% else -%}
+    fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
+    {% endif -%}
+    client_max_body_size 0;
+  }
 }
 
 {% if item.value.ssl is defined and item.value.ssl.enabled | default(False) %}
