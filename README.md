@@ -30,7 +30,7 @@ bedrock-ansible will configure a server with the following and more:
 
 ## Requirements
 
-* Ansible >= 1.8 (except 1.9.1 - see this [bug](https://github.com/roots/bedrock-ansible/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/)
+* Ansible >= 1.9 (except 1.9.1 - see this [bug](https://github.com/roots/bedrock-ansible/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/)
 * Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
 * vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
@@ -67,8 +67,9 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 1. Edit `group_vars/<environment>` and add your WordPress sites
 2. Edit `hosts/<environment>` and add your server IP/hostnames
-3. Set up SSH keys. See the [Wiki page](https://github.com/roots/bedrock-ansible/wiki/SSH-Keys)
-4. Run `ansible-playbook -i hosts/<environment> server.yml`
+3. Add SSH keys to `users` in `group_vars/all`. See the [Wiki page](https://github.com/roots/bedrock-ansible/wiki/SSH-Keys)
+4. Consider adding better SSH security by setting `secure_root: true` in `group_vars/all`. See the Wiki for [Locking down root](https://github.com/roots/bedrock-ansible/wiki/Security#locking-down-root).
+5. Run `ansible-playbook -i hosts/<environment> server.yml`
 
 ## Deploying to remote servers
 
@@ -144,7 +145,3 @@ Read the Wiki section on [SSL](https://github.com/roots/bedrock-ansible/wiki/SSL
 ## Caching
 
 You can enable FastCGI caching on a per site basis. The cache is a low duration, "micro-cache" type setup. More info on how to configure the different options can be found in the [FastCGI caching](https://github.com/roots/bedrock-ansible/wiki/FastCGI-caching) wiki page.
-
-## Security
-
-The `secure-root.yml` playbook is provided to help secure your remote servers including better SSH security. See the Wiki for [Locking down root](https://github.com/roots/bedrock-ansible/wiki/Security#locking-down-root).

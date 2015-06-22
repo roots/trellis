@@ -8,5 +8,4 @@ script:
   - ansible-galaxy install --force -r requirements.yml -p vendor/roles
   - ansible-playbook --syntax-check -i hosts/development deploy.yml
   - ansible-playbook --syntax-check -i hosts/development dev.yml
-  - ansible-playbook --syntax-check -i hosts/development secure-root.yml
   - ansible-playbook --syntax-check -i hosts/development server.yml

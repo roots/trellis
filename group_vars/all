@@ -12,14 +12,27 @@ mail_password: smtp_password
 
 hhvm: false
 
+admin_user: admin
 web_user: web
 web_group: www-data
 web_sudoers:
   - "/usr/sbin/service php5-fpm *"
 
-sudoers:
-  - user: admin
-    groups: [sudo]
+secure_root: false # If true, ensure that admin_user is in sudo group (see 'users' below)
+
+users:
+  - name: "{{ web_user }}"
+    groups:
+      - "{{ web_group }}"
+    keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      # - https://github.com/username.keys
+  - name: "{{ admin_user }}"
+    groups:
+      - sudo
+    keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      # - https://github.com/username.keys
 
 ferm_input_list:
   - type: dport_accept

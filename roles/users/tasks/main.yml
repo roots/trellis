@@ -1,12 +1,23 @@
 ---
-- name: Setup web user
-  user: name="{{ web_user }}"
-        group="{{ web_group }}"
+- name: Ensure sudo group is present
+  group: name=sudo state=present
+
+- name: Ensure sudo group has sudo privileges
+  lineinfile: dest=/etc/sudoers
+              state=present
+              regexp="^%sudo"
+              line="%sudo ALL=(ALL:ALL) ALL"
+              validate="/usr/sbin/visudo -cf %s"
+
+- name: Setup users
+  user: name="{{ item.name }}"
+        group="{{ item.groups[0] }}"
+        groups="{{ item.groups | join(',') }}"
+        password="{{ sudoer_passwords[ item.name ] | default(None) }}"
         state=present
         shell=/bin/bash
-
-- name: Add web user to www-data group
-  user: name="{{ web_user }}" groups=www-data state=present append=yes
+        update_password=always
+  with_items: users
 
 - name: Add web user sudoers items for services
   template:
@@ -17,3 +28,9 @@
     group: root
     validate: "/usr/sbin/visudo -cf %s"
   when: web_sudoers
+
+- name: Add SSH keys
+  authorized_key: user="{{ item.0.name }}" key="{{ item.1 }}"
+  with_subelements:
+    - users | default([])
+    - keys
