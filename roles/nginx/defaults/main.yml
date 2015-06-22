@@ -1,5 +1,5 @@
 ---
-logs_root: /var/log/nginx/
+logs_root: /var/log/nginx
 nginx_user: www-data
 strip_www: true
 
