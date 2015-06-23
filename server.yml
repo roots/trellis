@@ -1,15 +1,30 @@
 ---
+- name: Test Whether root User Can Connect via SSH
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Attempt SSH connection as root
+      local_action: shell ssh -o PasswordAuthentication=no root@{{ groups.web.0 }} "echo can connect"
+      failed_when: false
+      changed_when: false
+      register: root_status
+      tags: [always]
+
 - name: "WordPress Server: Install LEMP Stack with PHP 5.6 and MariaDB MySQL"
   hosts: web
-  remote_user: root
+  remote_user: "{% if hostvars.localhost.root_status.stdout == 'can connect' %}root{% else %}{{ admin_user }}{% endif %}"
+  sudo: yes
+  vars_files:
+    - vars/sudoer_passwords.yml
 
   roles:
+    - { role: users, tags: [users, secure-root] }
+    - { role: sshd, when: secure_root, tags: [sshd, secure-root] }
     - { role: common, tags: [common] }
     - { role: swapfile, swapfile_size: 1GB, tags: [swapfile] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
     - { role: ntp }
-    - { role: users, tags: [users] }
     - { role: mariadb, tags: [mariadb] }
     - { role: ssmtp, tags: [ssmtp mail] }
     - { role: php, when: not hhvm, tags: [php] }
@@ -19,5 +34,4 @@
     - { role: memcached, tags: [memcached] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
-    - { role: github-ssh-keys, tags: [github-ssh-keys], when: github_ssh_keys is defined }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }
