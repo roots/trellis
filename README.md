@@ -30,7 +30,7 @@ bedrock-ansible will configure a server with the following and more:
 
 ## Requirements
 
-* Ansible >= 1.8 (except 1.9.1 - see this [bug](https://github.com/roots/bedrock-ansible/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/)
+* Ansible >= 1.9 (except 1.9.1 - see this [bug](https://github.com/roots/bedrock-ansible/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/)
 * Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
 * vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
@@ -67,7 +67,7 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 1. Edit `group_vars/<environment>` and add your WordPress sites
 2. Edit `hosts/<environment>` and add your server IP/hostnames
-3. Set up SSH keys. See the [Wiki page](https://github.com/roots/bedrock-ansible/wiki/SSH-Keys)
+3. Add SSH keys to `users` in `group_vars/all`. See the [Wiki page](https://github.com/roots/bedrock-ansible/wiki/SSH-Keys)
 4. Run `ansible-playbook -i hosts/<environment> server.yml`
 
 ## Deploying to remote servers
