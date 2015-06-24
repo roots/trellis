@@ -4,7 +4,7 @@ wordpress_sites:
   example.com:
     site_hosts:
       - staging.example.com
-    local_path: '../site' # path targeting local Bedrock site directory (relative to Ansible root)
+    local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
     repo: git@github.com:roots/bedrock.git
     branch: master
     multisite:
