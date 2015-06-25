@@ -89,3 +89,15 @@ server {
   return 301 https://$host$request_uri;
 }
 {% endif %}
+
+{% for host in item.value.site_hosts if strip_www %}
+server {
+  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
+    listen 443 ssl spdy;
+  {% else -%}
+    listen 80;
+  {% endif -%}
+    server_name www.{{ host }};
+    return 301 $scheme://{{ host }}$request_uri;
+}
+{% endfor %}

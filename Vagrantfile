@@ -31,9 +31,10 @@ Vagrant.configure('2') do |config|
 
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname
+  www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
 
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
-    config.hostsupdater.aliases = aliases
+    config.hostsupdater.aliases = aliases + www_aliases
   else
     puts 'vagrant-hostsupdater missing, please install the plugin:'
     puts 'vagrant plugin install vagrant-hostsupdater'
