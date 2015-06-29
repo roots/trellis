@@ -26,7 +26,7 @@ bedrock-ansible will configure a server with the following and more:
 * WP-CLI
 * Fail2ban
 * ferm
-* SSL support
+* SSL support (A+ on https://www.ssllabs.com/ssltest/)
 
 ## Requirements
 
