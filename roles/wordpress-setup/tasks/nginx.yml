@@ -1,7 +1,4 @@
 ---
-- name: Create SSL directory
-  file: dest=/etc/nginx/ssl state=directory
-
 - name: Copy SSL cert
   copy: src="{{ item.value.ssl.cert }}" dest=/etc/nginx/ssl/{{ item.value.ssl.cert | basename }} mode=0640
   with_dict: wordpress_sites

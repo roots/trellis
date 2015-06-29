@@ -5,6 +5,16 @@
 - name: Install Nginx
   apt: name=nginx state=present force=yes
 
+- name: Create SSL directory
+  file: dest=/etc/nginx/ssl state=directory
+
+- name: Generate strong unique Diffie-Hellman group.
+  command: openssl dhparam -out dhparams.pem 2048
+  args:
+    chdir: /etc/nginx/ssl/
+    creates: /etc/nginx/ssl/dhparams.pem
+  notify: reload nginx
+
 - name: Grab h5bp/server-configs-nginx
   git: repo="https://github.com/h5bp/server-configs-nginx.git"
        dest=/etc/nginx/h5bp-server-configs
