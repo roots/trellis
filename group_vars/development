@@ -1,4 +1,5 @@
 mysql_root_password: devpw
+db_remote_allow: false
 
 web_user: vagrant
 
@@ -45,3 +46,8 @@ php_xdebug_remote_port: 9000
 php_xdebug_remote_log: /tmp/xdebug.log
 php_xdebug_idekey: XDEBUG
 php_max_nesting_level: 200
+
+ferm_input_group_list:
+  - type: "dport_accept"
+    dport: ["mysql"]
+    filename: "mysql_accept"
