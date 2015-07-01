@@ -17,7 +17,7 @@ Configure complete [Bedrock](https://roots.io/bedrock/)-based WordPress ready se
 bedrock-ansible will configure a server with the following and more:
 
 * Ubuntu 14.04 Trusty LTS
-* Nginx (with optional FastCGI caching)
+* Nginx (with optional FastCGI micro-caching)
 * PHP 5.6 (or [HHVM](http://hhvm.com/))
 * [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better)
 * sSMTP (mail delivery)
