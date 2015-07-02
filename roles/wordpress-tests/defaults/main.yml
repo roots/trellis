@@ -1,0 +1,2 @@
+test_svn_repo: http://develop.svn.wordpress.org/trunk/tests/phpunit/includes/
+test_lib_dir: wp-tests-lib
