@@ -7,11 +7,12 @@ $webroot_dir = $root_dir . '/web';
 /**
  * Use Dotenv to set required environment variables and load .env file in root
  */
+$dotenv = new Dotenv\Dotenv($root_dir);
 if (file_exists($root_dir . '/.env')) {
-  Dotenv::load($root_dir);
+  $dotenv->load();
 }
 
-Dotenv::required(['TEST_DB_NAME', 'TEST_DB_USER', 'TEST_DB_PASSWORD', 'WP_HOME', 'WP_SITEURL']);
+$dotenv->required(['TEST_DB_NAME', 'TEST_DB_USER', 'TEST_DB_PASSWORD', 'WP_HOME', 'WP_SITEURL']);
 
 /* Path to the WordPress codebase you'd like to test. Add a backslash in the end. */
 define( 'ABSPATH', $webroot_dir . '/wp/' );
