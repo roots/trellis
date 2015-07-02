@@ -152,12 +152,35 @@ You can enable FastCGI caching on a per site basis. The cache is a low duration,
 
 The `secure-root.yml` playbook is provided to help secure your remote servers including better SSH security. See the Wiki for [Locking down root](https://github.com/roots/bedrock-ansible/wiki/Security#locking-down-root).
 
-## Unit Testing
+## Plugin Unit Testing
 
-You may wish to Unit Test your Plugins using the WP Core PHPUnit classes. To configure this ensure you have configured the test database correctly within the `group_vars/development` file. __This database will be dropped__ between each test so it is *critical* that you never use your main database as your test database.
+You may wish to Unit Test your Plugins using the WP Core PHPUnit classes. To configure this ensure you have configured the test database correctly within the `group_vars/development` file. 
+
+__Warning:__ *This database will be dropped* between each test so it is *critical* that you never use your main database as your test database.
 
 ### Testing a Plugin
 
-To test an individual plugin 
+To test an individual plugin we advise using WP CLI to scaffold the required files. To do this ssh into Vagrant and run:
+
+````wp scaffold plugin-tests my-plugin````
+
+...where `my-plugin` is the Plugin dir in which you wish to scaffold the test files. You should see several files generated. 
+
+We next need to edit the `tests/bootstrap.php` file, replacing...
+
+```
+$_tests_dir = getenv('WP_TESTS_DIR');
+if ( !$_tests_dir ) $_tests_dir = '/tmp/wordpress-tests-lib';
+```
+
+...with
+
+```
+$_tests_dir = '../../../../wp-tests-lib';
+```
+
+To run the Plugin's test suite cd into your plugin directory and run
+
+`../../../../vendor/bin/phpunit`
 
 
