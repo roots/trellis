@@ -154,7 +154,9 @@ The `secure-root.yml` playbook is provided to help secure your remote servers in
 
 ## Plugin Unit Testing
 
-You may wish to Unit Test your Plugins using the WP Core PHPUnit classes. To configure this ensure you have configured the test database correctly within the `group_vars/development` file. 
+You may wish to Unit Test your Plugins using the WP Core PHPUnit classes. 
+
+To do this ensure you have configured the test database correctly within the `group_vars/development` file. 
 
 __Warning:__ *This database will be dropped* between each test so it is *critical* that you never use your main database as your test database.
 
