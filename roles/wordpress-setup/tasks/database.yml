@@ -19,6 +19,26 @@
   with_dict: wordpress_sites
   when: item.value.db_create | default(True)
 
+- name: Create test database of sites
+  mysql_db: name="{{ item.value.env.test_db_name | default(item.key) }}"
+            state=present
+            login_host="{{ item.value.env.test_db_host | default('localhost') }}"
+            login_user="{{ mysql_user }}"
+            login_password="{{ mysql_root_password }}"
+  with_dict: wordpress_sites
+  when: item.value.db_create | default(True)
+
+- name: Create/assign test database user to db and grant permissions
+  mysql_user: name="{{ item.value.env.test_db_user }}"
+              password="{{ item.value.env.test_db_password }}"
+              priv="{{ item.value.env.test_db_name | default(item.key) }}.*:ALL"
+              state=present
+              login_host="{{ item.value.env.test_db_host | default('localhost') }}"
+              login_user="{{ mysql_user }}"
+              login_password="{{ mysql_root_password }}"
+  with_dict: wordpress_sites
+  when: item.value.db_create | default(True)
+
 - name: Copy database dump
   copy: src="{{ item.value.db_import }}" dest=/tmp
   with_dict: wordpress_sites

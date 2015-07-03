@@ -11,3 +11,4 @@
   - python-mysqldb
   - curl
   - git-core
+  - subversion

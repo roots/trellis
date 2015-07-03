@@ -1,0 +1,27 @@
+- name: Create WP Tests Directory
+  file: path="{{ www_root }}/{{ item.key }}/current/{{ test_lib_dir }}"
+        owner="{{ web_user }}"
+        group="{{ web_group }}"
+        mode=0755
+        state=directory
+  with_dict: wordpress_sites
+
+- name: Clone WP PHPUnit Test Lib from WP SVN repo
+  command: svn co --quiet {{ test_svn_repo }}
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/current/{{ test_lib_dir }}"
+  with_dict: wordpress_sites
+
+- name: Create Bedrock WP Tests Config file
+  template: src="wp-tests-config.j2"
+            dest="{{ www_root }}/{{ item.key }}/current/{{ test_lib_dir }}/wp-tests-config.php"
+            owner="{{ web_user }}"
+            group="{{ web_group }}"
+  with_dict: wordpress_sites
+
+- name: Create Application Test Config file
+  template: src="application-test.j2"
+            dest="{{ www_root }}/{{ item.key }}/current/config/application-test.php"
+            owner="{{ web_user }}"
+            group="{{ web_group }}"
+  with_dict: wordpress_sites

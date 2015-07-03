@@ -127,6 +127,9 @@ For a complete, working example you can see our [example project](https://github
   * `db_user` - database username (required)
   * `db_password` - database password (required)
   * `db_host` - database hostname (default: `localhost`)
+  * `test_db_name` - test database name (__must__ be different to primary `db_name`)
+  * `test_db_user` - test database user (__must__ be different to primary `db_user`
+  * `test_db_password` - test database password (__must__ be different to primary `db_password`)
   * `domain_current_site` (required if multisite.enabled is `true`)
 
 ### Mail
@@ -148,3 +151,38 @@ You can enable FastCGI caching on a per site basis. The cache is a low duration,
 ## Security
 
 The `secure-root.yml` playbook is provided to help secure your remote servers including better SSH security. See the Wiki for [Locking down root](https://github.com/roots/bedrock-ansible/wiki/Security#locking-down-root).
+
+## Plugin Unit Testing
+
+You may wish to Unit Test your Plugins using the WP Core PHPUnit classes. 
+
+To do this ensure you have configured the test database correctly within the `group_vars/development` file. 
+
+__Warning:__ *This database will be dropped* between each test so it is *critical* that you never use your main database as your test database.
+
+### Testing a Plugin
+
+To test an individual plugin we advise using WP CLI to scaffold the required files. To do this ssh into Vagrant and run:
+
+````wp scaffold plugin-tests my-plugin````
+
+...where `my-plugin` is the Plugin dir in which you wish to scaffold the test files. You should see several files generated. 
+
+We next need to edit the `tests/bootstrap.php` file, replacing...
+
+```
+$_tests_dir = getenv('WP_TESTS_DIR');
+if ( !$_tests_dir ) $_tests_dir = '/tmp/wordpress-tests-lib';
+```
+
+...with
+
+```
+$_tests_dir = '../../../../wp-tests-lib';
+```
+
+To run the Plugin's test suite cd into your plugin directory and run
+
+`../../../../vendor/bin/phpunit`
+
+
