@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Windows provisioner for bedrock-ansible
+# Windows provisioner for Trellis
 # heavily modified and based on KSid/windows-vagrant-ansible
 # @author Andrea Brandi
 # @version 1.0
