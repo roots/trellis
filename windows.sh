@@ -20,7 +20,7 @@ if [ ! -f /usr/bin/ansible ]; then
   echo "Updating system..."
   sudo apt-get -y update
   echo "Installing Ansible..."
-  sudo apt-get -y install ansible
+  sudo apt-get -y --force-yes install ansible
 fi
 
 if [ ! -d /vagrant/${ANSIBLE_PATH}/vendor ]; then

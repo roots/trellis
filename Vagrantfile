@@ -59,7 +59,7 @@ Vagrant.configure('2') do |config|
   if Vagrant::Util::Platform.windows?
     config.vm.provision :shell do |sh|
       sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
-      sh.args = ANSIBLE_PATH
+      sh.args = ''
     end
   else
     config.vm.provision :ansible do |ansible|
