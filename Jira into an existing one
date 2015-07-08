@@ -1,0 +1,29 @@
+creating a subtask. &lt;/p&gt;
+&lt;p&gt;If there is no support, when might Atlassian offer this exteremely important feature for their OnDemand clients?  Currently, one of the reasons I cannot get managers to buy in is that they have to manually know what subtasks to create and automatically create them -- not as easy as copy/paste in or other options where you have this choice...and, given that there seem to be several plugins that offer this, it wouldn't necessarily require Atlassian to do a significant amount of work or investment -- they would need to certify the desired plugin and provide it as an option.&lt;/p&gt;</description>
+      <category>jira-cloud</category>
+      <category>cloud</category>
+      <pubDate>Mon, 21 May 2012 06:30:46 GMT</pubDate>
+      <guid isPermaLink="false">tag:https://answers.atlassian.com,2014:question-56377</guid>
+      <dc:creator>Karie Kelly</dc:creator>
+      <dc:date>2012-05-21T06:30:46Z</dc:date>
+    </item>
+    <item>
+      <title>Can you save a template of transferable tasks?</title>
+      <link>https://answers.atlassian.com/questions/19139583/can-you-save-a-template-of-transferable-tasks</link>
+      <description>&lt;p&gt;Is there a way to save a template of tasks, so that we can quickly and easily transfer the same identical tasks from one project to another without having to re-create them each time we start a new project that requires the same tasks. &lt;/p&gt;</description>
+      <category>jira-cloud</category>
+      <category>jira</category>
+      <pubDate>Thu, 02 Jul 2015 16:41:13 GMT</pubDate>
+      <guid isPermaLink="false">tag:https://answers.atlassian.com,2014:question-19139583</guid>
+      <dc:creator>Kellen Young</dc:creator>
+      <dc:date>2015-07-02T16:41:13Z</dc:date>
+    </item>
+    <item>
+      <title>Is there a way to keep Epic, Parent and lable links when migrating from cloud to on prem?</title>
+      <link>https://answers.atlassian.com/questions/19144165/is-there-a-way-to-keep-epic-parent-and-lable-links-when-migrating-from-cloud-to-on-prem</link>
+      <description>&lt;p&gt;We need to move a number of projects from our Ondemand Jira into an existing on prem Jira.&lt;/p&gt;&lt;p&gt;Following the instructions &lt;a href="https://confluence.atlassian.com/display/JIRA063/Restoring+a+Project+from+Backup#RestoringaProjectfromBackup-RestoringaprojectfromJIRACloudtoJIRAServer" class="external-link" rel="nofollow"&gt;https://confluence.atlassian.com/display/JIRA063/Restoring+a+Project+from+Backup#RestoringaProjectfromBackup-RestoringaprojectfromJIRACloudtoJIRAServer&lt;/a&gt;&lt;/p&gt;&lt;p&gt;we imported one project into a clone of the On prem Jira, and there were some problems:&lt;/p&gt;&lt;p&gt;• The sub-tasks imported are not linked to the parent issues&lt;br /&gt;• The issues are not linked to the Epics&lt;br /&gt;• Components and versions are created, but the issues are not linked to them&lt;br /&gt;• Epic names are not imported&lt;br /&gt;• The information in Custom Fields are lost&lt;br /&gt;• All labels are lost&lt;br /&gt;• Information about sprints, both current and completed, are lost&lt;/p&gt;&lt;p&gt;Is there a better way to migrate that the one stated in the link or is there a way to preserve the links when migrating?&lt;/p&gt;&lt;p&gt;Best regards &lt;br /&gt;Kim&lt;/p&gt;</description>
+      <category>jira-cloud</category>
+      <category>jira</category>
+      <category>cloud</category>
+      <category>migration</category>
+      <category>on</category>
