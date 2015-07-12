@@ -30,7 +30,7 @@ Trellis will configure a server with the following and more:
 
 ## Requirements
 
-* Ansible >= 1.9 (except 1.9.1 - see this [bug](https://github.com/roots/trellis/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/)
+* Ansible >= 1.9 (except 1.9.1 - see this [bug](https://github.com/roots/trellis/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/) • [Windows wiki](https://github.com/roots/trellis/wiki/Windows)
 * Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
 * vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
@@ -39,10 +39,8 @@ Trellis will configure a server with the following and more:
 ## Installation
 
 1. Download/fork/clone this repo to your local machine.
-2. Run `ansible-galaxy install -r requirements.yml` to install external Ansible roles/packages.
+2. Run `ansible-galaxy install -r requirements.yml` inside your Trellis directory to install external Ansible roles/packages.
 3. Download/fork/clone [Bedrock](https://github.com/roots/bedrock) or have an existing Bedrock-based site ready.
-
-Note on `.env` files: You **do not** need a configured `.env` file. Trellis will automatically create and configure one.
 
 You should now have the following directories at the same level somewhere:
 
@@ -52,22 +50,22 @@ example.com/    - Primary folder for the project
 └── site/       - A Bedrock-based site (suggested to name this the generic `site` since your project name is already at the top level)
 ```
 
-To see a complete working example of this, visit the [roots-example-project.com repo](https://github.com/roots/roots-example-project.com).
-
-Note: The full paths to these directories must not contain spaces or else [Ansible will fail](https://github.com/ansible/ansible/issues/8555).
+- You **do not** need a configured `.env` file. Trellis will automatically create and configure one.
+- The full paths to these directories must not contain spaces or else [Ansible will fail](https://github.com/ansible/ansible/issues/8555).
+- See a complete working example in the [roots-example-project.com repo](https://github.com/roots/roots-example-project.com).
 
 ## Development setup
 
-1. Edit `group_vars/development` and add your WordPress sites
+1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/development`
 2. Run `vagrant up`
 
 ## Remote server setup (staging/production)
 
 For remote servers you'll need to have a base Ubuntu 14.04 server already created.
 
-1. Edit `group_vars/<environment>` and add your WordPress sites
-2. Edit `hosts/<environment>` and add your server IP/hostnames
-3. Add SSH keys to `users` in `group_vars/all`. See the [Wiki page](https://github.com/roots/trellis/wiki/SSH-Keys)
+1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>`. Also see the [Passwords wiki](https://github.com/roots/trellis/wiki/Passwords).
+2. Add your server IP/hostnames to `hosts/<environment>`.
+3. Add SSH keys to `users` in `group_vars/all`. See the [SSH Keys wiki](https://github.com/roots/trellis/wiki/SSH-Keys).
 4. Run `ansible-playbook -i hosts/<environment> server.yml`
 
 ## Deploying to remote servers
@@ -85,21 +83,14 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 ### WordPress Sites
 
-Since Trellis is all about automatically creating servers for your WordPress sites, you need to configure your sites before anything else.
+Before using Trellis, you must configure your WordPress sites. The `group_vars` directory contains one configuration file per environment (`development`, `staging`, and `production` in [YAML](http://en.wikipedia.org/wiki/YAML) format). For example: configure the sites on your Vagrant development VM by editing `group_vars/development`.
 
-This configuration is done in the environment files inside the `group_vars` directory. The `group_vars` files are in [YAML](http://en.wikipedia.org/wiki/YAML) format.
+`wordpress_sites` is the top level dictionary used to define the WordPress sites, databases, Nginx vhosts, etc that will be created. Each site's variables are nested under a site "key" (e.g., `example.com`). This key is just a descriptive name and serves as the default value for some variables. See our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development) for a complete working example.
 
-To configure the sites you want on your Vagrant development VM, you'd edit `group_vars/development` for example. For staging, `group_vars/staging`. And likewise for production: `group_vars/production`.
-
-`wordpress_sites` is the top level dictionary used to define the WordPress sites, databases, Nginx vhosts, etc that will be created.
-
-The following variables are all nested under the site "key". The key is just a descriptive name although it's used as a default value of other variables in some cases.
-
-For a complete, working example you can see our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development).
-
-* `site_hosts` - array of hosts that Nginx will listen on (required, include main domain at least) * `local_path` - path targeting Bedrock-based site directory (required for development)
+* `site_hosts` - array of hosts that Nginx will listen on (required, include main domain at least)
+* `local_path` - path targeting Bedrock-based site directory (required for development)
 * `repo` - URL of the Git repo of your Bedrock project (required, used when deploying)
-* `branch` - the branch of the repo you want to deploy. You can also use a tag or the SHA1 of a commit (default: `master`)
+* `branch` - the branch name, tag name, or commit SHA1 you want to deploy (default: `master`)
 * `ssl` - enable SSL and set paths
   * `enabled` - `true` or `false` (required, set to `false`)
   * `key` - local relative path to private key
@@ -112,7 +103,7 @@ For a complete, working example you can see our [example project](https://github
 * `admin_user` - WP admin user name (*development* only, required)
 * `admin_email` - WP admin email address (*development* only, required)
 * `admin_password` - WP admin user password (*development* only, required)
-* `multisite` - hash of multisite options
+* `multisite` - hash of multisite options. See the [Multisite wiki](https://github.com/roots/trellis/wiki/Multisite).
   * `enabled` - Multisite enabled flag (required, set to `false`)
   * `subdomains` - subdomains option
   * `base_path` - base path/current site path
@@ -122,7 +113,7 @@ For a complete, working example you can see our [example project](https://github
 * `env` - environment variables
   * `wp_home` - `WP_HOME` constant (required)
   * `wp_siteurl` - `WP_SITEURL` constant (required)
-  * `wp_env` - WordPress environment (required, matches group name: `development`, `staging`, `production`)
+  * `wp_env` - environment (required, matches group name: `development`, `staging`, `production`)
   * `db_name` - database name (required)
   * `db_user` - database username (required)
   * `db_password` - database password (required)
@@ -131,20 +122,16 @@ For a complete, working example you can see our [example project](https://github
 
 ### Mail
 
-Outgoing mail is done by the sSMTP role. Configure SMTP credentials in `group_vars/all`.
+Outgoing mail is handled by sSMTP. Configure credentials in `group_vars/all`.  See the [Mail wiki](https://github.com/roots/trellis/wiki/Mail).
 
 ## SSL
 
-Full SSL support is available for your WordPress sites. Note that this will configure your site to be HTTPS **only** by default.
-
-Our HTTPS implementation has all the best practices for performance and security.
-
-Read the Wiki section on [SSL](https://github.com/roots/trellis/wiki/SSL) for more documentation.
+Full SSL support is available for your WordPress sites. Our HTTPS implementation has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL wiki](https://github.com/roots/trellis/wiki/SSL).
 
 ## Caching
 
-You can enable FastCGI caching on a per site basis. The cache is a low duration, "micro-cache" type setup. More info on how to configure the different options can be found in the [FastCGI caching](https://github.com/roots/trellis/wiki/FastCGI-caching) wiki page.
+You can enable FastCGI caching on a per site basis. The cache is a low duration, "micro-cache" type setup. See the [FastCGI micro-caching wiki](https://github.com/roots/trellis/wiki/FastCGI-caching) for configuration options.
 
 ## Security
 
-The `secure-root.yml` playbook is provided to help secure your remote servers including better SSH security. See the Wiki for [Locking down root](https://github.com/roots/trellis/wiki/Security#locking-down-root).
+The `secure-root.yml` playbook improves SSH security on your remote servers. See the [Security wiki](https://github.com/roots/trellis/wiki/Security).
