@@ -3,7 +3,7 @@ fail2ban_loglevel: 3
 fail2ban_logtarget: /var/log/fail2ban.log
 fail2ban_socket: /var/run/fail2ban/fail2ban.sock
 
-fail2ban_ignoreip: 127.0.0.1/8
+fail2ban_ignoreip: 127.0.0.1/8 {{ lookup('pipe', 'dig +short myip.opendns.com @resolver1.opendns.com') }}
 fail2ban_bantime: 600
 fail2ban_maxretry: 6
 

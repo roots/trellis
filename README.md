@@ -30,7 +30,7 @@ Trellis will configure a server with the following and more:
 
 ## Requirements
 
-* Ansible >= 1.9 (except 1.9.1 - see this [bug](https://github.com/roots/trellis/issues/205)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/) • [Windows wiki](https://github.com/roots/trellis/wiki/Windows)
+* Ansible >= 1.9.2 - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/) • [Windows wiki](https://github.com/roots/trellis/wiki/Windows)
 * Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
 * vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
@@ -65,8 +65,9 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>`. Also see the [Passwords wiki](https://github.com/roots/trellis/wiki/Passwords).
 2. Add your server IP/hostnames to `hosts/<environment>`.
-3. Add SSH keys to `users` in `group_vars/all`. See the [SSH Keys wiki](https://github.com/roots/trellis/wiki/SSH-Keys).
-4. Run `ansible-playbook -i hosts/<environment> server.yml`
+3. Specify public SSH keys for `users` in `group_vars/all`. See the [SSH Keys wiki](https://github.com/roots/trellis/wiki/SSH-Keys).
+4. Consider setting `sshd_permit_root_login: "no"` in `group_vars/all`. See the [Security wiki](https://github.com/roots/trellis/wiki/Security).
+5. Run `ansible-playbook -i hosts/<environment> server.yml`
 
 ## Deploying to remote servers
 
@@ -131,7 +132,3 @@ Full SSL support is available for your WordPress sites. Our HTTPS implementation
 ## Caching
 
 You can enable FastCGI caching on a per site basis. The cache is a low duration, "micro-cache" type setup. See the [FastCGI micro-caching wiki](https://github.com/roots/trellis/wiki/FastCGI-caching) for configuration options.
-
-## Security
-
-The `secure-root.yml` playbook improves SSH security on your remote servers. See the [Security wiki](https://github.com/roots/trellis/wiki/Security).

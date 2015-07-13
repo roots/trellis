@@ -24,10 +24,16 @@ users:
     keys:
       - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       # - https://github.com/username.keys
+  - name: "{{ admin_user }}"
+    groups:
+      - sudo
+    keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      # - https://github.com/username.keys
 
-sudoers:
-  - user: admin
-    groups: [sudo]
+admin_user: admin
+sshd_permit_root_login: "yes" # If "no", admin_user must be in 'users' above (with sudo group) and in sudoer_passwords
+sshd_password_authentication: "no"
 
 ferm_input_list:
   - type: dport_accept
