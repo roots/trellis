@@ -84,6 +84,7 @@ project_post_build_commands:
 # Post finalize commands are run with Ansible's `shell` module.
 # These are meant primarily for service restarts such as php5-fpm or memcached.
 project_post_finalize_commands:
+  - if wp core is-installed; then wp eval 'wp_clean_themes_cache(); switch_theme(get_stylesheet());'; fi
   - sudo service php5-fpm reload
 
 # At the end of the role, the unfinished_filename is removed and the "current" symlink is set to
