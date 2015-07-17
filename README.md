@@ -20,13 +20,13 @@ Trellis will configure a server with the following and more:
 * Nginx (with optional FastCGI micro-caching)
 * PHP 5.6 (or [HHVM](http://hhvm.com/))
 * [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better)
-* sSMTP (mail delivery)
-* Memcached
+* SSL support (A+ on https://www.ssllabs.com/ssltest/)
 * Composer
 * WP-CLI
+* sSMTP (mail delivery)
+* Memcached
 * Fail2ban
 * ferm
-* SSL support (A+ on https://www.ssllabs.com/ssltest/)
 
 ## Requirements
 
