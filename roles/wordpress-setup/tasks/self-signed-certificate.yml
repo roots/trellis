@@ -1,0 +1,28 @@
+---
+- name: Get existing self-signed certificates
+  shell: find . -name "*_self_signed.pem"
+  args:
+    chdir: /etc/nginx/ssl/
+  register: self_signed_certs
+  changed_when: false
+
+- name: Get self-signed certificates domains
+  shell: openssl x509 -noout -subject -in {{ item | quote }} | sed -n "/^subject/s/^.*CN=//p"
+  register: self_signed_domains
+  args:
+    chdir: /etc/nginx/ssl/
+  with_items: self_signed_certs.stdout_lines
+  changed_when: false
+
+- name: Generate self-signed certificates
+  shell: >
+    openssl req -subj "/CN={{ item.value.site_hosts | first }}" -new
+    -newkey rsa:2048 -days 3650 -nodes -x509 -sha256
+    -keyout {{ item.key }}_self_signed.key -out {{ item.key }}_self_signed.pem
+  args:
+    chdir: /etc/nginx/ssl/
+  with_dict: wordpress_sites
+  when: >
+    item.value.ssl.enabled and item.value.site_hosts | first
+    not in self_signed_domains.results | default([]) | map(attribute='stdout') | list
+  notify: reload nginx

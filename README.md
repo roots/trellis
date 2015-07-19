@@ -92,7 +92,7 @@ Before using Trellis, you must configure your WordPress sites. The `group_vars` 
 * `repo` - URL of the Git repo of your Bedrock project (required, used when deploying)
 * `branch` - the branch name, tag name, or commit SHA1 you want to deploy (default: `master`)
 * `ssl` - enable SSL and set paths
-  * `enabled` - `true` or `false` (required, set to `false`)
+  * `enabled` - `true` or `false` (required, set to `false`. Set to `true` without the `key` and `cert` options [to generate a *self-signed* certificate](https://github.com/roots/trellis/wiki/SSL) )
   * `key` - local relative path to private key
   * `cert` - local relative path to certificate
 * `site_install` - whether to install WordPress or not (*development* only, required)
@@ -126,7 +126,7 @@ Outgoing mail is handled by sSMTP. Configure credentials in `group_vars/all`.  S
 
 ## SSL
 
-Full SSL support is available for your WordPress sites. Our HTTPS implementation has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL wiki](https://github.com/roots/trellis/wiki/SSL).
+Full SSL support is available for your WordPress sites. Trellis will also *auto-generate* self-signed certificates for development purposes. Our HTTPS implementation has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL wiki](https://github.com/roots/trellis/wiki/SSL).
 
 ## Caching
 

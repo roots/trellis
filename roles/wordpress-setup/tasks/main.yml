@@ -1,5 +1,6 @@
 ---
 - include: database.yml
+- include: self-signed-certificate.yml
 - include: nginx.yml
 
 - name: Create web root
