@@ -1,4 +1,14 @@
 ---
+- name: Ensure sudo group is present
+  group: name=sudo state=present
+
+- name: Ensure sudo group has sudo privileges
+  lineinfile: dest=/etc/sudoers
+              state=present
+              regexp="^%sudo"
+              line="%sudo ALL=(ALL:ALL) ALL"
+              validate="/usr/sbin/visudo -cf %s"
+
 - name: Setup users
   user: name="{{ item.name }}"
         group="{{ item.groups[0] }}"
