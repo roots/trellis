@@ -1,7 +1,8 @@
 ---
 apt_cache_valid_time: 86400
 mariadb_dist: trusty
-mysql_user: root
+mysql_remote_database: false
+mysql_root_user: root
 www_root: /srv/www
 
 mail_smtp_server: smtp.mandrillapp.com:587
