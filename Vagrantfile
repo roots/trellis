@@ -34,21 +34,6 @@ Vagrant.configure('2') do |config|
   config.vm.hostname = hostname
   www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
 
-  # Uncomment this control block for subdomain multisite installs
-  # See note on next control block
-  # if Vagrant.has_plugin? 'landrush'
-  #   config.landrush.enabled = true
-  #   config.landrush.tld = config.vm.hostname
-  # 
-  #   aliases.each do |host|
-  #     config.landrush.host host, PRIVATE_IP
-  #   end
-  # else
-  #   puts 'landrush missing, please install the plugin:'
-  #   puts 'vagrant plugin install landrush'
-  # end
-  
-  # Comment out this control block for subdomain multisite installs
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
     config.hostsupdater.aliases = aliases + www_aliases
   else
