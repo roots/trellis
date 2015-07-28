@@ -50,7 +50,7 @@ Vagrant.configure('2') do |config|
   
   # Comment out this control block for subdomain multisite installs
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
-    config.hostsupdater.aliases = aliases
+    config.hostsupdater.aliases = aliases + www_aliases
   else
     puts 'vagrant-hostsupdater missing, please install the plugin:'
     puts 'vagrant plugin install vagrant-hostsupdater'
