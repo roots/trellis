@@ -45,18 +45,7 @@
   failed_when: site_statuses.rc != 1 | site_statuses.rc != 0
   when: item.value.multisite.enabled | default(False) == True
   
-- name: Install WP
-  command: wp core install
-           --allow-root
-           --url="{{ item.item.value.env.wp_home }}"
-           --title="{{ item.item.value.site_title | default(item.item.key) }}"
-           --admin_user="{{ item.item.value.admin_user }}"
-           --admin_password="{{ item.item.value.admin_password }}"
-           --admin_email="{{ item.item.value.admin_email }}"
-  args:
-    chdir: "{{ www_root }}/{{ item.item.key }}/current/"
-  with_items: site_statuses.results
-  when: item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == False)
+  when: item.rc == 1 and item.item.value.site_install == True and item.item.value.multisite.enabled == False
 
 - name: Install WP Multisite
   command: wp core multisite-install
@@ -71,7 +60,7 @@
   args:
     chdir: "{{ www_root }}/{{ item.item.key }}/current/"
   with_items: site_statuses.results
-  when: item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == True)
+  when: item.rc == 1 and item.item.value.site_install == True and item.item.value.multisite.enabled == True
 
 - name: Restart HHVM
   service: name=hhvm state=restarted
