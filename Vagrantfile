@@ -6,6 +6,7 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 
 require 'yaml'
 
+PRIVATE_IP   = '192.168.50.5'
 ANSIBLE_PATH = __dir__ # path targeting Ansible directory (relative to Vagrantfile)
 
 # Set Ansible roles_path relative to Ansible directory
@@ -27,14 +28,29 @@ Vagrant.configure('2') do |config|
   config.ssh.forward_agent = true
 
   # Required for NFS to work, pick any local IP
-  config.vm.network :private_network, ip: '192.168.50.5'
+  config.vm.network :private_network, ip: PRIVATE_IP
 
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname
   www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
 
+  # Uncomment this control block for subdomain multisite installs
+  # See note on next control block
+  # if Vagrant.has_plugin? 'landrush'
+  #   config.landrush.enabled = true
+  #   config.landrush.tld = config.vm.hostname
+  # 
+  #   aliases.each do |host|
+  #     config.landrush.host host, PRIVATE_IP
+  #   end
+  # else
+  #   puts 'landrush missing, please install the plugin:'
+  #   puts 'vagrant plugin install landrush'
+  # end
+  
+  # Comment out this control block for subdomain multisite installs
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
-    config.hostsupdater.aliases = aliases + www_aliases
+    config.hostsupdater.aliases = aliases
   else
     puts 'vagrant-hostsupdater missing, please install the plugin:'
     puts 'vagrant plugin install vagrant-hostsupdater'
