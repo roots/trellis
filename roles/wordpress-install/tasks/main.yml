@@ -42,7 +42,7 @@
   register: multisite_statuses
   with_dict: wordpress_sites
   changed_when: False
-  failed_when: site_statuses.rc != 1 and site_statuses.rc != 0
+  failed_when: multisite_statuses.rc != 1 and multisite_statuses.rc != 0
   when: item.value.multisite.enabled == True
 
 - name: Install WP
