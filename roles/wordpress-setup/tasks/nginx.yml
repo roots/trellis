@@ -2,12 +2,12 @@
 - name: Copy SSL cert
   copy: src="{{ item.value.ssl.cert }}" dest=/etc/nginx/ssl/{{ item.value.ssl.cert | basename }} mode=0640
   with_dict: wordpress_sites
-  when: item.value.ssl.enabled | default(False)
+  when: item.value.ssl.enabled and item.value.ssl.cert is defined | default(False)
 
 - name: Copy SSL key
   copy: src="{{ item.value.ssl.key }}" dest=/etc/nginx/ssl/{{ item.value.ssl.key | basename }} mode=0600
   with_dict: wordpress_sites
-  when: item.value.ssl.enabled | default(False)
+  when: item.value.ssl.enabled and item.value.ssl.key is defined | default(False)
 
 - name: Create includes.d directories
   file: path="/etc/nginx/includes.d/{{ item.key }}" state=directory mode=0755
