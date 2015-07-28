@@ -32,19 +32,6 @@
   failed_when: site_statuses.stderr != ""
   when: item.value.multisite.enabled == False
 
-- name: WP network installed?
-  command: wp core is-installed
-           --allow-root
-           --network
-           --url="{{ item.value.env.wp_home }}"
-  args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
-  register: multisite_statuses
-  with_dict: wordpress_sites
-  changed_when: False
-  failed_when: multisite_statuses.rc != 1 and multisite_statuses.rc != 0
-  when: item.value.multisite.enabled == True
-
 - name: Install WP
   command: wp core install
            --allow-root
@@ -58,6 +45,19 @@
   with_items: site_statuses.results
   when: item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == False)
 
+- name: WP network installed?
+  command: wp core is-installed
+           --allow-root
+           --network
+           --url="{{ item.item.value.env.wp_home }}"
+  args:
+    chdir: "{{ www_root }}/{{ item.item.key }}/current/"
+  register: site_statuses
+  with_dict: wordpress_sites
+  changed_when: False
+  failed_when: site_statuses.rc != 1 and site_statuses.rc != 0
+  when: item.value.multisite.enabled == True
+
 - name: Install WP Multisite
   command: wp core multisite-install
            --allow-root
@@ -70,8 +70,8 @@
            --admin_email="{{ item.item.value.admin_email }}"
   args:
     chdir: "{{ www_root }}/{{ item.item.key }}/current/"
-  with_items: multisite_statuses.results
-  when: item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == True)
+  with_items: site_statuses.results
+  when: item.skipped != True and item.item.value.multisite.enabled == True and item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == False)
 
 - name: Restart HHVM
   service: name=hhvm state=restarted
