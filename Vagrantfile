@@ -6,7 +6,6 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 
 require 'yaml'
 
-PRIVATE_IP   = '192.168.50.5'
 ANSIBLE_PATH = __dir__ # path targeting Ansible directory (relative to Vagrantfile)
 
 # Set Ansible roles_path relative to Ansible directory
@@ -28,7 +27,7 @@ Vagrant.configure('2') do |config|
   config.ssh.forward_agent = true
 
   # Required for NFS to work, pick any local IP
-  config.vm.network :private_network, ip: PRIVATE_IP
+  config.vm.network :private_network, ip: '192.168.50.5'
 
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname
