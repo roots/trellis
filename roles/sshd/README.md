@@ -26,7 +26,7 @@ sshd_server_key_bits: 768
 sshd_syslog_facility: AUTH
 sshd_log_level: INFO
 sshd_login_grace_time: 120
-sshd_permit_root_login: "no"
+sshd_permit_root_login: "yes"
 sshd_strict_modes: "yes"
 sshd_rsa_authentication: "yes"
 sshd_pubkey_authentication: "yes"
