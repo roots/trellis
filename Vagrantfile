@@ -6,7 +6,7 @@ ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
 
 require 'yaml'
 
-ANSIBLE_PATH = __dir__ # path targeting Ansible directory (relative to Vagrantfile)
+ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
 
 # Set Ansible roles_path relative to Ansible directory
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
