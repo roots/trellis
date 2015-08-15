@@ -1,5 +1,6 @@
 ---
 apt_cache_valid_time: 86400
+default_timezone: Etc/UTC
 mariadb_dist: trusty
 mysql_user: root
 www_root: /srv/www
