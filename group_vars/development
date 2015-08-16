@@ -1,4 +1,5 @@
 mysql_root_password: devpw
+mailhog_install_ssmtp: no
 
 web_user: vagrant
 
@@ -29,6 +30,15 @@ wordpress_sites:
       db_name: example_dev
       db_user: example_dbuser
       db_password: example_dbpassword
+
+mail_smtp_server: localhost:1025
+mail_admin: admin@example.dev
+mail_hostname: example.dev
+ssmtp_auth_method: ""
+ssmtp_start_tls: 'no'
+ssmtp_tls: 'no'
+
+ferm_enabled: false
 
 php_error_reporting: 'E_ALL'
 php_display_errors: 'On'

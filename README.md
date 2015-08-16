@@ -123,7 +123,7 @@ Before using Trellis, you must configure your WordPress sites. The `group_vars` 
 
 ### Mail
 
-Outgoing mail is handled by sSMTP. Configure credentials in `group_vars/all`.  See the [Mail wiki](https://github.com/roots/trellis/wiki/Mail).
+Outgoing mail is handled by sSMTP. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `staging` and `production`, configure credentials in `group_vars/all`.  See the [Mail wiki](https://github.com/roots/trellis/wiki/Mail).
 
 ## SSL
 
