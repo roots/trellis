@@ -17,6 +17,7 @@ web_user: web
 web_group: www-data
 web_sudoers:
   - "/usr/sbin/service php5-fpm *"
+  - "/usr/sbin/service hhvm *"
 
 users:
   - name: "{{ web_user }}"

@@ -85,7 +85,8 @@ project_post_build_commands:
 # These are meant primarily for service restarts such as php5-fpm or memcached.
 project_post_finalize_commands:
   - if wp core is-installed; then wp eval 'wp_clean_themes_cache(); switch_theme(get_stylesheet());'; fi
-  - sudo service php5-fpm reload
+  - if dpkg --list | grep -Fq 'php5-fpm'; then sudo service php5-fpm reload; fi
+  - if dpkg --list | grep -Fq 'hhvm'; then sudo service hhvm restart; fi
 
 # At the end of the role, the unfinished_filename is removed and the "current" symlink is set to
 # the release. If you need to perform your own actions before this happens, set "project_finalize"
