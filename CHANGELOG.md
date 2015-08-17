@@ -1,3 +1,11 @@
+### HEAD
+* Capture development mail with MailHog ([#304](https://github.com/roots/trellis/pull/304))
+* Update git remote URL before cloning on deploys ([#299](https://github.com/roots/trellis/pull/299))
+* Allow user to set the timezone ([#301](https://github.com/roots/trellis/pull/301))
+* Improvements to custom Nginx includes ([#242](https://github.com/roots/trellis/pull/242))
+* Fix comment in Vagrantfile: use absolute path for ANSIBLE_PATH ([#292](https://github.com/roots/trellis/pull/292))
+* Fix remote user handling for AWS ([#290](https://github.com/roots/trellis/pull/290))
+
 ### 0.9.0: August 3rd, 2015
 * Allow auto-generation of self signed SSL certificate
 * Merge secure-root.yml into server.yml
