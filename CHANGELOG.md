@@ -1,4 +1,4 @@
-### HEAD
+### 0.9.1: August 18th, 2015
 * Capture development mail with MailHog ([#304](https://github.com/roots/trellis/pull/304))
 * Update git remote URL before cloning on deploys ([#299](https://github.com/roots/trellis/pull/299))
 * Allow user to set the timezone ([#301](https://github.com/roots/trellis/pull/301))
