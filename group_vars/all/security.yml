@@ -1,0 +1,12 @@
+ferm_input_list:
+  - type: dport_accept
+    dport: [http, https]
+    filename: nginx_accept
+  - type: dport_limit
+    dport: [ssh]
+    seconds: 300
+    hits: 20
+
+# Documentation: https://github.com/roots/trellis/wiki/Security
+sshd_permit_root_login: "yes" # If "no", admin_user must be in 'users' (`users.yml`) with sudo group and in `sudoer_passwords`
+sshd_password_authentication: "no"

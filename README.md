@@ -59,22 +59,22 @@ example.com/    - Primary folder for the project
 
 ## Development setup
 
-1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/development`
+1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/development/wordpress_sites.yml`
 2. Run `vagrant up`
 
 ## Remote server setup (staging/production)
 
 For remote servers, you'll need to have a base Ubuntu 14.04 server already created.
 
-1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>`. Also see the [Passwords wiki](https://github.com/roots/trellis/wiki/Passwords).
+1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>/wordpress_sites.yml`. Also see the [Passwords wiki](https://github.com/roots/trellis/wiki/Passwords).
 2. Add your server IP/hostnames to `hosts/<environment>`.
-3. Specify public SSH keys for `users` in `group_vars/all`. See the [SSH Keys wiki](https://github.com/roots/trellis/wiki/SSH-Keys).
-4. Consider setting `sshd_permit_root_login: "no"` in `group_vars/all`. See the [Security wiki](https://github.com/roots/trellis/wiki/Security).
+3. Specify public SSH keys for `users` in `group_vars/all/users.yml`. See the [SSH Keys wiki](https://github.com/roots/trellis/wiki/SSH-Keys).
+4. Consider setting `sshd_permit_root_login: "no"` in `group_vars/all/security.yml`. See the [Security wiki](https://github.com/roots/trellis/wiki/Security).
 5. Run `ansible-playbook -i hosts/<environment> server.yml`
 
 ## Deploying to remote servers
 
-1. Add the `repo` (Git url) of your Bedrock WordPress project in the corresponding `group_vars/<environment>` file.
+1. Add the `repo` (Git url) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file.
 2. Set the `branch` you want to deploy.
 3. Run `./deploy.sh <environment> <site name>`
 4. To rollback a deploy, run `ansible-playbook -i hosts/<environment> rollback.yml --extra-vars="site=<site name>"`
@@ -83,13 +83,17 @@ For remote servers, you'll need to have a base Ubuntu 14.04 server already creat
 
 ### HHVM
 
-[HHVM](http://hhvm.com/) can be used instead of PHP 5.6 by setting `hhvm: true` in `group_vars/all`.
+[HHVM](http://hhvm.com/) can be used instead of PHP 5.6 by setting `hhvm: true` in `group_vars/all/main.yml`.
 
 ### WordPress Sites
 
-Before using Trellis, you must configure your WordPress sites. The `group_vars` directory contains one configuration file per environment (`development`, `staging`, and `production` in [YAML](http://en.wikipedia.org/wiki/YAML) format). For example: configure the sites on your Vagrant development VM by editing `group_vars/development`.
+Before using Trellis, you must configure your WordPress sites.
 
-`wordpress_sites` is the top level dictionary used to define your WordPress sites, databases, Nginx vhosts, etc. Each site's variables live under a site "key" (e.g., `example.com`). This key is just a descriptive name and serves as the default value for some variables. See our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development) for a complete working example.
+The `group_vars` directory contains directories for each environment (`development`, `staging`, and `production`). Each environment has its own `wordpress_sites.yml` variables file in [YAML](http://en.wikipedia.org/wiki/YAML) format.
+
+For example: configure the sites on your Vagrant development VM by editing `group_vars/development/wordpress_sites.yml`.
+
+`wordpress_sites` is the top-level dictionary used to define the WordPress sites, databases, Nginx vhosts, etc that will be created. Each site's variables are nested under a site "key" (e.g., `example.com`). This key is just a descriptive name and serves as the default value for some variables. See our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development/wordpress_sites.yml) for a complete working example.
 
 * `site_hosts` - array of hosts that Nginx will listen on (required, include main domain at least)
 * `local_path` - path targeting Bedrock-based site directory (required for development)
@@ -126,7 +130,7 @@ Before using Trellis, you must configure your WordPress sites. The `group_vars` 
 
 ### Mail
 
-sSMTP handles outgoing mail. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `staging` and `production`, configure credentials in `group_vars/all`.  See the [Mail wiki](https://github.com/roots/trellis/wiki/Mail).
+sSMTP handles outgoing mail. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `staging` and `production`, configure credentials in `group_vars/all/mail.yml`. See the [Mail wiki](https://github.com/roots/trellis/wiki/Mail).
 
 ## SSL
 

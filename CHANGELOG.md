@@ -1,3 +1,6 @@
+### HEAD
+* Re-organize `group_vars` files into subdirectories and separate files ([#308](https://github.com/roots/trellis/pull/308))
+
 ### 0.9.1: August 18th, 2015
 * Capture development mail with MailHog ([#304](https://github.com/roots/trellis/pull/304))
 * Update git remote URL before cloning on deploys ([#299](https://github.com/roots/trellis/pull/299))

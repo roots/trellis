@@ -1,0 +1,3 @@
+ferm_enabled: false
+mysql_root_password: devpw
+web_user: vagrant

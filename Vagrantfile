@@ -11,7 +11,7 @@ ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
 # Set Ansible roles_path relative to Ansible directory
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
 
-config_file = File.join(ANSIBLE_PATH, 'group_vars/development')
+config_file = File.join(ANSIBLE_PATH, 'group_vars/development/wordpress_sites.yml')
 
 if File.exists?(config_file)
   wordpress_sites = YAML.load_file(config_file)['wordpress_sites']

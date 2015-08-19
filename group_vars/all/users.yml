@@ -1,0 +1,21 @@
+# Documentation: https://github.com/roots/trellis/wiki/SSH-Keys
+admin_user: admin
+
+users:
+  - name: "{{ web_user }}"
+    groups:
+      - "{{ web_group }}"
+    keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      # - https://github.com/username.keys
+  - name: "{{ admin_user }}"
+    groups:
+      - sudo
+    keys:
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      # - https://github.com/username.keys
+
+web_user: web
+web_group: www-data
+web_sudoers:
+  - "/usr/sbin/service php5-fpm *"
