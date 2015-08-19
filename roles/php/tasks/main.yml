@@ -17,6 +17,9 @@
   - php5-dev
   - php5-imap
 
+- name: Set permissions for log file
+  file: path=/var/log/php5-fpm.log group=www-data mode="g=rw"
+
 - name: Start php5-fpm service
   service: name=php5-fpm state=started enabled=true
 
