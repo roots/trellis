@@ -2,9 +2,12 @@
 
 [![Build Status](https://travis-ci.org/roots/trellis.svg)](https://travis-ci.org/roots/trellis)
 
-Trellis is a set of [Ansible](http://www.ansible.com/home) [playbooks](http://docs.ansible.com/playbooks.html) to automatically configure servers and deploy WordPress sites. It easily creates development environments with Vagrant to help achieve development & production parity.
+Trellis is an end-to-end solution for WordPress environment management.
+- Reproducible development environments with Vagrant
+- Automate the configuration of high-performance production servers
+- One-command deploys for your WordPress sites
 
-Configure complete [Bedrock](https://roots.io/bedrock/)-based WordPress ready servers with a single command:
+Configure servers for [Bedrock](https://roots.io/bedrock/)-based WordPress sites with a single command:
 
 |                        | Command
 | ---------------------- | ------------------------------------------------ |
@@ -61,7 +64,7 @@ example.com/    - Primary folder for the project
 
 ## Remote server setup (staging/production)
 
-For remote servers you'll need to have a base Ubuntu 14.04 server already created.
+For remote servers, you'll need to have a base Ubuntu 14.04 server already created.
 
 1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>`. Also see the [Passwords wiki](https://github.com/roots/trellis/wiki/Passwords).
 2. Add your server IP/hostnames to `hosts/<environment>`.
@@ -86,7 +89,7 @@ For remote servers you'll need to have a base Ubuntu 14.04 server already create
 
 Before using Trellis, you must configure your WordPress sites. The `group_vars` directory contains one configuration file per environment (`development`, `staging`, and `production` in [YAML](http://en.wikipedia.org/wiki/YAML) format). For example: configure the sites on your Vagrant development VM by editing `group_vars/development`.
 
-`wordpress_sites` is the top level dictionary used to define the WordPress sites, databases, Nginx vhosts, etc that will be created. Each site's variables are nested under a site "key" (e.g., `example.com`). This key is just a descriptive name and serves as the default value for some variables. See our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development) for a complete working example.
+`wordpress_sites` is the top level dictionary used to define your WordPress sites, databases, Nginx vhosts, etc. Each site's variables live under a site "key" (e.g., `example.com`). This key is just a descriptive name and serves as the default value for some variables. See our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development) for a complete working example.
 
 * `site_hosts` - array of hosts that Nginx will listen on (required, include main domain at least)
 * `local_path` - path targeting Bedrock-based site directory (required for development)
@@ -123,7 +126,7 @@ Before using Trellis, you must configure your WordPress sites. The `group_vars` 
 
 ### Mail
 
-Outgoing mail is handled by sSMTP. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `staging` and `production`, configure credentials in `group_vars/all`.  See the [Mail wiki](https://github.com/roots/trellis/wiki/Mail).
+sSMTP handles outgoing mail. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `staging` and `production`, configure credentials in `group_vars/all`.  See the [Mail wiki](https://github.com/roots/trellis/wiki/Mail).
 
 ## SSL
 
@@ -131,4 +134,4 @@ Full SSL support is available for your WordPress sites. Trellis will also *auto-
 
 ## Caching
 
-You can enable FastCGI caching on a per site basis. The cache is a low duration, "micro-cache" type setup. See the [FastCGI micro-caching wiki](https://github.com/roots/trellis/wiki/FastCGI-caching) for configuration options.
+You can enable FastCGI caching on a per site basis. The cache is a short duration, "micro-cache" type setup. See the [FastCGI micro-caching wiki](https://github.com/roots/trellis/wiki/FastCGI-caching) for configuration options.
