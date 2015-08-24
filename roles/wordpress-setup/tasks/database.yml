@@ -3,10 +3,10 @@
   mysql_db: name="{{ item.value.env.db_name | default(item.key) }}"
             state=present
             login_host="{{ item.value.env.db_host | default('localhost') }}"
-            login_user="{{ mysql_user }}"
+            login_user="{{ mysql_root_user }}"
             login_password="{{ mysql_root_password }}"
   with_dict: wordpress_sites
-  when: item.value.db_create | default(True)
+  when: not mysql_remote_database and item.value.db_create | default(True)
 
 - name: Create/assign database user to db and grant permissions
   mysql_user: name="{{ item.value.env.db_user }}"
@@ -14,10 +14,10 @@
               priv="{{ item.value.env.db_name | default(item.key) }}.*:ALL"
               state=present
               login_host="{{ item.value.env.db_host | default('localhost') }}"
-              login_user="{{ mysql_user }}"
+              login_user="{{ mysql_root_user }}"
               login_password="{{ mysql_root_password }}"
   with_dict: wordpress_sites
-  when: item.value.db_create | default(True)
+  when: not mysql_remote_database and item.value.db_create | default(True)
 
 - name: Copy database dump
   copy: src="{{ item.value.db_import }}" dest=/tmp
