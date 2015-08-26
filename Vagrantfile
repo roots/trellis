@@ -28,6 +28,7 @@ end
 Vagrant.require_version '>= 1.5.1'
 
 Vagrant.configure('2') do |config|
+  config.vm.define 'vagrant-vm'
   config.vm.box = 'ubuntu/trusty64'
   config.ssh.forward_agent = true
 
@@ -67,8 +68,8 @@ Vagrant.configure('2') do |config|
     config.vm.provision :ansible do |ansible|
       ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
       ansible.groups = {
-        'web' => ['default'],
-        'development' => ['default']
+        'development' => ['vagrant-vm'],
+        'web' => ['vagrant-vm']
       }
 
       if vars = ENV['ANSIBLE_VARS']

@@ -1,0 +1,27 @@
+---
+- name: Remove prior ssh config info
+  local_action: file path=/tmp/ansible-ssh-config state=absent
+  changed_when: false
+
+- name: Gather ssh config info for Vagrant VM
+  local_action: shell vagrant ssh-config --host {{ inventory_hostname }} >> /tmp/ansible-ssh-config
+  when: "'development' in group_names"
+  register: vagrant_ssh_config
+  failed_when: vagrant_ssh_config.rc == 1
+  changed_when: false
+
+- name: Gather user-specified ssh config files
+  local_action: shell echo "" && cat {{ item }} >> /tmp/ansible-ssh-config
+  with_items: ssh_config_files | default([])
+  changed_when: false
+
+- name: Update ssh config file
+  local_action: command rsync -acv /tmp/ansible-ssh-config roles/ansible-ssh/files/config
+  register: ansible_ssh_config
+  changed_when: "'ansible-ssh-config' in ansible_ssh_config.stdout"
+
+- name: Set connection facts if control machine appears to be a Vagrant VM
+  set_fact:
+    ansible_ssh_host: 127.0.0.1
+    ansible_connection: local
+  when: vagrant_ssh_config.rc is defined and vagrant_ssh_config.rc == 127

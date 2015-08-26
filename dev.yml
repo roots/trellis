@@ -1,9 +1,14 @@
 ---
-- name: "WordPress Server: Install LEMP Stack with PHP 5.6 and MariaDB MySQL"
+- name: Prepare Ansible SSH Config
+  hosts: web
+  gather_facts: false
+  roles:
+    - { role: ansible-ssh, tags: [ansible-ssh] }
+
+- name: WordPress Server - Install LEMP Stack with PHP 5.6 and MariaDB MySQL
   hosts: web
   sudo: yes
   remote_user: vagrant
-
   roles:
     - { role: common, tags: [common] }
     - { role: fail2ban, tags: [fail2ban] }

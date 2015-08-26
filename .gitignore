@@ -1,2 +1,3 @@
 .vagrant
 vendor/roles
+roles/ansible-ssh/files/config
