@@ -15,6 +15,10 @@
   with_items: ssh_config_files | default([])
   changed_when: false
 
+- name: Ensure ansible-ssh/files directory exists
+  local_action: file path=roles/ansible-ssh/files state=directory
+  changed_when: false
+
 - name: Update ssh config file
   local_action: command rsync -acv /tmp/ansible-ssh-config roles/ansible-ssh/files/config
   register: ansible_ssh_config
