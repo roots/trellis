@@ -1,0 +1,20 @@
+# Documentation: https://galaxy.ansible.com/list#/roles/1117
+logrotate_scripts:
+  - name: wordpress-sites
+    path: "{{ www_root }}/**/logs/*.log"
+    options:
+      - weekly
+      - maxsize 50M
+      - missingok
+      - rotate 8
+      - compress
+      - delaycompress
+      - notifempty
+      - create 0640 {{ web_user }} {{ web_group }}
+      - sharedscripts
+    scripts:
+      prerotate: |
+        if [ -d /etc/logrotate.d/httpd-prerotate ]; then \
+              run-parts /etc/logrotate.d/httpd-prerotate; \
+            fi \
+      postrotate: invoke-rc.d nginx rotate >/dev/null 2>&1

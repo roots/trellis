@@ -1,9 +1,8 @@
-mysql_root_password: productionpw
-
+# Documentation: https://github.com/roots/trellis#wordpress-sites
 wordpress_sites:
   example.com:
     site_hosts:
-      - example.com
+      - staging.example.com
     local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
     repo: git@github.com:roots/bedrock.git
     branch: master
@@ -18,10 +17,10 @@ wordpress_sites:
       duration: 30s
     system_cron: true
     env:
-      wp_home: http://example.com
-      wp_siteurl: http://example.com/wp
-      wp_env: production
-      db_name: example_prod
+      wp_home: http://staging.example.com
+      wp_siteurl: http://staging.example.com/wp
+      wp_env: staging
+      db_name: example_staging
       db_user: example_dbuser
       db_password: example_dbpassword
       # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/

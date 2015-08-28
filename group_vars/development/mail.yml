@@ -1,0 +1,8 @@
+# Documentation: https://github.com/roots/trellis#mail
+mailhog_install_ssmtp: no
+mail_admin: admin@example.dev
+mail_hostname: example.dev
+mail_smtp_server: localhost:1025
+ssmtp_auth_method: ""
+ssmtp_start_tls: 'no'
+ssmtp_tls: 'no'

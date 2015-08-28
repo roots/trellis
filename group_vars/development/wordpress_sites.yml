@@ -1,8 +1,4 @@
-mysql_root_password: devpw
-mailhog_install_ssmtp: no
-
-web_user: vagrant
-
+# Documentation: https://github.com/roots/trellis#wordpress-sites
 wordpress_sites:
   example.com:
     site_hosts:
@@ -30,28 +26,3 @@ wordpress_sites:
       db_name: example_dev
       db_user: example_dbuser
       db_password: example_dbpassword
-
-mail_smtp_server: localhost:1025
-mail_admin: admin@example.dev
-mail_hostname: example.dev
-ssmtp_auth_method: ""
-ssmtp_start_tls: 'no'
-ssmtp_tls: 'no'
-
-ferm_enabled: false
-
-php_error_reporting: 'E_ALL'
-php_display_errors: 'On'
-php_display_startup_errors: 'On'
-php_track_errors: 'On'
-php_mysqlnd_collect_memory_statistics: 'On'
-php_opcache_enable: 0
-
-xdebug_install: false
-php_xdebug_remote_enable: true
-php_xdebug_remote_connect_back: true
-php_xdebug_remote_host: localhost
-php_xdebug_remote_port: 9000
-php_xdebug_remote_log: /tmp/xdebug.log
-php_xdebug_idekey: XDEBUG
-php_max_nesting_level: 200

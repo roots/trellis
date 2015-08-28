@@ -1,0 +1,6 @@
+# Documentation: https://github.com/roots/trellis#mail
+mail_smtp_server: smtp.mandrillapp.com:587
+mail_admin: admin@example.com
+mail_hostname: example.com
+mail_user: smtp_user
+mail_password: smtp_password
