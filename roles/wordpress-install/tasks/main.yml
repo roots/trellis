@@ -22,42 +22,38 @@
   with_dict: wordpress_sites
   changed_when: "'Nothing to install or update' not in composer_results.stderr"
 
-- name: WP installed?
-  command: wp core is-installed --allow-root
-  args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
-  register: site_statuses
-  with_dict: wordpress_sites
-  changed_when: False
-  failed_when: site_statuses.stderr != ""
-
 - name: Install WP
   command: wp core install
            --allow-root
-           --url="{{ item.item.value.env.wp_home }}"
-           --title="{{ item.item.value.site_title | default(item.item.key) }}"
-           --admin_user="{{ item.item.value.admin_user }}"
-           --admin_password="{{ item.item.value.admin_password }}"
-           --admin_email="{{ item.item.value.admin_email }}"
+           --url="{{ item.value.env.wp_home }}"
+           --title="{{ item.value.site_title | default(item.key) }}"
+           --admin_user="{{ item.value.admin_user }}"
+           --admin_password="{{ item.value.admin_password }}"
+           --admin_email="{{ item.value.admin_email }}"
   args:
-    chdir: "{{ www_root }}/{{ item.item.key }}/current/"
-  with_items: site_statuses.results
-  when: item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == False)
+    chdir: "{{ www_root }}/{{ item.key }}/current/"
+  register: wp_install_results
+  with_dict: wordpress_sites
+  when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == False)
+  changed_when: "'WordPress is already installed.' not in wp_install_results.stdout"
 
 - name: Install WP Multisite
   command: wp core multisite-install
            --allow-root
-           --url="{{ item.item.value.env.wp_home }}"
-           --base="{{ item.item.value.multisite.base_path | default('/') }}"
-           --subdomains="{{ item.item.value.multisite.subdomains | default('false') }}"
-           --title="{{ item.item.value.site_title | default(item.item.key) }}"
-           --admin_user="{{ item.item.value.admin_user }}"
-           --admin_password="{{ item.item.value.admin_password }}"
-           --admin_email="{{ item.item.value.admin_email }}"
+           --url="{{ item.value.env.wp_home }}"
+           --base="{{ item.value.multisite.base_path | default('/') }}"
+           --subdomains="{{ item.value.multisite.subdomains | default('false') }}"
+           --title="{{ item.value.site_title | default(item.key) }}"
+           --admin_user="{{ item.value.admin_user }}"
+           --admin_password="{{ item.value.admin_password }}"
+           --admin_email="{{ item.value.admin_email }}"
   args:
-    chdir: "{{ www_root }}/{{ item.item.key }}/current/"
-  with_items: site_statuses.results
-  when: item.rc == 1 and item.item.value.site_install == True and (item.item.value.multisite.enabled | default(False) == True)
+    chdir: "{{ www_root }}/{{ item.key }}/current/"
+  register: wp_install_results
+  with_dict: wordpress_sites
+  when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == True)
+  changed_when: "'The network already exists.' not in wp_install_results.stdout"
+
 
 - name: Restart HHVM
   service: name=hhvm state=restarted
