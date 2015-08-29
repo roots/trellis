@@ -1,7 +1,8 @@
 ---
-logs_root: /var/log/nginx
+nginx_logs_root: /var/log/nginx
 nginx_user: www-data
 strip_www: true
+nginx_fastcgi_buffers: 8 8k
 
 # Fastcgi cache params
 nginx_cache_path: /var/cache/nginx
