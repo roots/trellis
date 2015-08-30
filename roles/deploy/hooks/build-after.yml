@@ -1,0 +1,15 @@
+---
+- name: Check for composer.json in project root or project_subtree_path
+  stat:
+    path: "{{ deploy_helper.new_release_path }}/composer.json"
+  register: composer_json
+
+- name: Fail if composer.json not found
+  fail:
+    msg: "Unable to find a `composer.json` file in the root of '{{ deploy_helper.new_release_path }}'. Make sure your repo has a `composer.json` file in its root or edit `subtree_path` for '{{ site }}' in `wordpress_sites.yml` so it points to the directory with a `composer.json` file."
+  when: not composer_json.stat.exists
+
+- name: Install Composer dependencies
+  command: composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"

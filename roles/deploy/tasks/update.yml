@@ -1,0 +1,31 @@
+---
+- include: "{{ deploy_update_before | default('../hooks/example.yml') }}"
+
+- name: Check whether project source path is a git repo
+  stat:
+    path: "{{ project_source_path }}/.git"
+  register: git_project
+
+- name: Get current git remote URL
+  command: git config --get remote.origin.url
+  args:
+    chdir: "{{ project_source_path }}"
+  register: remote_origin_url
+  when: git_project.stat.exists
+  changed_when: false
+
+- name: Update git remote URL
+  command: git remote set-url origin {{ project_git_repo }}
+  args:
+    chdir: "{{ project_source_path }}"
+  when: git_project.stat.exists and remote_origin_url.stdout != project_git_repo
+
+- name: Clone project files
+  git:
+    repo: "{{ project_git_repo }}"
+    dest: "{{ project_source_path }}"
+    version: "{{ project_version }}"
+    accept_hostkey: yes
+  register: git_commit
+
+- include: "{{ deploy_update_after | default('../hooks/example.yml') }}"
