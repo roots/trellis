@@ -35,7 +35,9 @@ server {
   include ssl-stapling.conf;
 
   add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload";
+  add_header X-Content-Type-Options "nosniff" always;
   add_header X-Frame-Options SAMEORIGIN;
+  add_header X-Xss-Protection "1; mode=block" always;
 
   {% if item.value.ssl.cert is defined and item.value.ssl.key is defined %}
   ssl_certificate         /etc/nginx/ssl/{{ item.value.ssl.cert | basename }};
