@@ -33,7 +33,7 @@ Trellis will configure a server with the following and more:
 
 ## Requirements
 
-* Ansible >= 1.9.2 (**not** 2.0 which is in alpha) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/) • [Windows wiki](https://github.com/roots/trellis/wiki/Windows)
+* Ansible >= 1.9.2 (**not** 2.0 which is in alpha) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/) • [Windows docs](https://roots.io/trellis/docs/windows/)
 * Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
 * vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
@@ -66,10 +66,10 @@ example.com/    - Primary folder for the project
 
 For remote servers, you'll need to have a base Ubuntu 14.04 server already created.
 
-1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>/wordpress_sites.yml`. Also see the [Passwords wiki](https://github.com/roots/trellis/wiki/Passwords).
+1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>/wordpress_sites.yml`. Also see the [Passwords docs](https://roots.io/trellis/docs/passwords/).
 2. Add your server IP/hostnames to `hosts/<environment>`.
-3. Specify public SSH keys for `users` in `group_vars/all/users.yml`. See the [SSH Keys wiki](https://github.com/roots/trellis/wiki/SSH-Keys).
-4. Consider setting `sshd_permit_root_login: "no"` in `group_vars/all/security.yml`. See the [Security wiki](https://github.com/roots/trellis/wiki/Security).
+3. Specify public SSH keys for `users` in `group_vars/all/users.yml`. See the [SSH Keys docs](https://roots.io/trellis/docs/ssh-keys/).
+4. Consider setting `sshd_permit_root_login: "no"` in `group_vars/all/security.yml`. See the [Security docs](https://roots.io/trellis/docs/security/).
 5. Run `ansible-playbook -i hosts/<environment> server.yml`
 
 ## Deploying to remote servers
@@ -100,7 +100,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 * `repo` - URL of the Git repo of your Bedrock project (required, used when deploying)
 * `branch` - the branch name, tag name, or commit SHA1 you want to deploy (default: `master`)
 * `ssl` - enable SSL and set paths
-  * `enabled` - `true` or `false` (required, set to `false`. Set to `true` without the `key` and `cert` options [to generate a *self-signed* certificate](https://github.com/roots/trellis/wiki/SSL) )
+  * `enabled` - `true` or `false` (required, set to `false`. Set to `true` without the `key` and `cert` options [to generate a *self-signed* certificate](https://roots.io/trellis/docs/ssl/) )
   * `key` - local relative path to private key
   * `cert` - local relative path to certificate
 * `site_install` - whether to install WordPress or not (*development* only, required)
@@ -111,7 +111,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 * `admin_user` - WP admin user name (*development* only, required)
 * `admin_email` - WP admin email address (*development* only, required)
 * `admin_password` - WP admin user password (*development* only, required)
-* `multisite` - hash of multisite options. See the [Multisite wiki](https://github.com/roots/trellis/wiki/Multisite).
+* `multisite` - hash of multisite options. See the [Multisite docs](https://roots.io/trellis/docs/multisite/).
   * `enabled` - Multisite enabled flag (required, set to `false`)
   * `subdomains` - subdomains option
   * `base_path` - base path/current site path
@@ -130,12 +130,12 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 
 ### Mail
 
-sSMTP handles outgoing mail. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `staging` and `production`, configure credentials in `group_vars/all/mail.yml`. See the [Mail wiki](https://github.com/roots/trellis/wiki/Mail).
+sSMTP handles outgoing mail. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `staging` and `production`, configure credentials in `group_vars/all/mail.yml`. See the [Mail docs](https://roots.io/trellis/docs/mail/).
 
 ## SSL
 
-Full SSL support is available for your WordPress sites. Trellis will also *auto-generate* self-signed certificates for development purposes. Our HTTPS implementation has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL wiki](https://github.com/roots/trellis/wiki/SSL).
+Full SSL support is available for your WordPress sites. Trellis will also *auto-generate* self-signed certificates for development purposes. Our HTTPS implementation has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL docs](https://roots.io/trellis/docs/ssl/).
 
 ## Caching
 
-You can enable FastCGI caching on a per site basis. The cache is a short duration, "micro-cache" type setup. See the [FastCGI micro-caching wiki](https://github.com/roots/trellis/wiki/FastCGI-caching) for configuration options.
+You can enable FastCGI caching on a per site basis. The cache is a short duration, "micro-cache" type setup. See the [FastCGI micro-caching docs](https://roots.io/trellis/docs/fastcgi-caching/) for configuration options.
