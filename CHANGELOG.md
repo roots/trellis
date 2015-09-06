@@ -1,4 +1,5 @@
 ### HEAD
+* Rename WP site variable `subtree` to `subtree_path` ([#329](https://github.com/roots/trellis/pull/329))
 * Add extra HTTP security headers ([#322](https://github.com/roots/trellis/pull/322))
 * HHVM restart cron job fix ([#327](https://github.com/roots/trellis/pull/327))
 * Improve SSH remote user detection ([#321](https://github.com/roots/trellis/pull/321))
