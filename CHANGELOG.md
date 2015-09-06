@@ -1,4 +1,9 @@
 ### HEAD
+* Add extra HTTP security headers ([#322](https://github.com/roots/trellis/pull/322))
+* HHVM restart cron job fix ([#327](https://github.com/roots/trellis/pull/327))
+* Improve SSH remote user detection ([#321](https://github.com/roots/trellis/pull/321))
+* Add variable + better default for Nginx fastcgi buffers ([#302](https://github.com/roots/trellis/pull/302))
+* WP Multisite install fixes ([#319](https://github.com/roots/trellis/pull/319))
 * Re-organize `group_vars` files into subdirectories and separate files ([#308](https://github.com/roots/trellis/pull/308))
 
 ### 0.9.1: August 18th, 2015
