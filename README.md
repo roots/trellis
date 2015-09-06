@@ -99,6 +99,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 * `local_path` - path targeting Bedrock-based site directory (required for development)
 * `repo` - URL of the Git repo of your Bedrock project (required, used when deploying)
 * `branch` - the branch name, tag name, or commit SHA1 you want to deploy (default: `master`)
+* `subtree_path` - relative path to your Bedrock/WP directory in your repo (above) if its not the root (like in the [roots-example-project](https://github.com/roots/roots-example-project.com))
 * `ssl` - enable SSL and set paths
   * `enabled` - `true` or `false` (required, set to `false`. Set to `true` without the `key` and `cert` options [to generate a *self-signed* certificate](https://github.com/roots/trellis/wiki/SSL) )
   * `key` - local relative path to private key
