@@ -25,10 +25,12 @@ wordpress_sites:
       db_password: example_dbpassword
       # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/
       auth_key: "generateme"
-      auth_salt: "generateme"
-      logged_in_key: "generateme"
-      logged_in_salt: "generateme"
-      nonce_key: "generateme"
-      nonce_salt: "generateme"
       secure_auth_key: "generateme"
+      logged_in_key: "generateme"
+      nonce_key: "generateme"
+      auth_salt: "generateme"
       secure_auth_salt: "generateme"
+      logged_in_salt: "generateme"
+      nonce_salt: "generateme"
+      
+      
