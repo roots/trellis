@@ -1,4 +1,5 @@
 disable_default_pool: true
+memcached_sessions: false
 
 php_error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
 php_display_errors: 'Off'
