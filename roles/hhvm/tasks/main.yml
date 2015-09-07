@@ -19,13 +19,15 @@
 
 - name: HHVM php.ini
   template: src=php.ini.j2 dest=/etc/hhvm/php.ini
-
-- name: HHVM server.ini
-  template: src=server.ini.j2 dest=/etc/hhvm/server.ini
-
-- name: Start HHVM service
-  service: name=hhvm state=started enabled=true
+  notify: restart hhvm
 
 - name: HHVM server.ini
   template: src=server.ini.j2 dest=/etc/hhvm/server.ini
   notify: restart hhvm
+
+- name: HHVM defaults
+  template: src=hhvm.j2 dest=/etc/default/hhvm
+  notify: restart hhvm
+
+- name: Start HHVM service
+  service: name=hhvm state=started enabled=true
