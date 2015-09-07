@@ -20,12 +20,6 @@
 - name: HHVM server.ini
   template: src=server.ini.j2 dest=/etc/hhvm/server.ini
 
-- name: HHVM php.ini
-  template: src=php.ini.j2 dest=/etc/hhvm/php.ini
-
-- name: Symlink mysql.sock for HHVM
-  file: src=/var/run/mysqld/mysqld.sock dest=/tmp/mysql.sock owner=mysql group=mysql state=link force=yes
-
 - name: Start HHVM service
   service: name=hhvm state=started enabled=true
 
