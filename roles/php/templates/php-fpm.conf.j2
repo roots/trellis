@@ -17,6 +17,6 @@ php_admin_flag[log_errors] = on
 php_admin_flag[display_errors] = {{ php_display_errors }}
 php_admin_value[open_basedir] = {{ www_root }}/:/tmp
 {% if memcached_sessions %}
-session.save_handler = memcached
-session.save_path = "{{ memcached_listen_ip }}:{{ memcached_port }}"
+php_value[session.save_handler] = memcached
+php_value[session.save_path] = "{{ memcached_listen_ip }}:{{ memcached_port }}"
 {% endif %}
