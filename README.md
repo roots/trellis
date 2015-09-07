@@ -74,7 +74,7 @@ For remote servers, you'll need to have a base Ubuntu 14.04 server already creat
 
 ## Deploying to remote servers
 
-1. Add the `repo` (Git url) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file.
+1. Add the `repo` (Git URL) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file.
 2. Set the `branch` you want to deploy.
 3. Run `./deploy.sh <environment> <site name>`
 4. To rollback a deploy, run `ansible-playbook -i hosts/<environment> rollback.yml --extra-vars="site=<site name>"`
