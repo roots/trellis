@@ -1,4 +1,5 @@
 ### HEAD
+* Convert sshd role variables to booleans ([#344](https://github.com/roots/trellis/pull/344))
 * Add check to validate `subtree_path` during deploy ([#334](https://github.com/roots/trellis/pull/334))
 * Rename WP site variable `subtree` to `subtree_path` ([#329](https://github.com/roots/trellis/pull/329))
 * Add extra HTTP security headers ([#322](https://github.com/roots/trellis/pull/322))

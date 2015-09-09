@@ -69,8 +69,8 @@ For remote servers, you'll need to have a base Ubuntu 14.04 server already creat
 1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>/wordpress_sites.yml`. Also see the [Passwords docs](https://roots.io/trellis/docs/passwords/).
 2. Add your server IP/hostnames to `hosts/<environment>`.
 3. Specify public SSH keys for `users` in `group_vars/all/users.yml`. See the [SSH Keys docs](https://roots.io/trellis/docs/ssh-keys/).
-4. Consider setting `sshd_permit_root_login: "no"` in `group_vars/all/security.yml`. See the [Security docs](https://roots.io/trellis/docs/security/).
-5. Run `ansible-playbook -i hosts/<environment> server.yml`
+4. Consider setting `sshd_permit_root_login: false` in `group_vars/all/security.yml`. See the [Security docs](https://roots.io/trellis/docs/security/).
+5. Run `ansible-playbook -i hosts/<environment> server.yml`.
 
 ## Deploying to remote servers
 
