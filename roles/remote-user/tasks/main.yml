@@ -7,7 +7,7 @@
 
 - name: Set remote user for each host
   set_fact:
-    ansible_ssh_user: "{{ (root_status.rc == 0) | ternary('root', admin_user) }}"
+    ansible_ssh_user: "{{ root_status | success | ternary('root', admin_user) }}"
 
 - name: Announce which user was selected
   debug:
