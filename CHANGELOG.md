@@ -1,4 +1,5 @@
 ### HEAD
+* Ensure admin_user can connect before disabling root ([#345](https://github.com/roots/trellis/pull/345))
 * Prevent PHP execution in uploads directory ([#356](https://github.com/roots/trellis/pull/356))
 * Update h5bp Nginx configs ([#355](https://github.com/roots/trellis/pull/355))
 * Convert sshd role variables to booleans ([#344](https://github.com/roots/trellis/pull/344))
