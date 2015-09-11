@@ -31,7 +31,7 @@
            --admin_password="{{ item.value.admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
+    chdir: "{{ www_root }}/{{ item.key }}/current/web/"
   register: wp_install_results
   with_dict: wordpress_sites
   when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == False)
@@ -48,7 +48,7 @@
            --admin_password="{{ item.value.admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
+    chdir: "{{ www_root }}/{{ item.key }}/current/web/"
   register: wp_install_results
   with_dict: wordpress_sites
   when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == True)
