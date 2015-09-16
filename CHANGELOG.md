@@ -1,4 +1,5 @@
 ### HEAD
+* Update h5bp Nginx configs ([#355](https://github.com/roots/trellis/pull/355))
 * Convert sshd role variables to booleans ([#344](https://github.com/roots/trellis/pull/344))
 * Add check to validate `subtree_path` during deploy ([#334](https://github.com/roots/trellis/pull/334))
 * Rename WP site variable `subtree` to `subtree_path` ([#329](https://github.com/roots/trellis/pull/329))
