@@ -18,7 +18,7 @@
 - name: Grab h5bp/server-configs-nginx
   git: repo="https://github.com/h5bp/server-configs-nginx.git"
        dest=/etc/nginx/h5bp-server-configs
-       version=b674df55453988a837e94dc1f71c9a35e8d77528
+       version=94b3680c9d13f108d6d62c22cba251b84f795aa8
        force=yes
 
 - name: Move h5bp configs
