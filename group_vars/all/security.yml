@@ -8,5 +8,9 @@ ferm_input_list:
     hits: 20
 
 # Documentation: https://roots.io/trellis/docs/security/
-sshd_permit_root_login: true # If `false`, `admin_user` must be in 'users' (`users.yml`) with sudo group and in `sudoer_passwords`
+# If `sshd_permit_root_login` is `false`, `admin_user` must be:
+# (1) in 'users' (`users.yml`) with sudo group, and
+# (2) in `sudoer_passwords` (unless `sudoer_passwordless` is true).
+sshd_permit_root_login: true
 sshd_password_authentication: false
+sudoer_passwordless: false

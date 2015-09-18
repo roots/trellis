@@ -6,7 +6,7 @@
   lineinfile: dest=/etc/sudoers
               state=present
               regexp="^%sudo"
-              line="%sudo ALL=(ALL:ALL) ALL"
+              line="%sudo ALL={{ sudoer_passwordless | ternary('(ALL) NOPASSWD:', '(ALL:ALL)') }} ALL"
               validate="/usr/sbin/visudo -cf %s"
 
 - name: Fail if root login will be disabled but admin_user will not be a sudoer
@@ -14,8 +14,8 @@
     that:
       - "{{ admin_user in (users | map(attribute='name') | list) }}"
       - "{% for item in users if item.name == admin_user %}{{ 'sudo' in item.groups }}{% endfor %}"
-      - "{{ admin_user in sudoer_passwords.keys() }}"
-    msg: "When `sshd_permit_root_login: false`, you must add `sudo` to the `groups` for admin_user (in `users` hash), and set a password for admin_user in `sudoer_passwords`. Otherwise Ansible could lose the ability to run the necessary sudo commands."
+      - "{{ admin_user in sudoer_passwords.keys() or sudoer_passwordless }}"
+    msg: "When `sshd_permit_root_login: false`, you must add `sudo` to the `groups` for admin_user (in `users` hash), and set a password for admin_user in `sudoer_passwords` (unless `sudoer_passwordless` is true). Otherwise Ansible could lose the ability to run the necessary sudo commands."
   when: not sshd_permit_root_login
 
 - name: Setup users
