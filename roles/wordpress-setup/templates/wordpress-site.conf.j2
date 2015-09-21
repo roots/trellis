@@ -87,7 +87,6 @@ server {
     {% else -%}
     fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
     {% endif -%}
-    client_max_body_size 0;
   }
 }
 
