@@ -93,7 +93,7 @@ server {
 {% if item.value.ssl is defined and item.value.ssl.enabled | default(False) %}
 server {
   listen 80;
-  server_name {{ item.value.site_hosts | join(' ') }};
+  server_name {% for host in item.value.site_hosts %} {{ host }} {% if item.value.multisite.subdomains %} *.{{ host }} {% endif %} {% endfor %};
   return 301 https://$host$request_uri;
 }
 {% endif %}
