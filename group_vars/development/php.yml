@@ -5,7 +5,7 @@ php_track_errors: 'On'
 php_mysqlnd_collect_memory_statistics: 'On'
 php_opcache_enable: 0
 
-xdebug_install: false
+xdebug_install: true
 php_xdebug_remote_enable: true
 php_xdebug_remote_connect_back: true
 php_xdebug_remote_host: localhost
