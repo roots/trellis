@@ -83,6 +83,7 @@ Vagrant.configure('2') do |config|
   config.vm.provider 'virtualbox' do |vb|
     # Give VM access to all cpu cores on the host
     cpus = case RbConfig::CONFIG['host_os']
+      when ENV['NUMBER_OF_PROCESSORS'] then ENV['NUMBER_OF_PROCESSORS'].to_i
       when /darwin/ then `sysctl -n hw.ncpu`.to_i
       when /linux/ then `nproc`.to_i
       else 2
