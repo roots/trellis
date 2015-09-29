@@ -1,4 +1,5 @@
 ### HEAD
+* Check for galaxy roles before `vagrant up` ([#365](https://github.com/roots/trellis/pull/365))
 * Install Xdebug by default in development environment ([#363](https://github.com/roots/trellis/pull/363))
 * Ensure admin_user can connect before disabling root ([#345](https://github.com/roots/trellis/pull/345))
 * Prevent PHP execution in uploads directory ([#356](https://github.com/roots/trellis/pull/356))

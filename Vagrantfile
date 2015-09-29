@@ -11,13 +11,18 @@ ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
 # Set Ansible roles_path relative to Ansible directory
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
 
-config_file = File.join(ANSIBLE_PATH, 'group_vars/development/wordpress_sites.yml')
+config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
+galaxy_roles = File.join(ANSIBLE_PATH, 'vendor', 'roles')
 
 if File.exists?(config_file)
   wordpress_sites = YAML.load_file(config_file)['wordpress_sites']
-  raise "no sites found in #{config_file}" if wordpress_sites.to_h.empty?
+  raise "No sites found in #{config_file}." if wordpress_sites.to_h.empty?
 else
-  raise "#{config_file} file not found. Please set `ANSIBLE_PATH` in Vagrantfile"
+  raise "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
+end
+
+if !Dir.exists?(galaxy_roles)
+  raise "You are missing the required Ansible Galaxy roles. Run `ansible-galaxy install -r requirements.yml` to get them."
 end
 
 Vagrant.require_version '>= 1.5.1'
@@ -36,7 +41,7 @@ Vagrant.configure('2') do |config|
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
     config.hostsupdater.aliases = aliases + www_aliases
   else
-    puts 'vagrant-hostsupdater missing, please install the plugin:'
+    puts 'vagrant-hostsupdater is missing, please install the plugin:'
     puts 'vagrant plugin install vagrant-hostsupdater'
   end
 
