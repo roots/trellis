@@ -48,14 +48,14 @@ Vagrant.configure('2') do |config|
   end
 
   if Vagrant::Util::Platform.windows?
-    wordpress_sites.each do |(name, site)|
+    wordpress_sites.each_pair do |name, site|
       config.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
   else
     if !Vagrant.has_plugin? 'vagrant-bindfs'
       fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
     else
-      wordpress_sites.each do |(name, site)|
+      wordpress_sites.each_pair do |name, site|
         config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
         config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data'
       end
@@ -109,5 +109,5 @@ def nfs_path(site_name)
 end
 
 def remote_site_path(site_name)
-  File.join('/srv/www/', site_name, 'current')
+  "/srv/www/#{site_name}/current"
 end
