@@ -12,17 +12,20 @@ ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
 
 config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
-galaxy_roles = File.join(ANSIBLE_PATH, 'vendor', 'roles')
+
+def fail_with_message(msg)
+  fail Vagrant::Errors::VagrantError.new, msg
+end
 
 if File.exists?(config_file)
   wordpress_sites = YAML.load_file(config_file)['wordpress_sites']
-  raise "No sites found in #{config_file}." if wordpress_sites.to_h.empty?
+  fail_with_message "No sites found in #{config_file}." if wordpress_sites.to_h.empty?
 else
-  raise "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
+  fail_with_message "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
 end
 
-if !Dir.exists?(galaxy_roles)
-  raise "You are missing the required Ansible Galaxy roles. Run `ansible-galaxy install -r requirements.yml` to get them."
+if !Dir.exists?(ENV['ANSIBLE_ROLES_PATH']) && !Vagrant::Util::Platform.windows?
+  fail_with_message "You are missing the required Ansible Galaxy roles, please install them with this command:\nansible-galaxy install -r requirements.yml"
 end
 
 Vagrant.require_version '>= 1.5.1'
@@ -41,20 +44,18 @@ Vagrant.configure('2') do |config|
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
     config.hostsupdater.aliases = aliases + www_aliases
   else
-    puts 'vagrant-hostsupdater is missing, please install the plugin:'
-    puts 'vagrant plugin install vagrant-hostsupdater'
+    fail_with_message "vagrant-hostsupdater missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostsupdater"
   end
 
   if Vagrant::Util::Platform.windows?
-    wordpress_sites.each do |(name, site)|
+    wordpress_sites.each_pair do |name, site|
       config.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
   else
     if !Vagrant.has_plugin? 'vagrant-bindfs'
-      raise Vagrant::Errors::VagrantError.new,
-        "vagrant-bindfs missing, please install the plugin:\nvagrant plugin install vagrant-bindfs"
+      fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
     else
-      wordpress_sites.each do |(name, site)|
+      wordpress_sites.each_pair do |name, site|
         config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
         config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data'
       end
@@ -108,5 +109,5 @@ def nfs_path(site_name)
 end
 
 def remote_site_path(site_name)
-  File.join('/srv/www/', site_name, 'current')
+  "/srv/www/#{site_name}/current"
 end
