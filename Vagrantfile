@@ -21,7 +21,7 @@ else
   raise "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
 end
 
-if !Dir.exists?(galaxy_roles)
+if !Dir.exists?(galaxy_roles) && !Vagrant::Util::Platform.windows?
   raise "You are missing the required Ansible Galaxy roles. Run `ansible-galaxy install -r requirements.yml` to get them."
 end
 
