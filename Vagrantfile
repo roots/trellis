@@ -24,7 +24,7 @@ else
   fail_with_message "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
 end
 
-unless Dir.exists?(ENV['ANSIBLE_ROLES_PATH'])
+if !Dir.exists?(ENV['ANSIBLE_ROLES_PATH']) && !Vagrant::Util::Platform.windows?
   fail_with_message "You are missing the required Ansible Galaxy roles, please install them with this command:\nansible-galaxy install -r requirements.yml"
 end
 
