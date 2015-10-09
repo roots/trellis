@@ -12,7 +12,7 @@ server {
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
 
   root  {{ www_root }}/{{ item.key }}/current/web;
-  index index.php;
+  index index.php index.htm index.html;
 
   charset utf-8;
 
