@@ -4,6 +4,8 @@
   remote_user: "{{ web_user }}"
 
   vars:
+    deploy_build_after: "{{ playbook_dir }}/roles/deploy/hooks/build-after.yml"
+    deploy_finalize_after: "{{ playbook_dir }}/roles/deploy/hooks/finalize-after.yml"
     project: "{{ wordpress_sites[site] }}"
     project_root: "{{ www_root }}/{{ site }}"
 

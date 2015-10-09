@@ -1,0 +1,33 @@
+---
+- include: "{{ deploy_prepare_before | default('../hooks/example.yml') }}"
+
+- name: write unfinished file
+  file:
+    path: "{{ project_source_path }}/{{ deploy_helper.unfinished_filename }}"
+    state: touch
+
+- name: Copy files to new build dir
+  command: cp -pr {{ project_source_path }} {{ deploy_helper.new_release_path }}
+
+- name: Check for project subtree
+  stat:
+    path: "{{ deploy_helper.new_release_path }}/{{ project_subtree_path }}"
+  register: project_subtree_full_path
+  when: project_subtree_path != 'False'
+
+- name: Fail if project_subtree_path is set incorrectly
+  fail:
+    msg: "subtree is set to '{{ project_subtree_path }}' but that path does not exist in the repo. Edit `subtree_path` for '{{ site }}' in `wordpress_sites.yml`."
+  when: project_subtree_path != 'False' and not project_subtree_full_path.stat.exists
+
+- name: Move project subtree into root folder
+  shell: mv {{ deploy_helper.new_release_path }}/{{ project_subtree_path }}/* {{ deploy_helper.new_release_path }}
+  when: project_subtree_path != 'False'
+
+- name: Remove unwanted files/folders from new release
+  file:
+    path: "{{ deploy_helper.new_release_path }}/{{ item }}"
+    state: absent
+  with_items: project_unwanted_items
+
+- include: "{{ deploy_prepare_after | default('../hooks/example.yml') }}"

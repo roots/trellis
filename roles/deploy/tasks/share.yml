@@ -1,0 +1,24 @@
+---
+- include: "{{ deploy_share_before | default('../hooks/example.yml') }}"
+
+- name: Ensure shared sources are present
+  file:
+    path: "{{ deploy_helper.shared_path }}/{{ item.src }}"
+    state: "{{ item.type | default('directory') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  with_items: project_shared_children
+
+- name: Ensure shared paths are absent
+  file:
+    path: "{{ deploy_helper.new_release_path }}/{{ item.path }}"
+    state: absent
+  with_items: project_shared_children
+
+- name: Create shared symlinks
+  file:
+    path: "{{ deploy_helper.new_release_path }}/{{ item.path }}"
+    src: "{{ deploy_helper.shared_path }}/{{ item.src }}"
+    state: link
+  with_items: project_shared_children
+
+- include: "{{ deploy_share_after | default('../hooks/example.yml') }}"

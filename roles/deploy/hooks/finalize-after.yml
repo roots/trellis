@@ -1,0 +1,26 @@
+---
+- name: WordPress Installed?
+  command: wp core is-installed
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  register: wp_installed
+  changed_when: false
+  failed_when: wp_installed.stderr != ""
+
+- name: Update WP theme paths
+  command: wp eval 'wp_clean_themes_cache(); switch_theme(get_stylesheet());'
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: wp_installed.rc == 0
+
+- name: Reload php5-fpm
+  shell: sudo service php5-fpm reload
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: not hhvm
+
+- name: Restart HHVM
+  shell: sudo service hhvm restart
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: hhvm
