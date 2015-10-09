@@ -1,4 +1,6 @@
 ### HEAD
+* Fix logrotate's Nginx postrotate script ([#377](https://github.com/roots/trellis/pull/377))
+* Add static HTML files as fallbacks for Nginx's `index` directive ([#376](https://github.com/roots/trellis/pull/376))
 * Use Windows environment variable to determine number of CPUs ([#366](https://github.com/roots/trellis/pull/366))
 * Check for galaxy roles before `vagrant up` ([#365](https://github.com/roots/trellis/pull/365))
 * Install Xdebug by default in development environment ([#363](https://github.com/roots/trellis/pull/363))
