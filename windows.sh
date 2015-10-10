@@ -13,6 +13,12 @@ if [ ! -f ~/.ssh/id_rsa ]; then
   echo -e "\n\n\n" | ssh-keygen -t rsa
 fi
 
+# Check that add-apt-repository is installed for non-standard Vagrant boxes
+if [ ! -f /usr/bin/add-apt-repository ]; then
+  echo "Adding add-apt-repository..."
+  sudo apt-get -y install software-properties-common
+fi
+
 # Install Ansible and its dependencies if not installed.
 if [ ! -f /usr/bin/ansible ]; then
   echo "Adding Ansible repository..."
