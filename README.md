@@ -49,7 +49,7 @@ You should now have the following directories at the same level somewhere:
 
 ```
 example.com/    - Primary folder for the project
-├── ansible/    - Your version of this repo (renamed to just `ansible`)
+├── trellis/    - Your clone of this repo (renamed to just `trellis`)
 └── site/       - A Bedrock-based site (suggested to name this the generic `site` since your project name is already at the top level)
 ```
 
