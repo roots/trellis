@@ -2,6 +2,9 @@ ferm_input_list:
   - type: dport_accept
     dport: [http, https]
     filename: nginx_accept
+  - type: dport_accept
+    dport: [ssh]
+    saddr: ["{{ lookup('pipe', 'dig +short myip.opendns.com @resolver1.opendns.com') }}"]
   - type: dport_limit
     dport: [ssh]
     seconds: 300
