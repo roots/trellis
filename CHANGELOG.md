@@ -1,4 +1,5 @@
 ### HEAD
+* Add nonempty option to config.bindfs.bind_folder ([#382](https://github.com/roots/trellis/pull/382))
 * Add proper hooks for task files during deploys ([#378](https://github.com/roots/trellis/pull/378))
 * Fix logrotate's Nginx postrotate script ([#377](https://github.com/roots/trellis/pull/377))
 * Add static HTML files as fallbacks for Nginx's `index` directive ([#376](https://github.com/roots/trellis/pull/376))
