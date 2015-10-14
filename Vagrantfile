@@ -57,7 +57,7 @@ Vagrant.configure('2') do |config|
     else
       wordpress_sites.each_pair do |name, site|
         config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
-        config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data'
+        config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
       end
     end
   end
