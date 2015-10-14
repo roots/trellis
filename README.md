@@ -49,7 +49,7 @@ You should now have the following directories at the same level somewhere:
 
 ```
 example.com/    - Primary folder for the project
-├── trellis/    - Your clone of this repo (renamed to just `trellis`)
+├── trellis/    - Your clone of repository
 └── site/       - A Bedrock-based site (suggested to name this the generic `site` since your project name is already at the top level)
 ```
 
