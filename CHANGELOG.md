@@ -1,4 +1,5 @@
 ### HEAD
+* Support for other Vagrant providers (VirtualBox, VMWare, Parallels) ([#340](https://github.com/roots/trellis/pull/340))
 * Specify versions for Ansible Galaxy requirements ([#385](https://github.com/roots/trellis/pull/385))
 
 ### 0.9.2: October 15th, 2015
