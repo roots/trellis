@@ -1,4 +1,5 @@
 ### HEAD
+* Specify versions for Ansible Galaxy requirements ([#385](https://github.com/roots/trellis/pull/385))
 
 ### 0.9.2: October 15th, 2015
 * Add dev's IP to ferm whitelist ([#381](https://github.com/roots/trellis/pull/381))
