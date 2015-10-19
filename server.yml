@@ -1,8 +1,9 @@
 ---
-- name: Determine Remote User
+- name: Prepare Ansible SSH Config
   hosts: web
   gather_facts: false
   roles:
+    - { role: ansible-ssh, tags: [ansible-ssh] }
     - { role: remote-user, tags: [remote-user, always] }
 
 - name: WordPress Server - Install LEMP Stack with PHP 5.6 and MariaDB MySQL
