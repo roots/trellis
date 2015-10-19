@@ -2,6 +2,7 @@
 * Update SSL cipher suite ([#386](https://github.com/roots/trellis/pull/386))
 * Support for other Vagrant providers (VirtualBox, VMWare, Parallels) ([#340](https://github.com/roots/trellis/pull/340))
 * Specify versions for Ansible Galaxy requirements ([#385](https://github.com/roots/trellis/pull/385))
+* Adds ability to configure [HSTS headers](https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security) with site variables. ([#388](https://github.com/roots/trellis/pull/388))
 
 ### 0.9.2: October 15th, 2015
 * Add dev's IP to ferm whitelist ([#381](https://github.com/roots/trellis/pull/381))
