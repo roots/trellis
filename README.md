@@ -104,6 +104,9 @@ For example: configure the sites on your Vagrant development VM by editing `grou
   * `enabled` - `true` or `false` (required, set to `false`. Set to `true` without the `key` and `cert` options [to generate a *self-signed* certificate](https://roots.io/trellis/docs/ssl/) )
   * `key` - local relative path to private key
   * `cert` - local relative path to certificate
+  * `hsts_max_age` - time, in seconds, that the browser should remember that this site is only to be accessed using HTTPS (default: `31536000`)
+  * `hsts_include_subdomains` - if true, the HSTS rules apply to all of the site's subdomains as well (default: `true`)
+  * `hsts_preload` - required to opt into [Google's HSTS preload list](https://hstspreload.appspot.com/) (default: `true`)
 * `site_install` - whether to install WordPress or not (*development* only, required)
 * `site_title` - WP site title (*development* only, default: project name)
 * `db_create` - whether to auto create a database or not (default: `true`)

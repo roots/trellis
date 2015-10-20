@@ -4,6 +4,11 @@ nginx_user: www-data
 strip_www: true
 nginx_fastcgi_buffers: 8 8k
 
+# HSTS defaults
+nginx_hsts_max_age: 31536000
+nginx_hsts_include_subdomains: true
+nginx_hsts_preload: true
+
 # Fastcgi cache params
 nginx_cache_path: /var/cache/nginx
 nginx_cache_duration: 30s
