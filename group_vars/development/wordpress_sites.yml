@@ -18,8 +18,8 @@ wordpress_sites:
     cache:
       enabled: false
       duration: 30s
-    system_cron: true
     env:
+      disable_wp_cron: true
       wp_home: http://example.dev
       wp_siteurl: http://example.dev/wp
       wp_env: development
