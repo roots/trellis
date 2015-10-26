@@ -31,6 +31,10 @@ Trellis will configure a server with the following and more:
 * Fail2ban
 * ferm
 
+## Documentation
+
+Trellis documentation is available at [https://roots.io/trellis/docs/](https://roots.io/trellis/docs/).
+
 ## Requirements
 
 * Ansible >= 1.9.2 (**not** 2.0 which is in alpha) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/) • [Windows docs](https://roots.io/trellis/docs/windows/)
@@ -143,3 +147,16 @@ Full SSL support is available for your WordPress sites. Trellis will also *auto-
 ## Caching
 
 You can enable FastCGI caching on a per site basis. The cache is a short duration, "micro-cache" type setup. See the [FastCGI micro-caching docs](https://roots.io/trellis/docs/fastcgi-caching/) for configuration options.
+
+## Contributing
+
+Contributions are welcome from everyone. We have [contributing guidelines](CONTRIBUTING.md) to help you get started.
+
+## Community
+
+Keep track of development and community news.
+
+* Participate on the [Roots Discourse](https://discourse.roots.io/)
+* Follow [@rootswp on Twitter](https://twitter.com/rootswp)
+* Read and subscribe to the [Roots Blog](https://roots.io/blog/)
+* Subscribe to the [Roots Newsletter](https://roots.io/subscribe/)
