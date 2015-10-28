@@ -1,15 +1,6 @@
 ---
 - include: "{{ deploy_build_before | default('../hooks/example.yml') }}"
 
-- name: Copy project local files
-  synchronize:
-    src: "{{ item.src }}"
-    dest: "{{ deploy_helper.new_release_path }}/{{ item.dest }}"
-    group: no
-    owner: no
-    rsync_opts: --chmod=Du=rwx,--chmod=Dg=rx,--chmod=Do=rx,--chmod=Fu=rw,--chmod=Fg=r,--chmod=Fo=r
-  with_items: project_local_files
-
 - name: Copy project templates
   template:
     src: "{{ item.src }}"

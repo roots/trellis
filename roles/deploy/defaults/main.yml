@@ -5,13 +5,6 @@ project_subtree_path: "{{ project.subtree_path | default(false) }}"
 # - you can set the git ref to deploy (can be a branch, tag or commit hash)
 project_version: "{{ project.branch | default('master') }}"
 
-# If you use the "rsync" strategy:
-# - you can set a timeout for the synchonize module
-project_deploy_synchronize_timeout: 30
-# - you can also delete files that don't exist on source after synchronizing
-project_deploy_synchronize_delete: false
-# - you must set the path to your local source (the default assumes your playbook is located in /ansible/ ) project_local_path: "../"
-
 # The source_path is used to fetch the tags from git, or synchronise via rsync. This way
 # you do not have to download/sync the entire project on every deploy
 project_source_path: "{{ project_root }}/shared/source"
@@ -24,17 +17,6 @@ project_unwanted_items: ['.git']
 # These should not be part of project_shared_children since dependencies need to be atomic and tied to a deploy.
 project_copy_folders:
   - vendor
-
-# All the files to copy to the remote system on deploy. These could contain config files.
-# Example:
-# project_local_files:
-#   - name: "some_file"           // <- optional, for your own reference and readability
-#     src: "local-path-to-file"   // <- relative or absolute, just like Ansible
-#     dest: "remote-path-to-file"
-#   - name: compiled theme assets
-#     src: "{{ project.local_path }}/web/app/themes/sage/dist"
-#     dest: web/app/themes/sage
-project_local_files: []
 
 # All the templates to process on the remote system on deploy. These could contain config files.
 # `src` and `dest` paths work the same as project_local_files.
