@@ -1,4 +1,5 @@
 ### HEAD
+* Add deploy_build_before example hook for theme assets ([#397](https://github.com/roots/trellis/pull/37))
 * Use curl instead of dig for IP lookups ([#390](https://github.com/roots/trellis/pull/390))
 * Update SSL cipher suite ([#386](https://github.com/roots/trellis/pull/386))
 * Support for other Vagrant providers (VirtualBox, VMWare, Parallels) ([#340](https://github.com/roots/trellis/pull/340))
