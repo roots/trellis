@@ -18,5 +18,5 @@
     backrefs: yes
 
 - name: Composer config github-oauth
-  command: composer config -g github-oauth.github.com {{ composer_githuboauth }}
-  when: composer_githuboauth is defined
+  command: composer config -g github-oauth.github.com {{ composer_github_oauth_token }}
+  when: composer_github_oauth_token is defined
