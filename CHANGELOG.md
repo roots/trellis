@@ -1,4 +1,5 @@
 ### HEAD
+* Update cron variable to match Bedrock ([#394](https://github.com/roots/trellis/pull/394))
 * Add deploy_build_before example hook for theme assets ([#397](https://github.com/roots/trellis/pull/37))
 * Use curl instead of dig for IP lookups ([#390](https://github.com/roots/trellis/pull/390))
 * Update SSL cipher suite ([#386](https://github.com/roots/trellis/pull/386))
