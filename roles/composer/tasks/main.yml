@@ -16,3 +16,7 @@
     regexp: ^PATH="(((?!:./vendor/bin).)*)"
     line: PATH="\1:./vendor/bin"
     backrefs: yes
+
+- name: Composer config github-oauth
+  command: composer config -g github-oauth.github.com {{ composer_githuboauth }}
+  when: composer_githuboauth is defined
