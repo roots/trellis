@@ -1,4 +1,5 @@
 ### HEAD
+* Fix copy project local files in example hook ([#404](https://github.com/roots/trellis/pull/404))
 * Update cron variable to match Bedrock ([#394](https://github.com/roots/trellis/pull/394))
 * Add deploy_build_before example hook for theme assets ([#397](https://github.com/roots/trellis/pull/37))
 * Use curl instead of dig for IP lookups ([#390](https://github.com/roots/trellis/pull/390))
