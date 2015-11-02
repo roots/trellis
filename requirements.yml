@@ -1,6 +1,3 @@
-- src: f500.project_deploy_module
-  version: v1.0.3
-
 - name: ntp
   src: resmo.ntp
   version: 0.3.0
