@@ -1,19 +1,18 @@
-# Trellis
+# ProteusThemes OPS (based on [Trellis](https://github.com/roots/trellis))
 
 [![Build Status](https://travis-ci.org/proteusthemes/pt-ops.svg)](https://travis-ci.org/proteusthemes/pt-ops)
 
 Trellis is an end-to-end solution for WordPress environment management.
+
 - Reproducible development environments with Vagrant
 - Automate the configuration of high-performance production servers
-- One-command deploys for your WordPress sites
 
-Configure servers for [Bedrock](https://roots.io/bedrock/)-based WordPress sites with a single command:
+Configure servers for WordPress sites with a single command:
 
 |                        | Command
 | ---------------------- | ------------------------------------------------ |
 | **Development**        | `vagrant up`                                     |
-| **Staging/Production** |`ansible-playbook -i hosts/production server.yml` |
-| **Deploying**          | `./deploy.sh production <site name>`             |
+| **Sandbox/Production** |`ansible-playbook -i hosts/production server.yml` |
 
 ## What's included
 
@@ -65,7 +64,7 @@ example.com/    - Primary folder for the project
 1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/development/wordpress_sites.yml`
 2. Run `vagrant up`
 
-## Remote server setup (staging/production)
+## Remote server setup (sandbox/production)
 
 For remote servers, you'll need to have a base Ubuntu 14.04 server already created.
 
@@ -92,7 +91,7 @@ For remote servers, you'll need to have a base Ubuntu 14.04 server already creat
 
 Before using Trellis, you must configure your WordPress sites.
 
-The `group_vars` directory contains directories for each environment (`development`, `staging`, and `production`). Each environment has its own `wordpress_sites.yml` variables file in [YAML](http://en.wikipedia.org/wiki/YAML) format.
+The `group_vars` directory contains directories for each environment (`development`, `sandbox`, and `production`). Each environment has its own `wordpress_sites.yml` variables file in [YAML](http://en.wikipedia.org/wiki/YAML) format.
 
 For example: configure the sites on your Vagrant development VM by editing `group_vars/development/wordpress_sites.yml`.
 
@@ -128,7 +127,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
   * `disable_wp_cron` - Disable WP cron and use system's (default: `true`)
   * `wp_home` - `WP_HOME` constant (required)
   * `wp_siteurl` - `WP_SITEURL` constant (required)
-  * `wp_env` - environment (required, matches group name: `development`, `staging`, `production`)
+  * `wp_env` - environment (required, matches group name: `development`, `sandbox`, `production`)
   * `db_name` - database name (required)
   * `db_user` - database username (required)
   * `db_password` - database password (required)
@@ -137,7 +136,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 
 ### Mail
 
-sSMTP handles outgoing mail. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `staging` and `production`, configure credentials in `group_vars/all/mail.yml`. See the [Mail docs](https://roots.io/trellis/docs/mail/).
+sSMTP handles outgoing mail. For the `development` environment, emails are sent to MailHog, where you can inspect them. To access MailHog interface, go to `http://yourdevelopmentdomain.dev:8025`. For `sandbox` and `production`, configure credentials in `group_vars/all/mail.yml`. See the [Mail docs](https://roots.io/trellis/docs/mail/).
 
 ## SSL
 

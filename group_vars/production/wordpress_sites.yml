@@ -1,14 +1,11 @@
 # Documentation: https://github.com/roots/trellis#wordpress-sites
 wordpress_sites:
-  example.com:
+  demo.proteusthemes.com:
     site_hosts:
-      - example.com
+      - demo.proteusthemes.com
     local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
-    repo: git@github.com:roots/bedrock.git
-    branch: master
-    # subtree_path: site # relative path to your Bedrock/WP directory in your repo (above) if it is not the root (like the roots-example-project structure)
     multisite:
-      enabled: false
+      enabled: true
       subdomains: false
     ssl:
       enabled: false
@@ -17,10 +14,10 @@ wordpress_sites:
       duration: 30s
     env:
       disable_wp_cron: true
-      wp_home: http://example.com
-      wp_siteurl: http://example.com/wp
+      wp_home: https://demo.proteusthemes.com
+      wp_siteurl: https://demo.proteusthemes.com
       wp_env: production
-      db_name: example_prod
+      db_name: demo_network
       db_user: example_dbuser
       db_password: example_dbpassword
       # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/

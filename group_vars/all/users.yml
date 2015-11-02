@@ -15,7 +15,7 @@ users:
       - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       # - https://github.com/username.keys
 
-web_user: web
+web_user: deployer
 web_group: www-data
 web_sudoers:
   - "/usr/sbin/service hhvm *"
