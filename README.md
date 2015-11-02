@@ -1,6 +1,6 @@
 # Trellis
 
-[![Build Status](https://travis-ci.org/roots/trellis.svg)](https://travis-ci.org/roots/trellis)
+[![Build Status](https://travis-ci.org/proteusthemes/pt-ops.svg)](https://travis-ci.org/proteusthemes/pt-ops)
 
 Trellis is an end-to-end solution for WordPress environment management.
 - Reproducible development environments with Vagrant
