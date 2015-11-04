@@ -6,8 +6,8 @@ users:
     groups:
       - "{{ web_group }}"
     keys:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-      # - https://github.com/username.keys
+      # - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - https://github.com/primozcigler.keys
   - name: "{{ admin_user }}"
     groups:
       - sudo
