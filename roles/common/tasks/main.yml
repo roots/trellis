@@ -18,6 +18,8 @@
   - python-mysqldb
   - curl
   - git-core
+  - unzip
+  - imagemagick
 
 - name: Validate timezone variable
   stat: path=/usr/share/zoneinfo/{{ default_timezone }}
