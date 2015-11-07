@@ -4,7 +4,6 @@ wordpress_sites:
     site_hosts:
       - example.dev
     local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
-    repo: git@github.com:roots/bedrock.git
     site_install: true
     site_title: Example Site
     admin_user: admin
