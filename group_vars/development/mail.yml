@@ -1,4 +1,4 @@
-# Documentation: https://github.com/roots/trellis#mail
+# Documentation: https://roots.io/trellis/docs/mail/
 mailhog_install_ssmtp: no
 mail_admin: admin@example.dev
 mail_hostname: example.dev

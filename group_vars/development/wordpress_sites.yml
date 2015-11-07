@@ -1,4 +1,4 @@
-# Documentation: https://github.com/roots/trellis#wordpress-sites
+# Documentation: https://roots.io/trellis/docs/local-development-setup/
 wordpress_sites:
   example.com:
     site_hosts:

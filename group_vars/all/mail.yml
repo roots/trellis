@@ -1,4 +1,4 @@
-# Documentation: https://github.com/roots/trellis#mail
+# Documentation: https://roots.io/trellis/docs/mail/
 mail_smtp_server: smtp.example.com:587
 mail_admin: admin@example.com
 mail_hostname: example.com
