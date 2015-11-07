@@ -78,6 +78,8 @@ For remote servers, you'll need to have a base Ubuntu 14.04 server already creat
 
 ## Deploying to remote servers
 
+Full documentation: https://roots.io/trellis/docs/deploys/
+
 1. Add the `repo` (Git URL) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file.
 2. Set the `branch` you want to deploy (optional - defaults to `master`).
 3. Run `./deploy.sh <environment> <site name>`
