@@ -4,11 +4,11 @@ wordpress_sites:
     site_hosts:
       - demo.proteusthemes.dev
     local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
-    site_install: false
+    site_install: true
     site_title: ProteusThemes
-    admin_user: admin
+    admin_user: proteusnet
     admin_password: admin
-    admin_email: admin@example.dev
+    admin_email: proteusnet@proteusthemes.dev
     multisite:
       enabled: true
       subdomains: false
@@ -23,5 +23,6 @@ wordpress_sites:
       wp_siteurl: http://demo.proteusthemes.dev
       wp_env: development
       db_name: demo_network
-      db_user: root
-      db_password: root
+      db_user: proteusnet
+      db_password: devpw
+      db_prefix: wpsites_

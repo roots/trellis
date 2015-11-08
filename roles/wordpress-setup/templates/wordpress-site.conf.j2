@@ -11,7 +11,7 @@ server {
   access_log   {{ www_root }}/{{ item.key }}/logs/access.log;
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
 
-  root  {{ www_root }}/{{ item.key }}/current/web;
+  root  {{ www_root }}/{{ item.key }};
   index index.php index.htm index.html;
 
   charset utf-8;

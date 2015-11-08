@@ -141,5 +141,5 @@ def nfs_path(site_name)
 end
 
 def remote_site_path(site_name)
-  "/srv/www/#{site_name}/current"
+  "/srv/www/#{site_name}"
 end
