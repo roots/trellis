@@ -1,4 +1,4 @@
-# Documentation: https://github.com/roots/trellis#wordpress-sites
+# Documentation: https://roots.io/trellis/docs/remote-server-setup/
 wordpress_sites:
   sandbox.proteusthemes.com:
     site_hosts:
