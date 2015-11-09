@@ -17,11 +17,9 @@
   command: wp core download --allow-root
   args:
     chdir: "{{ www_root }}/{{ item.key }}/"
-  register: wp_download_results
+    creates: "{{ www_root }}/{{ item.key }}/index.php"
   with_dict: wordpress_sites
   when: item.value.site_install == True
-  changed_when: "'WordPress files seem to already be present' not in wp_download_results.stderr"
-  failed_when: False
 
 - name: Create wp-config.php
   command: |
@@ -33,11 +31,9 @@
             --dbprefix="{{ item.value.env.db_prefix }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/"
-  register: wp_config_results
+    creates: "{{ www_root }}/{{ item.key }}/wp-config.php"
   with_dict: wordpress_sites
   when: item.value.site_install == True
-  changed_when: "'file already exists.' not in wp_config_results.stderr"
-  failed_when: False
 
 - name: Install WP
   command: wp core install

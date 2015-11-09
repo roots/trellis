@@ -34,6 +34,9 @@ Vagrant.configure('2') do |config|
   # Required for NFS to work, pick any local IP
   config.vm.network :private_network, ip: '192.168.50.5'
 
+  # disable default mount
+  config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname
   www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
@@ -141,5 +144,5 @@ def nfs_path(site_name)
 end
 
 def remote_site_path(site_name)
-  "/srv/www/#{site_name}"
+  "/opt/proteusnet/www/#{site_name}"
 end
