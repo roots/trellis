@@ -12,8 +12,10 @@
 - name: Checking essentials
   apt: name="{{ item }}" state=present
   with_items:
-  - sysvinit-utils
+  - python-software-properties
+  - python-pycurl
   - build-essential
+  - python-mysqldb
   - curl
   - git-core
   - unzip
