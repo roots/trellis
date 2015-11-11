@@ -3,4 +3,7 @@
   get_url: url="{{ phar_url }}" dest="{{ bin_path }}" mode=0755
 
 - name: Install WP-CLI tab completions
-  get_url: url="{{ completion_url }}" dest="{{ completion_path }}" mode=0644
+  get_url:
+    url="{{ wp_cli_completion_url }}"
+    dest="{{ wp_cli_completion_path }}"
+    mode=0644
