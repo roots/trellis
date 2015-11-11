@@ -21,6 +21,7 @@
   - unzip
   - imagemagick
   - redis-server
+  - htop
 
 - name: Validate timezone variable
   stat: path=/usr/share/zoneinfo/{{ default_timezone }}
