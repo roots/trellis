@@ -96,7 +96,7 @@ Vagrant.configure('2') do |config|
   config.vm.provider 'virtualbox' do |vb|
     # Customize  VM settings
     vb.customize ['modifyvm', :id, '--memory', memory]
-    vb.customize ['modifyvm', :id, '--cpus', cpus]
+    # vb.customize ['modifyvm', :id, '--cpus', cpus]
 
     # Fix for slow external network connections
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
