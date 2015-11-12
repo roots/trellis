@@ -14,10 +14,6 @@
   - php5-gd
   - php5-imagick
   - php5-cli
-  - php-pear
-  - php5-dev
-  - php5-imap
-  - php5-redis
 
 - name: Start php5-fpm service
   service: name=php5-fpm state=started enabled=true

@@ -20,7 +20,6 @@
   - git-core
   - unzip
   - imagemagick
-  - redis-server
   - htop
 
 - name: Validate timezone variable
