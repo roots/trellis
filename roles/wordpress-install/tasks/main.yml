@@ -1,5 +1,5 @@
 ---
-- include: directories.yml
+# - include: directories.yml
 
 - name: Create .env file
   template: src="env.j2"
