@@ -8,8 +8,8 @@ server {
   {% endif %}
 
   server_name  {% for host in item.value.site_hosts %} {{ host }} {% if item.value.multisite.subdomains %} *.{{ host }} {% endif %} {% endfor %};
-  access_log   {{ www_root }}/{{ item.key }}/logs/access.log;
-  error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
+  access_log   {{ www_root }}/logs/{{ item.key }}/access.log;
+  error_log    {{ www_root }}/logs/{{ item.key }}/error.log;
 
   root  {{ www_root }}/{{ item.key }};
   index index.php index.htm index.html;

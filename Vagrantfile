@@ -81,9 +81,6 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  # Always manually start the nginx
-  config.vm.provision 'shell', inline: 'service nginx start', run: 'always'
-
   # Give VM access to all cpu cores on the host
   cpus = case RbConfig::CONFIG['host_os']
     when ENV['NUMBER_OF_PROCESSORS'] then ENV['NUMBER_OF_PROCESSORS'].to_i
