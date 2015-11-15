@@ -9,6 +9,7 @@ ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
 
 config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
+main_config_file = File.join(ANSIBLE_PATH, 'group_vars', 'all', 'main.yml')
 
 def fail_with_message(msg)
   fail Vagrant::Errors::VagrantError.new, msg
@@ -16,6 +17,7 @@ end
 
 if File.exists?(config_file)
   wordpress_sites = YAML.load_file(config_file)['wordpress_sites']
+  www_root = YAML.load_file(main_config_file)['www_root']
   fail_with_message "No sites found in #{config_file}." if wordpress_sites.to_h.empty?
 else
   fail_with_message "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
@@ -40,6 +42,10 @@ Vagrant.configure('2') do |config|
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname
   www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
+
+  if !Vagrant.has_plugin? 'vagrant-triggers'
+    fail_with_message "vagrant-triggers missing, please install the plugin with this command:\nvagrant plugin install vagrant-triggers"
+  end
 
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
     config.hostsupdater.aliases = aliases + www_aliases
@@ -77,6 +83,23 @@ Vagrant.configure('2') do |config|
       if vars = ENV['ANSIBLE_VARS']
         extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
         ansible.extra_vars = extra_vars
+      end
+    end
+  end
+
+  # Vagrant Triggers
+  # https://github.com/emyl/vagrant-triggers
+  #
+  # If the vagrant-triggers plugin is installed, we can run various scripts on Vagrant
+  # state changes like `vagrant up`, `vagrant halt`, `vagrant suspend`, and `vagrant destroy`
+  #
+  # These scripts are run on the host machine, so we use `vagrant ssh` to tunnel back
+  # into the VM and execute things.
+  if defined? VagrantPlugins::Triggers
+    config.trigger.before [:halt, :destroy], :stdout => true do
+      wordpress_sites.each_key do |wp_site_folder|
+        info "Exporting db for #{wp_site_folder}"
+        run_remote "cd #{www_root}/#{wp_site_folder}/ && wp db export --allow-root"
       end
     end
   end
