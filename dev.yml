@@ -6,6 +6,7 @@
 
   roles:
     - { role: common, tags: [common] }
+    - { role: dotfiles, tags: [dotfiles], sudo: no }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
     - { role: ntp }

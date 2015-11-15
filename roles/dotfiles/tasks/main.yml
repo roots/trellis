@@ -1,0 +1,8 @@
+---
+- name: Copy dotfiles GitHub repo
+  git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "{{ dotfiles_dir }}"
+
+- name: Bootstrap dotfiles
+  command: ~/dotfiles/bootstrap.sh --force
