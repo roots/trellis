@@ -18,7 +18,7 @@ wordpress_sites:
       enabled: false
       duration: 30s
     env:
-      disable_wp_cron: true
+      disable_wp_cron: false
       wp_home: http://demo.proteusthemes.dev
       wp_siteurl: http://demo.proteusthemes.dev
       wp_env: development
