@@ -22,3 +22,4 @@
     - { role: wp-cli, tags: [wp-cli] }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }
     - { role: wordpress-install, tags: [wordpress, wordpress-install] }
+    - { role: static-sites-setup, tags: [static-sites-setup] }

@@ -8,19 +8,22 @@ ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
 # Set Ansible roles_path relative to Ansible directory
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
 
-config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
+wp_config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
+static_config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'static_sites.yml')
 main_config_file = File.join(ANSIBLE_PATH, 'group_vars', 'all', 'main.yml')
 
 def fail_with_message(msg)
   fail Vagrant::Errors::VagrantError.new, msg
 end
 
-if File.exists?(config_file)
-  wordpress_sites = YAML.load_file(config_file)['wordpress_sites']
+if File.exists?(wp_config_file)
+  wordpress_sites = YAML.load_file(wp_config_file)['wordpress_sites']
+  static_sites = YAML.load_file(static_config_file)['static_sites']
   www_root = YAML.load_file(main_config_file)['www_root']
-  fail_with_message "No sites found in #{config_file}." if wordpress_sites.to_h.empty?
+  fail_with_message "No sites found in #{wp_config_file}." if wordpress_sites.to_h.empty?
+  fail_with_message "No sites found in #{static_config_file}." if static_sites.to_h.empty?
 else
-  fail_with_message "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
+  fail_with_message "#{wp_config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
 end
 
 if !Dir.exists?(ENV['ANSIBLE_ROLES_PATH']) && !Vagrant::Util::Platform.windows?
@@ -41,27 +44,24 @@ Vagrant.configure('2') do |config|
 
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname
+  aliases.concat static_sites.flat_map { |(_name, site)| site['site_hosts'] } # add aliases from the static sites
   www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
 
-  if !Vagrant.has_plugin? 'vagrant-triggers'
-    fail_with_message "vagrant-triggers missing, please install the plugin with this command:\nvagrant plugin install vagrant-triggers"
-  end
-
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
-    config.hostsupdater.aliases = aliases + www_aliases
+    config.hostsupdater.aliases = (aliases + www_aliases).uniq
   else
     fail_with_message "vagrant-hostsupdater missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostsupdater"
   end
 
   if Vagrant::Util::Platform.windows?
-    wordpress_sites.each_pair do |name, site|
+    wordpress_sites.merge(static_sites).each_pair do |name, site|
       config.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
   else
     if !Vagrant.has_plugin? 'vagrant-bindfs'
       fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
     else
-      wordpress_sites.each_pair do |name, site|
+      wordpress_sites.merge(static_sites).each_pair do |name, site|
         config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
         config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
       end
@@ -95,13 +95,15 @@ Vagrant.configure('2') do |config|
   #
   # These scripts are run on the host machine, so we use `vagrant ssh` to tunnel back
   # into the VM and execute things.
-  if defined? VagrantPlugins::Triggers
+  if Vagrant.has_plugin? 'vagrant-triggers'
     config.trigger.before [:halt, :destroy], :stdout => true do
       wordpress_sites.each_key do |wp_site_folder|
         info "Exporting db for #{wp_site_folder}"
         run_remote "cd #{www_root}/#{wp_site_folder}/ && wp db export --allow-root"
       end
     end
+  else
+    info "vagrant-triggers missing, please install the plugin with this command:\nvagrant plugin install vagrant-triggers"
   end
 
   # Give VM access to all cpu cores on the host

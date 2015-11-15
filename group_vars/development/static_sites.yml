@@ -1,0 +1,11 @@
+static_sites:
+  www.proteusthemes.com:
+    site_hosts:
+      - www.proteusthemes.dev
+    local_path: ../www/www.proteusthemes.com # path targeting local Bedrock site directory (relative to Ansible root)
+    ssl:
+      enabled: false
+    cache:
+      enabled: false
+      duration: 30s
+    env: development
