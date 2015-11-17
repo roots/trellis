@@ -39,3 +39,5 @@
 - name: Set timezone
   command: timedatectl set-timezone {{ default_timezone }}
   when: current_timezone.stdout != default_timezone
+
+- include: symlinks.yml

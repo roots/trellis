@@ -1,0 +1,8 @@
+---
+- name: Set default symlinks
+  sudo: no
+  file:
+    src={{item.src}}
+    dest={{item.dest}}
+    state=link
+  with_items: default_symlinks
