@@ -1,2 +1,9 @@
 minimum_ansible_version: 1.9.2
 default_timezone: Etc/UTC
+default_symlinks:
+  - src: "{{ www_root }}/demo.proteusthemes.com/wp-content/themes"
+    dest: ~/themes
+  - src: "{{ www_root }}/demo.proteusthemes.com/wp-content/plugins"
+    dest: ~/plugins
+  - src: "{{ www_root }}/demo.proteusthemes.com"
+    dest: ~/demo.proteusthemes.com
