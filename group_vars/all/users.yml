@@ -12,8 +12,13 @@ users:
     groups:
       - sudo
     keys:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-      # - https://github.com/username.keys
+      - https://github.com/primozcigler.keys
+  - name: primoz
+    groups:
+      - "{{ web_group }}"
+      - sudo
+    keys:
+      - https://github.com/primozcigler.keys
 
 web_user: deployer
 web_group: www-data

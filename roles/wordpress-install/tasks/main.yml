@@ -1,5 +1,5 @@
 ---
-# - include: directories.yml
+- include: directories.yml
 
 - name: Create .env file
   template: src="env.j2"
@@ -19,7 +19,7 @@
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/index.php"
   with_dict: wordpress_sites
-  when: item.value.site_install == True
+  when: "{{ item.value.site_install | default(False) }} == True"
 
 - name: Create wp-config.php
   command: |
@@ -33,7 +33,7 @@
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/wp-config.php"
   with_dict: wordpress_sites
-  when: item.value.site_install == True
+  when: "{{ item.value.site_install | default(False) }} == True"
 
 - name: Install WP
   command: wp core install

@@ -3,7 +3,11 @@ wordpress_sites:
   sandbox.proteusthemes.com:
     site_hosts:
       - sandbox.proteusthemes.com
-    local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
+    site_install: true
+    site_title: ProteusThemes
+    admin_user: proteusnet
+    admin_password: admin
+    admin_email: proteusnet@proteusthemes.dev
     multisite:
       enabled: true
       subdomains: false
@@ -20,13 +24,29 @@ wordpress_sites:
       db_name: example_sandbox
       db_user: example_dbuser
       db_password: example_dbpassword
-      # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/
-      # These CANNOT contain the characters "{%" in succession
-      auth_key: "generateme"
-      secure_auth_key: "generateme"
-      logged_in_key: "generateme"
-      nonce_key: "generateme"
-      auth_salt: "generateme"
-      secure_auth_salt: "generateme"
-      logged_in_salt: "generateme"
-      nonce_salt: "generateme"
+      db_prefix: sb_
+  xml-io.proteusthemes.com:
+    site_hosts:
+      - xml-io.proteusthemes.com
+    site_install: true
+    site_title: ProteusThemes
+    admin_user: proteusnet
+    admin_password: admin
+    admin_email: proteusnet@proteusthemes.dev
+    multisite:
+      enabled: true
+      subdomains: false
+    ssl:
+      enabled: false
+    cache:
+      enabled: false
+      duration: 30s
+    env:
+      disable_wp_cron: true
+      wp_home: http://xml-io.proteusthemes.com
+      wp_siteurl: http://xml-io.proteusthemes.com
+      wp_env: sandbox
+      db_name: example_sandbox
+      db_user: example_dbuser
+      db_password: example_dbpassword
+      db_prefix: xmlio_
