@@ -36,48 +36,99 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'ubuntu/trusty64'
   config.ssh.forward_agent = true
 
-  # Required for NFS to work, pick any local IP
-  config.vm.network :private_network, ip: '192.168.51.62'
+  ############################################################################
+  # default devbox definition
+  ############################################################################
+  config.vm.define "default", primary: true do |default|
+    # Required for NFS to work, pick any local IP
+    default.vm.network :private_network, ip: '192.168.51.62'
 
-  # disable default mount
-  config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+    # disable default mount
+    default.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
 
-  hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
-  config.vm.hostname = hostname
-  aliases.concat static_sites.flat_map { |(_name, site)| site['site_hosts'] } # add aliases from the static sites
-  www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
+    hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
+    default.vm.hostname = hostname
+    aliases.concat static_sites.flat_map { |(_name, site)| site['site_hosts'] } # add aliases from the static sites
+    www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
 
-  if Vagrant.has_plugin? 'vagrant-hostsupdater'
-    config.hostsupdater.aliases = (aliases + www_aliases).uniq
-  else
-    fail_with_message "vagrant-hostsupdater missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostsupdater"
-  end
-
-  if Vagrant::Util::Platform.windows?
-    wordpress_sites.merge(static_sites).each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
-    end
-  else
-    if !Vagrant.has_plugin? 'vagrant-bindfs'
-      fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
+    if Vagrant.has_plugin? 'vagrant-hostsupdater'
+      default.hostsupdater.aliases = (aliases + www_aliases).uniq
     else
+      fail_with_message "vagrant-hostsupdater missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostsupdater"
+    end
+
+    if Vagrant::Util::Platform.windows?
       wordpress_sites.merge(static_sites).each_pair do |name, site|
-        config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
-        config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
+        default.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      end
+    else
+      if !Vagrant.has_plugin? 'vagrant-bindfs'
+        fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
+      else
+        wordpress_sites.merge(static_sites).each_pair do |name, site|
+          default.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
+          default.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
+        end
       end
     end
+
+    if Vagrant::Util::Platform.windows?
+      default.vm.provision :shell do |sh|
+        sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
+      end
+    else
+      default.vm.provision :ansible do |ansible|
+        ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
+        ansible.groups = {
+          'web' => ['default'],
+          'development' => ['default']
+        }
+
+        if vars = ENV['ANSIBLE_VARS']
+          extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
+          ansible.extra_vars = extra_vars
+        end
+      end
+    end
+
+    # Vagrant Triggers
+    # https://github.com/emyl/vagrant-triggers
+    #
+    # If the vagrant-triggers plugin is installed, we can run various scripts on Vagrant
+    # state changes like `vagrant up`, `vagrant halt`, `vagrant suspend`, and `vagrant destroy`
+    #
+    # These scripts are run on the host machine, so we use `vagrant ssh` to tunnel back
+    # into the VM and execute things.
+    if Vagrant.has_plugin? 'vagrant-triggers'
+      default.trigger.before [:halt, :destroy], :stdout => true do
+        wordpress_sites.each_key do |wp_site_folder|
+          info "Exporting db for #{wp_site_folder}"
+          run_remote "cd #{www_root}/#{wp_site_folder}/ && wp db export --allow-root"
+        end
+      end
+    else
+      info "vagrant-triggers missing, please install the plugin with this command:\nvagrant plugin install vagrant-triggers"
+    end
   end
 
-  if Vagrant::Util::Platform.windows?
-    config.vm.provision :shell do |sh|
-      sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
+  ############################################################################
+  # sandbox definition
+  ############################################################################
+  config.vm.define "sandbox", autostart: false do |sandbox|
+    sandbox.vm.network :private_network, ip: '192.168.51.63'
+    sandbox.vm.hostname = "sandbox.proteusthemes.dev"
+
+    if Vagrant.has_plugin? 'vagrant-hostsupdater'
+      sandbox.hostsupdater.aliases = ['xml-io.proteusthemes.dev']
+    else
+      fail_with_message "vagrant-hostsupdater missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostsupdater"
     end
-  else
-    config.vm.provision :ansible do |ansible|
+
+    sandbox.vm.provision :ansible do |ansible|
       ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
       ansible.groups = {
-        'web' => ['default'],
-        'development' => ['default']
+        'web' => ['sandbox'],
+        'sandbox' => ['sandbox']
       }
 
       if vars = ENV['ANSIBLE_VARS']
@@ -85,25 +136,6 @@ Vagrant.configure('2') do |config|
         ansible.extra_vars = extra_vars
       end
     end
-  end
-
-  # Vagrant Triggers
-  # https://github.com/emyl/vagrant-triggers
-  #
-  # If the vagrant-triggers plugin is installed, we can run various scripts on Vagrant
-  # state changes like `vagrant up`, `vagrant halt`, `vagrant suspend`, and `vagrant destroy`
-  #
-  # These scripts are run on the host machine, so we use `vagrant ssh` to tunnel back
-  # into the VM and execute things.
-  if Vagrant.has_plugin? 'vagrant-triggers'
-    config.trigger.before [:halt, :destroy], :stdout => true do
-      wordpress_sites.each_key do |wp_site_folder|
-        info "Exporting db for #{wp_site_folder}"
-        run_remote "cd #{www_root}/#{wp_site_folder}/ && wp db export --allow-root"
-      end
-    end
-  else
-    info "vagrant-triggers missing, please install the plugin with this command:\nvagrant plugin install vagrant-triggers"
   end
 
   # Give VM access to all cpu cores on the host
