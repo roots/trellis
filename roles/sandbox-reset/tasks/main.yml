@@ -1,0 +1,6 @@
+---
+- name: Fetch DB files
+  fetch: |
+    src='/opt/backup/mysql/demo_network-20151124.sql.gz'
+    dest='/tmp/db.sql.gz'
+    flat='yes'

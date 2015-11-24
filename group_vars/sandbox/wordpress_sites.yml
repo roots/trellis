@@ -46,7 +46,7 @@ wordpress_sites:
       wp_home: http://xml-io.proteusthemes.com
       wp_siteurl: http://xml-io.proteusthemes.com
       wp_env: sandbox
-      db_name: example_sandbox
+      db_name: example_sandbox2
       db_user: example_dbuser
       db_password: example_dbpassword
       db_prefix: xmlio_

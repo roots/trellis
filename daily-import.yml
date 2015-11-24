@@ -1,0 +1,15 @@
+---
+- name: Fetch data from prod server and overwrite local WP installations
+  hosts: web
+  sudo: yes
+
+  roles:
+    - { role: sandbox-reset, tags: [sandbox-reset] }
+
+- name: Local actions
+  hosts: 127.0.0.1
+  connection: local
+  sudo: yes
+
+  roles:
+    - { role: sandbox-reset2, tags: [sandbox-reset2] }

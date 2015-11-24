@@ -1,0 +1,42 @@
+---
+- include_vars: group_vars/sandbox/wordpress_sites.yml
+
+- name: Remove old DB file
+  file: |
+    path='/tmp/db.sql'
+    state='absent'
+
+- name: Unzip DB
+  command: gunzip db.sql.gz
+  args:
+    chdir: /tmp/
+
+- name: Search/replace domains in the mysqldump file
+  replace: |
+    dest=/tmp/db.sql
+    regexp='demo\.proteusthemes\.com'
+    replace='xml-io.proteusthemes.com'
+
+- name: Search/replace protocol in the mysqldump file
+  replace: |
+    dest=/tmp/db.sql
+    regexp='https\:\/\/xml-io\.proteusthemes\.com'
+    replace='http://xml-io.proteusthemes.com'
+
+- name: Drop old DB
+  mysql_db: |
+    name={{item.value.env.db_name}}
+    state=absent
+  with_dict: wordpress_sites
+
+- name: Create new DB
+  mysql_db: |
+    name={{item.value.env.db_name}}
+    state=present
+  with_dict: wordpress_sites
+
+- name: Import database
+  mysql_db: name={{item.value.env.db_name}}
+            state=import
+            target=/tmp/db.sql
+  with_dict: wordpress_sites

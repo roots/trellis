@@ -17,3 +17,6 @@
 - name: mailhog
   src: geerlingguy.mailhog
   version: 1.0.3
+
+- name: ansible
+  src: AsianChris.ansible

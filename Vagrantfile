@@ -125,7 +125,7 @@ Vagrant.configure('2') do |config|
     end
 
     sandbox.vm.provision :ansible do |ansible|
-      ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
+      ansible.playbook = File.join(ANSIBLE_PATH, 'dev-sandbox.yml')
       ansible.groups = {
         'web' => ['sandbox'],
         'sandbox' => ['sandbox']
