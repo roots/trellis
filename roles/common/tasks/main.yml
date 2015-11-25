@@ -21,7 +21,6 @@
   - unzip
   - imagemagick
   - htop
-  - gunzip
 
 - name: Validate timezone variable
   stat: path=/usr/share/zoneinfo/{{ default_timezone }}
