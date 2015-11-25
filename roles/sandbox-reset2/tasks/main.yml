@@ -3,40 +3,49 @@
 
 - name: Remove old DB file
   file: |
-    path='/tmp/db.sql'
+    path='/tmp/as1_db_file.sql'
     state='absent'
 
 - name: Unzip DB
-  command: gunzip db.sql.gz
+  command: gunzip as1_db_file.sql.gz
   args:
     chdir: /tmp/
 
+- name: Create a copy of the DB for each site
+  command: cp as1_db_file.sql db-{{ item.key }}.sql
+  args:
+    chdir: /tmp/
+  with_dict: wordpress_sites
+
 - name: Search/replace domains in the mysqldump file
   replace: |
-    dest=/tmp/db.sql
+    dest="/tmp/db-{{ item.key }}.sql"
     regexp='demo\.proteusthemes\.com'
-    replace='xml-io.proteusthemes.com'
+    replace="{{ item.key }}"
+  with_dict: wordpress_sites
 
 - name: Search/replace protocol in the mysqldump file
   replace: |
-    dest=/tmp/db.sql
-    regexp='https\:\/\/xml-io\.proteusthemes\.com'
-    replace='http://xml-io.proteusthemes.com'
+    dest="/tmp/db-{{ item.key }}.sql"
+    regexp="https://({{ item.key }})"
+    replace="http://\1"
+  with_dict: wordpress_sites
 
-- name: Drop old DB
+- name: Drop old DBs
   mysql_db: |
     name={{item.value.env.db_name}}
     state=absent
   with_dict: wordpress_sites
 
-- name: Create new DB
+- name: Create new DBs
   mysql_db: |
     name={{item.value.env.db_name}}
     state=present
   with_dict: wordpress_sites
 
-- name: Import database
-  mysql_db: name={{item.value.env.db_name}}
-            state=import
-            target=/tmp/db.sql
+- name: Import SQL to fresh DBs
+  mysql_db: |
+    name={{item.value.env.db_name}}
+    state=import
+    target="/tmp/db-{{ item.key }}.sql"
   with_dict: wordpress_sites
