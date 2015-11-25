@@ -37,11 +37,11 @@
   with_dict: wordpress_sites
 
 - name: Search/replace domain in the mysqldump file - table wp_blogs
-  command: mysql -u {{ item.value.evn.db_user }} -p{{ item.value.db_password }} -e "use {{ item.value.db.db_name }}; update {{ item.value.db.db_prefix }}blogs set domain='{{ item.key }}' where domain='demo.proteusthemes.com';"
+  command: mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}blogs set domain='{{ item.key }}' where domain='demo.proteusthemes.com';"
   with_dict: wordpress_sites
 
 - name: Search/replace domain in the mysqldump file - table wp_site
-  command: mysql -u {{ item.value.evn.db_user }} -p{{ item.value.db_password }} -e "use {{ item.value.db.db_name }}; update {{ item.value.db.db_prefix }}site set domain='{{  }}' where domain='demo.proteusthemes.com';"
+  command: mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}site set domain='{{ item.key }}' where domain='demo.proteusthemes.com';"
   with_dict: wordpress_sites
 
 - name: Preform WP search-replace for the remaining strings
