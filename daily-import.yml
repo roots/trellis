@@ -4,7 +4,7 @@
   sudo: yes
 
   roles:
-    - { role: sandbox-reset, tags: [sandbox-reset] }
+    - { role: sandbox-remote, tags: [sandbox-remote] }
 
 - name: Local actions
   hosts: 127.0.0.1
@@ -12,4 +12,4 @@
   sudo: yes
 
   roles:
-    - { role: sandbox-reset2, tags: [sandbox-reset2] }
+    - { role: sandbox-local, tags: [sandbox-local] }
