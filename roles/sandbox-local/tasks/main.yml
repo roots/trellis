@@ -49,3 +49,15 @@
     state=import
     target="/tmp/db-{{ item.key }}.sql"
   with_dict: wordpress_sites
+
+- name: Preform WP search-replace for the remaining strings
+  command: wp search-replace 'https://demo.proteusthemes.com' 'http://{{ item.key }}' --all-tables --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}"
+  with_dict: wordpress_sites
+
+- name: Deactivate WP rocket
+  command: wp plugin deactivate wp-rocket --network --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}"
+  with_dict: wordpress_sites

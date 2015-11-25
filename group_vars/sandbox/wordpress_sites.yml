@@ -7,7 +7,7 @@ wordpress_sites:
     site_title: ProteusThemes
     admin_user: proteusnet
     admin_password: admin
-    admin_email: proteusnet@proteusthemes.dev
+    admin_email: noreply@proteusthemes.com
     multisite:
       enabled: true
       subdomains: false
@@ -21,10 +21,10 @@ wordpress_sites:
       wp_home: http://sandbox.proteusthemes.com
       wp_siteurl: http://sandbox.proteusthemes.com
       wp_env: sandbox
-      db_name: example_sandbox
-      db_user: example_dbuser
-      db_password: example_dbpassword
-      db_prefix: sb_
+      db_name: sandbox_network # TODO vault
+      db_user: proteusnet
+      db_password: devpw # TODO vault
+      db_prefix: wpsites_
   xml-io.proteusthemes.com:
     site_hosts:
       - xml-io.proteusthemes.com
@@ -32,7 +32,7 @@ wordpress_sites:
     site_title: ProteusThemes
     admin_user: proteusnet
     admin_password: admin
-    admin_email: proteusnet@proteusthemes.dev
+    admin_email: noreply@proteusthemes.com
     multisite:
       enabled: true
       subdomains: false
@@ -46,7 +46,7 @@ wordpress_sites:
       wp_home: http://xml-io.proteusthemes.com
       wp_siteurl: http://xml-io.proteusthemes.com
       wp_env: sandbox
-      db_name: example_sandbox2
-      db_user: example_dbuser
-      db_password: example_dbpassword
-      db_prefix: xmlio_
+      db_name: xml_io_network # TODO vault
+      db_user: proteusnet
+      db_password: devpw # TODO vault
+      db_prefix: wpsites_
