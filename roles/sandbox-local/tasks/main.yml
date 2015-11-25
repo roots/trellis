@@ -17,37 +17,31 @@
     chdir: /tmp/
   with_dict: wordpress_sites
 
-- name: Search/replace domains in the mysqldump file
-  replace: |
-    dest="/tmp/db-{{ item.key }}.sql"
-    regexp='demo\.proteusthemes\.com'
-    replace="{{ item.key }}"
-  with_dict: wordpress_sites
-
-- name: Search/replace protocol in the mysqldump file
-  replace: |
-    dest="/tmp/db-{{ item.key }}.sql"
-    regexp="https://({{ item.key }})"
-    replace="http://\1"
-  with_dict: wordpress_sites
-
 - name: Drop old DBs
   mysql_db: |
-    name={{item.value.env.db_name}}
+    name={{ item.value.env.db_name }}
     state=absent
   with_dict: wordpress_sites
 
 - name: Create new DBs
   mysql_db: |
-    name={{item.value.env.db_name}}
+    name={{ item.value.env.db_name }}
     state=present
   with_dict: wordpress_sites
 
 - name: Import SQL to fresh DBs
   mysql_db: |
-    name={{item.value.env.db_name}}
+    name={{ item.value.env.db_name }}
     state=import
     target="/tmp/db-{{ item.key }}.sql"
+  with_dict: wordpress_sites
+
+- name: Search/replace domain in the mysqldump file - table wp_blogs
+  command: mysql -u {{ item.value.evn.db_user }} -p{{ item.value.db_password }} -e "use {{ item.value.db.db_name }}; update {{ item.value.db.db_prefix }}blogs set domain='{{ item.key }}' where domain='demo.proteusthemes.com';"
+  with_dict: wordpress_sites
+
+- name: Search/replace domain in the mysqldump file - table wp_site
+  command: mysql -u {{ item.value.evn.db_user }} -p{{ item.value.db_password }} -e "use {{ item.value.db.db_name }}; update {{ item.value.db.db_prefix }}site set domain='{{  }}' where domain='demo.proteusthemes.com';"
   with_dict: wordpress_sites
 
 - name: Preform WP search-replace for the remaining strings
