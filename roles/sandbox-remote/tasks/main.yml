@@ -1,4 +1,6 @@
 ---
+- include_vars: group_vars/sandbox/wordpress_sites.yml
+
 - name: Fetch DB files
   fetch:
     src:  /opt/backup/mysql/demo_network-20151126.sql.gz
