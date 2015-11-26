@@ -13,7 +13,7 @@
     mode: pull
     group: no
     owner: no
-    rsync_opts: {{ wp_rsync_opts.root }}
+    rsync_opts: "{{ wp_rsync_opts.root }}"
   with_dict: sb_wp_sites
 
 - name: Rsync WP uploads
@@ -23,5 +23,5 @@
     mode: pull
     group: no
     owner: no
-    rsync_opts: {{ wp_rsync_opts.uploads }}
+    rsync_opts: "{{ wp_rsync_opts.uploads }}"
   with_dict: sb_wp_sites
