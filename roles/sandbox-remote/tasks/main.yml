@@ -8,7 +8,7 @@
 - name: Rsync WP (without uploads)
   synchronize:
     src:  /opt/proteusnet/www/demo.proteusthemes.com/
-    dest: /opt/proteusnet/www/sandbox.proteusthemes.com/
+    dest: "/opt/proteusnet/www/{{ item.key }}/"
     mode: pull
     rsync_opts:
       - "--delete"
@@ -21,13 +21,16 @@
       - "--exclude='/wp-content/advanced-cache.php'"
       - "--exclude='/wp-content/uploads/'"
       - "--exclude='/wp-content/cache/'"
+  with_dict: wordpress_sites
 
 - name: Rsync WP uploads
   synchronize:
     src:  /opt/proteusnet/www/demo.proteusthemes.com/wp-content/uploads/
-    dest: /opt/proteusnet/www/sandbox.proteusthemes.com/wp-content/uploads/
+    dest: "/opt/proteusnet/www/{{ item.key }}/wp-content/uploads/"
     mode: pull
     rsync_opts:
       - "--delete"
       - "--ignore-existing"
       - "--exclude='.*'"
+      - "--exclude='Makefile'"
+  with_dict: wordpress_sites
