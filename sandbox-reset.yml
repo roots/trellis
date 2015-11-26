@@ -2,13 +2,11 @@
 - name: Fetch data from prod server and overwrite local WP installations
   hosts: as
   sudo: yes
-
   roles:
     - { role: sandbox-remote, tags: [sandbox-remote] }
 
 - name: Perform local actions on sandbox server
   hosts: sbs
   sudo: yes
-
   roles:
     - { role: sandbox-local, tags: [sandbox-local] }

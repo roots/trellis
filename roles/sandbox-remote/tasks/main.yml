@@ -13,17 +13,7 @@
     mode: pull
     group: no
     owner: no
-    rsync_opts: # TODO to var
-      - "--delete"
-      - "--exclude='.git/'"
-      - "--exclude='wp-config.php'"
-      - "--exclude='wp-cli.yml'"
-      - "--exclude='/google*.html'"
-      - "--exclude='/.htaccess'"
-      - "--exclude='/wc-logs/'"
-      - "--exclude='/wp-content/advanced-cache.php'"
-      - "--exclude='/wp-content/uploads/'"
-      - "--exclude='/wp-content/cache/'"
+    rsync_opts: {{ wp_rsync_opts.root }}
   with_dict: sb_wp_sites
 
 - name: Rsync WP uploads
@@ -33,9 +23,5 @@
     mode: pull
     group: no
     owner: no
-    rsync_opts: # TODO to var
-      - "--delete"
-      - "--ignore-existing"
-      - "--exclude='.*'"
-      - "--exclude='Makefile'"
+    rsync_opts: {{ wp_rsync_opts.uploads }}
   with_dict: sb_wp_sites

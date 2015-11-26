@@ -15,3 +15,21 @@ sb_wp_sites:
       db_user: proteusnet
       db_password: devpw # TODO vault
       db_prefix: wpsites_
+
+wp_rsync_opts:
+  root:
+    - "--delete"
+    - "--exclude='.git/'"
+    - "--exclude='wp-config.php'"
+    - "--exclude='wp-cli.yml'"
+    - "--exclude='/google*.html'"
+    - "--exclude='/.htaccess'"
+    - "--exclude='/wc-logs/'"
+    - "--exclude='/wp-content/advanced-cache.php'"
+    - "--exclude='/wp-content/uploads/'"
+    - "--exclude='/wp-content/cache/'"
+  uploads:
+    - "--delete"
+    - "--ignore-existing"
+    - "--exclude='.*'"
+    - "--exclude='Makefile'"
