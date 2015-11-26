@@ -4,3 +4,30 @@
     src='/opt/backup/mysql/demo_network-20151124.sql.gz'
     dest='/tmp/as1_db_file.sql.gz'
     flat=yes
+
+- name: Rsync WP (without uploads)
+  synchronize:
+    src:  /opt/proteusnet/www/demo.proteusthemes.com/
+    dest: /opt/proteusnet/www/sandbox.proteusthemes.com/
+    mode: pull
+    rsync_opts:
+      - "--delete"
+      - "--exclude='.git/'"
+      - "--exclude='wp-config.php'"
+      - "--exclude='wp-cli.yml'"
+      - "--exclude='/google*.html'"
+      - "--exclude='/.htaccess'"
+      - "--exclude='/wc-logs/'"
+      - "--exclude='/wp-content/advanced-cache.php'"
+      - "--exclude='/wp-content/uploads/'"
+      - "--exclude='/wp-content/cache/'"
+
+- name: Rsync WP uploads
+  synchronize:
+    src:  /opt/proteusnet/www/demo.proteusthemes.com/wp-content/uploads/
+    dest: /opt/proteusnet/www/sandbox.proteusthemes.com/wp-content/uploads/
+    mode: pull
+    rsync_opts:
+      - "--delete"
+      - "--ignore-existing"
+      - "--exclude='.*'"
