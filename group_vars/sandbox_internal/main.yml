@@ -1,0 +1,17 @@
+# Documentation: https://docs.google.com/a/proteusnet.com/document/d/1B6GEpHSMAsxnn4hfh_t-1NvKqh7vHWKNyun3TOaKWM0/edit?usp=sharing
+src_domain: "demo.proteusthemes.com" # inside {{ www_root }}
+src_url: "https://{{ src_domain }}"
+
+sb_wp_sites:
+  sandbox.proteusthemes.com:
+    env: # this must match the groups_vars/sandbox
+      db_name: sandbox_network # TODO vault
+      db_user: proteusnet
+      db_password: devpw # TODO vault
+      db_prefix: wpsites_
+  xml-io.proteusthemes.com:
+    env: # this must match the groups_vars/sandbox
+      db_name: xml_io_network # TODO vault
+      db_user: proteusnet
+      db_password: devpw # TODO vault
+      db_prefix: wpsites_

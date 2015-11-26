@@ -1,6 +1,4 @@
 ---
-- include_vars: group_vars/sandbox/wordpress_sites.yml
-
 - name: Remove old DB file
   file: |
     path='/tmp/as1_db_file.sql'
@@ -15,37 +13,43 @@
   mysql_db: |
     name={{ item.value.env.db_name }}
     state=absent
-  with_dict: wordpress_sites
+    login_host="{{ item.value.env.db_host | default('localhost') }}"
+    login_user="{{ item.value.env.db_user }}"
+    login_password="{{ item.value.env.db_password }}"
+  with_dict: sb_wp_sites
 
 - name: Create new DBs
   mysql_db: |
     name={{ item.value.env.db_name }}
     state=present
-  with_dict: wordpress_sites
+    login_host="{{ item.value.env.db_host | default('localhost') }}"
+    login_user="{{ item.value.env.db_user }}"
+    login_password="{{ item.value.env.db_password }}"
+  with_dict: sb_wp_sites
 
 - name: Import SQL to fresh DBs
   mysql_db: |
     name={{ item.value.env.db_name }}
     state=import
     target="/tmp/as1_db_file.sql"
-  with_dict: wordpress_sites
+  with_dict: sb_wp_sites
 
-- name: Search/replace domain in the mysqldump file - table wp_blogs
-  command: mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}blogs set domain='{{ item.key }}' where domain='demo.proteusthemes.com';"
-  with_dict: wordpress_sites
+- name: Search/replace domain - table wp_blogs
+  command: mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}blogs set domain='{{ item.key }}' where domain='{{ src_domain }}';"
+  with_dict: sb_wp_sites
 
-- name: Search/replace domain in the mysqldump file - table wp_site
-  command: mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}site set domain='{{ item.key }}' where domain='demo.proteusthemes.com';"
-  with_dict: wordpress_sites
+- name: Search/replace domain - table wp_site
+  command: mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}site set domain='{{ item.key }}' where domain='{{ src_domain }}';"
+  with_dict: sb_wp_sites
 
 - name: Preform WP search-replace for the remaining strings
-  command: wp search-replace 'https://demo.proteusthemes.com' 'http://{{ item.key }}' --all-tables --allow-root
+  command: wp search-replace '{{ src_url }}' 'http://{{ item.key }}' --all-tables --allow-root
   args:
     chdir: "{{ www_root }}/{{ item.key }}"
-  with_dict: wordpress_sites
+  with_dict: sb_wp_sites
 
 - name: Deactivate WP rocket
   command: wp plugin deactivate wp-rocket --network --allow-root
   args:
     chdir: "{{ www_root }}/{{ item.key }}"
-  with_dict: wordpress_sites
+  with_dict: sb_wp_sites

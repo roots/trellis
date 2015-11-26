@@ -1,6 +1,4 @@
 ---
-- include_vars: group_vars/sandbox/wordpress_sites.yml
-
 - name: Fetch DB files
   fetch:
     src:  /opt/backup/mysql/demo_network-20151126.sql.gz
@@ -9,10 +7,12 @@
 
 - name: Rsync WP (without uploads)
   synchronize:
-    src:  /opt/proteusnet/www/demo.proteusthemes.com/
-    dest: "/opt/proteusnet/www/{{ item.key }}/"
+    src:  "{{ www_root }}/{{ src_domain }}/"
+    dest: "{{ www_root }}/{{ item.key }}/"
     mode: pull
-    rsync_opts:
+    group: no
+    owner: no
+    rsync_opts: # TODO to var
       - "--delete"
       - "--exclude='.git/'"
       - "--exclude='wp-config.php'"
@@ -27,10 +27,12 @@
 
 - name: Rsync WP uploads
   synchronize:
-    src:  /opt/proteusnet/www/demo.proteusthemes.com/wp-content/uploads/
-    dest: "/opt/proteusnet/www/{{ item.key }}/wp-content/uploads/"
+    src:  "{{ www_root }}/{{ src_domain }}/wp-content/uploads/"
+    dest: "{{ www_root }}/{{ item.key }}/wp-content/uploads/"
     mode: pull
-    rsync_opts:
+    group: no
+    owner: no
+    rsync_opts: # TODO to var
       - "--delete"
       - "--ignore-existing"
       - "--exclude='.*'"

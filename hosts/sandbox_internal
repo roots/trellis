@@ -1,0 +1,9 @@
+[as]
+10.133.163.38 ansible_ssh_user=root
+
+[sbs]
+localhost ansible_connection=local
+
+[sandbox_internal:children]
+as
+sbs

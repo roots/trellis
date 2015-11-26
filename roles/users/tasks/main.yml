@@ -6,7 +6,7 @@
   lineinfile: dest=/etc/sudoers
               state=present
               regexp="^%sudo"
-              line="%sudo ALL=(ALL:ALL) ALL"
+              line="%sudo ALL=(ALL:ALL) NOPASSWD:ALL"
               validate="/usr/sbin/visudo -cf %s"
 
 - name: Fail if root login will be disabled but admin_user will not be a sudoer
