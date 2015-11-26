@@ -23,7 +23,7 @@
       - "--exclude='/wp-content/advanced-cache.php'"
       - "--exclude='/wp-content/uploads/'"
       - "--exclude='/wp-content/cache/'"
-  with_dict: wordpress_sites
+  with_dict: sb_wp_sites
 
 - name: Rsync WP uploads
   synchronize:
@@ -37,4 +37,4 @@
       - "--ignore-existing"
       - "--exclude='.*'"
       - "--exclude='Makefile'"
-  with_dict: wordpress_sites
+  with_dict: sb_wp_sites
