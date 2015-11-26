@@ -1,9 +1,9 @@
 ---
 - name: Fetch DB files
-  fetch: |
-    src='/opt/backup/mysql/demo_network-20151124.sql.gz'
-    dest='/tmp/as1_db_file.sql.gz'
-    flat=yes
+  fetch:
+    src:  /opt/backup/mysql/demo_network-20151126.sql.gz
+    dest: /tmp/as1_db_file.sql.gz
+    flat: yes
 
 - name: Rsync WP (without uploads)
   synchronize:

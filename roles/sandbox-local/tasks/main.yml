@@ -11,12 +11,6 @@
   args:
     chdir: /tmp/
 
-- name: Create a copy of the DB for each site
-  command: cp as1_db_file.sql db-{{ item.key }}.sql
-  args:
-    chdir: /tmp/
-  with_dict: wordpress_sites
-
 - name: Drop old DBs
   mysql_db: |
     name={{ item.value.env.db_name }}
@@ -33,7 +27,7 @@
   mysql_db: |
     name={{ item.value.env.db_name }}
     state=import
-    target="/tmp/db-{{ item.key }}.sql"
+    target="/tmp/as1_db_file.sql"
   with_dict: wordpress_sites
 
 - name: Search/replace domain in the mysqldump file - table wp_blogs
