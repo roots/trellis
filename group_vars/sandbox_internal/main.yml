@@ -45,3 +45,6 @@ emails_to_replace:
   - 'jaka@spaka\.si'
   - 'lenagregorcic@gmail\.com'
   - 'marko\.prelec@proteusnet\.com'
+
+sites_to_export:
+  - structurepress

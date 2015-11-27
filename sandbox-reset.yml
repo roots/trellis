@@ -16,11 +16,21 @@
   become: yes
   become_user: deployer
   tasks:
-    - name: Find latest XML exports
-      local_action: "command find  -mmin -60 -name '*.xml'"
+    - name: Find all XML exports
+      local_action: "command find /tmp/xml-exports/ -name '*.xml'"
       register: xmls_to_transfer
 
     - name: Deploy latest XML files to as
-      synchronize:
-        src:  "/tmp/xml-exports/" # TODO var
-        dest: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/"
+      copy:
+        src:  "{{ item }}"
+        dest: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/" # TODO var
+      with_items: "{{ xmls_to_transfer.stdout_lines }}"
+      register: transfered_xmls
+
+    - debug: var=transfered_xmls
+
+    # - name: Symlink to these latest files
+    #   file:
+    #     src:  "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/"
+    #     dest: "/tmp/xml-exports/" # TODO var
+    #   with_items: sites_to_export
