@@ -17,11 +17,10 @@
   become_user: deployer
   tasks:
     - name: Find latest XML exports
-      local_action: "command find /tmp/xml-exports/ -mmin -60 -name '*.xml'"
+      local_action: "command find  -mmin -60 -name '*.xml'"
       register: xmls_to_transfer
 
     - name: Deploy latest XML files to as
-      copy:
-        src:  "{{ item }}"
+      synchronize:
+        src:  "/tmp/xml-exports/" # TODO var
         dest: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/"
-      with_items: "{{ xmls_to_transfer.stdout_lines }}"
