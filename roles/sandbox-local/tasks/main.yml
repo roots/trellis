@@ -60,11 +60,9 @@
     chdir: "{{ www_root }}/xml-io.proteusthemes.com"
   register: wp_user_ids
 
-- debug: var=wp_user_ids
-
 - name: Change all user passwords
   command: wp user update {{ item }} --user_pass='99sandbox' --allow-root
   args:
     chdir: "{{ www_root }}/xml-io.proteusthemes.com"
-  with_lines: wp_user_ids
+  with_items: "{{ wp_user_ids.stdout_lines }}"
   when: item != 'ID'
