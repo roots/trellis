@@ -9,6 +9,17 @@
   args:
     chdir: /tmp/
 
+- name: Replace emails
+  replace:
+    dest:    /tmp/as1_db_file.sql
+    regexp:  "{{ item }}"
+    replace: "info@example.com"
+    backup:  yes
+  with_items:
+    - 'primoz\.cigler@gmail\.com'
+    - 'primoz@proteusnet\.com'
+    - 'info@proteusthemes\.com'
+
 - name: Drop old DBs
   mysql_db: |
     name={{ item.value.env.db_name }}
