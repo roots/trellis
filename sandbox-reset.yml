@@ -25,12 +25,10 @@
         src:  "{{ item }}"
         dest: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/" # TODO var
       with_items: "{{ xmls_to_transfer.stdout_lines }}"
-      register: transfered_xmls
 
-    - debug: var=transfered_xmls
-
-    # - name: Symlink to these latest files
-    #   file:
-    #     src:  "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/"
-    #     dest: "/tmp/xml-exports/" # TODO var
-    #   with_items: sites_to_export
+    - name: Symlink to these latest files
+      file:
+        state: link
+        src:   "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/{{ item }}.wordpress.{{ ansible_date_time.date }}.000.xml"
+        dest:  "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/{{ item }}-latest.xml"
+      with_items: sites_to_export
