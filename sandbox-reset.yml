@@ -16,10 +16,6 @@
   become: yes
   become_user: deployer
   tasks:
-    - name: Find all XML exports
-      local_action: "command find {{ xml_paths.local }}/ -name '*.xml'"
-      register: xmls_to_transfer
-
     - name: Ensure target dir exists
       file:
         state: directory
@@ -27,9 +23,9 @@
 
     - name: Deploy latest XML files to as
       copy:
-        src:  "{{ item }}"
+        src:  "{{ xml_paths.local }}/{{ item }}.wordpress.{{ ansible_date_time.date }}.000.xml"
         dest: "{{ xml_paths.remote }}/"
-      with_items: "{{ xmls_to_transfer.stdout_lines }}"
+      with_items: "{{ sites_to_export }}"
 
     - name: Symlink to these latest files
       file:
