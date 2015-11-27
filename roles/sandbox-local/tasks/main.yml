@@ -12,8 +12,8 @@
 - name: Replace emails
   replace:
     dest:    /tmp/as1_db_file.sql
-    regexp:  "({{ emails_to_replace | join( '|' ) }})"
-    replace: "info@example.com"
+    regexp:  "({{ wp_emails.from | join( '|' ) }})"
+    replace: "{{ wp_emails.to }}"
     backup:  yes
 
 - name: Drop old DBs

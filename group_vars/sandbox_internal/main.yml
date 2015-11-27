@@ -37,16 +37,18 @@ wp_rsync_opts:
     - "--exclude='Makefile'"
 
 # replace these emails to info@example.com when importing
-emails_to_replace:
-  - 'primoz\.cigler@gmail\.com'
-  - 'primoz@proteusnet\.com'
-  - 'primoz\.cigler@outlook\.com'
-  - 'info@proteusthemes\.com'
-  - 'capuderg@gmail\.com'
-  - 'jejcic\.jaka@gmail\.com'
-  - 'jaka@spaka\.si'
-  - 'lenagregorcic@gmail\.com'
-  - 'marko\.prelec@proteusnet\.com'
+wp_emails:
+  from:
+    - 'primoz\.cigler@gmail\.com'
+    - 'primoz@proteusnet\.com'
+    - 'primoz\.cigler@outlook\.com'
+    - 'info@proteusthemes\.com'
+    - 'capuderg@gmail\.com'
+    - 'jejcic\.jaka@gmail\.com'
+    - 'jaka@spaka\.si'
+    - 'lenagregorcic@gmail\.com'
+    - 'marko\.prelec@proteusnet\.com'
+  to: 'info@example.com'
 
 sites_to_export:
   - structurepress
