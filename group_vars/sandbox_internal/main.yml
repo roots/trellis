@@ -2,6 +2,7 @@
 src_domain: "demo.proteusthemes.com" # inside {{ www_root }}
 export_domain: "xml-io.proteusthemes.com"
 src_url: "https://{{ src_domain }}"
+dummy_pass: "99sandbox" # TODO vault
 
 sb_wp_sites:
   sandbox.proteusthemes.com:
