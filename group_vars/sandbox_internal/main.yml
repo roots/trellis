@@ -2,21 +2,21 @@
 src_domain: "demo.proteusthemes.com" # inside {{ www_root }}
 export_domain: "xml-io.proteusthemes.com"
 src_url: "https://{{ src_domain }}"
-dummy_pass: "99sandbox" # TODO vault
+dummy_pass: "{{ vault_dummy_pass }}"
 
 sb_wp_sites:
   sandbox.proteusthemes.com:
     env: # this must match the groups_vars/sandbox
-      db_name: sandbox_network # TODO vault
-      db_user: proteusnet
-      db_password: devpw # TODO vault
-      db_prefix: wpsites_
+      db_name: "{{ vault_sb_wp_sites.sandbox.proteusthemes.com.env.db_name }}"
+      db_user: "{{ vault_sb_wp_sites.sandbox.proteusthemes.com.env.db_user }}"
+      db_password: "{{ vault_sb_wp_sites.sandbox.proteusthemes.com.env.db_password }}"
+      db_prefix: "{{ vault_sb_wp_sites.sandbox.proteusthemes.com.env.db_prefix }}"
   xml-io.proteusthemes.com:
-    env: # this must match the groups_vars/sandbox
-      db_name: xml_io_network # TODO vault
-      db_user: proteusnet
-      db_password: devpw # TODO vault
-      db_prefix: wpsites_
+    env:
+      db_name: "{{ vault_sb_wp_sites.xml-io.proteusthemes.com.env.db_name }}"
+      db_user: "{{ vault_sb_wp_sites.xml-io.proteusthemes.com.env.db_user }}"
+      db_password: "{{ vault_sb_wp_sites.xml-io.proteusthemes.com.env.db_password }}"
+      db_prefix: "{{ vault_sb_wp_sites.xml-io.proteusthemes.com.env.db_prefix }}"
 
 wp_rsync_opts:
   root:

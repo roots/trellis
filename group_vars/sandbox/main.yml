@@ -1,1 +1,1 @@
-mysql_root_password: sandboxpw
+mysql_root_password: "{{ vault_mysql_root_password }}"
