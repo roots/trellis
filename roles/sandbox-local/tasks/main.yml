@@ -73,3 +73,18 @@
     chdir: "{{ www_root }}/xml-io.proteusthemes.com"
   with_items: "{{ wp_user_ids.stdout_lines }}"
   when: item != 'ID'
+
+- name: Ensure /tmp/xml-exports/ is a directory
+  file:
+    path: /tmp/xml-exports/ # TODO to var
+    state: directory
+
+- name: Clean all existing XML files within exports directory
+  file:
+    path: '/tmp/xml-exports/*.xml'
+    state: absent
+
+- name: Export XML file
+  command: wp export --dir=/tmp/xml-exports/ --url='xml-io.proteusthemes.com/structurepress' --allow-root
+  args:
+    chdir: "{{ www_root }}/xml-io.proteusthemes.com"

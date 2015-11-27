@@ -38,10 +38,10 @@ wp_rsync_opts:
 emails_to_replace:
   - 'primoz\.cigler@gmail\.com'
   - 'primoz@proteusnet\.com'
+  - 'primoz\.cigler@outlook\.com'
   - 'info@proteusthemes\.com'
   - 'capuderg@gmail\.com'
   - 'jejcic\.jaka@gmail\.com'
   - 'jaka@spaka\.si'
   - 'lenagregorcic@gmail\.com'
   - 'marko\.prelec@proteusnet\.com'
-  - 'primoz\.cigler@outlook\.com'
