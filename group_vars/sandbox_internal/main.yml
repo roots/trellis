@@ -33,3 +33,15 @@ wp_rsync_opts:
     - "--ignore-existing"
     - "--exclude='.*'"
     - "--exclude='Makefile'"
+
+# replace these emails to info@example.com when importing
+emails_to_replace:
+  - 'primoz\.cigler@gmail\.com'
+  - 'primoz@proteusnet\.com'
+  - 'info@proteusthemes\.com'
+  - 'capuderg@gmail\.com'
+  - 'jejcic\.jaka@gmail\.com'
+  - 'jaka@spaka\.si'
+  - 'lenagregorcic@gmail\.com'
+  - 'marko\.prelec@proteusnet\.com'
+  - 'primoz\.cigler@outlook\.com'

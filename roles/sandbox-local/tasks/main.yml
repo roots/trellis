@@ -12,13 +12,9 @@
 - name: Replace emails
   replace:
     dest:    /tmp/as1_db_file.sql
-    regexp:  "{{ item }}"
+    regexp:  "({{ emails_to_replace | join( '|' ) }})"
     replace: "info@example.com"
     backup:  yes
-  with_items:
-    - 'primoz\.cigler@gmail\.com'
-    - 'primoz@proteusnet\.com'
-    - 'info@proteusthemes\.com'
 
 - name: Drop old DBs
   mysql_db: |
