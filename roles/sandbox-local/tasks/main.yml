@@ -53,3 +53,18 @@
   args:
     chdir: "{{ www_root }}/{{ item.key }}"
   with_dict: sb_wp_sites
+
+- name: Get list of all user IDs
+  command: wp user list --network --format=csv --fields=ID --allow-root
+  args:
+    chdir: "{{ www_root }}/xml-io.proteusthemes.com"
+  register: wp_user_ids
+
+- debug: var=wp_user_ids
+
+- name: Change all user passwords
+  command: wp user update {{ item }} --user_pass='99sandbox' --allow-root
+  args:
+    chdir: "{{ www_root }}/xml-io.proteusthemes.com"
+  with_lines: wp_user_ids
+  when: item != 'ID'
