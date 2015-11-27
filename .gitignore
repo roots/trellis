@@ -1,2 +1,3 @@
 .vagrant
 vendor/roles
+/test.yml

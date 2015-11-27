@@ -20,6 +20,11 @@
       local_action: "command find {{ xml_paths.local }}/ -name '*.xml'"
       register: xmls_to_transfer
 
+    - name: Ensure target dir exists
+      file:
+        state: directory
+        path: "{{ xml_paths.remote }}/"
+
     - name: Deploy latest XML files to as
       copy:
         src:  "{{ item }}"
@@ -31,4 +36,10 @@
         state: link
         src:   "{{ xml_paths.remote }}/{{ item }}.wordpress.{{ ansible_date_time.date }}.000.xml"
         dest:  "{{ xml_paths.remote }}/{{ item }}-latest.xml"
+      with_items: sites_to_export
+
+    - name: Clean old XMLs
+      command: "find . -type f -name '*.xml' -mtime +5 -exec rm {} +"
+      args:
+        chdir: "{{ xml_paths.remote }}"
       with_items: sites_to_export
