@@ -1,5 +1,6 @@
 # Documentation: https://docs.google.com/a/proteusnet.com/document/d/1B6GEpHSMAsxnn4hfh_t-1NvKqh7vHWKNyun3TOaKWM0/edit?usp=sharing
 src_domain: "demo.proteusthemes.com" # inside {{ www_root }}
+export_domain: "xml-io.proteusthemes.com"
 src_url: "https://{{ src_domain }}"
 
 sb_wp_sites:
@@ -48,3 +49,8 @@ emails_to_replace:
 
 sites_to_export:
   - structurepress
+  - repairpress
+
+xml_paths:
+  local:  "/tmp/xml-exports"
+  remote: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new"
