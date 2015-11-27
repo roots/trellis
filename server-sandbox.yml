@@ -36,4 +36,15 @@
         repo:    https://github.com/proteusthemes/pt-ops.git
         dest:    /opt/proteusnet/ops/
         version: master
+      tags: after-roles
 
+    - name: Add cron to reset every day
+      become: yes
+      become_user: root
+      cron:
+        name:   "reset sandbox every day"
+        state:  "present"
+        minute: "0"
+        hour:   "8"
+        job:    "ANSIBLE_NOCOLOR='1' ansible-playbook -i /opt/proteusnet/ops/hosts/sandbox_internal /opt/proteusnet/ops/sandbox-reset.yml > /var/log/sandbox/ansible-reset.log 2>&1"
+      tags: after-roles
