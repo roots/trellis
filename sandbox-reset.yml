@@ -12,12 +12,12 @@
     - { role: sandbox-local, tags: [sandbox-local] }
 
 - name: Deploy XML files
-  hosts: sbs
+  hosts: as
   become: yes
   become_user: deployer
   tasks:
     - name: Find latest XML exports
-      command: "find /tmp/xml-exports/ -mmin -60 -name '*.xml'"
+      local_action: "command find /tmp/xml-exports/ -mmin -60 -name '*.xml'"
       register: xmls_to_transfer
 
     - name: Deploy latest XML files to as
