@@ -79,10 +79,8 @@
     path: /tmp/xml-exports/ # TODO to var
     state: directory
 
-- name: Clean all existing XML files within exports directory
-  file:
-    path: '/tmp/xml-exports/*.xml'
-    state: absent
+- name: Clean all 3+ days old XML files within exports directory
+  command: "find /tmp/xml-exports/ -name '*.xml' -mtime +3 -exec rm {} +"
 
 - name: Export XML file
   command: wp export --dir=/tmp/xml-exports/ --url='xml-io.proteusthemes.com/structurepress' --allow-root

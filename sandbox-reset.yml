@@ -10,3 +10,22 @@
   sudo: yes
   roles:
     - { role: sandbox-local, tags: [sandbox-local] }
+
+- name: Deploy XML files
+  hosts: sbs
+  become: yes
+  become_user: deployer
+  tasks:
+    - name: Find latest XML exports
+      find:
+        path:     /tmp/xml-exports/ # TODO var
+        recurse:  yes
+        age:      "-1h" # less than 1 hour old
+        patterns: "*.xml"
+      register: xmls_to_transfer
+
+    - name: Deploy latest XML files to as
+      copy:
+        src:  "{{ item.path }}"
+        dest: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new/"
+      with_items: "{{ xmls_to_transfer.files }}"
