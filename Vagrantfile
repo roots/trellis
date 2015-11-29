@@ -98,26 +98,24 @@ Vagrant.configure('2') do |config|
     # Fix for slow external network connections
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
     vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
+
+    # Set VM name
+    vb.name = config.vm.hostname
   end
 
-  # VMware Workstation settings
-  config.vm.provider 'vmware_workstation' do |vmw, override|
-    # Override provider box
-    override.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
+  # VMware Workstation/Fusion settings
+  ['vmware_fusion', 'vmware_workstation'].each do |provider|
+    config.vm.provider 'provider' do |vmw, override|
+      # Override provider box
+      override.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
 
-    # Customize  VM settings
-    vmw.vmx['memsize'] = memory
-    vmw.vmx['numvcpus'] = cpus
-  end
+      # Customize  VM settings
+      vmw.vmx['memsize'] = memory
+      vmw.vmx['numvcpus'] = cpus
 
-  # VMware Fusion settings
-  config.vm.provider 'vmware_fusion' do |vmf, override|
-    # Override provider box
-    override.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
-
-    # Customize  VM settings
-    vmf.vmx['memsize'] = memory
-    vmf.vmx['numvcpus'] = cpus
+      # Set VM name
+      vmw.name = config.vm.hostname
+    end
   end
 
   # Parallels settings
@@ -128,6 +126,9 @@ Vagrant.configure('2') do |config|
     # Customize  VM settings
     prl.memory = memory
     prl.cpus = cpus
+
+    # Set VM name
+    prl.name = config.vm.hostname
   end
 
 end
