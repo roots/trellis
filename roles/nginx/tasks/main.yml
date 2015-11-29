@@ -18,15 +18,11 @@
 - name: Grab h5bp/server-configs-nginx
   git: repo="https://github.com/h5bp/server-configs-nginx.git"
        dest=/etc/nginx/h5bp-server-configs
-       version=94b3680c9d13f108d6d62c22cba251b84f795aa8
+       version=82181a672a7c26f9bc8744fead80318d8a2520b1
        force=yes
 
 - name: Move h5bp configs
   command: creates=/etc/nginx/h5bp/ cp -R /etc/nginx/h5bp-server-configs/h5bp /etc/nginx/h5bp
-
-- name: Copy conf files
-  copy: src="{{ item }}" dest=/etc/nginx/{{ item | basename }} mode=644
-  with_fileglob: '*'
 
 - name: Create nginx.conf
   template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
