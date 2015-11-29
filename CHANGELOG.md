@@ -1,4 +1,5 @@
 ### HEAD
+* Add global `deploy_before` and `deploy_after` hooks ([#427](https://github.com/roots/trellis/pull/427))
 * Fix HSTS headers ([#424](https://github.com/roots/trellis/pull/424))
 * Notify Windows users about SSH forwarding ([#423](https://github.com/roots/trellis/pull/423))
 * Use append_privs for WP DB privileges ([#422](https://github.com/roots/trellis/pull/422))

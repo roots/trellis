@@ -6,6 +6,7 @@
 #   2. set one of the below hook variables to "{{ playbook_dir }}/path/to/tasks-file.yml" in `deploy.yml`
 #
 #  Available hooks:
+#    - deploy_before
 #    - deploy_initialize_before
 #    - deploy_initialize_after
 #    - deploy_update_before
@@ -18,3 +19,4 @@
 #    - deploy_share_after
 #    - deploy_finalize_before
 #    - deploy_finalize_after
+#    - deploy_after
