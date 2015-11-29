@@ -30,6 +30,7 @@ server {
     {%- endif %}
   {%- endif %}
 
+  add_header Fastcgi-Cache $upstream_cache_status;
   add_header X-Content-Type-Options "nosniff" always;
   add_header X-Frame-Options SAMEORIGIN;
   add_header X-Xss-Protection "1; mode=block" always;
@@ -61,7 +62,6 @@ server {
     try_files $uri =404;
 
     {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
-      add_header Fastcgi-Cache $upstream_cache_status;
       set $skip_cache 0;
 
       if ($query_string != "") {
