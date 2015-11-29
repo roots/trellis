@@ -13,6 +13,15 @@ if [ ! -f ~/.ssh/id_rsa ]; then
   echo -e "\n\n\n" | ssh-keygen -t rsa
 fi
 
+# Check SSH forwarding agent
+echo '
+printf "\033[1;33m"
+if ! ssh-add -l >/dev/null; then
+    printf "See: https://roots.io/trellis/docs/windows/#ssh-forwarding"
+fi
+printf "\033[0m\n\n"
+' >> /home/vagrant/.profile
+
 # Check that add-apt-repository is installed for non-standard Vagrant boxes
 if [ ! -f /usr/bin/add-apt-repository ]; then
   echo "Adding add-apt-repository..."
