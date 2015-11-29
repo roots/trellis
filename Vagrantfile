@@ -31,6 +31,10 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'ubuntu/trusty64'
   config.ssh.forward_agent = true
 
+  # Fix for: "stdin: is not a tty"
+  # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
+  config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
+
   # Required for NFS to work, pick any local IP
   config.vm.network :private_network, ip: '192.168.50.5'
 
