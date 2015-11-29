@@ -13,7 +13,7 @@ wordpress_sites:
       enabled: false
       subdomains: false
     ssl:
-      enabled: false
+      enabled: true
     cache:
       enabled: false
       duration: 30s

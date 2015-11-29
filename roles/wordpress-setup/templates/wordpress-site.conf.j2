@@ -31,9 +31,6 @@ server {
   {%- endif %}
 
   add_header Fastcgi-Cache $upstream_cache_status;
-  add_header X-Content-Type-Options "nosniff" always;
-  add_header X-Frame-Options SAMEORIGIN;
-  add_header X-Xss-Protection "1; mode=block" always;
 
   {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
     include h5bp/directive-only/spdy.conf;
