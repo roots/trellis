@@ -1,4 +1,4 @@
-### HEAD
+### 0.9.3: November 29th, 2015
 * Nginx role improvements: use more h5bp configs ([#428](https://github.com/roots/trellis/pull/428))
 * Add global `deploy_before` and `deploy_after` hooks ([#427](https://github.com/roots/trellis/pull/427))
 * Fix HSTS headers ([#424](https://github.com/roots/trellis/pull/424))
