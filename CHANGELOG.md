@@ -1,4 +1,11 @@
-### HEAD
+### 0.9.3: November 29th, 2015
+* Nginx role improvements: use more h5bp configs ([#428](https://github.com/roots/trellis/pull/428))
+* Add global `deploy_before` and `deploy_after` hooks ([#427](https://github.com/roots/trellis/pull/427))
+* Fix HSTS headers ([#424](https://github.com/roots/trellis/pull/424))
+* Notify Windows users about SSH forwarding ([#423](https://github.com/roots/trellis/pull/423))
+* Use append_privs for WP DB privileges ([#422](https://github.com/roots/trellis/pull/422))
+* Stop WP cron job emails ([#421](https://github.com/roots/trellis/pull/421))
+* Add WP-CLI bash completion script ([#407](https://github.com/roots/trellis/pull/407))
 * Add Composer config `github-oauth` variable ([#402](https://github.com/roots/trellis/pull/402))
 * Fix copy project local files in example hook ([#404](https://github.com/roots/trellis/pull/404))
 * Update cron variable to match Bedrock ([#394](https://github.com/roots/trellis/pull/394))

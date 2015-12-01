@@ -43,6 +43,10 @@ Vagrant.configure('2') do |config|
     # Required for NFS to work, pick any local IP
     default.vm.network :private_network, ip: '192.168.51.62'
 
+    # Fix for: "stdin: is not a tty"
+    # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
+    default.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
+
     # disable default mount
     default.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
 
@@ -158,26 +162,24 @@ Vagrant.configure('2') do |config|
     # Fix for slow external network connections
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
     vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
+
+    # Set VM name
+    vb.name = config.vm.hostname
   end
 
-  # VMware Workstation settings
-  config.vm.provider 'vmware_workstation' do |vmw, override|
-    # Override provider box
-    override.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
+  # VMware Workstation/Fusion settings
+  ['vmware_fusion', 'vmware_workstation'].each do |provider|
+    config.vm.provider 'provider' do |vmw, override|
+      # Override provider box
+      override.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
 
-    # Customize  VM settings
-    vmw.vmx['memsize'] = memory
-    vmw.vmx['numvcpus'] = cpus
-  end
+      # Customize  VM settings
+      vmw.vmx['memsize'] = memory
+      vmw.vmx['numvcpus'] = cpus
 
-  # VMware Fusion settings
-  config.vm.provider 'vmware_fusion' do |vmf, override|
-    # Override provider box
-    override.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
-
-    # Customize  VM settings
-    vmf.vmx['memsize'] = memory
-    vmf.vmx['numvcpus'] = cpus
+      # Set VM name
+      vmw.name = config.vm.hostname
+    end
   end
 
   # Parallels settings
@@ -188,6 +190,9 @@ Vagrant.configure('2') do |config|
     # Customize  VM settings
     prl.memory = memory
     prl.cpus = cpus
+
+    # Set VM name
+    prl.name = config.vm.hostname
   end
 
 end
