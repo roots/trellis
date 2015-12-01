@@ -1,5 +1,5 @@
 # Documentation: https://roots.io/trellis/docs/ssh-keys/
-admin_user: admin
+admin_user: "{{ vault_admin_user }}"
 
 users:
   - name: "{{ web_user }}"
@@ -21,8 +21,6 @@ users:
     keys:
       - https://github.com/primozcigler.keys
 
-web_user: deployer
-web_group: www-data
-web_sudoers:
-  - "/usr/sbin/service hhvm *"
-  - "/usr/sbin/service php5-fpm *"
+web_user: "{{ vault_web_user }}"
+web_group: "{{ vault_web_group }}"
+web_sudoers: "{{ vault_web_sudoers }}"

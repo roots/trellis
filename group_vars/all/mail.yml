@@ -1,6 +1,6 @@
 # Documentation: https://roots.io/trellis/docs/mail/
-mail_smtp_server: smtp.example.com:587
-mail_admin: admin@example.com
-mail_hostname: example.com
-mail_user: smtp_user
-mail_password: smtp_password
+mail_smtp_server: "{{ vault_mail_smtp_server }}"
+mail_admin: "{{ vault_mail_admin }}"
+mail_hostname: "{{ vault_mail_hostname }}"
+mail_user: "{{ vault_mail_user }}"
+mail_password: "{{ vault_mail_password }}"
