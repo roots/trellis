@@ -10,6 +10,7 @@ users:
       - https://github.com/primozcigler.keys
   - name: "{{ admin_user }}"
     groups:
+      - "{{ web_group }}"
       - sudo
     keys:
       - https://github.com/primozcigler.keys
