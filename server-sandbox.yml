@@ -46,3 +46,7 @@
         hour:   "8"
         job:    "ANSIBLE_NOCOLOR='1' ansible-playbook -i /opt/proteusnet/ops/hosts/sandbox_internal --vault-password-file=/opt/proteusnet/vault-key /opt/proteusnet/ops/sandbox-reset.yml > /var/log/sandbox/ansible-reset.log 2>&1"
       tags: after-roles
+
+    - name: Ensure blurify.sh script is present
+      copy: src=blurify.sh dest=/usr/local/bin/blurify.sh mode=0755
+      tags: after-roles
