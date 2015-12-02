@@ -14,7 +14,6 @@
     that:
       - "{{ admin_user in (users | map(attribute='name') | list) }}"
       - "{% for item in users if item.name == admin_user %}{{ 'sudo' in item.groups }}{% endfor %}"
-      - "{{ admin_user in sudoer_passwords.keys() }}"
     msg: "When `sshd_permit_root_login: false`, you must add `sudo` to the `groups` for admin_user (in `users` hash), and set a password for admin_user in `sudoer_passwords`. Otherwise Ansible could lose the ability to run the necessary sudo commands."
   when: not sshd_permit_root_login
 
