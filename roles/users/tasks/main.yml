@@ -22,10 +22,8 @@
   user: name="{{ item.name }}"
         group="{{ item.groups[0] }}"
         groups="{{ item.groups | join(',') }}"
-        password="{{ sudoer_passwords[item.name] | default(None) }}"
         state=present
         shell=/bin/bash
-        update_password=always
   with_items: users
 
 - name: Add web user sudoers items for services
