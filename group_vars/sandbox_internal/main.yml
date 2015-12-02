@@ -21,6 +21,7 @@ sb_wp_sites:
 wp_rsync_opts:
   root:
     - "--delete"
+    - "--omit-dir-times"
     - "--exclude='.git/'"
     - "--exclude='wp-config.php'"
     - "--exclude='wp-cli.yml'"
@@ -33,6 +34,7 @@ wp_rsync_opts:
   uploads:
     - "--delete"
     - "--ignore-existing"
+    - "--omit-dir-times"
     - "--exclude='.*'"
     - "--exclude='Makefile'"
 
