@@ -1,10 +1,10 @@
 ---
 - name: Fetch DB files
   fetch:
-    src:             "/opt/backup/mysql/demo_network-{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}.sql.gz"
-    dest:            /tmp/as1_db_file.sql.gz
+    src: "/opt/backup/mysql/demo_network-{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}.sql.gz"
+    dest: /tmp/as1_db_file.sql.gz
     fail_on_missing: yes
-    flat:            yes
+    flat: yes
 
 - name: Rsync WP (without uploads)
   synchronize:

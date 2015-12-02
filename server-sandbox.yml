@@ -38,7 +38,7 @@
 
     - name: Add cron to reset every day
       become: yes
-      become_user: root
+      become_user: "{{ admin_user }}"
       cron:
         name:   "reset sandbox every day"
         state:  "present"
