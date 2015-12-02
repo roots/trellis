@@ -6,5 +6,5 @@ install:
   - pip install ansible
 script:
   - ansible-galaxy install --force -r requirements.yml -p vendor/roles
-  - ansible-playbook --syntax-check -i hosts/development dev.yml --ask-vault-pass < $ANSIBLE_VAULT_KEY
-  - ansible-playbook --syntax-check -i hosts/development server.yml --ask-vault-pass < $ANSIBLE_VAULT_KEY
+  - ansible-playbook --syntax-check -i hosts/development dev.yml
+  - ansible-playbook --syntax-check -i hosts/development server.yml
