@@ -30,6 +30,7 @@ wp_rsync_opts:
     - "--exclude='/wp-content/advanced-cache.php'"
     - "--exclude='/wp-content/uploads/'"
     - "--exclude='/wp-content/cache/'"
+    - "--exclude='/wp-content/plugins/wp-rocket/'"
   uploads:
     - "--delete"
     - "--ignore-existing"
