@@ -55,12 +55,6 @@
     chdir: "{{ www_root }}/{{ item.key }}"
   with_dict: sb_wp_sites
 
-- name: Deactivate WP rocket
-  command: wp plugin deactivate wp-rocket --network --allow-root
-  args:
-    chdir: "{{ www_root }}/{{ item.key }}"
-  with_dict: sb_wp_sites
-
 - name: Get list of all user IDs
   command: wp user list --network --format=csv --fields=ID --allow-root
   args:
