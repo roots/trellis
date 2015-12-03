@@ -67,10 +67,17 @@
     chdir: "{{ www_root }}/{{ export_domain }}"
   register: wp_user_ids
 
-- name: Change all user passwords
+- name: Change all user passwords on xml-io
   command: "wp user update {{ item }} --user_pass='{{ dummy_pass }}' --allow-root"
   args:
     chdir: "{{ www_root }}/{{ export_domain }}"
+  with_items: "{{ wp_user_ids.stdout_lines }}"
+  when: item != 'ID'
+
+- name: Change all user passwords on sandbox
+  command: "wp user update {{ item }} --user_pass='{{ dummy_pass }}' --allow-root"
+  args:
+    chdir: "{{ www_root }}/sandbox.proteusthemes.com"
   with_items: "{{ wp_user_ids.stdout_lines }}"
   when: item != 'ID'
 
