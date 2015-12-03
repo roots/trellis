@@ -34,8 +34,8 @@
         dest:  "{{ xml_paths.remote }}/{{ item }}-latest.xml"
       with_items: sites_to_export
 
-    - name: Clean old XMLs
-      command: "find . -type f -name '*.xml' -mtime +5 -exec rm {} +"
-      args:
-        chdir: "{{ xml_paths.remote }}"
-      with_items: sites_to_export
+    # - name: Clean old XMLs
+    #   command: "find . -type f -name '*.xml' -mtime +5 -exec rm {} +"
+    #   args:
+    #     chdir: "{{ xml_paths.remote }}"
+    #   with_items: sites_to_export
