@@ -21,7 +21,7 @@ Trellis will configure a server with the following and more:
 
 * Ubuntu 14.04 Trusty LTS
 * Nginx (with optional FastCGI micro-caching)
-* PHP 5.6 (or [HHVM](http://hhvm.com/))
+* PHP 5.6
 * [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better)
 * SSL support (A+ on https://www.ssllabs.com/ssltest/)
 * HTTP/2 support (requires SSL)
@@ -87,10 +87,6 @@ Full documentation: https://roots.io/trellis/docs/deploys/
 4. To rollback a deploy, run `ansible-playbook rollback.yml -e "site=<site name> env=<environment>"`
 
 ## Configuration
-
-### HHVM
-
-[HHVM](http://hhvm.com/) can be used instead of PHP 5.6 by setting `hhvm: true` in `group_vars/all/main.yml`.
 
 ### WordPress Sites
 

@@ -1,7 +1,4 @@
 ---
-- name: restart hhvm
-  service: name=hhvm state=restarted
-
 - name: restart memcached
   service: name=memcached state=restarted
 

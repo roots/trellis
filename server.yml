@@ -22,8 +22,7 @@
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb], when: not mysql_remote_database }
     - { role: ssmtp, tags: [ssmtp mail] }
-    - { role: php, when: not hhvm, tags: [php] }
-    - { role: hhvm, when: hhvm, tags: [hhvm] }
+    - { role: php, tags: [php] }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
     - { role: memcached, tags: [memcached] }

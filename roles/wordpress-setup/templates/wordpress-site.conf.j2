@@ -88,12 +88,7 @@ server {
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
-
-    {% if hhvm -%}
-      fastcgi_pass unix:/var/run/hhvm/hhvm.sock;
-    {% else -%}
-      fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
-    {% endif -%}
+    fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
   }
 }
 

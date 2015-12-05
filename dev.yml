@@ -13,8 +13,7 @@
     - { role: mariadb, tags: [mariadb], when: not mysql_remote_database }
     - { role: ssmtp, tags: [ssmtp mail] }
     - { role: mailhog, tags: [mailhog mail] }
-    - { role: php, when: not hhvm, tags: [php] }
-    - { role: hhvm, when: hhvm, tags: [hhvm] }
+    - { role: php, tags: [php] }
     - { role: php5-xdebug, tags: [xdebug], when: xdebug_install | default(False) }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }

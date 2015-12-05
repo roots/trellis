@@ -19,5 +19,4 @@ users:
 web_user: web
 web_group: www-data
 web_sudoers:
-  - "/usr/sbin/service hhvm *"
   - "/usr/sbin/service php5-fpm *"

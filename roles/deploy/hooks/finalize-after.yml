@@ -34,10 +34,3 @@
   shell: sudo service php5-fpm reload
   args:
     chdir: "{{ deploy_helper.new_release_path }}"
-  when: not hhvm
-
-- name: Restart HHVM
-  shell: sudo service hhvm restart
-  args:
-    chdir: "{{ deploy_helper.new_release_path }}"
-  when: hhvm
