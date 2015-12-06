@@ -1,5 +1,5 @@
 ---
-- name: "WordPress Server: Install LEMP Stack with PHP 5.6 and MariaDB MySQL"
+- name: "WordPress Server: Install LEMP Stack with PHP 7.0 and MariaDB MySQL"
   hosts: web:&development
   become: yes
   remote_user: vagrant
@@ -14,10 +14,9 @@
     - { role: ssmtp, tags: [ssmtp mail] }
     - { role: mailhog, tags: [mailhog mail] }
     - { role: php, tags: [php] }
-    - { role: php5-xdebug, tags: [xdebug], when: xdebug_install | default(False) }
+    - { role: memcached, tags: [memcached] }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
-    - { role: memcached, tags: [memcached] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }

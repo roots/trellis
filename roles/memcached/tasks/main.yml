@@ -1,18 +1,27 @@
 ---
 - name: Install memcached
-  apt: name="{{ item }}" state=present update_cache=yes
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
   with_items:
-  - python-selinux
   - memcached
-  - php5-memcached
-  - libmemcached-tools
+  - php-memcached
 
 - name: Copy the client configuration file
-  template: src=memcached.j2 dest=/etc/memcached.conf
+  template:
+    src: memcached.conf.j2
+    dest: /etc/memcached.conf
   notify: restart memcached
 
 - name: Set the max open file descriptors
-  sysctl: name=fs.file-max value="{{ memcached_fs_file_max }}" state=present
+  sysctl:
+    name: fs.file-max
+    value: "{{ memcached_fs_file_max }}"
+    state: present
 
 - name: Start the memcached service
-  service: name=memcached state=started enabled=yes
+  service:
+    name: memcached
+    state: started
+    enabled: yes

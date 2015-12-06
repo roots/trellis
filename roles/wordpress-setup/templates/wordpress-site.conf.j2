@@ -88,7 +88,7 @@ server {
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
-    fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
+    fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
   }
 }
 

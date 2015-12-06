@@ -6,4 +6,4 @@
   service: name=nginx state=reloaded
 
 - name: reload php-fpm
-  service: name=php5-fpm state=reloaded
+  service: name=php7.0-fpm state=reloaded

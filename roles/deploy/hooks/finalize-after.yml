@@ -30,7 +30,7 @@
     chdir: "{{ deploy_helper.new_release_path }}"
   when: wp_installed | success and project.multisite.enabled | default(false)
 
-- name: Reload php5-fpm
-  shell: sudo service php5-fpm reload
+- name: Reload php-fpm
+  shell: sudo service php7.0-fpm reload
   args:
     chdir: "{{ deploy_helper.new_release_path }}"
