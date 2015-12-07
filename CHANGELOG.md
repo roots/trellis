@@ -1,3 +1,6 @@
+### HEAD
+* Switch to mainline Nginx, replaces SPDY with HTTP2 ([#389](https://github.com/roots/trellis/issues/389))
+
 ### 0.9.3: November 29th, 2015
 * Nginx role improvements: use more h5bp configs ([#428](https://github.com/roots/trellis/pull/428))
 * Add global `deploy_before` and `deploy_after` hooks ([#427](https://github.com/roots/trellis/pull/427))
