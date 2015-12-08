@@ -52,8 +52,18 @@ wp_emails:
   to: 'info@example.com'
 
 sites_to_export:
-  - structurepress
+  - hairpress
+  - webmarket
+  - carpress
+  - organique
+  - readable
+  - restaurant
+  - buildpress
+  - mentalpress
+  - cargopress
+  - legalpress
   - repairpress
+  - structurepress
 
 xml_paths:
   local:  "/tmp/xml-exports"
