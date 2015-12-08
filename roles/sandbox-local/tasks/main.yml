@@ -88,3 +88,8 @@
   args:
     chdir: "{{ www_root }}/{{ export_domain }}"
   with_items: "{{ sites_to_export }}"
+
+- name: Rename hairpresswptheme > hairpress
+  command: "mv hairpresswptheme.wordpress.{{ ansible_date_time.date }}.000.xml hairpress.wordpress.{{ ansible_date_time.date }}.000.xml"
+  args:
+    chdir: "{{ xml_paths.local }}/"
