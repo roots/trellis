@@ -35,6 +35,6 @@
       with_items: sites_to_export
 
     - name: Clean old XMLs # backslashes should be double escaped
-      command: "find . -regextype posix-egrep -regex '^\\.\\/({{ sites_to_export | join( '|' ) }})\\..+\\.xml$' -mtime +5 -exec rm {} +"
+      command: "find . -regextype posix-egrep -regex '^\\./({{ sites_to_export | join( '|' ) }})\\..+\\.xml$' -mtime +5 -exec rm -f {} +"
       args:
         chdir: "{{ xml_paths.remote }}/"
