@@ -38,4 +38,3 @@
       command: "find . -regextype posix-egrep -regex '^\\.\\/({{ sites_to_export | join( '|' ) }})\\..+\\.xml$' -mtime +5 -exec rm {} +"
       args:
         chdir: "{{ xml_paths.remote }}/"
-      with_items: sites_to_export
