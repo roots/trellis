@@ -15,6 +15,9 @@
   hosts: as
   become: yes
   become_user: deployer
+  vars:
+    piped_sites_to_export: "{{ sites_to_export | join( '|' ) }}"
+    regex_for_removing_old_xmls: '^\.\/({{ piped_sites_to_export }})\..+\.xml$'
   tasks:
     - name: Ensure target dir exists
       file:
@@ -35,6 +38,6 @@
       with_items: sites_to_export
 
     - name: Clean old XMLs # backslashes should be double escaped
-      command: "find . -regextype posix-egrep -regex '^\\.\\/({{ sites_to_export | join( '|' ) }})\\..+\\.xml$' -mtime +5 -exec rm {} +"
+      command: "find . -regextype posix-egrep -regex '{{ regex_for_removing_old_xmls }}' -mtime +5 -exec rm {} +"
       args:
         chdir: "{{ xml_paths.remote }}/"
