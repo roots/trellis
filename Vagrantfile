@@ -83,6 +83,7 @@ Vagrant.configure('2') do |config|
     else
       default.vm.provision :ansible do |ansible|
         ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
+        ansible.vault_password_file = "../vault-key"
         ansible.groups = {
           'web' => ['default'],
           'development' => ['default']
