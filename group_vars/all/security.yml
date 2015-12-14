@@ -4,7 +4,7 @@ ferm_input_list:
     filename: nginx_accept
   - type: dport_accept
     dport: [ssh]
-    saddr: ["{{ lookup('pipe', 'curl -4 https://diagnostic.opendns.com/myip') }}"]
+    saddr: "{{ ip_whitelist }}"
   - type: dport_limit
     dport: [ssh]
     seconds: 300
