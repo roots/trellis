@@ -1,4 +1,5 @@
 ### 0.9.3: November 29th, 2015
+* Add variable for whitelisted IPs ([#435](https://github.com/roots/trellis/pull/435))
 * Nginx role improvements: use more h5bp configs ([#428](https://github.com/roots/trellis/pull/428))
 * Add global `deploy_before` and `deploy_after` hooks ([#427](https://github.com/roots/trellis/pull/427))
 * Fix HSTS headers ([#424](https://github.com/roots/trellis/pull/424))
