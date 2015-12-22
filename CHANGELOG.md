@@ -1,4 +1,5 @@
 ### HEAD
+* Add `wp core update-db` to deploy finalize hook ([#411](https://github.com/roots/trellis/pull/411))
 * Use WP-CLI 0.21.1 ([#392](https://github.com/roots/trellis/pull/392))
 * Add variable for whitelisted IPs ([#435](https://github.com/roots/trellis/pull/435))
 
