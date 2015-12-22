@@ -1,4 +1,5 @@
 ### HEAD
+* se ipinfo.io instead of opendns for IP lookup ([#440](https://github.com/roots/trellis/pull/440))
 * Use WP-CLI 0.21.1 ([#392](https://github.com/roots/trellis/pull/392))
 * Add variable for whitelisted IPs ([#435](https://github.com/roots/trellis/pull/435))
 
