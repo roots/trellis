@@ -23,6 +23,7 @@ Trellis will configure a server with the following and more:
 * PHP 5.6 (or [HHVM](http://hhvm.com/))
 * [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better)
 * SSL support (A+ on https://www.ssllabs.com/ssltest/)
+* HTTP/2 support (requires SSL)
 * Composer
 * WP-CLI
 * sSMTP (mail delivery)
@@ -142,7 +143,7 @@ sSMTP handles outgoing mail. For the `development` environment, emails are sent 
 
 ## SSL
 
-Full SSL support is available for your WordPress sites. Trellis will also *auto-generate* self-signed certificates for development purposes. Our HTTPS implementation has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL docs](https://roots.io/trellis/docs/ssl/).
+Full SSL support is available for your WordPress sites. Trellis will also *auto-generate* self-signed certificates for development purposes. Our HTTPS implementation utilizes HTTP/2 and has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL docs](https://roots.io/trellis/docs/ssl/).
 
 ## Caching
 
