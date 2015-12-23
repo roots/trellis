@@ -1,4 +1,5 @@
 ### HEAD
+* Switch to https://api.ipify.org for IP lookup ([#444](https://github.com/roots/trellis/pull/444))
 * Replace `vagrant-hostsupdater` with `vagrant-hostmanager` ([#442](https://github.com/roots/trellis/pull/442))
 * Switch to mainline Nginx, replaces SPDY with HTTP2 ([#389](https://github.com/roots/trellis/issues/389))
 * Add `wp core update-db` to deploy finalize hook ([#411](https://github.com/roots/trellis/pull/411))
