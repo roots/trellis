@@ -44,8 +44,14 @@ Vagrant.configure('2') do |config|
 
   if Vagrant.has_plugin? 'vagrant-hostsupdater'
     config.hostsupdater.aliases = aliases + www_aliases
+
+  elsif Vagrant.has_plugin? 'vagrant-hostmanager'
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+    config.hostmanager.aliases = aliases + www_aliases
+
   else
-    fail_with_message "vagrant-hostsupdater missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostsupdater"
+    fail_with_message "vagrant-hostsupdater or vagrant-hostmanager required, please install the plugin with this command:\nvagrant plugin install vagrant-hostsupdater or vagrant plugin install vagrant-hostmanager"
   end
 
   if Vagrant::Util::Platform.windows?
