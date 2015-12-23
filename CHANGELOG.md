@@ -1,5 +1,8 @@
 ### HEAD
 * Switch to mainline Nginx, replaces SPDY with HTTP2 ([#389](https://github.com/roots/trellis/issues/389))
+* Add `wp core update-db` to deploy finalize hook ([#411](https://github.com/roots/trellis/pull/411))
+* Use WP-CLI 0.21.1 ([#392](https://github.com/roots/trellis/pull/392))
+* Add variable for whitelisted IPs ([#435](https://github.com/roots/trellis/pull/435))
 
 ### 0.9.3: November 29th, 2015
 * Nginx role improvements: use more h5bp configs ([#428](https://github.com/roots/trellis/pull/428))
