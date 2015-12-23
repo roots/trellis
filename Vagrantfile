@@ -109,7 +109,7 @@ Vagrant.configure('2') do |config|
 
   # VMware Workstation/Fusion settings
   ['vmware_fusion', 'vmware_workstation'].each do |provider|
-    config.vm.provider 'provider' do |vmw, override|
+    config.vm.provider provider do |vmw, override|
       # Override provider box
       override.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
 
