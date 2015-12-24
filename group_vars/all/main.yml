@@ -3,4 +3,4 @@ default_timezone: Etc/UTC
 hhvm: false
 www_root: /srv/www
 ip_whitelist:
-  - "{{ lookup('pipe', 'curl -4 https://diagnostic.opendns.com/myip') }}"
+  - "{{ lookup('pipe', 'curl -4 https://api.ipify.org') }}"
