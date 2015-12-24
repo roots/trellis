@@ -42,7 +42,7 @@ Trellis documentation is available at [https://roots.io/trellis/docs/](https://r
 * Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
 * vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
-* vagrant-hostsupdater - [Install](https://github.com/cogitatio/vagrant-hostsupdater#installation) • [Docs](https://github.com/cogitatio/vagrant-hostsupdater)
+* vagrant-hostmanager - [Install](https://github.com/smdahlen/vagrant-hostmanager#installation) • [Docs](https://github.com/smdahlen/vagrant-hostmanager)
 
 ## Installation
 
