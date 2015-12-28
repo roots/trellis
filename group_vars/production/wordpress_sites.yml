@@ -7,6 +7,7 @@ wordpress_sites:
     repo: git@github.com:roots/bedrock.git
     branch: master
     # subtree_path: site # relative path to your Bedrock/WP directory in your repo (above) if it is not the root (like the roots-example-project structure)
+    permalink_structure: "/%postname%/"
     multisite:
       enabled: false
       subdomains: false

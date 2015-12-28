@@ -37,6 +37,27 @@
   when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == False)
   changed_when: "'WordPress is already installed.' not in wp_install_results.stdout"
 
+- name: Check Existing Permalink Structure
+  command: wp rewrite list --format=count
+           --allow-root
+           --url="{{ item.value.env.wp_home }}"
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/current/"
+  register: wp_permalink_check_results
+  with_dict: wordpress_sites
+  when: item.value.site_install and not item.value.multisite.enabled | default(false)
+  changed_when: False
+
+- name: Setup Permalink Structure
+  command: wp rewrite structure {{ item.value.permalink_structure | default("/%postname%/") }}
+           --allow-root
+           --url="{{ item.value.env.wp_home }}"
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/current/"
+  register: wp_permalink_results
+  with_dict: wordpress_sites
+  when: "'No rewrite rules' in wp_permalink_check_results.results.0.stderr"
+
 - name: Install WP Multisite
   command: wp core multisite-install
            --allow-root
