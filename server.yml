@@ -1,12 +1,16 @@
 ---
+- include: variable-check.yml
+  vars:
+    playbook: server.yml
+
 - name: Determine Remote User
-  hosts: web
+  hosts: web:&{{ env }}
   gather_facts: false
   roles:
     - { role: remote-user, tags: [remote-user, always] }
 
 - name: WordPress Server - Install LEMP Stack with PHP 5.6 and MariaDB MySQL
-  hosts: web
+  hosts: web:&{{ env }}
   sudo: yes
   roles:
     - { role: common, tags: [common] }

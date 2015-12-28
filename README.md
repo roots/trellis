@@ -73,7 +73,7 @@ For remote servers, you'll need to have a base Ubuntu 14.04 server already creat
 2. Add your server IP/hostnames to `hosts/<environment>`.
 3. Specify public SSH keys for `users` in `group_vars/all/users.yml`. See the [SSH Keys docs](https://roots.io/trellis/docs/ssh-keys/).
 4. Consider setting `sshd_permit_root_login: false` in `group_vars/all/security.yml`. See the [Security docs](https://roots.io/trellis/docs/security/).
-5. Run `ansible-playbook -i hosts/<environment> server.yml`.
+5. Run `ansible-playbook server.yml -e env=<environment>`
 
 ## Deploying to remote servers
 
@@ -82,7 +82,7 @@ Full documentation: https://roots.io/trellis/docs/deploys/
 1. Add the `repo` (Git URL) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file.
 2. Set the `branch` you want to deploy (optional - defaults to `master`).
 3. Run `./deploy.sh <environment> <site name>`
-4. To rollback a deploy, run `ansible-playbook -i hosts/<environment> rollback.yml --extra-vars="site=<site name>"`
+4. To rollback a deploy, run `ansible-playbook rollback.yml -e "site=<site name> env=<environment>"`
 
 ## Configuration
 
@@ -167,7 +167,6 @@ Keep track of development and community news.
 This repo should keep it's pace with [Trellis](https://github.com/roots/trellis) itself. Here is the list of commits to future-me that haven't been merged yet, but I hope they will be at some point:
 
 - Refactor hosts files
-  - https://github.com/roots/trellis/commit/40cdb5e75f4b83090df3405d3d63829c81d763f0
   - https://github.com/roots/trellis/commit/f48e3d8c8c0381d3f2371ca1972036fe65e8e7a6
   - https://github.com/roots/trellis/commit/170eae84ad513ea1b769e388634aff0e922a1f55
 - PHP7: https://github.com/roots/trellis/pull/432
