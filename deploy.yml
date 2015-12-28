@@ -1,6 +1,10 @@
 ---
+- include: variable-check.yml
+  vars:
+    playbook: deploy.yml
+
 - name: Deploy WP site
-  hosts: web
+  hosts: web:&{{ env }}
   remote_user: "{{ web_user }}"
 
   vars:

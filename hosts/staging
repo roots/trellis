@@ -1,5 +1,8 @@
-[web]
-192.168.50.5
+# Add each host to the [staging] group and to a "type" group such as [web] or [db].
+# List each machine only once per [group], even if it will host multiple sites.
 
-[staging:children]
-web
+[staging]
+your_server_ip
+
+[web]
+your_server_ip

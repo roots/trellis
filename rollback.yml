@@ -1,6 +1,10 @@
 ---
+- include: variable-check.yml
+  vars:
+    playbook: rollback.yml
+
 - name: Rollback a Deploy
-  hosts: web
+  hosts: web:&{{ env }}
   remote_user: "{{ web_user }}"
 
   vars:
