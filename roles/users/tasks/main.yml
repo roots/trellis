@@ -50,7 +50,7 @@
   changed_when: false
   sudo: no
   register: admin_user_status
-  when: not sshd_permit_root_login
+  when: not sshd_permit_root_login and ansible_connection | default('ssh') != 'local'
 
 - name: Fail if root login will be disabled but admin_user cannot connect
   fail:
