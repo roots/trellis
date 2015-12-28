@@ -1,8 +1,10 @@
 ### HEAD
+* Fixes #374 - Remove composer vendor/bin from $PATH ([#449](https://github.com/roots/trellis/pull/449))
 * Fixes #436 - Let WP handle 404s for PHP files ([#448](https://github.com/roots/trellis/pull/448))
 * Fixes #297 - Use `php_flag` vs `php_admin_flag` ([#447](https://github.com/roots/trellis/pull/447))
 * Fixes #316 - Set WP permalink structure during install ([#316](https://github.com/roots/trellis/pull/316))
 * Switch to https://api.ipify.org for IP lookup ([#444](https://github.com/roots/trellis/pull/444))
+* Replace `vagrant-hostsupdater` with `vagrant-hostmanager` ([#442](https://github.com/roots/trellis/pull/442))
 * Switch to mainline Nginx, replaces SPDY with HTTP2 ([#389](https://github.com/roots/trellis/issues/389))
 * Add `wp core update-db` to deploy finalize hook ([#411](https://github.com/roots/trellis/pull/411))
 * Use WP-CLI 0.21.1 ([#392](https://github.com/roots/trellis/pull/392))
