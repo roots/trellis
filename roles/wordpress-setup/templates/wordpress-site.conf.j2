@@ -60,6 +60,7 @@ server {
 
   location ~ \.php$ {
     try_files $uri =404;
+    error_page 404 /index.php;
 
     {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
       set $skip_cache 0;
