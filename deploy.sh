@@ -1,7 +1,7 @@
 #!/bin/bash
 shopt -s nullglob
 
-DEPLOY_CMD="ansible-playbook -i hosts/$1 deploy.yml --extra-vars="site=$2""
+DEPLOY_CMD="ansible-playbook deploy.yml -e env=$1 -e site=$2"
 ENVIRONMENTS=( hosts/* )
 ENVIRONMENTS=( "${ENVIRONMENTS[@]##*/}" )
 NUM_ARGS=2
