@@ -1,4 +1,5 @@
 ### HEAD
+* Fixes #297 - Use `php_flag` vs `php_admin_flag` ([#447](https://github.com/roots/trellis/pull/447))
 * Fixes #316 - Set WP permalink structure during install ([#316](https://github.com/roots/trellis/pull/316))
 * Switch to https://api.ipify.org for IP lookup ([#444](https://github.com/roots/trellis/pull/444))
 * Switch to mainline Nginx, replaces SPDY with HTTP2 ([#389](https://github.com/roots/trellis/issues/389))
