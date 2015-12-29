@@ -23,14 +23,13 @@ wordpress_sites:
       wp_env: production
       db_name: example_prod
       db_user: example_dbuser
-      db_password: example_dbpassword
-      # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/
-      # These CANNOT contain the characters "{%" in succession
-      auth_key: "generateme"
-      secure_auth_key: "generateme"
-      logged_in_key: "generateme"
-      nonce_key: "generateme"
-      auth_salt: "generateme"
-      secure_auth_salt: "generateme"
-      logged_in_salt: "generateme"
-      nonce_salt: "generateme"
+      # Define the following variables in group_vars/production/vault.yml
+      # db_password:
+      # auth_key:
+      # secure_auth_key:
+      # logged_in_key:
+      # nonce_key:
+      # auth_salt:
+      # secure_auth_salt:
+      # logged_in_salt:
+      # nonce_salt:

@@ -10,7 +10,7 @@
 
 - name: Create/assign database user to db and grant permissions
   mysql_user: name="{{ item.value.env.db_user }}"
-              password="{{ item.value.env.db_password }}"
+              password="{{ vault_wordpress_sites[item.key].env.db_password }}"
               append_privs=yes
               priv="{{ item.value.env.db_name | default(item.key) }}.*:ALL"
               state=present
@@ -31,7 +31,7 @@
             target="/tmp/{{ item.value.db_import | basename }}"
             login_host="{{ item.value.env.db_host | default('localhost') }}"
             login_user="{{ item.value.env.db_user }}"
-            login_password="{{ item.value.env.db_password }}"
+            login_password="{{ vault_wordpress_sites[item.key].env.db_password }}"
   with_dict: wordpress_sites
   when: item.value.db_import | default(False)
   notify: reload nginx

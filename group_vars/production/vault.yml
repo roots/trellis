@@ -1,0 +1,22 @@
+# Documentation: https://roots.io/trellis/docs/vault/
+vault_mysql_root_password: productionpw
+
+# Documentation: https://roots.io/trellis/docs/security/
+vault_sudoer_passwords:
+  admin: $6$rounds=100000$JUkj1d3hCa6uFp6R$3rZ8jImyCpTP40e4I5APx7SbBvDCM8fB6GP/IGOrsk/GEUTUhl1i/Q2JNOpj9ashLpkgaCxqMqbFKdZdmAh26/
+
+# Variables to accompany `group_vars/production/wordpress_sites.yml`
+vault_wordpress_sites:
+  example.com:
+    env:
+      db_password: example_dbpassword
+      # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/
+      # These CANNOT contain the characters "{%" in succession
+      auth_key: "generateme"
+      secure_auth_key: "generateme"
+      logged_in_key: "generateme"
+      nonce_key: "generateme"
+      auth_salt: "generateme"
+      secure_auth_salt: "generateme"
+      logged_in_salt: "generateme"
+      nonce_salt: "generateme"

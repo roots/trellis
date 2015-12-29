@@ -28,7 +28,7 @@
            --url="{{ item.value.env.wp_home }}"
            --title="{{ item.value.site_title | default(item.key) }}"
            --admin_user="{{ item.value.admin_user }}"
-           --admin_password="{{ item.value.admin_password }}"
+           --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
@@ -66,7 +66,7 @@
            --subdomains="{{ item.value.multisite.subdomains | default('false') }}"
            --title="{{ item.value.site_title | default(item.key) }}"
            --admin_user="{{ item.value.admin_user }}"
-           --admin_password="{{ item.value.admin_password }}"
+           --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
