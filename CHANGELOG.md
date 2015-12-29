@@ -1,4 +1,5 @@
 ### HEAD
+* Replace strip_www with optional redirect to www/non-www ([#452](https://github.com/roots/trellis/pull/452))
 * Accommodate file encryption via ansible vault ([#317](https://github.com/roots/trellis/pull/317))
 * Fixes #353 - Allow insecure curl reqs for cron ([#450](https://github.com/roots/trellis/pull/450))
 * Fixes #374 - Remove composer vendor/bin from $PATH ([#449](https://github.com/roots/trellis/pull/449))
