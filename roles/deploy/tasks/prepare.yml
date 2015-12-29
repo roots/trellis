@@ -1,5 +1,5 @@
 ---
-- include: "{{ deploy_prepare_before | default('../hooks/example.yml') }}"
+- include: "{{ deploy_prepare_before | default('../hooks/example.yml') }} tags=deploy-prepare-before"
 
 - name: write unfinished file
   file:
@@ -34,4 +34,4 @@
     chdir: "{{ project_source_path }}"
   when: project_subtree_path != 'False'
 
-- include: "{{ deploy_prepare_after | default('../hooks/example.yml') }}"
+- include: "{{ deploy_prepare_after | default('../hooks/example.yml') }} tags=deploy-prepare-after"

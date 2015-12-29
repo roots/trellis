@@ -1,7 +1,7 @@
 ---
-- include: database.yml
-- include: self-signed-certificate.yml
-- include: nginx.yml
+- include: database.yml tags=wordpress-setup-database
+- include: self-signed-certificate.yml tags=wordpress-setup-self-signed-certificate
+- include: nginx.yml tags=wordpress-setup-nginx
 
 - name: Create web root
   file:

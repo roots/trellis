@@ -1,5 +1,5 @@
 ---
-- include: "{{ deploy_finalize_before | default('../hooks/example.yml') }}"
+- include: "{{ deploy_finalize_before | default('../hooks/example.yml') }} tags=deploy-finalize-before"
 
 - name: Finalize the deploy
   deploy_helper:
@@ -7,7 +7,7 @@
     release: "{{ deploy_helper.new_release }}"
     state: finalize
 
-- include: "{{ deploy_finalize_after | default('../hooks/example.yml') }}"
+- include: "{{ deploy_finalize_after | default('../hooks/example.yml') }} tags=deploy-finalize-after"
 
 - debug:
     msg: "{{ project_version }}@{{ git_commit.after | truncate(7, True, '') }} deployed as release {{ deploy_helper.new_release }}"
