@@ -1,6 +1,8 @@
 ### HEAD
+* Replace strip_www with optional redirect to www/non-www ([#452](https://github.com/roots/trellis/pull/452))
 * Fixes #353 - Allow insecure curl reqs for cron ([#450](https://github.com/roots/trellis/pull/450))
 * Fixes #374 - Remove composer vendor/bin from $PATH ([#449](https://github.com/roots/trellis/pull/449))
+* Refactor hosts files ([#313](https://github.com/roots/trellis/pull/313))
 * Fixes #436 - Let WP handle 404s for PHP files ([#448](https://github.com/roots/trellis/pull/448))
 * Fixes #297 - Use `php_flag` vs `php_admin_flag` ([#447](https://github.com/roots/trellis/pull/447))
 * Fixes #316 - Set WP permalink structure during install ([#316](https://github.com/roots/trellis/pull/316))
