@@ -7,7 +7,7 @@ wordpress_sites:
     site_install: true
     site_title: Example Site
     admin_user: admin
-    admin_password: admin
+    # admin_password: (defined in group_vars/development/vault.yml)
     admin_email: admin@example.dev
     permalink_structure: "/%postname%/"
     multisite:
@@ -25,4 +25,4 @@ wordpress_sites:
       wp_env: development
       db_name: example_dev
       db_user: example_dbuser
-      db_password: example_dbpassword
+      # db_password: (defined in group_vars/development/vault.yml)

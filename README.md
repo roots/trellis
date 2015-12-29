@@ -64,14 +64,14 @@ example.com/    - Primary folder for the project
 
 ## Development setup
 
-1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/development/wordpress_sites.yml`
+1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`.
 2. Run `vagrant up`
 
 ## Remote server setup (staging/production)
 
 For remote servers, you'll need to have a base Ubuntu 14.04 server already created.
 
-1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>/wordpress_sites.yml`. Also see the [Passwords docs](https://roots.io/trellis/docs/passwords/).
+1. Configure your [WordPress sites](#wordpress-sites) in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml`. See the [Vault docs](https://roots.io/trellis/docs/vault/) for how to encrypt files containing passwords.
 2. Add your server IP/hostnames to `hosts/<environment>`.
 3. Specify public SSH keys for `users` in `group_vars/all/users.yml`. See the [SSH Keys docs](https://roots.io/trellis/docs/ssh-keys/).
 4. Consider setting `sshd_permit_root_login: false` in `group_vars/all/security.yml`. See the [Security docs](https://roots.io/trellis/docs/security/).
@@ -96,9 +96,9 @@ Full documentation: https://roots.io/trellis/docs/deploys/
 
 Before using Trellis, you must configure your WordPress sites.
 
-The `group_vars` directory contains directories for each environment (`development`, `staging`, and `production`). Each environment has its own `wordpress_sites.yml` variables file in [YAML](http://en.wikipedia.org/wiki/YAML) format.
+The `group_vars` directory contains directories for each environment (`development`, `staging`, and `production`). Each environment has its own `wordpress_sites.yml` variables file in [YAML](http://en.wikipedia.org/wiki/YAML) format, with an accompanying `vault.yml` file for sensitive information.
 
-For example: configure the sites on your Vagrant development VM by editing `group_vars/development/wordpress_sites.yml`.
+For example: configure the sites on your Vagrant development VM by editing `group_vars/development/wordpress_sites.yml` and `group_vars/development/vault.yml`.
 
 `wordpress_sites` is the top-level dictionary used to define the WordPress sites, databases, Nginx vhosts, etc that will be created. Each site's variables are nested under a site "key" (e.g., `example.com`). This key is just a descriptive name and serves as the default value for some variables. See our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development/wordpress_sites.yml) for a complete working example.
 
@@ -120,7 +120,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 * `db_import` - Path to local `sql` dump file which will be imported (optional)
 * `admin_user` - WP admin user name (*development* only, required)
 * `admin_email` - WP admin email address (*development* only, required)
-* `admin_password` - WP admin user password (*development* only, required)
+* `admin_password` - WP admin user password (*development* only, required, in `vault.yml`)
 * `multisite` - hash of multisite options. See the [Multisite docs](https://roots.io/trellis/docs/multisite/).
   * `enabled` - Multisite enabled flag (required, set to `false`)
   * `subdomains` - subdomains option
@@ -135,7 +135,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
   * `wp_env` - environment (required, matches group name: `development`, `staging`, `production`)
   * `db_name` - database name (required)
   * `db_user` - database username (required)
-  * `db_password` - database password (required)
+  * `db_password` - database password (required, in `vault.yml`)
   * `db_host` - database hostname (default: `localhost`)
   * `domain_current_site` (required if multisite.enabled is `true`)
 
