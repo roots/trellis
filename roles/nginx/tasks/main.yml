@@ -21,6 +21,7 @@
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
   notify: reload nginx
+  tags: [diffie-hellman]
 
 - name: Grab h5bp/server-configs-nginx
   git:

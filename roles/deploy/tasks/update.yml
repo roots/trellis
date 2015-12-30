@@ -1,5 +1,5 @@
 ---
-- include: "{{ deploy_update_before | default('../hooks/example.yml') }}"
+- include: "{{ deploy_update_before | default('../hooks/example.yml') }} tags=deploy-update-before"
 
 - name: Check whether project source path is a git repo
   stat:
@@ -28,4 +28,4 @@
     accept_hostkey: yes
   register: git_commit
 
-- include: "{{ deploy_update_after | default('../hooks/example.yml') }}"
+- include: "{{ deploy_update_after | default('../hooks/example.yml') }} tags=deploy-update-after"

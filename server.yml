@@ -17,7 +17,7 @@
     - { role: swapfile, swapfile_size: 1GB, tags: [swapfile] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
-    - { role: ntp }
+    - { role: ntp, tags: [ntp] }
     - { role: users, tags: [users] }
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb], when: not mysql_remote_database }

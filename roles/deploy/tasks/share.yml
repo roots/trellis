@@ -1,5 +1,5 @@
 ---
-- include: "{{ deploy_share_before | default('../hooks/example.yml') }}"
+- include: "{{ deploy_share_before | default('../hooks/example.yml') }} tags=deploy-share-before"
 
 - name: Ensure shared sources are present
   file:
@@ -21,4 +21,4 @@
     state: link
   with_items: project_shared_children
 
-- include: "{{ deploy_share_after | default('../hooks/example.yml') }}"
+- include: "{{ deploy_share_after | default('../hooks/example.yml') }} tags=deploy-share-after"

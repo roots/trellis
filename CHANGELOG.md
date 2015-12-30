@@ -1,4 +1,5 @@
 ### HEAD
+* Add tags to select includes and tasks ([#453](https://github.com/roots/trellis/pull/453))
 * Improve Git deploy implementation via `git archive` ([#451](https://github.com/roots/trellis/pull/451))
 * Replace strip_www with optional redirect to www/non-www ([#452](https://github.com/roots/trellis/pull/452))
 * Accommodate file encryption via ansible vault ([#317](https://github.com/roots/trellis/pull/317))

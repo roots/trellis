@@ -1,9 +1,9 @@
 ---
-- include: "{{ deploy_before | default('../hooks/example.yml') }}"
+- include: "{{ deploy_before | default('../hooks/example.yml') }} tags=deploy-before"
 - include: initialize.yml
 - include: update.yml
 - include: prepare.yml
 - include: build.yml
 - include: share.yml
 - include: finalize.yml
-- include: "{{ deploy_after | default('../hooks/example.yml') }}"
+- include: "{{ deploy_after | default('../hooks/example.yml') }} tags=deploy-after"
