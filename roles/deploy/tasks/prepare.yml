@@ -6,28 +6,32 @@
     path: "{{ project_source_path }}/{{ deploy_helper.unfinished_filename }}"
     state: touch
 
-- name: Copy files to new build dir
-  command: cp -pr {{ project_source_path }} {{ deploy_helper.new_release_path }}
-
-- name: Check for project subtree
+- name: Check for project repo subtree
   stat:
-    path: "{{ deploy_helper.new_release_path }}/{{ project_subtree_path }}"
+    path: "{{ project_source_path }}/{{ project_subtree_path }}"
   register: project_subtree_full_path
   when: project_subtree_path != 'False'
 
-- name: Fail if project_subtree_path is set incorrectly
+- name: Fail if repo_subtree_path is set incorrectly
   fail:
-    msg: "subtree is set to '{{ project_subtree_path }}' but that path does not exist in the repo. Edit `subtree_path` for '{{ site }}' in `wordpress_sites.yml`."
+    msg: "repo subtree is set to '{{ project_subtree_path }}' but that path does not exist in the repo. Edit `repo_subtree_path` for '{{ site }}' in `wordpress_sites.yml`."
   when: project_subtree_path != 'False' and not project_subtree_full_path.stat.exists
 
-- name: Move project subtree into root folder
-  shell: mv {{ deploy_helper.new_release_path }}/{{ project_subtree_path }}/* {{ deploy_helper.new_release_path }}
-  when: project_subtree_path != 'False'
-
-- name: Remove unwanted files/folders from new release
+- name: Create new release dir
   file:
-    path: "{{ deploy_helper.new_release_path }}/{{ item }}"
-    state: absent
-  with_items: project_unwanted_items
+    path: "{{ deploy_helper.new_release_path }}"
+    state: directory
+
+- name: Run git archive to populate new build dir
+  shell: git archive {{ project_version }} | tar xf - -C {{ deploy_helper.new_release_path }}
+  args:
+    chdir: "{{ project_source_path }}"
+  when: project_subtree_path == 'False'
+
+- name: Run git archive with subdirectory to populate new build dir
+  shell: git archive {{ project_version }} {{ project_subtree_path }} | tar -x --strip-components {{ project_subtree_path.split('/') | count }} -f - -C {{ deploy_helper.new_release_path }}
+  args:
+    chdir: "{{ project_source_path }}"
+  when: project_subtree_path != 'False'
 
 - include: "{{ deploy_prepare_after | default('../hooks/example.yml') }}"

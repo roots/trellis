@@ -1,16 +1,13 @@
 # If you use the "git" strategy:
 # - you must set a repository (no default)
 project_git_repo: "{{ project.repo }}"
-project_subtree_path: "{{ project.subtree_path | default(false) }}"
+project_subtree_path: "{{ project.repo_subtree_path | default(false) }}"
 # - you can set the git ref to deploy (can be a branch, tag or commit hash)
 project_version: "{{ project.branch | default('master') }}"
 
 # The source_path is used to fetch the tags from git, or synchronise via rsync. This way
 # you do not have to download/sync the entire project on every deploy
 project_source_path: "{{ project_root }}/shared/source"
-
-# Files or folders to remove from the source when deploying
-project_unwanted_items: ['.git']
 
 # There are certain folders you'll want to copy from release to release to speed up deploys.
 # Examples: Composer's `vendor` folder, npm's `node_modules`.
