@@ -1,7 +1,28 @@
-# No edits are necessary
+# If you want to run `dev.yml` manually via the `ansible-playbook`
+# command (vs. `vagrant up` or `vagrant provision`), you might be
+# inclined to define your development host information in this file.
+# We recommend instead that you use the `-i` (inventory) option with
+# your `ansible-playbook` command to specify the custom inventory file
+# Vagrant has created for the VM. Vagrant's custom inventory
+# includes necessary non-standard SSH connection information.
+#
+# Here is an example command:
+#
+# `ansible-playbook dev.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory`
+#
+# The `.vagrant` directory above is usually in the same directory as
+# your `Vagrantfile`. If not, you will need to adjust this path in the
+# command.
+#
+# One reason you may want to run `dev.yml` via the `ansible-playbook`
+# command is for the convenience of adding Ansible options via the
+# command line (e.g., `--tags`, `--skip-tags`, or `-vvvv`). In contrast,
+# the commands `vagrant up` and `vagrant provision` would only run the
+# `dev.yml` playbook with such options if you were edit the options
+# into the Vagrantfile's `config.vm.provision` section.
 
 [development]
-127.0.0.1
+192.168.50.5
 
 [web]
-127.0.0.1
+192.168.50.5
