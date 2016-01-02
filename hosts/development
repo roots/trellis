@@ -1,7 +1,7 @@
 # No edits are necessary
 
 [development]
-127.0.0.1
+127.0.0.1 ansible_connection=local
 
 [web]
-127.0.0.1
+127.0.0.1 ansible_connection=local
