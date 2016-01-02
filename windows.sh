@@ -51,5 +51,5 @@ fi
 cp -R ${ANSIBLE_PATH}/hosts ${TEMP_HOSTS} && chmod -x ${TEMP_HOSTS}/*
 echo "Running Ansible Playbooks"
 cd ${ANSIBLE_PATH}/
-ansible-playbook ${ANSIBLE_PATH}/dev.yml -i ${TEMP_HOSTS}/development --sudo --user=vagrant --connection=local
+ansible-playbook ${ANSIBLE_PATH}/dev.yml -i ${TEMP_HOSTS}/development --sudo --user=vagrant
 rm -rf ${TEMP_HOSTS}
