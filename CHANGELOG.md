@@ -1,4 +1,5 @@
 ### HEAD
+* Fix development hosts file ([#455](https://github.com/roots/trellis/pull/455))
 * Fixes #353 - Allow insecure curl reqs for cron ([#450](https://github.com/roots/trellis/pull/450))
 * Fixes #374 - Remove composer vendor/bin from $PATH ([#449](https://github.com/roots/trellis/pull/449))
 * Refactor hosts files ([#313](https://github.com/roots/trellis/pull/313))
