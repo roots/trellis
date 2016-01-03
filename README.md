@@ -12,7 +12,7 @@ Configure servers for [Bedrock](https://roots.io/bedrock/)-based WordPress sites
 |                        | Command
 | ---------------------- | ------------------------------------------------ |
 | **Development**        | `vagrant up`                                     |
-| **Staging/Production** |`ansible-playbook -i hosts/production server.yml` |
+| **Staging/Production** |`ansible-playbook server.yml -e env=production` |
 | **Deploying**          | `./deploy.sh production <site name>`             |
 
 ## What's included
