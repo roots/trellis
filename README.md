@@ -12,7 +12,7 @@ Configure servers for WordPress sites with a single command:
 |                        | Command
 | ---------------------- | ------------------------------------------------ |
 | **Development**        | `vagrant up`                                     |
-| **Sandbox/Production** |`ansible-playbook -i hosts/production server.yml` |
+| **Sandbox/Production** |`ansible-playbook server.yml -e env=production` |
 
 ## What's included
 
@@ -166,8 +166,6 @@ Keep track of development and community news.
 
 This repo should keep it's pace with [Trellis](https://github.com/roots/trellis) itself. Here is the list of commits to future-me that haven't been merged yet, but I hope they will be at some point:
 
-- Refactor hosts files
-  - https://github.com/roots/trellis/commit/170eae84ad513ea1b769e388634aff0e922a1f55
 - PHP7: https://github.com/roots/trellis/pull/432
 
 I've cherry-picked till https://github.com/roots/trellis/commit/f0f43d31de05a3924ce8bd402d54fd33aca128db.
