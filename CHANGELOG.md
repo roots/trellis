@@ -1,6 +1,7 @@
 ### HEAD
+* Add pre-flight checks for common deploy problems ([#459](https://github.com/roots/trellis/pull/459))
 * Prevent duplicate hosts entries made by `vagrant-hostsupdater` ([#458](https://github.com/roots/trellis/pull/458))
-* Fix README's `ansible-playbook` command for server.yml ([#456](https://github.com/roots/trellis/pull/456)) 
+* Fix README's `ansible-playbook` command for server.yml ([#456](https://github.com/roots/trellis/pull/456))
 * Fix development hosts file ([#455](https://github.com/roots/trellis/pull/455))
 * Add tags to select includes and tasks ([#453](https://github.com/roots/trellis/pull/453))
 * Improve Git deploy implementation via `git archive` ([#451](https://github.com/roots/trellis/pull/451))
