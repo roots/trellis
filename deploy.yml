@@ -14,5 +14,38 @@
     project: "{{ wordpress_sites[site] }}"
     project_root: "{{ www_root }}/{{ site }}"
 
+  pre_tasks:
+    - name: Ensure site is valid
+      connection: local
+      fail:
+        msg: "Site `{{ site }}` is not valid. Available sites to deploy: {{ wordpress_sites.keys() | join(', ') }}"
+      when: wordpress_sites[site] is not defined
+
+    - name: Ensure repo is valid
+      connection: local
+      fail:
+        msg: |
+          Invalid Git repository.
+          Ensure that your site's `repo` variable is defined in `group_vars/{{ env }}/wordpress_sites.yml` and uses the SSH format (example: git@github.com/roots/bedrock.git)
+          More info:
+          > https://roots.io/trellis/docs/deploys/
+      when: project.repo is not defined or not project.repo | match("git@.*.git")
+
+    - name: Verify remote repo
+      command: git ls-remote {{ project.repo }} HEAD
+      changed_when: false
+      ignore_errors: true
+      no_log: true
+      register: repo_check
+
+    - name: Failed connection to remote repo
+      fail:
+        msg: |
+          Git repo {{ project.repo }} cannot be accessed. Please verify the repository exists and you have SSH forwarding set up correctly.
+          More info:
+          > https://roots.io/trellis/docs/deploys/#ssh-keys
+          > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
+      when: repo_check | failed
+
   roles:
     - deploy
