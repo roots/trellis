@@ -40,14 +40,12 @@ wp_rsync_opts:
 # replace these emails to info@example.com when importing
 wp_emails:
   from:
-    - 'primoz\.cigler@gmail\.com'
     - 'primoz@proteusnet\.com'
-    - 'primoz\.cigler@outlook\.com'
     - 'info@proteusthemes\.com'
-    - 'capuderg@gmail\.com'
+    - 'gregor\.capuder@proteusnet\.com'
     - 'jejcic\.jaka@gmail\.com'
     - 'jaka@spaka\.si'
-    - 'lenagregorcic@gmail\.com'
+    - 'lena\.gregorcic@proteusnet\.com'
     - 'marko\.prelec@proteusnet\.com'
   to: 'info@example.com'
 
