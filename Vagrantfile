@@ -36,7 +36,7 @@ Vagrant.configure('2') do |config|
   config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
 
   # Required for NFS to work, pick any local IP
-  config.vm.network :private_network, ip: '192.168.50.5'
+  config.vm.network :private_network, ip: '192.168.50.5', hostsupdater: 'skip'
 
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname

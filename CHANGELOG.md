@@ -1,4 +1,5 @@
 ### HEAD
+* Prevent duplicate hosts entries made by `vagrant-hostsupdater` ([#458](https://github.com/roots/trellis/pull/458))
 * Fix README's `ansible-playbook` command for server.yml ([#456](https://github.com/roots/trellis/pull/456)) 
 * Fix development hosts file ([#455](https://github.com/roots/trellis/pull/455))
 * Add tags to select includes and tasks ([#453](https://github.com/roots/trellis/pull/453))
