@@ -22,5 +22,4 @@ php_opcache_fast_shutdown: 1
 php_opcache_interned_strings_buffer: 8
 php_opcache_max_accelerated_files: 4000
 php_opcache_memory_consumption: 128
-php_opcache_memory_consumption: 128
 php_opcache_revalidate_freq: 60
