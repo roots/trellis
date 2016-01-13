@@ -1,5 +1,6 @@
 ---
-- include: directories.yml tags=wordpress-install-directories
+- include: directories.yml
+  tags: wordpress-install-directories
 
 - name: Create .env file
   template: src="env.j2"

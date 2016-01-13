@@ -1,7 +1,7 @@
 ---
 - name: "WordPress Server: Install LEMP Stack with PHP 5.6 and MariaDB MySQL"
   hosts: web:&development
-  sudo: yes
+  become: yes
   remote_user: vagrant
 
   roles:

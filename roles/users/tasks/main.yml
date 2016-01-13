@@ -48,7 +48,7 @@
   local_action: command ansible {{ inventory_hostname }} -m ping -i {{ inventory_file }} -u {{ admin_user }}
   failed_when: false
   changed_when: false
-  sudo: no
+  become: no
   register: admin_user_status
   when: not sshd_permit_root_login
 
