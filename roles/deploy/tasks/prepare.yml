@@ -1,5 +1,6 @@
 ---
-- include: "{{ deploy_prepare_before | default('../hooks/example.yml') }} tags=deploy-prepare-before"
+- include: "{{ deploy_prepare_before | default('../hooks/example.yml') }}"
+  tags: deploy-prepare-before
 
 - name: write unfinished file
   file:
@@ -8,14 +9,14 @@
 
 - name: Check for project repo subtree
   stat:
-    path: "{{ project_source_path }}/{{ project_subtree_path }}"
+    path: "{{ project_source_path }}/{{ project.repo_subtree_path }}"
   register: project_subtree_full_path
-  when: project_subtree_path != 'False'
+  when: project.repo_subtree_path is defined
 
 - name: Fail if repo_subtree_path is set incorrectly
   fail:
-    msg: "repo subtree is set to '{{ project_subtree_path }}' but that path does not exist in the repo. Edit `repo_subtree_path` for '{{ site }}' in `wordpress_sites.yml`."
-  when: project_subtree_path != 'False' and not project_subtree_full_path.stat.exists
+    msg: "repo subtree is set to '{{ project.repo_subtree_path }}' but that path does not exist in the repo. Edit `repo_subtree_path` for '{{ site }}' in `wordpress_sites.yml`."
+  when: project_subtree_full_path is defined and not project_subtree_full_path.stat.exists
 
 - name: Create new release dir
   file:
@@ -26,12 +27,13 @@
   shell: git archive {{ project_version }} | tar xf - -C {{ deploy_helper.new_release_path }}
   args:
     chdir: "{{ project_source_path }}"
-  when: project_subtree_path == 'False'
+  when: project.repo_subtree_path is not defined
 
 - name: Run git archive with subdirectory to populate new build dir
-  shell: git archive {{ project_version }} {{ project_subtree_path }} | tar -x --strip-components {{ project_subtree_path.split('/') | count }} -f - -C {{ deploy_helper.new_release_path }}
+  shell: git archive {{ project_version }} {{ project.repo_subtree_path }} | tar -x --strip-components {{ project.repo_subtree_path.split('/') | count }} -f - -C {{ deploy_helper.new_release_path }}
   args:
     chdir: "{{ project_source_path }}"
-  when: project_subtree_path != 'False'
+  when: project.repo_subtree_path is defined
 
-- include: "{{ deploy_prepare_after | default('../hooks/example.yml') }} tags=deploy-prepare-after"
+- include: "{{ deploy_prepare_after | default('../hooks/example.yml') }}"
+  tags: deploy-prepare-after

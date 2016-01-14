@@ -1,5 +1,6 @@
 ---
-- include: "{{ deploy_update_before | default('../hooks/example.yml') }} tags=deploy-update-before"
+- include: "{{ deploy_update_before | default('../hooks/example.yml') }}"
+  tags: deploy-update-before
 
 - name: Check whether project source path is a git repo
   stat:
@@ -26,6 +27,18 @@
     dest: "{{ project_source_path }}"
     version: "{{ project_version }}"
     accept_hostkey: yes
-  register: git_commit
+  ignore_errors: true
+  no_log: true
+  register: git_clone
 
-- include: "{{ deploy_update_after | default('../hooks/example.yml') }} tags=deploy-update-after"
+- name: Failed connection to remote repo
+  fail:
+    msg: |
+      Git repo {{ project.repo }} cannot be accessed. Please verify the repository exists and you have SSH forwarding set up correctly.
+      More info:
+      > https://roots.io/trellis/docs/deploys/#ssh-keys
+      > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
+  when: git_clone | failed
+
+- include: "{{ deploy_update_after | default('../hooks/example.yml') }}"
+  tags: deploy-update-after
