@@ -57,7 +57,7 @@
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   register: wp_permalink_results
   with_dict: wordpress_sites
-  when: "'No rewrite rules' in wp_permalink_check_results.results.0.stderr"
+  when: "wp_permalink_check_results.changed and 'No rewrite rules' in wp_permalink_check_results.results.0.stderr"
 
 - name: Install WP Multisite
   command: wp core multisite-install
