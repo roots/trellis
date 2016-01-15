@@ -122,6 +122,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 * `admin_user` - WP admin user name (*development* only, required)
 * `admin_email` - WP admin email address (*development* only, required)
 * `admin_password` - WP admin user password (*development* only, required, in `vault.yml`)
+* `initial_permalink_structure` - permalink structure applied at time of WP install (*development* only, default: `/%postname%/`)
 * `multisite` - hash of multisite options. See the [Multisite docs](https://roots.io/trellis/docs/multisite/).
   * `enabled` - Multisite enabled flag (required, set to `false`)
   * `subdomains` - subdomains option

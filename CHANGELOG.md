@@ -1,4 +1,5 @@
 ### HEAD
+* Fix conditional logic for permalink setup task ([#467](https://github.com/roots/trellis/pull/467))
 * Fix permalink setup during WordPress Install ([#466](https://github.com/roots/trellis/pull/466))
 * Fix deploy pre-flight check for verifying repo ([#463](https://github.com/roots/trellis/pull/463))
 * Add pre-flight checks for common deploy problems ([#459](https://github.com/roots/trellis/pull/459))

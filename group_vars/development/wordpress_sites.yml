@@ -9,7 +9,7 @@ wordpress_sites:
     admin_user: admin
     # admin_password: (defined in group_vars/development/vault.yml)
     admin_email: admin@example.dev
-    permalink_structure: "/%postname%/"
+    initial_permalink_structure: /%postname%/ # applied only at time of WP install and when `site_install: true`
     multisite:
       enabled: false
       subdomains: false
