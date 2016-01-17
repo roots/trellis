@@ -1,6 +1,6 @@
 ---
 - name: Determine whether to connect as root or admin_user
-  local_action: command ansible {{ inventory_hostname }} -m ping -i {{ inventory_file }} -u root
+  local_action: command ansible {{ inventory_hostname }} -m ping{{ (inventory_file == None) | ternary('', ' -i ' + inventory_file | string) }} -u root
   failed_when: false
   changed_when: false
   register: root_status
