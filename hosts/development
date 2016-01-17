@@ -1,3 +1,14 @@
+# This file is only used for Windows hosts.
+#
+# Windows
+# -------------------------------------------------------------
+# If you want to run `dev.yml` manually you can SSH into the VM
+# to the directory with the `dev.yml` playbook and run:
+
+# `ansible-playbook dev.yml`
+#
+# Non-Windows
+# -------------------------------------------------------------
 # If you want to run `dev.yml` manually via the `ansible-playbook`
 # command (vs. `vagrant up` or `vagrant provision`), you might be
 # inclined to define your development host information in this file.
@@ -14,6 +25,8 @@
 # your `Vagrantfile`. If not, you will need to adjust this path in the
 # command.
 #
+# Why run `dev.yml` manually?
+# -------------------------------------------------------------
 # One reason you may want to run `dev.yml` via the `ansible-playbook`
 # command is for the convenience of adding Ansible options via the
 # command line (e.g., `--tags`, `--skip-tags`, or `-vvvv`). In contrast,
@@ -22,7 +35,7 @@
 # into the Vagrantfile's `config.vm.provision` section.
 
 [development]
-192.168.50.5
+192.168.50.5 ansible_connection=local
 
 [web]
-192.168.50.5
+192.168.50.5 ansible_connection=local
