@@ -1,7 +1,4 @@
 ---
-- name: restart hhvm
-  service: name=hhvm state=restarted
-
 - name: restart memcached
   service: name=memcached state=restarted
 
@@ -9,4 +6,4 @@
   service: name=nginx state=reloaded
 
 - name: reload php-fpm
-  service: name=php5-fpm state=reloaded
+  service: name=php7.0-fpm state=reloaded

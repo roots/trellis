@@ -9,10 +9,6 @@
   src: nickhammond.logrotate
   version: fc3ea4
 
-- name: php5-xdebug
-  src: MaximeThoonsen.php5-xdebug
-  version: v1.0.5
-
 - name: swapfile
   src: kamaln7.swapfile
   version: 0.4

@@ -1,9 +1,9 @@
 ---
-- name: Add Composer PPA
-  apt_repository: repo="ppa:duggan/composer" update_cache=yes
-
 - name: Install Composer
-  apt: name=php5-composer state=present force=yes
+  get_url:
+    url: "https://getcomposer.org/composer.phar"
+    dest: /usr/local/bin/composer
+    mode: 0755
 
 - name: Composer self update
   command: composer self-update

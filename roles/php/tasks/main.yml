@@ -1,37 +1,63 @@
 ---
-- name: Add PHP 5.6 PPA
-  apt_repository: repo="ppa:ondrej/php5-5.6" update_cache=yes
+- name: Add PHP 7.0 PPA
+  apt_repository:
+    repo: "ppa:ondrej/php-7.0"
+    update_cache: yes
 
-- name: Install PHP 5.6
-  apt: name="{{ item }}" state=present force=yes
+- name: Install PHP 7.0
+  apt:
+    name: "{{ item }}"
+    state: present
+    force: yes
   with_items:
-  - php5-common
-  - php5-fpm
-  - php5-mysqlnd
-  - php5-xmlrpc
-  - php5-mcrypt
-  - php5-curl
-  - php5-gd
-  - php5-cli
-  - php-pear
-  - php5-dev
-  - php5-imap
+  - php7.0-cli
+  - php7.0-common
+  - php7.0-curl
+  - php7.0-dev
+  - php7.0-fpm
+  - php7.0-gd
+  - php7.0-mcrypt
+  - php7.0-mysql
+  - php7.0-opcache
 
-- name: Start php5-fpm service
-  service: name=php5-fpm state=started enabled=true
+- name: Install Xdebug
+  apt:
+    name: php-xdebug
+    state: latest
+  when: xdebug_install | default(false)
+
+- name: xdebug configuration file
+  template:
+    src: xdebug.ini.j2
+    dest: /etc/php/mods-available/xdebug.ini
+  when: xdebug_install | default(false)
+
+- name: Start php7.0-fpm service
+  service:
+    name: php7.0-fpm
+    state: started
+    enabled: true
 
 - name: Create socket directory
-  file: path=/var/run/php5-fpm/ state=directory
+  file:
+    path: /var/run/php7.0-fpm/
+    state: directory
 
 - name: Disable default pool
-  command: mv /etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.disabled creates=/etc/php5/fpm/pool.d/www.disabled
+  command: mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.disabled
+  args:
+    creates: /etc/php/7.0/fpm/pool.d/www.disabled
   when: disable_default_pool
   notify: reload php-fpm
 
-- name: Add php.ini template
-  template: src=php.ini.j2 dest=/etc/php5/fpm/php.ini
+- name: PHP configuration file
+  template:
+    src: php.ini.j2
+    dest: /etc/php/7.0/fpm/php.ini
   notify: reload php-fpm
 
-- name: Copy php-fpm configuration
-  template: src="php-fpm.conf.j2" dest="/etc/php5/fpm/pool.d/wordpress.conf"
+- name: php-fpm configuration file
+  template:
+    src: php-fpm.conf.j2
+    dest: /etc/php/7.0/fpm/pool.d/wordpress.conf
   notify: reload php-fpm

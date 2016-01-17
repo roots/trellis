@@ -62,7 +62,3 @@
   with_dict: wordpress_sites
   when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == True)
   changed_when: "'The network already exists.' not in wp_install_results.stdout"
-
-- name: Restart HHVM
-  service: name=hhvm state=restarted
-  when: hhvm | default(False)
