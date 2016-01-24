@@ -15,13 +15,29 @@
   register: env
   changed_when: env.stdout == "{{ item.key }}.env"
 
+- name: Retrieve ssh hosts from composer.json
+  shell: egrep 'url.*@.*:.*' {{ www_root }}/{{ item.key }}/current/composer.json |
+         sed 's/.*@\(.*\):.*/\1/' | sort | uniq
+  with_dict: wordpress_sites
+  register: composer_ssh_hosts
+  when: accept_hostkeys
+  changed_when: false
+
+- name: Add known_hosts from composer.json
+  known_hosts:
+    name: "{{ item }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan -t rsa ' + item) }}"
+    path: "/home/{{ web_user }}/.ssh/known_hosts"
+  with_items: accept_hostkeys | ternary(composer_ssh_hosts.results | map(attribute='stdout_lines') | list, [])
+
 - name: Install Dependencies with Composer
   command: composer install
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   register: composer_results
   with_dict: wordpress_sites
-  changed_when: "'Nothing to install or update' not in composer_results.stderr"
+  become: no
+  changed_when: "'Nothing to install or update' not in composer_results.stderr | default('')"
 
 - name: Install WP
   command: wp core install
