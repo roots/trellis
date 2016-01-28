@@ -19,7 +19,7 @@
 - name: Template files out to includes.d
   template: src="includes.d/{{ item }}"
             dest="/etc/nginx/includes.d/{{ item[:-3] }}"
-  with_lines: "cd ../templates/includes.d && find {{ wordpress_sites.keys() | join(' ') }} -type f -name \\*.conf.j2 2>/dev/null || :"
+  with_lines: "cd {{ role_path }}/templates/includes.d && find {{ wordpress_sites.keys() | join(' ') }} -type f -name \\*.conf.j2 2>/dev/null || :"
   register: nginx_includes_managed
   notify: reload nginx
 
@@ -31,7 +31,11 @@
 - name: Remove unmanaged files from includes.d
   file: path="{{ item }}"
         state=absent
-  with_items: "{{ nginx_includes_existing.stdout_lines | difference(nginx_includes_managed.results | default([]) | map(attribute='item') | map('regex_replace', '(.*)\\.j2', '/etc/nginx/includes.d/\\\\1') | list) }}"
+  with_items: "{{ nginx_includes_existing.stdout_lines |
+                  difference(nginx_includes_managed.results | default([]) | map(attribute='item') |
+                    map('regex_replace', '(.*)\\.j2', '/etc/nginx/includes.d/\\1') | list
+                  )
+               }}"
   notify: reload nginx
 
 - name: Create WordPress configuration for Nginx
