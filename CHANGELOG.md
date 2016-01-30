@@ -1,4 +1,5 @@
 ### HEAD
+* Add option to add `known_hosts` on remote ([#475](https://github.com/roots/trellis/pull/475))
 * Update to PHP 7.0 and remove HHVM ([#432](https://github.com/roots/trellis/pull/432))
 * Windows: Sync `hosts` dir with proper permissions ([#460](https://github.com/roots/trellis/pull/460))
 * Fix `inventory_file` variable in connection tests ([#470](https://github.com/roots/trellis/pull/470))

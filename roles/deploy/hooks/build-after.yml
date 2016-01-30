@@ -9,6 +9,20 @@
     msg: "Unable to find a `composer.json` file in the root of '{{ deploy_helper.new_release_path }}'. Make sure your repo has a `composer.json` file in its root or edit `repo_subtree_path` for '{{ site }}' in `wordpress_sites.yml` so it points to the directory with a `composer.json` file."
   when: not composer_json.stat.exists
 
+- name: Retrieve ssh hosts from composer.json
+  shell: egrep 'url.*@.*:.*' {{ deploy_helper.new_release_path }}/composer.json |
+         sed 's/.*@\(.*\):.*/\1/' | sort | uniq
+  register: composer_ssh_hosts
+  when: accept_hostkeys
+  changed_when: false
+
+- name: Add known_hosts from composer.json
+  known_hosts:
+    name: "{{ item }}"
+    key: "{{ lookup('pipe', 'ssh-keyscan -t rsa ' + item) }}"
+    path: "/home/{{ web_user }}/.ssh/known_hosts"
+  with_items: composer_ssh_hosts.stdout_lines | default([])
+
 - name: Install Composer dependencies
   command: composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
   args:

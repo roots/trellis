@@ -36,3 +36,12 @@
 - name: Set timezone
   command: timedatectl set-timezone {{ default_timezone }}
   when: current_timezone.stdout != default_timezone
+
+- name: Add known_hosts
+  known_hosts:
+    name: "{{ item.name }}"
+    key: "{{ item.key | default(omit) }}"
+    path: "{{ item.path | default('/home/' + web_user + '/.ssh/known_hosts') }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: known_hosts | default([])
+  tags: known-hosts

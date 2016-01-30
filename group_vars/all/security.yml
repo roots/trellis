@@ -1,3 +1,14 @@
+# Documentation: https://roots.io/trellis/docs/security/
+
+# If sshd_permit_root_login: false, admin_user must be in 'users' (`group_vars/all/users.yml`) with sudo group
+# and in 'sudoer_passwords' (`group_vars/<environment>/main.yml`)
+sshd_permit_root_login: true
+sshd_password_authentication: false
+
+# Whether `git clone` and `composer install` should accept host keys into known_hosts
+# If `no`, manually add host keys to `group_vars/all/known_hosts.yml`
+accept_hostkeys: yes
+
 ferm_input_list:
   - type: dport_accept
     dport: [http, https]
@@ -9,9 +20,3 @@ ferm_input_list:
     dport: [ssh]
     seconds: 300
     hits: 20
-
-# Documentation: https://roots.io/trellis/docs/security/
-# If sshd_permit_root_login: false, admin_user must be in 'users' (`group_vars/all/users.yml`) with sudo group
-# and in 'sudoer_passwords' (`group_vars/<environment>/main.yml`)
-sshd_permit_root_login: true
-sshd_password_authentication: false
