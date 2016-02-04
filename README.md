@@ -38,7 +38,7 @@ Trellis documentation is available at [https://roots.io/trellis/docs/](https://r
 
 ## Requirements
 
-* Ansible 1.9.2 to 1.9.4 (not 2.x - see [bug](https://github.com/roots/trellis/issues/469)) - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/) • [Windows docs](https://roots.io/trellis/docs/windows/)
+* Ansible >= 2.0.0.2 - [Install](http://docs.ansible.com/intro_installation.html) • [Docs](http://docs.ansible.com/) • [Windows docs](https://roots.io/trellis/docs/windows/)
 * Virtualbox >= 4.3.10 - [Install](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant >= 1.5.4 - [Install](http://www.vagrantup.com/downloads.html) • [Docs](https://docs.vagrantup.com/v2/)
 * vagrant-bindfs >= 0.3.1 - [Install](https://github.com/gael-ian/vagrant-bindfs#installation) • [Docs](https://github.com/gael-ian/vagrant-bindfs) (Windows users may skip this)
@@ -59,7 +59,6 @@ example.com/    - Primary folder for the project
 ```
 
 - You **do not** need a configured `.env` file. Trellis will automatically create and configure one.
-- The full paths to these directories must not contain spaces or else [Ansible will fail](https://github.com/ansible/ansible/issues/8555).
 - See a complete working example in the [roots-example-project.com repo](https://github.com/roots/roots-example-project.com).
 
 ## Development setup
