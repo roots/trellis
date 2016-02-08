@@ -36,3 +36,6 @@
 - name: Set timezone
   command: timedatectl set-timezone {{ default_timezone }}
   when: current_timezone.stdout != default_timezone
+
+- name: Install Bundler
+  command: bash -lc "gem install bundler"
