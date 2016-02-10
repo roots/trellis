@@ -11,7 +11,7 @@ vault_wordpress_sites:
     env:
       db_password: example_dbpassword
       # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/
-      # These CANNOT contain the characters "{%" in succession
+      # These CANNOT contain the characters "{%" or "{{" in succession
       auth_key: "generateme"
       secure_auth_key: "generateme"
       logged_in_key: "generateme"
