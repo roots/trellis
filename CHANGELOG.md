@@ -1,4 +1,4 @@
-### HEAD
+### 0.9.5: February 10th, 2016
 * Fix Nginx includes for Ansible 2.0 ([#473](https://github.com/roots/trellis/pull/473))
 * Use `ondrej/php` PPA since `ondrej/php-7.0` is deprecated ([#479](https://github.com/roots/trellis/pull/479))
 * Fix Ansible 2.x deploys and require version 2.x ([#478](https://github.com/roots/trellis/pull/478))
