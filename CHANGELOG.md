@@ -1,3 +1,6 @@
+### HEAD
+* Fixes #410 - Default to 1 CPU in Vagrant ([#487](https://github.com/roots/trellis/pull/487))
+
 ### 0.9.5: February 10th, 2016
 * Fix Nginx includes for Ansible 2.0 ([#473](https://github.com/roots/trellis/pull/473))
 * Use `ondrej/php` PPA since `ondrej/php-7.0` is deprecated ([#479](https://github.com/roots/trellis/pull/479))
