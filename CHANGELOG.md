@@ -1,4 +1,5 @@
 ### HEAD
+* Fix bad `curl` output ([#490](https://github.com/roots/trellis/pull/490))
 * Fixes #410 - Default to 1 CPU in Vagrant ([#487](https://github.com/roots/trellis/pull/487))
 
 ### 0.9.5: February 10th, 2016
