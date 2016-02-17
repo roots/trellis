@@ -1,4 +1,5 @@
 ### HEAD
+* Use ansible-role-composer ([#491](https://github.com/roots/trellis/pull/491))
 * Fix bad `curl` output ([#490](https://github.com/roots/trellis/pull/490))
 * Fixes #410 - Default to 1 CPU in Vagrant ([#487](https://github.com/roots/trellis/pull/487))
 

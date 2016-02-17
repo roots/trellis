@@ -1,3 +1,7 @@
+- name: composer
+  src: geerlingguy.composer
+  version: 1.2.7
+
 - name: ntp
   src: resmo.ntp
   version: 0.3.0
