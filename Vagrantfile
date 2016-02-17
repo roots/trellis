@@ -3,6 +3,10 @@
 
 require 'yaml'
 
+ip = '192.168.50.5' # pick any local IP
+cpus = 1
+memory = 1024 # in MB
+
 ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
 
 # Set Ansible roles_path relative to Ansible directory
@@ -35,8 +39,8 @@ Vagrant.configure('2') do |config|
   # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
   config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
 
-  # Required for NFS to work, pick any local IP
-  config.vm.network :private_network, ip: '192.168.50.5', hostsupdater: 'skip'
+  # Required for NFS to work
+  config.vm.network :private_network, ip: ip, hostsupdater: 'skip'
 
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname
@@ -84,9 +88,6 @@ Vagrant.configure('2') do |config|
       end
     end
   end
-
-  cpus = 1
-  memory = 1024 # in MB
 
   # Virtualbox settings
   config.vm.provider 'virtualbox' do |vb|

@@ -1,4 +1,5 @@
 ### HEAD
+* Add IP address variable, move some variables to top of Vagrantfile ([#494](https://github.com/roots/trellis/pull/494))
 * Keep Composer updated ([#493](https://github.com/roots/trellis/pull/493))
 * Use prestissimo Composer plugin ([#492](https://github.com/roots/trellis/pull/492))
 * Use ansible-role-composer ([#491](https://github.com/roots/trellis/pull/491))
