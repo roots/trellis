@@ -1,4 +1,5 @@
 ### HEAD
+* Update to latest ansible-role-mailhog version ([#497](https://github.com/roots/trellis/pull/497))
 * Add `reverse_www` filter to fix `www_redirect` ([#486](https://github.com/roots/trellis/pull/486))
 * Add IP address variable, move some variables to top of Vagrantfile ([#494](https://github.com/roots/trellis/pull/494))
 * Keep Composer updated ([#493](https://github.com/roots/trellis/pull/493))
