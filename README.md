@@ -21,6 +21,7 @@ Trellis will configure a server with the following and more:
 * Composer
 * WP-CLI
 * sSMTP (mail delivery)
+* MailHog
 * Memcached
 * Fail2ban
 * ferm
