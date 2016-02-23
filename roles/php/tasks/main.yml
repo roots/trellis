@@ -19,6 +19,7 @@
   - php7.0-mcrypt
   - php7.0-mysql
   - php7.0-opcache
+  - php7.0-xmlrpc
 
 - name: Install Xdebug
   apt:
