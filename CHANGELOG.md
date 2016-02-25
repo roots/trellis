@@ -1,4 +1,5 @@
 ### HEAD
+* Add php-mbstring extension ([#504](https://github.com/roots/trellis/pull/504))
 * Add more necessary PHP extensions ([#503](https://github.com/roots/trellis/pull/503))
 
 ### 0.9.6: February 18th, 2016
