@@ -9,3 +9,13 @@ static_sites:
       enabled: false
       duration: 30s
     env: development
+  apps.proteusthemes.com:
+    site_hosts:
+      - apps.proteusthemes.dev
+    local_path: ../www/apps.proteusthemes.com
+    ssl:
+      enabled: false
+    cache:
+      enabled: false
+      duration: 30s
+    env: development
