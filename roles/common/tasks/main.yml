@@ -7,10 +7,13 @@
     msg: "Your Ansible version is too old. Trellis require at least {{ minimum_ansible_version }}. Your version is {{ ansible_version.full | default('< 1.6') }}"
 
 - name: Update Apt
-  apt: update_cache=yes
+  apt:
+    update_cache: yes
 
 - name: Checking essentials
-  apt: name="{{ item }}" state=present
+  apt:
+    name: "{{ item }}"
+    state: present
   with_items:
   - python-software-properties
   - python-pycurl
@@ -20,12 +23,14 @@
   - git-core
 
 - name: Validate timezone variable
-  stat: path=/usr/share/zoneinfo/{{ default_timezone }}
+  stat:
+    path: /usr/share/zoneinfo/{{ default_timezone }}
   register: timezone_path
   changed_when: false
 
 - name: Explain timezone error
-  fail: msg="{{ default_timezone }} is not a valid timezone. For a list of valid timezones, check https://php.net/manual/en/timezones.php"
+  fail:
+    msg: "{{ default_timezone }} is not a valid timezone. For a list of valid timezones, check https://php.net/manual/en/timezones.php"
   when: not timezone_path.stat.exists
 
 - name: Get current timezone
