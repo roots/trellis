@@ -28,6 +28,7 @@ users:
   - name: gregor
     groups:
       - "{{ web_group }}"
+      - sudo
     keys:
       - https://github.com/capuderg.keys
 
