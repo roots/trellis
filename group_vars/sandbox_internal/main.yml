@@ -62,6 +62,7 @@ sites_to_export:
   - repairpress
   - structurepress
   - beauty
+  - auto
 
 xml_paths:
   local:  "/tmp/xml-exports"
