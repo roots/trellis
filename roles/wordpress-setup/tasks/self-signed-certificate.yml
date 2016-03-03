@@ -11,7 +11,7 @@
   register: self_signed_domains
   args:
     chdir: /etc/nginx/ssl/
-  with_items: self_signed_certs.stdout_lines
+  with_items: "{{ self_signed_certs.stdout_lines }}"
   changed_when: false
 
 - name: Generate self-signed certificates
@@ -21,7 +21,7 @@
     -keyout {{ item.key }}_self_signed.key -out {{ item.key }}_self_signed.pem
   args:
     chdir: /etc/nginx/ssl/
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: >
     item.value.ssl.enabled and item.value.site_hosts | first
     not in self_signed_domains.results | default([]) | map(attribute='stdout') | list

@@ -3,15 +3,16 @@
   tags: wordpress-install-directories
 
 - name: Create .env file
-  template: src="env.j2"
-            dest="/tmp/{{ item.key }}.env"
-            owner="{{ web_user }}"
-            group="{{ web_group }}"
-  with_dict: wordpress_sites
+  template:
+    src: "env.j2"
+    dest: "/tmp/{{ item.key }}.env"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Copy .env file into web root
   command: rsync -ac --info=NAME /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/current/.env
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   register: env
   changed_when: env.stdout == "{{ item.key }}.env"
 
@@ -20,7 +21,7 @@
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   register: composer_results
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   changed_when: "'Nothing to install or update' not in composer_results.stderr"
 
 - name: Install WP
@@ -34,7 +35,7 @@
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   register: wp_install_results
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == False)
   changed_when: "'WordPress is already installed.' not in wp_install_results.stdout"
 
@@ -43,7 +44,7 @@
            --allow-root
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: wp_install_results | changed
 
 - name: Install WP Multisite
@@ -59,6 +60,6 @@
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   register: wp_install_results
-  with_dict: wordpress_sites
+  with_dict: "{{ wordpress_sites }}"
   when: item.value.site_install == True and (item.value.multisite.enabled | default(False) == True)
   changed_when: "'The network already exists.' not in wp_install_results.stdout"
