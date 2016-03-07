@@ -23,6 +23,7 @@ printf "\033[0m\n\n"
 
 # Check that add-apt-repository is installed for non-standard Vagrant boxes
 if [ ! -f /usr/bin/add-apt-repository ]; then
+  sudo apt-get -y update
   echo "Adding add-apt-repository..."
   sudo apt-get -y install software-properties-common
 fi
