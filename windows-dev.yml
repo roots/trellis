@@ -1,0 +1,9 @@
+---
+- name: "WordPress Server: Install Windows specific packages for vagrant development"
+  hosts: web:&development
+  become: yes
+  remote_user: vagrant
+
+  roles:
+    - { role: nodesource.node, tags: [windows, node] }
+    - { role: windows-dev, tags: [windows] }

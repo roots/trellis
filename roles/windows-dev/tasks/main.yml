@@ -1,0 +1,11 @@
+---
+- name: Install "gulp" node.js package
+  npm:
+    name: gulp
+    global: yes
+
+- name: Install "bower" node.js package
+  npm:
+    name: bower
+    global: yes
+

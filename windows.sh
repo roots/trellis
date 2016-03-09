@@ -46,3 +46,13 @@ fi
 echo "Running Ansible Playbooks"
 cd ${ANSIBLE_PATH}/
 ansible-playbook dev.yml
+
+# Install Node
+if [ ! -d ${ANSIBLE_PATH}/vendor ]; then
+  echo "Running Ansible Galaxy install for nodesource.node"
+  ansible-galaxy install nodesource.node -p ${ANSIBLE_PATH}/vendor/roles
+fi
+
+echo "Running Windows Specific Ansible Playbooks"
+cd ${ANSIBLE_PATH}/
+ansible-playbook windows-dev.yml
