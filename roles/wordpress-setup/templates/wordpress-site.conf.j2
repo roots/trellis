@@ -105,7 +105,7 @@ server {
 }
 {% endif %}
 
-{% for host in item.value.site_hosts if item.value.www_redirect | default(true) %}
+{% for host in item.value.site_hosts if strip_www %}
 server {
   {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
     listen 443 ssl http2;
@@ -113,7 +113,7 @@ server {
     listen 80;
   {% endif -%}
 
-  server_name {{ host | match('^www\\.(.*)') | ternary(host | regex_replace('^www\\.(.*)', '\\1'), 'www.' + host ) }};
+  server_name www.{{ host }};
   return 301 $scheme://{{ host }}$request_uri;
 }
 {% endfor %}

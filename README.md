@@ -101,7 +101,6 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 `wordpress_sites` is the top-level dictionary used to define the WordPress sites, databases, Nginx vhosts, etc that will be created. Each site's variables are nested under a site "key" (e.g., `example.com`). This key is just a descriptive name and serves as the default value for some variables. See our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development/wordpress_sites.yml) for a complete working example.
 
 * `site_hosts` - array of hosts that Nginx will listen on (required, include main domain at least)
-* `www_redirect` - whether to redirect `www/non-www` counterparts of `site_hosts` (default: `true`)
 * `local_path` - path targeting Bedrock-based site directory (required for development)
 * `repo` - URL of the Git repo of your Bedrock project (required, used when deploying)
 * `branch` - the branch name, tag name, or commit SHA1 you want to deploy (default: `master`)
