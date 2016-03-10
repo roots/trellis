@@ -161,3 +161,10 @@ Keep track of development and community news.
 * Follow [@rootswp on Twitter](https://twitter.com/rootswp)
 * Read and subscribe to the [Roots Blog](https://roots.io/blog/)
 * Subscribe to the [Roots Newsletter](https://roots.io/subscribe/)
+
+## TODO
+
+This repo should keep it's pace with [Trellis](https://github.com/roots/trellis) itself. Here is the list of commits to future-me that haven't been merged yet, but I hope they will be at some point:
+
+- https://github.com/roots/trellis/commit/d9833dc0e334c3da9d4bcc36636375db2a718f60
+- https://github.com/roots/trellis/commit/40cdb5e75f4b83090df3405d3d63829c81d763f0
