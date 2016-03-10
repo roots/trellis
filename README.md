@@ -175,3 +175,5 @@ This repo should keep it's pace with [Trellis](https://github.com/roots/trellis)
   - https://github.com/roots/trellis/commit/f48e3d8c8c0381d3f2371ca1972036fe65e8e7a6
   - https://github.com/roots/trellis/commit/170eae84ad513ea1b769e388634aff0e922a1f55
 - Ansible Vault https://github.com/roots/trellis/commit/82d94f68d77c4c216e90f6c8bdb35edad74caa1d
+
+I've cherry-picked till https://github.com/roots/trellis/commit/f0f43d31de05a3924ce8bd402d54fd33aca128db.
