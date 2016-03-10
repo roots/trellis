@@ -9,7 +9,6 @@ wordpress_sites:
     admin_user: proteusnet
     admin_password: admin
     admin_email: proteusnet@proteusthemes.dev
-    permalink_structure: "/%postname%/"
     multisite:
       enabled: true
       subdomains: false

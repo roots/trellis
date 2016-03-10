@@ -4,7 +4,6 @@ wordpress_sites:
     site_hosts:
       - demo.proteusthemes.com
     local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
-    permalink_structure: "/%postname%/"
     multisite:
       enabled: true
       subdomains: false
