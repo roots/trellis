@@ -10,13 +10,6 @@
   register: composer_update_result
   changed_when: composer_update_result | success and 'already using composer version' not in composer_update_result.stderr
 
-- name: add Composer vendor binary path
-  lineinfile:
-    dest: /etc/environment
-    regexp: ^PATH="(((?!:./vendor/bin).)*)"
-    line: PATH="\1:./vendor/bin"
-    backrefs: yes
-
 - name: Composer config github-oauth
   command: composer config -g github-oauth.github.com {{ composer_github_oauth_token }}
   when: composer_github_oauth_token is defined

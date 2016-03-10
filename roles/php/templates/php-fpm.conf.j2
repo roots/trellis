@@ -13,8 +13,8 @@ pm.min_spare_servers = 1
 pm.max_spare_servers = 3
 pm.max_requests = 500
 chdir = {{ www_root }}/
-php_admin_flag[log_errors] = on
-php_admin_flag[display_errors] = {{ php_display_errors }}
+php_flag[log_errors] = on
+php_flag[display_errors] = {{ php_display_errors }}
 php_admin_value[open_basedir] = {{ www_root }}/:/tmp
 {% if memcached_sessions %}
 php_value[session.save_handler] = memcached

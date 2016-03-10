@@ -23,6 +23,7 @@ Trellis will configure a server with the following and more:
 * PHP 5.6 (or [HHVM](http://hhvm.com/))
 * [MariaDB](https://mariadb.org/) as a drop-in MySQL replacement (but better)
 * SSL support (A+ on https://www.ssllabs.com/ssltest/)
+* HTTP/2 support (requires SSL)
 * Composer
 * WP-CLI
 * sSMTP (mail delivery)
@@ -100,6 +101,7 @@ For example: configure the sites on your Vagrant development VM by editing `grou
 `wordpress_sites` is the top-level dictionary used to define the WordPress sites, databases, Nginx vhosts, etc that will be created. Each site's variables are nested under a site "key" (e.g., `example.com`). This key is just a descriptive name and serves as the default value for some variables. See our [example project](https://github.com/roots/roots-example-project.com/blob/master/ansible/group_vars/development/wordpress_sites.yml) for a complete working example.
 
 * `site_hosts` - array of hosts that Nginx will listen on (required, include main domain at least)
+* `www_redirect` - whether to redirect `www/non-www` counterparts of `site_hosts` (default: `true`)
 * `local_path` - path targeting Bedrock-based site directory (required for development)
 * `repo` - URL of the Git repo of your Bedrock project (required, used when deploying)
 * `branch` - the branch name, tag name, or commit SHA1 you want to deploy (default: `master`)
@@ -142,7 +144,7 @@ sSMTP handles outgoing mail. For the `development` environment, emails are sent 
 
 ## SSL
 
-Full SSL support is available for your WordPress sites. Trellis will also *auto-generate* self-signed certificates for development purposes. Our HTTPS implementation has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL docs](https://roots.io/trellis/docs/ssl/).
+Full SSL support is available for your WordPress sites. Trellis will also *auto-generate* self-signed certificates for development purposes. Our HTTPS implementation utilizes HTTP/2 and has all the best practices for performance and security. (Note: default configuration is HTTPS **only**.) See the [SSL docs](https://roots.io/trellis/docs/ssl/).
 
 ## Caching
 
@@ -160,3 +162,18 @@ Keep track of development and community news.
 * Follow [@rootswp on Twitter](https://twitter.com/rootswp)
 * Read and subscribe to the [Roots Blog](https://roots.io/blog/)
 * Subscribe to the [Roots Newsletter](https://roots.io/subscribe/)
+
+## TODO
+
+This repo should keep it's pace with [Trellis](https://github.com/roots/trellis) itself. Here is the list of commits to future-me that haven't been merged yet, but I hope they will be at some point:
+
+- Switch to vagrant-hostmanager
+  - https://github.com/roots/trellis/commit/d9833dc0e334c3da9d4bcc36636375db2a718f60
+  - https://github.com/roots/trellis/commit/f0f43d31de05a3924ce8bd402d54fd33aca128db
+- Refactor hosts files
+  - https://github.com/roots/trellis/commit/40cdb5e75f4b83090df3405d3d63829c81d763f0
+  - https://github.com/roots/trellis/commit/f48e3d8c8c0381d3f2371ca1972036fe65e8e7a6
+  - https://github.com/roots/trellis/commit/170eae84ad513ea1b769e388634aff0e922a1f55
+- Ansible Vault https://github.com/roots/trellis/commit/82d94f68d77c4c216e90f6c8bdb35edad74caa1d
+
+I've cherry-picked till https://github.com/roots/trellis/commit/f0f43d31de05a3924ce8bd402d54fd33aca128db.
