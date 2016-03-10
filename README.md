@@ -168,3 +168,4 @@ This repo should keep it's pace with [Trellis](https://github.com/roots/trellis)
 
 - https://github.com/roots/trellis/commit/d9833dc0e334c3da9d4bcc36636375db2a718f60
 - https://github.com/roots/trellis/commit/40cdb5e75f4b83090df3405d3d63829c81d763f0
+- https://github.com/roots/trellis/commit/82d94f68d77c4c216e90f6c8bdb35edad74caa1d
