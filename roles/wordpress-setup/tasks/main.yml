@@ -3,8 +3,6 @@
   tags: wordpress-setup-database
 - include: self-signed-certificate.yml
   tags: wordpress-setup-self-signed-certificate
-- include: nginx.yml
-  tags: wordpress-setup-nginx
 
 - name: Create web root
   file:
@@ -23,6 +21,9 @@
     mode: 0755
     state: directory
   with_dict: "{{ wordpress_sites }}"
+
+- include: nginx.yml
+  tags: wordpress-setup-nginx
 
 - name: Setup WP system cron
   cron:

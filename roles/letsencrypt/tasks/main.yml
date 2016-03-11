@@ -1,0 +1,14 @@
+- include: setup.yml
+- include: nginx.yml
+- include: certificates.yml
+
+- name: Install cronjob for key generation
+  cron:
+    cron_file: letsencrypt-certificate-renewal
+    name: letsencrypt certificate renewal
+    user: root
+    job: cd {{ acme_tiny_data_directory }} && ./renew-certs.py
+    day: "{{ letsencrypt_cronjob_daysofmonth }}"
+    hour: 4
+    minute: 30
+    state: present

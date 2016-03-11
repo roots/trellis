@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 server {
-  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
+  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
   listen 443 ssl http2;
   {% else -%}
   listen 80;
@@ -32,7 +32,7 @@ server {
 
   add_header Fastcgi-Cache $upstream_cache_status;
 
-  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
+  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
     include h5bp/directive-only/ssl.conf;
     include h5bp/directive-only/ssl-stapling.conf;
 
@@ -44,15 +44,17 @@ server {
     {% set hsts_preload = item.value.ssl.hsts_preload | default(nginx_hsts_preload) | ternary('preload', None) %}
     add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
 
-    {% if item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
-      ssl_certificate         /etc/nginx/ssl/{{ item.value.ssl.cert | basename }};
-      ssl_trusted_certificate /etc/nginx/ssl/{{ item.value.ssl.cert | basename }};
-      ssl_certificate_key     /etc/nginx/ssl/{{ item.value.ssl.key | basename }};
-    {% else -%}
-      ssl_certificate         /etc/nginx/ssl/{{ item.key }}_self_signed.pem;
-      ssl_trusted_certificate /etc/nginx/ssl/{{ item.key }}_self_signed.pem;
-      ssl_certificate_key     /etc/nginx/ssl/{{ item.key }}_self_signed.key;
-    {% endif -%}
+    {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
+      ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
+      ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
+    {%- elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+      ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-bundled.cert;
+      ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
+    {%- elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
+      ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
+      ssl_trusted_certificate {{ nginx_path }}/ssl/{{ item.key }}.cert;
+      ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.key }}.key;
+    {%- endif -%}
   {% endif %}
 
   include includes.d/{{ item.key }}/*.conf;
@@ -95,8 +97,22 @@ server {
 {% if item.value.ssl is defined and item.value.ssl.enabled | default(False) %}
 server {
   listen 80;
+
+  {% if item.value.www_redirect | default(true) -%}
   server_name {{ item.value.site_hosts | join(' ') }} {{ item.value.site_hosts | reverse_www | join(' ') }};
+  {% else -%}
+  server_name {{ item.value.site_hosts | join(' ') }};
+  {% endif %}
+
+  {% if item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+  include acme-challenge-location.conf;
+
+  location / {
+    return 301 https://$host$request_uri;
+  }
+  {% else %}
   return 301 https://$host$request_uri;
+  {% endif -%}
 }
 {% endif %}
 

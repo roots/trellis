@@ -47,7 +47,7 @@
     user: "{{ item.0.name }}"
     key: "{{ item.1 }}"
   with_subelements:
-    - users | default([])
+    - "{{ users | default([]) }}"
     - keys
 
 - name: Check whether Ansible can connect as admin_user

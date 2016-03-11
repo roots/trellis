@@ -12,8 +12,7 @@ wordpress_sites:
       subdomains: false
     ssl:
       enabled: false
-      # cert: ~/ssl/example.com.crt
-      # key: ~/ssl/example.com.key
+      provider: letsencrypt
     cache:
       enabled: false
       duration: 30s
