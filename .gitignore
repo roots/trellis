@@ -2,3 +2,4 @@
 .vagrant
 vendor/roles
 *.py[co]
+*.retry

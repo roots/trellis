@@ -1,4 +1,5 @@
 ### HEAD
+* Fix #505 - Git ignore \*.retry file
 * Fix Ansible deprecations for bare variables ([#510](https://github.com/roots/trellis/pull/510))
 * Fixes #508 - update php-xdebug config file path ([#509](https://github.com/roots/trellis/pull/509))
 * Add php-mbstring extension ([#504](https://github.com/roots/trellis/pull/504))
