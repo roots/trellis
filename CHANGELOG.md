@@ -1,4 +1,5 @@
 ### HEAD
+* Improve Git repo format validation [#516](https://github.com/roots/trellis/pull/516)
 * Fix #505 - Git ignore \*.retry file
 * Fix Ansible deprecations for bare variables ([#510](https://github.com/roots/trellis/pull/510))
 * Fixes #508 - update php-xdebug config file path ([#509](https://github.com/roots/trellis/pull/509))
