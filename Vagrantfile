@@ -39,9 +39,6 @@ Vagrant.configure('2') do |config|
   # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
   config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
 
-  # Required for NFS to work
-  config.vm.network :private_network, ip: ip, hostsupdater: 'skip'
-
   hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
   config.vm.hostname = hostname
   www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
@@ -94,6 +91,9 @@ Vagrant.configure('2') do |config|
     vb.name = config.vm.hostname
     vb.customize ['modifyvm', :id, '--cpus', cpus]
     vb.customize ['modifyvm', :id, '--memory', memory]
+
+    # Required for Virtualbox NFS to work
+    config.vm.network :private_network, ip: ip, hostsupdater: 'skip'
 
     # Fix for slow external network connections
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
