@@ -25,10 +25,10 @@
     group: root
   when: binary_logging_disabled
 
-- name: Start MariaDB MySQL Server
+- name: Restart MariaDB MySQL Server
   service:
     name: mysql
-    state: started
+    state: restarted
     enabled: true
 
 - name: Set root user password
