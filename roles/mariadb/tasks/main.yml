@@ -17,6 +17,14 @@
     name: mariadb-server
     state: present
 
+- name: Disable MariaDB binary logging
+  template:
+    src: disable-binary-logging.cnf
+    dest: /etc/mysql/conf.d
+    owner: root
+    group: root
+  when: binary_logging_disabled
+
 - name: Start MariaDB MySQL Server
   service:
     name: mysql
