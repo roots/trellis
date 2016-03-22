@@ -1,4 +1,5 @@
 ### HEAD
+* Fix #520 - Disable MariaDB binary logging by default ([#521](https://github.com/roots/trellis/pull/521))
 * Let's Encrypt integration ([#518](https://github.com/roots/trellis/pull/518))
 * Improve Git repo format validation [#516](https://github.com/roots/trellis/pull/516)
 * Fix #505 - Git ignore \*.retry file
