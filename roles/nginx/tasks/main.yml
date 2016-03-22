@@ -12,7 +12,8 @@
 
 - name: Create SSL directory
   file:
-    dest: "{{ nginx_path }}/ssl"
+    mode: 0700
+    path: "{{ nginx_path }}/ssl"
     state: directory
 
 - name: Generate strong unique Diffie-Hellman group.

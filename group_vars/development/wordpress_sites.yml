@@ -15,6 +15,7 @@ wordpress_sites:
       subdomains: false
     ssl:
       enabled: false
+      provider: self-signed
     cache:
       enabled: false
       duration: 30s
