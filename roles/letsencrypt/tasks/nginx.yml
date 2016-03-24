@@ -33,23 +33,20 @@
     warn: false
 
 - name: Test Acme Challenges
-  command: curl -s -o /dev/null -w "%{http_code}" http://{{ item.1 }}/.well-known/acme-challenge/ping.txt
-  args:
-    warn: false
+  test_challenges:
+    hosts: "{{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) }}"
   register: letsencrypt_test_challenges
-  when: item.0.ssl is defined and item.0.ssl.enabled | default(false) and item.0.ssl.provider | default('manual')  == 'letsencrypt'
-  changed_when: false
-  with_subelements:
-    - "{{ wordpress_sites }}"
-    - site_hosts
+  ignore_errors: true
+  when: item.value.ssl is defined and item.value.ssl.enabled | default(false) and item.value.ssl.provider | default('manual')  == 'letsencrypt'
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Notify of challenge failures
   fail:
     msg: >
-      Could not access the challenge file for the domain: {{ item.item.1 }}.
+      Could not access the challenge file for the hosts/domains: {{ item.failed_hosts | join(', ') }}.
       Let's Encrypt requires every domain/host be publicly accessible.
-      Make sure that a valid DNS record exists for {{ item.item.1 }} and that it points to this server's IP.
-      If you don't want this domain in your SSL certificate, then remove it from `site_hosts`.
+      Make sure that a valid DNS record exists for {{ item.failed_hosts | join(', ') }} and that they point to this server's IP.
+      If you don't want these domains in your SSL certificate, then remove them from `site_hosts`.
       See https://roots.io/trellis/docs/ssl for more details.
-  when: not item | skipped and item.stdout | int != 200
-  with_items: letsencrypt_test_challenges.results
+  when: letsencrypt_test_challenges | failed
+  with_items: "{{ letsencrypt_test_challenges.results }}"
