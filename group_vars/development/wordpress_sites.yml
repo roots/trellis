@@ -4,7 +4,6 @@ wordpress_sites:
     site_hosts:
       - example.dev
     local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
-    site_install: true
     site_title: Example Site
     admin_user: admin
     # admin_password: (defined in group_vars/development/vault.yml)
@@ -20,10 +19,8 @@ wordpress_sites:
       enabled: false
       duration: 30s
     env:
-      disable_wp_cron: true
       wp_home: http://example.dev
       wp_siteurl: http://example.dev/wp
-      wp_env: development
       db_name: example_dev
       db_user: example_dbuser
       # db_password: (defined in group_vars/development/vault.yml)
