@@ -166,9 +166,6 @@ Keep track of development and community news.
 
 This repo should keep it's pace with [Trellis](https://github.com/roots/trellis) itself. Here is the list of commits to future-me that haven't been merged yet, but I hope they will be at some point:
 
-- Switch to vagrant-hostmanager
-  - https://github.com/roots/trellis/commit/d9833dc0e334c3da9d4bcc36636375db2a718f60
-  - https://github.com/roots/trellis/commit/f0f43d31de05a3924ce8bd402d54fd33aca128db
 - Refactor hosts files
   - https://github.com/roots/trellis/commit/40cdb5e75f4b83090df3405d3d63829c81d763f0
   - https://github.com/roots/trellis/commit/f48e3d8c8c0381d3f2371ca1972036fe65e8e7a6
