@@ -4,7 +4,8 @@
     that:
      - "{{ ansible_version is defined }}"
      - "{{ ansible_version.full | version_compare(minimum_ansible_version, '>=') }}"
-    msg: "Your Ansible version is too old. Trellis require at least {{ minimum_ansible_version }}. Your version is {{ ansible_version.full | default('< 1.6') }}"
+    msg: "Your Ansible version is too old. Trellis requires at least {{ minimum_ansible_version }}. Your version is {{ ansible_version.full | default('< 1.6') }}"
+  run_once: true
 
 - name: Update Apt
   apt:

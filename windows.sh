@@ -6,6 +6,7 @@
 # @version 1.0
 
 ANSIBLE_PATH="$(find /vagrant -name 'windows.sh' -printf '%h' -quit)"
+export PYTHONUNBUFFERED=1
 
 # Create an ssh key if not already created.
 if [ ! -f ~/.ssh/id_rsa ]; then
@@ -45,4 +46,4 @@ fi
 
 echo "Running Ansible Playbooks"
 cd ${ANSIBLE_PATH}/
-ansible-playbook dev.yml
+ansible-playbook dev.yml -e vagrant_version=$1
