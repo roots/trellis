@@ -1,3 +1,4 @@
 .vagrant
 vendor/roles
 /test.yml
+/*.retry
