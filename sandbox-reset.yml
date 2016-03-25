@@ -1,13 +1,13 @@
 ---
 - name: Fetch data from prod server and overwrite local WP installations
   hosts: as
-  sudo: yes
+  become: yes
   roles:
     - { role: sandbox-remote, tags: [sandbox-remote] }
 
 - name: Perform local actions on sandbox server
   hosts: sbs
-  sudo: yes
+  become: yes
   roles:
     - { role: sandbox-local, tags: [sandbox-local] }
 
@@ -32,7 +32,7 @@
         state: link
         src:   "{{ xml_paths.remote }}/{{ item }}.wordpress.{{ ansible_date_time.date }}.000.xml"
         dest:  "{{ xml_paths.remote }}/{{ item }}-latest.xml"
-      with_items: sites_to_export
+      with_items: "{{ sites_to_export }}"
 
     - name: Clean old XMLs # backslashes should be double escaped
       command: "find . -regextype posix-egrep -regex '^\\./({{ sites_to_export | join( '|' ) }})\\..+\\.xml$' -mtime +5 -exec rm -f {} +"

@@ -14,7 +14,7 @@
     group: no
     owner: no
     rsync_opts: "{{ wp_rsync_opts.root }}"
-  with_dict: sb_wp_sites
+  with_dict: "{{ sb_wp_sites }}"
 
 - name: Rsync WP uploads
   synchronize:
@@ -24,4 +24,4 @@
     group: no
     owner: no
     rsync_opts: "{{ wp_rsync_opts.uploads }}"
-  with_dict: sb_wp_sites
+  with_dict: "{{ sb_wp_sites }}"
