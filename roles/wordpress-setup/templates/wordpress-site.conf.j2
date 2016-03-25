@@ -94,15 +94,11 @@ server {
   }
 }
 
-{% if item.value.ssl is defined and item.value.ssl.enabled | default(False) %}
+{% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
 server {
   listen 80;
 
-  {% if item.value.www_redirect | default(true) -%}
-  server_name {{ item.value.site_hosts | join(' ') }} {{ item.value.site_hosts | reverse_www | join(' ') }};
-  {% else -%}
-  server_name {{ item.value.site_hosts | join(' ') }};
-  {% endif %}
+  server_name {{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) | join(' ') }};
 
   {% if item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
   include acme-challenge-location.conf;
@@ -124,7 +120,7 @@ server {
     listen 80;
   {% endif -%}
 
-  server_name {{ host | reverse_www }};
+  server_name {{ host | reverse_www(append=false) }};
   return 301 $scheme://{{ host }}$request_uri;
 }
 {% endfor %}

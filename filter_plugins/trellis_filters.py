@@ -7,26 +7,36 @@ import types
 from ansible import errors
 from ansible.compat.six import string_types
 
-def reverse_www(value):
+def reverse_www(hosts, enabled=True, append=True):
     ''' Add or remove www subdomain '''
 
-    # Check if value is a list and parse each item
-    if isinstance(value, (list, tuple, types.GeneratorType)):
-        values = []
-        for item in value:
-            values.append(reverse_www(item))
-        return values
+    if not enabled:
+        return hosts
+
+    # Check if hosts is a list and parse each host
+    if isinstance(hosts, (list, tuple, types.GeneratorType)):
+        reversed_hosts = [reverse_www(host) for host in hosts]
+
+        if append:
+            return list(set(hosts + reversed_hosts))
+        else:
+            return reversed_hosts
 
     # Add or remove www
-    elif isinstance(value, string_types):
-        if value.startswith('www.'):
-            return value[4:]
+    elif isinstance(hosts, string_types):
+        host = hosts
+
+        if len(host.split('.')) > 2:
+            return host
+
+        if host.startswith('www.'):
+            return host[4:]
         else:
-            return 'www.{0}'.format(value)
+            return 'www.{0}'.format(host)
 
     # Handle invalid input type
     else:
-        raise errors.AnsibleFilterError('The reverse_www filter expects a string or list of strings, got ' + repr(value))
+        raise errors.AnsibleFilterError('The reverse_www filter expects a string or list of strings, got ' + repr(hosts))
 
 
 class FilterModule(object):
