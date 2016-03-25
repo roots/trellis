@@ -75,15 +75,6 @@ For remote servers, you'll need to have a base Ubuntu 14.04 server already creat
 4. Consider setting `sshd_permit_root_login: false` in `group_vars/all/security.yml`. See the [Security docs](https://roots.io/trellis/docs/security/).
 5. Run `ansible-playbook server.yml -e env=<environment>`
 
-## Deploying to remote servers
-
-Full documentation: https://roots.io/trellis/docs/deploys/
-
-1. Add the `repo` (Git URL) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file.
-2. Set the `branch` you want to deploy (optional - defaults to `master`).
-3. Run `./deploy.sh <environment> <site name>`
-4. To rollback a deploy, run `ansible-playbook rollback.yml -e "site=<site name> env=<environment>"`
-
 ## Configuration
 
 ### HHVM
