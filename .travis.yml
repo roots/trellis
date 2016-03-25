@@ -6,10 +6,10 @@ install:
 - pip install ansible
 script:
 - ansible-galaxy install --force -r requirements.yml -p vendor/roles
-- ansible-playbook --syntax-check -i hosts/development dev.yml --vault-password-file=group_vars/vault-key
-- ansible-playbook --syntax-check -i hosts/development server.yml --vault-password-file=group_vars/vault-key
-- ansible-playbook --syntax-check -i hosts/development server-sandbox.yml --vault-password-file=group_vars/vault-key
-- ansible-playbook --syntax-check -i hosts/development sandbox-reset.yml --vault-password-file=group_vars/vault-key
+- ansible-playbook --syntax-check -e env=development dev.yml --vault-password-file=group_vars/vault-key
+- ansible-playbook --syntax-check -e env=development server.yml --vault-password-file=group_vars/vault-key
+- ansible-playbook --syntax-check -e env=development server-sandbox.yml --vault-password-file=group_vars/vault-key
+- ansible-playbook --syntax-check -e env=development sandbox-reset.yml --vault-password-file=group_vars/vault-key
 before_install:
 - openssl aes-256-cbc -K $encrypted_5434037dd783_key -iv $encrypted_5434037dd783_iv
   -in vault-key.enc -out group_vars/vault-key -d
