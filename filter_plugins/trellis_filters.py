@@ -38,6 +38,9 @@ def reverse_www(hosts, enabled=True, append=True):
     else:
         raise errors.AnsibleFilterError('The reverse_www filter expects a string or list of strings, got ' + repr(hosts))
 
+def to_env(dict_value):
+    envs = ["{0}='{1}'".format(key.upper(), value) for key, value in dict_value.iteritems()]
+    return "\n".join(envs)
 
 class FilterModule(object):
     ''' Trellis jinja2 filters '''
@@ -45,4 +48,5 @@ class FilterModule(object):
     def filters(self):
         return {
             'reverse_www': reverse_www,
+            'to_env': to_env,
         }

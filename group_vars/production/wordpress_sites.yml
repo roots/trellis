@@ -17,10 +17,8 @@ wordpress_sites:
       enabled: false
       duration: 30s
     env:
-      disable_wp_cron: true
       wp_home: http://example.com
       wp_siteurl: http://example.com/wp
-      wp_env: production
       db_name: example_prod
       db_user: example_dbuser
       # Define the following variables in group_vars/production/vault.yml

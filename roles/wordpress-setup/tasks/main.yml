@@ -33,4 +33,4 @@
     job: "curl -k -s {{ item.value.env.wp_siteurl }}/wp-cron.php > /dev/null 2>&1"
     cron_file: "wordpress-{{ item.key | replace('.', '_') }}"
   with_dict: "{{ wordpress_sites }}"
-  when: item.value.env.disable_wp_cron | default(false) and not item.value.multisite.enabled | default(false)
+  when: item.value.env.disable_wp_cron | default(true) and not item.value.multisite.enabled | default(false)

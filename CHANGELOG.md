@@ -1,4 +1,5 @@
 ### HEAD
+* Simplify and improve `wordpress_sites` with better defaults ([#528](https://github.com/roots/trellis/pull/528))
 * Improve Let's Encrypt challenge pre-flight tests ([#526](https://github.com/roots/trellis/pull/526))
 * `reverse_www` filter improvements (ignore subdomains) ([#525](https://github.com/roots/trellis/pull/525))
 * Fix #520 - Disable MariaDB binary logging by default ([#521](https://github.com/roots/trellis/pull/521))
