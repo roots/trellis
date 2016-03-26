@@ -19,8 +19,6 @@ wordpress_sites:
     env:
       wp_home: http://example.com
       wp_siteurl: http://example.com/wp
-      db_name: example_prod
-      db_user: example_dbuser
       # Define the following variables in group_vars/production/vault.yml
       # db_password:
       # auth_key:

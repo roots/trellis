@@ -37,7 +37,7 @@
     hosts: "{{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) }}"
   register: letsencrypt_test_challenges
   ignore_errors: true
-  when: item.value.ssl is defined and item.value.ssl.enabled | default(false) and item.value.ssl.provider | default('manual')  == 'letsencrypt'
+  when: site_uses_letsencrypt
   with_dict: "{{ wordpress_sites }}"
 
 - name: Notify of challenge failures

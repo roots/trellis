@@ -1,7 +1,7 @@
 ---
 - name: Create database of sites
   mysql_db:
-    name: "{{ item.value.env.db_name | default(item.key) }}"
+    name: "{{ db_name }}"
     state: present
     login_host: "{{ item.value.env.db_host | default('localhost') }}"
     login_user: "{{ mysql_root_user }}"
@@ -11,10 +11,10 @@
 
 - name: Create/assign database user to db and grant permissions
   mysql_user:
-    name: "{{ item.value.env.db_user }}"
+    name: "{{ db_user }}"
     password: "{{ vault_wordpress_sites[item.key].env.db_password }}"
     append_privs: yes
-    priv: "{{ item.value.env.db_name | default(item.key) }}.*:ALL"
+    priv: "{{ db_name }}.*:ALL"
     state: present
     login_host: "{{ item.value.env.db_host | default('localhost') }}"
     login_user: "{{ mysql_root_user }}"
@@ -31,11 +31,11 @@
 
 - name: Import database
   mysql_db:
-    name: "{{ item.value.env.db_name | default(item.key) }}"
+    name: "{{ db_name }}"
     state: import
     target: "/tmp/{{ item.value.db_import | basename }}"
     login_host: "{{ item.value.env.db_host | default('localhost') }}"
-    login_user: "{{ item.value.env.db_user }}"
+    login_user: "{{ db_user }}"
     login_password: "{{ vault_wordpress_sites[item.key].env.db_password }}"
   with_dict: "{{ wordpress_sites }}"
   when: item.value.db_import | default(False)
