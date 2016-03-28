@@ -1,0 +1,2 @@
+db_name: "{{ item.value.env.db_name | default(item.key + '_' + env) | underscore }}"
+db_user: "{{ item.value.env.db_user | default(item.key) | underscore }}"

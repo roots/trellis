@@ -6,7 +6,3 @@ default_timezone: Etc/UTC
 www_root: /srv/www
 ip_whitelist:
   - "{{ lookup('pipe', 'curl -4 -s https://api.ipify.org') }}"
-
-wordpress_env_defaults:
-  wp_env: "{{ env }}"
-  disable_wp_cron: true

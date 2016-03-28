@@ -19,8 +19,6 @@ wordpress_sites:
     env:
       wp_home: http://staging.example.com
       wp_siteurl: http://staging.example.com/wp
-      db_name: example_staging
-      db_user: example_dbuser
       # Define the following variables in group_vars/staging/vault.yml
       # db_password:
       # auth_key:

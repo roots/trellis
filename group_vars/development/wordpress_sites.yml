@@ -21,6 +21,4 @@ wordpress_sites:
     env:
       wp_home: http://example.dev
       wp_siteurl: http://example.dev/wp
-      db_name: example_dev
-      db_user: example_dbuser
       # db_password: (defined in group_vars/development/vault.yml)
