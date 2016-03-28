@@ -27,7 +27,7 @@
 - name: Install WP
   command: wp core install
            --allow-root
-           --url="{{ item.value.env.wp_home }}"
+           --url="{{ site_env.wp_home }}"
            --title="{{ item.value.site_title | default(item.key) }}"
            --admin_user="{{ item.value.admin_user }}"
            --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
@@ -50,7 +50,7 @@
 - name: Install WP Multisite
   command: wp core multisite-install
            --allow-root
-           --url="{{ item.value.env.wp_home }}"
+           --url="{{ site_env.wp_home }}"
            --base="{{ item.value.multisite.base_path | default('/') }}"
            --subdomains="{{ item.value.multisite.subdomains | default('false') }}"
            --title="{{ item.value.site_title | default(item.key) }}"

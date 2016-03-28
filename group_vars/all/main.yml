@@ -6,3 +6,14 @@ default_timezone: Etc/UTC
 www_root: /srv/www
 ip_whitelist:
   - "{{ lookup('pipe', 'curl -4 -s https://api.ipify.org') }}"
+
+wordpress_env_defaults:
+  db_host: localhost
+  db_name: "{{ item.key | underscore }}_{{ env }}"
+  db_user: "{{ item.key | underscore }}"
+  disable_wp_cron: true
+  wp_env: "{{ env }}"
+  wp_home: "{{ item.value.ssl.enabled | default(false) | ternary('https', 'http') }}://${HTTP_HOST}"
+  wp_siteurl: "${WP_HOME}/wp"
+
+site_env: "{{ wordpress_env_defaults | combine(item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
