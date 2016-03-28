@@ -1,4 +1,5 @@
 ### HEAD
+* Switch to Let's Encrypt X3 intermediate certificate and fix chain issues ([#534](https://github.com/roots/trellis/pull/534))
 * Supply better defaults for `db_name` and `db_user` ([#529](https://github.com/roots/trellis/pull/529))
 * Fix deploy env template to use valid ansible vars ([#530](https://github.com/roots/trellis/pull/530))
 * Simplify and improve `wordpress_sites` with better defaults ([#528](https://github.com/roots/trellis/pull/528))
