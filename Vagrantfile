@@ -76,6 +76,9 @@ Vagrant.configure('2') do |config|
     end
   else
     config.vm.provision :ansible do |ansible|
+      # uncomment out the next line if you do not want to store your password
+      # on your machine in a dotfile
+      # ansible.ask_vault_pass = true
       ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
       ansible.groups = {
         'web' => ['default'],
