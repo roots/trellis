@@ -73,6 +73,8 @@ Vagrant.configure('2') do |config|
   if Vagrant::Util::Platform.windows?
     config.vm.provision :shell do |sh|
       sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
+      sh.args = [Vagrant::VERSION]
+      sh.keep_color = true
     end
   else
     config.vm.provision :ansible do |ansible|
@@ -82,9 +84,10 @@ Vagrant.configure('2') do |config|
         'development' => ['default']
       }
 
+      ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
       if vars = ENV['ANSIBLE_VARS']
         extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
-        ansible.extra_vars = extra_vars
+        ansible.extra_vars.merge(extra_vars)
       end
     end
   end
