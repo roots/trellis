@@ -2,7 +2,7 @@
 # List each machine only once per [group], even if it will host multiple sites.
 
 [staging]
-your_server_ip
+your_server_hostname
 
 [web]
-your_server_ip
+your_server_hostname

@@ -1,4 +1,5 @@
 # Documentation: https://roots.io/trellis/docs/local-development-setup/
+# `wordpress_sites` options: https://roots.io/trellis/docs/wordpress-sites
 # Define accompanying passwords/secrets in group_vars/development/vault.yml
 
 wordpress_sites:
@@ -11,5 +12,6 @@ wordpress_sites:
       enabled: false
     ssl:
       enabled: false
+      provider: self-signed
     cache:
       enabled: false

@@ -1,4 +1,5 @@
 # Documentation: https://roots.io/trellis/docs/remote-server-setup/
+# `wordpress_sites` options: https://roots.io/trellis/docs/wordpress-sites
 # Define accompanying passwords/secrets in group_vars/staging/vault.yml
 
 wordpress_sites:
@@ -13,5 +14,6 @@ wordpress_sites:
       enabled: false
     ssl:
       enabled: false
+      provider: letsencrypt
     cache:
       enabled: false
