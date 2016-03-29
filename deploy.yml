@@ -13,6 +13,15 @@
     deploy_finalize_after: "{{ playbook_dir }}/roles/deploy/hooks/finalize-after.yml"
     project: "{{ wordpress_sites[site] }}"
     project_root: "{{ www_root }}/{{ site }}"
+    wordpress_env_defaults:
+      db_host: localhost
+      db_name: "{{ site | underscore }}_{{ env }}"
+      db_user: "{{ site | underscore }}"
+      disable_wp_cron: true
+      wp_env: "{{ env }}"
+      wp_home: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://${HTTP_HOST}"
+      wp_siteurl: "${WP_HOME}/wp"
+    site_env: "{{ wordpress_env_defaults | combine(project.env | default({}), vault_wordpress_sites[site].env) }}"
 
   pre_tasks:
     - name: Ensure site is valid

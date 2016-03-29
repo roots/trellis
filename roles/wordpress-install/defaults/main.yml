@@ -1,5 +1,0 @@
-wordpress_env_defaults:
-  db_name: "{{ item.key | underscore }}_{{ env }}"
-  db_user: "{{ item.key | underscore }}"
-  disable_wp_cron: true
-  wp_env: "{{ env }}"

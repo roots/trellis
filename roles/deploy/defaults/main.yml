@@ -40,9 +40,3 @@ project_shared_children:
 #   WP_ENV: "production"
 project_environment:
   WP_ENV: "{{ env }}"
-
-wordpress_env_defaults:
-  db_name: "{{ site | underscore }}_{{ env }}"
-  db_user: "{{ site | underscore }}"
-  disable_wp_cron: true
-  wp_env: "{{ env }}"
