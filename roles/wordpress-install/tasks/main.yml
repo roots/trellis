@@ -29,7 +29,7 @@
            --allow-root
            --url="{{ site_env.wp_home }}"
            --title="{{ item.value.site_title | default(item.key) }}"
-           --admin_user="{{ item.value.admin_user }}"
+           --admin_user="{{ item.value.admin_user | default('admin') }}"
            --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
@@ -54,7 +54,7 @@
            --base="{{ item.value.multisite.base_path | default('/') }}"
            --subdomains="{{ item.value.multisite.subdomains | default('false') }}"
            --title="{{ item.value.site_title | default(item.key) }}"
-           --admin_user="{{ item.value.admin_user }}"
+           --admin_user="{{ item.value.admin_user | default('admin') }}"
            --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
