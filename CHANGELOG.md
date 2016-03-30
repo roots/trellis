@@ -1,4 +1,5 @@
 ### HEAD
+* Move modules and plugins to `lib/trellis` directory ([#538](https://github.com/roots/trellis/pull/538))
 * Automatically set `wp_home` and `wp_siteurl` variables ([#533](https://github.com/roots/trellis/pull/533))
 * Switch to Let's Encrypt X3 intermediate certificate and fix chain issues ([#534](https://github.com/roots/trellis/pull/534))
 * Supply better defaults for `db_name` and `db_user` ([#529](https://github.com/roots/trellis/pull/529))
