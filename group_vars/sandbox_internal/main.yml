@@ -31,6 +31,8 @@ wp_rsync_opts:
     - "--exclude='/wp-content/uploads/'"
     - "--exclude='/wp-content/cache/'"
     - "--exclude='/wp-content/plugins/wp-rocket/'"
+    - "--exclude='/wp-content/plugins/js-style-swicher-*/'"
+    - "--exclude='/wp-content/plugins/*-style-switcher/'"
   uploads:
     - "--delete"
     - "--ignore-existing"
