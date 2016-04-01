@@ -1,6 +1,6 @@
 ---
 - name: WordPress Installed?
-  command: wp core is-installed
+  command: wp core is-installed {{ project.multisite.enabled | default(false) | ternary('--network', '') }}
   args:
     chdir: "{{ deploy_helper.new_release_path }}"
   register: wp_installed
