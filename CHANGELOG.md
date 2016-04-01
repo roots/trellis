@@ -1,4 +1,5 @@
 ### HEAD
+* Add plugin to pretty print Ansible msg output ([#544](https://github.com/roots/trellis/pull/544))
 * Fix #482 - Multisite is-installed deploy check ([#543](https://github.com/roots/trellis/pull/543))
 * Skip setting permalink for multisite installs ([#546](https://github.com/roots/trellis/pull/546))
 * Fix #489 - Add $realpath_root to fastcgi_cache_key ([#542](https://github.com/roots/trellis/pull/542))
