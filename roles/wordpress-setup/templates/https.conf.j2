@@ -1,0 +1,22 @@
+include h5bp/directive-only/ssl.conf;
+include h5bp/directive-only/ssl-stapling.conf;
+
+ssl_dhparam /etc/nginx/ssl/dhparams.pem;
+ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
+
+{% set hsts_max_age = item.value.ssl.hsts_max_age | default(nginx_hsts_max_age) %}
+{% set hsts_include_subdomains = item.value.ssl.hsts_include_subdomains | default(nginx_hsts_include_subdomains) | ternary('includeSubdomains', None) %}
+{% set hsts_preload = item.value.ssl.hsts_preload | default(nginx_hsts_preload) | ternary('preload', None) %}
+add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
+
+{% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
+{%- elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-bundled.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
+{%- elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
+  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ item.key }}.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.key }}.key;
+{%- endif -%}
