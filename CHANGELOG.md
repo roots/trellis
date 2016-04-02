@@ -1,4 +1,5 @@
 ### HEAD
+* Skip setting permalink for multisite installs ([#546](https://github.com/roots/trellis/pull/546))
 * Fix #489 - Add $realpath_root to fastcgi_cache_key ([#542](https://github.com/roots/trellis/pull/542))
 * Move modules and plugins to `lib/trellis` directory ([#538](https://github.com/roots/trellis/pull/538))
 * Automatically set `wp_home` and `wp_siteurl` variables ([#533](https://github.com/roots/trellis/pull/533))

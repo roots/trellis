@@ -45,7 +45,7 @@
   args:
     chdir: "{{ www_root }}/{{ item.key }}/current/"
   with_dict: "{{ wordpress_sites }}"
-  when: wp_install_results | changed
+  when: wp_install_results | changed and not wp_install_results | skipped
 
 - name: Install WP Multisite
   command: wp core multisite-install
