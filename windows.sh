@@ -6,6 +6,7 @@
 # @version 1.0
 
 ANSIBLE_PATH="$(find /vagrant -name 'windows.sh' -printf '%h' -quit)"
+export PYTHONUNBUFFERED=1
 
 # Create an ssh key if not already created.
 if [ ! -f ~/.ssh/id_rsa ]; then
@@ -31,7 +32,7 @@ fi
 # Install Ansible and its dependencies if not installed.
 if [ ! -f /usr/bin/ansible ]; then
   echo "Adding Ansible repository..."
-  sudo apt-add-repository ppa:ansible/ansible
+  sudo apt-add-repository -y ppa:ansible/ansible
   echo "Updating system..."
   sudo apt-get -y update
   echo "Installing Ansible..."
