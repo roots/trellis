@@ -1,4 +1,5 @@
 ### HEAD
+* Fix #550 - Properly skip permalink setup for MU ([#551](https://github.com/roots/trellis/pull/551))
 * Escape salts and keys to avoid templating errors ([#548](https://github.com/roots/trellis/pull/548))
 * Add plugin to pretty print Ansible msg output ([#544](https://github.com/roots/trellis/pull/544))
 * Fix #482 - Multisite is-installed deploy check ([#543](https://github.com/roots/trellis/pull/543))
