@@ -1,6 +1,12 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+from ansible import __version__
+from ansible.errors import AnsibleError
+
+if __version__.startswith('1'):
+    raise AnsibleError('Trellis no longer supports Ansible 1.x. Please upgrade to Ansible 2.x.')
+
 class VarsModule(object):
     ''' Creates and modifies host variables '''
 
