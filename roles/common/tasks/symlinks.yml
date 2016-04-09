@@ -1,9 +1,9 @@
 ---
 - name: Set default symlinks
-  sudo: no
+  become: no
   file:
-    src={{item.src}}
-    dest={{item.dest}}
-    state=link
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    state: link
   with_items: default_symlinks
   ignore_errors: yes
