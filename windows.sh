@@ -45,4 +45,4 @@ fi
 
 echo "Running Ansible Playbooks"
 cd ${ANSIBLE_PATH}/
-ansible-playbook dev.yml
+ansible-playbook dev.yml -e vagrant_version=$1

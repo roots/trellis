@@ -5,6 +5,7 @@ __metaclass__ = type
 import os.path
 import sys
 
+from ansible.parsing.dataloader import DataLoader
 from ansible.plugins.callback.default import CallbackModule as CallbackModule_default
 
 try:
@@ -30,10 +31,11 @@ class CallbackModule(CallbackModule_default):
         self.first_host = True
         self.first_item = True
         self.task_failed = False
+        self.vagrant_version = None
 
     def display_host_output(self, result):
         if 'results' not in result._result:
-            display_output(result, self.action, self._display.display, self.first_host and self.first_item, self.task_failed)
+            display_output(result, self.action, self._display.display, self.first_host and self.first_item, self.task_failed, self.vagrant_version)
             self.first_host = False
 
     def display_item_output(self, result):
@@ -79,6 +81,15 @@ class CallbackModule(CallbackModule_default):
     def v2_playbook_on_handler_task_start(self, task):
         self.reset_task(task)
         super(CallbackModule, self).v2_playbook_on_handler_task_start(task)
+
+    def v2_playbook_on_play_start(self, play):
+        super(CallbackModule, self).v2_playbook_on_play_start(play)
+
+        # Check for relevant settings or overrides passed via cli --extra-vars
+        loader = DataLoader()
+        play_vars = play.get_variable_manager().get_vars(loader=loader, play=play)
+        if 'vagrant_version' in play_vars:
+            self.vagrant_version = play_vars['vagrant_version']
 
     def v2_playbook_item_on_ok(self, result):
         self.display_item_output(result)
