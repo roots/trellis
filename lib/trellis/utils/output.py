@@ -36,14 +36,31 @@ def system(vagrant_version=None):
     # Assemble components and return
     return 'System info:\n  Ansible {0};{1} {2}{3}'.format(__version__, vagrant, platform.system(), changelog_msg)
 
-def display_output(result, action, display, first, task_failed=False, vagrant_version=None):
+def reset_task_info(obj, task=None):
+    obj.action = None if task is None else task._get_parent_attribute('action')
+    obj.first_host = True
+    obj.first_item = True
+    obj.task_failed = False
+    obj.vagrant_version = None
+
+# Display dict key only, instead of full json dump
+def replace_item_with_key(obj, result):
+    if not obj._display.verbosity:
+        if 'key' in result._result['item']:
+            result._result['item'] = result._result['item']['key']
+        elif 'item' in result._result['item'] and 'key' in result._result['item']['item']:
+            result._result['item'] = result._result['item']['item']['key']
+
+def display(obj, result):
     msg = ''
     result = result._result
+    display = obj._display.display
     wrap_width = 77
+    first = obj.first_host and obj.first_item
     failed = 'failed' in result or 'unreachable' in result
 
     # Only display msg if debug module or if failed (some modules have undesired 'msg' on 'ok')
-    if 'msg' in result and (failed or action == 'debug'):
+    if 'msg' in result and (failed or obj.action == 'debug'):
         msg = result.pop('msg', '')
 
         # Disable Ansible's verbose setting for debug module to avoid the CallbackBase._dump_results()
@@ -72,12 +89,12 @@ def display_output(result, action, display, first, task_failed=False, vagrant_ve
     # Display system info and msg, with horizontal rule between hosts/items
     hr = '-' * int(wrap_width*.67)
 
-    if task_failed and first:
-        display(system(vagrant_version), 'bright gray')
+    if obj.task_failed and first:
+        display(system(obj.vagrant_version), 'bright gray')
         display(hr, 'bright gray')
 
     if msg == '':
-        if task_failed and not first:
+        if obj.task_failed and not first:
             display(hr, 'bright gray')
         else:
             return
@@ -85,3 +102,12 @@ def display_output(result, action, display, first, task_failed=False, vagrant_ve
         if not first:
             display(hr, 'bright gray')
         display(msg, 'red' if failed else 'bright purple')
+
+def display_host(obj, result):
+    if 'results' not in result._result:
+        display(obj, result)
+        obj.first_host = False
+
+def display_item(obj, result):
+    display(obj, result)
+    obj.first_item = False
