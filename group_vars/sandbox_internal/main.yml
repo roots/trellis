@@ -65,6 +65,7 @@ sites_to_export:
   - structurepress
   - beauty
   - auto
+  - hammer
 
 xml_paths:
   local:  "/tmp/xml-exports"
