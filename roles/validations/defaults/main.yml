@@ -1,0 +1,75 @@
+# A validation will fail if any condition listed is true
+
+ansible_requirements:
+  - version: 2.0.2.0
+    operator: '>='
+  - version: 2.1.0.0
+    operator: '!='
+
+site: '' # `site` defined anywhere else (including extra-vars) will take priority over this
+
+validate_ansible_version:
+  name: Unsupported Ansible version
+  playbooks: all
+  conditions: "[{% for item in ansible_requirements %}{{ not ansible_version.full | version_compare(item.version, item.operator) }},{% endfor %}]"
+  msg: ansible_version.j2
+
+validate_site_hosts_format:
+  name: Invalid format for site_hosts
+  playbooks: dev.yml server.yml
+  conditions: "[{% for site in wordpress_sites.values() %}{{ site.site_hosts | rejectattr('canonical', 'defined') | list | count > 0 }}{% endfor %}]"
+  msg: site_hosts.j2
+
+validate_sudo_user:
+  name: No sudo user
+  playbooks: server.yml
+  conditions:
+    - "{% for user in users if user.name == admin_user %}{% if loop.last %}{{ 'sudo' not in user.groups | default([])}}{% endif %}{% else %}{{ true }}{% endfor %}"
+    - "{% for user in vault_users | default([]) if user.name == admin_user %}{% if loop.last %}{{ user.password is not defined }}{% endif %}{% else %}{{ true }}{% endfor %}"
+  msg: sudo_user.j2
+  when: "{{ admin_user != 'root' and not sshd_permit_root_login | bool | default(false) }}"
+
+validate_admin_user_is_not_root:
+  name: "`admin_user` must not be `root`"
+  playbooks: server.yml
+  conditions:
+    - "{{ admin_user == 'root' }}"
+  msg: admin_user_is_not_root.j2
+  when: "{{ not sshd_permit_root_login | bool | default(false) }}"
+
+validate_web_user_is_not_root:
+  name: "`web_user` must not be `root`"
+  playbooks: server.yml deploy.yml
+  conditions:
+    - "{{ web_user == 'root' }}"
+  msg: web_user_is_not_root.j2
+
+validate_site_variable:
+  name: Invalid `site` variable
+  playbooks: deploy.yml rollback.yml
+  conditions:
+    - "{{ site not in wordpress_sites }}"
+  msg: site_variable.j2
+
+validate_repo_definition:
+  name: Invalid `repo` definition
+  playbooks: deploy.yml
+  conditions:
+    - '{% if site in wordpress_sites %}{{ not wordpress_sites[site].repo | default("") | match(".*@.*:.*\.git") }}{% endif %}'
+  msg: repo_definition.j2
+  when: "{{ site in wordpress_sites }}"
+
+validate_repo_customized:
+  name: "`repo` definition must be customized"
+  playbooks: deploy.yml
+  conditions:
+    - "{% if site in wordpress_sites %}{{ wordpress_sites[site].repo | default('') == 'git@github.com:example/example.com.git' }}{% endif %}"
+  msg: repo_customized.j2
+  when: "{{ site in wordpress_sites }}"
+
+validate_one_env_group_only:
+  name: Host name is in multiple environment groups
+  playbooks: all
+  conditions:
+    - "{{ ['development', 'staging', 'production'] | difference(env) | difference(group_names) | count != 2 }}"
+  msg: one_env_group_only.j2

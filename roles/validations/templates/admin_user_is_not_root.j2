@@ -1,0 +1,1 @@
+When `sshd_permit_root_login: false` (in `group_vars/all/security.yml`), `admin_user` must be named something other than `root` so that there is a non-root sudoer created and available. Edit `admin_user` in `group_vars/all/users.yml`.

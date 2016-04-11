@@ -26,6 +26,7 @@ class CallbackModule(CallbackModule_default):
 
     def __init__(self):
         super(CallbackModule, self).__init__()
+        output.load_configs(self)
         output.reset_task_info(self)
 
     def v2_runner_on_failed(self, result, ignore_errors=False):
@@ -45,6 +46,10 @@ class CallbackModule(CallbackModule_default):
         self.task_failed = True
         output.display_host(self, result)
         super(CallbackModule, self).v2_runner_on_unreachable(result)
+
+    def v2_playbook_on_no_hosts_remaining(self):
+        output.display_fail_footer(self)
+        super(CallbackModule, self).v2_playbook_on_no_hosts_remaining()
 
     def v2_playbook_on_task_start(self, task, is_conditional):
         output.reset_task_info(self, task)

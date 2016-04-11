@@ -1,0 +1,6 @@
+When `sshd_permit_root_login: false`, you must add `sudo` to the `groups` for admin_user (in `users` hash), and set a password for admin_user in `vault_users` (in `group_vars/{{ env }}/vault.yml`). Otherwise Ansible could lose the ability to run the necessary sudo commands. {% if sudoer_passwords is defined or vault_sudoer_passwords is defined %}
+
+
+Please note that `sudoer_passwords` and `vault_sudoer_passwords have been replaced with `vault_users`. {% endif %}
+More info:
+> https://roots.io/trellis/docs/security/#admin-user-sudoer-password

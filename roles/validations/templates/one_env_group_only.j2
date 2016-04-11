@@ -1,0 +1,6 @@
+Ansible may not pick the right set of `group_vars` for the host `{{ inventory_hostname }}` because it appears to be in multiple environment groups (`{{ ['development', 'staging', 'production'] | intersect(group_names) | join('`, `') }}`).
+
+Edit your files in `hosts/<environment>` so that each hostname appears in one environment group only.
+
+If you are attempting to have multiple environments on a single host (e.g., both staging and production on a single server), note that it is not recommended. However, it is possible, with some adjustments. For details, see
+https://discourse.roots.io/t/6090/2

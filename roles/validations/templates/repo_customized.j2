@@ -1,0 +1,8 @@
+Edit the `repo` definition for `{{ site }}` in `group_vars/{{ env }}/wordpress_sites.yml`.
+
+  wordpress_sites:
+    {{ site }}:
+      repo: {{ project.repo }}
+
+The `repo` indicates the project to deploy. The project should be customized.
+More info: https://roots.io/trellis/docs/deploys/

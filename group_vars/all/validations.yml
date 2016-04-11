@@ -1,0 +1,13 @@
+validations:
+  - "{{ validate_ansible_version }}"
+  - "{{ validate_site_hosts_format }}"
+  - "{{ validate_sudo_user }}"
+  - "{{ validate_admin_user_is_not_root }}"
+  - "{{ validate_web_user_is_not_root }}"
+  - "{{ validate_site_variable }}"
+  - "{{ validate_repo_definition }}"
+  - "{{ validate_repo_customized }}"
+  - "{{ validate_one_env_group_only }}"
+
+# You probably only want to validate hosts separately if you have multiple hosts with differing variables
+validate_hosts_separately: false

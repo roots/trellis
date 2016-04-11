@@ -1,0 +1,17 @@
+---
+- name: Perform validations
+  connection: local
+  fail:
+    msg: |
+      {% if 'name' in item %}
+      *** Failed validation: {{ item.name }} ***
+
+      {% endif %}
+      {% if 'msg' in item and item.msg[-3:] == '.j2' %}
+      {{ lookup('template', item.msg) }}
+      {%- else %}
+      {{ item.msg | default('Failed validation') }}
+      {% endif %}
+  with_items: "[{% for item in validations | default([]) if 'all' in item.playbooks | default('all') or playbook in item.playbooks | default('all') %}{{ item }},{% endfor %}]"
+  when: item.when | default(true) and true in item.conditions | default([])
+  run_once: "{{ not validate_hosts_separately | default(false) }}"

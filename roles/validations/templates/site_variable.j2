@@ -1,0 +1,3 @@
+Site `{{ (site != '') | ternary(site, '(no site defined)') }}` is not valid. Available sites to deploy (from `group_vars/{{ env }}/wordpress_sites.yml`):
+
+{{ wordpress_sites.keys() | to_nice_yaml | trim }}

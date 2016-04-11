@@ -23,22 +23,6 @@
       wp_siteurl: "${WP_HOME}/wp"
     site_env: "{{ wordpress_env_defaults | combine(project.env | default({}), vault_wordpress_sites[site].env) }}"
 
-  pre_tasks:
-    - name: Ensure site is valid
-      connection: local
-      fail:
-        msg: "Site `{{ site | default('') }}` is not valid. Available sites to deploy: {{ wordpress_sites.keys() | join(', ') }}"
-      when: wordpress_sites[site | default('')] is not defined
-
-    - name: Ensure repo is valid
-      connection: local
-      fail:
-        msg: |
-          Invalid Git repository.
-          Ensure that your site's `repo` variable is defined in `group_vars/{{ env }}/wordpress_sites.yml` and uses the SSH format (example: git@github.com:roots/bedrock.git)
-          More info:
-          > https://roots.io/trellis/docs/deploys/
-      when: project.repo is not defined or not project.repo | match(".*@.*:.*\.git")
-
   roles:
-    - deploy
+    - { role: validations, tags: [validations, always], playbook: 'deploy.yml' }
+    - { role: deploy, tags: [deploy] }

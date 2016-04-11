@@ -5,6 +5,7 @@
   remote_user: vagrant
 
   roles:
+    - { role: validations, tags: [validations, always], playbook: 'dev.yml' }
     - { role: common, tags: [common] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }

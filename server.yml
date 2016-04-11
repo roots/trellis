@@ -21,6 +21,7 @@
   hosts: web:&{{ env }}
   become: yes
   roles:
+    - { role: validations, tags: [validations, always], playbook: 'server.yml' }
     - { role: common, tags: [common] }
     - { role: swapfile, swapfile_size: 1GB, tags: [swapfile] }
     - { role: fail2ban, tags: [fail2ban] }

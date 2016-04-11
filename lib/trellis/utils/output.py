@@ -23,26 +23,31 @@ def system(vagrant_version=None):
         # Retrieve release number if it is most recent entry
         release = re.search(r'^###\s((?!HEAD).*)', str)
         if release is not None:
-            changelog_msg = '\n  Trellis {0}'.format(release.group(1))
+            changelog_msg = '\nTrellis {0}'.format(release.group(1))
 
         # Retrieve most recent changelog entry
         else:
             change = re.search(r'^\*\s?(\[BREAKING\])?([^\(\n\[]+)', str, re.M|re.I)
             if change is not None:
-                changelog_msg = '\n  Trellis at "{0}"'.format(change.group(2).strip())
+                changelog_msg = '\nTrellis at "{0}"'.format(change.group(2).strip())
 
     # Vagrant info, if available
     vagrant = ' Vagrant {0};'.format(vagrant_version) if vagrant_version else ''
 
     # Assemble components and return
-    return 'System info:\n  Ansible {0};{1} {2}{3}'.format(__version__, vagrant, platform.system(), changelog_msg)
+    return 'Ansible {0};{1} {2}{3}'.format(__version__, vagrant, platform.system(), changelog_msg)
+
+def load_configs(obj):
+    obj.vagrant_version = None
+    obj.wrap_width = 80
+    obj.hr = '-' * int(obj.wrap_width * .67)
 
 def reset_task_info(obj, task=None):
+    obj.role = task._role.get_name() if task is not None and task._role else None
     obj.action = None if task is None else task._get_parent_attribute('action')
     obj.first_host = True
     obj.first_item = True
     obj.task_failed = False
-    obj.vagrant_version = None
 
 # Display dict key only, instead of full json dump
 def replace_item_with_key(obj, result):
@@ -52,11 +57,14 @@ def replace_item_with_key(obj, result):
         elif 'item' in result._result['item'] and 'key' in result._result['item']['item']:
             result._result['item'] = result._result['item']['item']['key']
 
+def wrap_text(obj, msg):
+    return '\n'.join([textwrap.fill(line, obj.wrap_width, replace_whitespace=False)
+                      for line in msg.splitlines()])
+
 def display(obj, result):
     msg = ''
     result = result._result
     display = obj._display.display
-    wrap_width = 77
     first = obj.first_host and obj.first_item
     failed = 'failed' in result or 'unreachable' in result
 
@@ -84,24 +92,18 @@ def display(obj, result):
         msg = to_unicode(msg)
 
     # Wrap text
-    msg = '\n'.join([textwrap.fill(line, wrap_width, replace_whitespace=False)
-                     for line in msg.splitlines()])
+    msg = wrap_text(obj, msg)
 
-    # Display system info and msg, with horizontal rule between hosts/items
-    hr = '-' * int(wrap_width*.67)
-
-    if obj.task_failed and first:
-        display(system(obj.vagrant_version), 'bright gray')
-        display(hr, 'bright gray')
+    # Display msg with horizontal rule between hosts/items
 
     if msg == '':
         if obj.task_failed and not first:
-            display(hr, 'bright gray')
+            display(obj.hr, 'bright gray')
         else:
             return
     else:
         if not first:
-            display(hr, 'bright gray')
+            display(obj.hr, 'bright gray')
         display(msg, 'red' if failed else 'bright purple')
 
 def display_host(obj, result):
@@ -112,3 +114,10 @@ def display_host(obj, result):
 def display_item(obj, result):
     display(obj, result)
     obj.first_item = False
+
+def display_fail_footer(obj):
+    display = obj._display.display
+    display(obj.hr, 'bright gray')
+    if obj.role == 'validations':
+        display(wrap_text(obj, 'You may disable individual validations in `group_vars/all/validations.yml`.'), 'red')
+    display(system(obj.vagrant_version), 'bright gray')

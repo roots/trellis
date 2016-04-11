@@ -12,4 +12,5 @@
     project_current_path: "{{ wordpress_sites[site].current_path | default('current') }}"
 
   roles:
-    - rollback
+    - { role: validations, tags: [validations, always], playbook: 'rollback.yml' }
+    - { role: rollback, tags: [rollback] }

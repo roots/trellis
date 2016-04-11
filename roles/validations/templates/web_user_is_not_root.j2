@@ -1,0 +1,4 @@
+`web_user` must be named something other than `root` to avoid web root files being owned by `root`.
+
+Edit `web_user` in `group_vars/all/users.yml` then ensure users are set up on your remote(s) by running:
+ansible-playbook server.yml -e env={{ env }} --tags users

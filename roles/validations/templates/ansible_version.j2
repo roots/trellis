@@ -1,0 +1,5 @@
+Your Ansible version is {{ ansible_version.full | default('unknown') }}.
+Please install a version of Ansible that meets these requirements:
+{% for item in ansible_requirements %}
+  {{ item.operator }} {{ item.version }}
+{% endfor %}
