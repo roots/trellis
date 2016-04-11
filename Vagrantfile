@@ -9,8 +9,13 @@ memory = 1024 # in MB
 
 ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
 
-# Set Ansible roles_path relative to Ansible directory
+# Set Ansible paths relative to Ansible directory
+ENV['ANSIBLE_CONFIG'] = ANSIBLE_PATH
+ENV['ANSIBLE_CALLBACK_PLUGINS'] = "~/.ansible/plugins/callback_plugins/:/usr/share/ansible_plugins/callback_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/callback')}"
+ENV['ANSIBLE_FILTER_PLUGINS'] = "~/.ansible/plugins/filter_plugins/:/usr/share/ansible_plugins/filter_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/filter')}"
+ENV['ANSIBLE_LIBRARY'] = "/usr/share/ansible:#{File.join(ANSIBLE_PATH, 'lib/trellis/modules')}"
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
+ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars_plugins/:/usr/share/ansible_plugins/vars_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/vars')}"
 
 config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
 

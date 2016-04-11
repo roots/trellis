@@ -13,7 +13,8 @@ from ansible.utils.unicode import to_unicode
 def system(vagrant_version=None):
     # Get most recent Trellis CHANGELOG entry
     changelog_msg = ''
-    changelog = os.path.join(os.getcwd(), 'CHANGELOG.md')
+    ansible_path = os.getenv('ANSIBLE_CONFIG', os.getcwd())
+    changelog = os.path.join(ansible_path, 'CHANGELOG.md')
 
     if os.path.isfile(changelog):
         with open(changelog) as f:
