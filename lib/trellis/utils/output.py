@@ -70,7 +70,7 @@ def display(obj, result):
 
     # Display additional info when failed
     if failed:
-        items = (item for item in ['module_stderr', 'module_stdout', 'stderr'] if item in result and to_unicode(result[item]) != '')
+        items = (item for item in ['reason', 'module_stderr', 'module_stdout', 'stderr'] if item in result and to_unicode(result[item]) != '')
         for item in items:
             msg = result[item] if msg == '' else '\n'.join([msg, result.pop(item, '')])
 
