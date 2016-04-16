@@ -49,8 +49,3 @@
     url: "{{ letsencrypt_intermediate_cert_url }}"
     dest: "{{ letsencrypt_intermediate_cert_path }}"
     sha256sum: "{{ letsencrypt_intermediate_cert_sha256sum }}"
-
-- name: Create Nginx conf for challenges location
-  template:
-    src: acme-challenge-location.conf.j2
-    dest: "{{ nginx_path }}/acme-challenge-location.conf"

@@ -47,6 +47,12 @@
                }}"
   notify: reload nginx
 
+- name: Create Nginx conf for challenges location
+  template:
+    src: "{{ playbook_dir }}/roles/letsencrypt/templates/acme-challenge-location.conf.j2"
+    dest: "{{ nginx_path }}/acme-challenge-location.conf"
+  notify: reload nginx
+
 - name: Create WordPress configuration for Nginx
   template:
     src: "wordpress-site.conf.j2"
@@ -62,13 +68,4 @@
     group: root
     state: link
   with_dict: "{{ wordpress_sites }}"
-
-- name: test nginx conf
-  command: nginx -t
-  changed_when: false
-
-- name: trigger nginx reload
-  service:
-    name: nginx
-    state: reloaded
-  changed_when: false
+  notify: reload nginx

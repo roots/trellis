@@ -1,30 +1,33 @@
-- name: Check for existing certificates
+- name: Check for existing Nginx conf per site
   stat:
-    path: "{{ letsencrypt_certs_dir }}/{{ item.key }}.cert"
-  register: letsencrypt_existing_certs
+    path: "{{ nginx_path }}/sites-enabled/{{ item.key }}.conf"
+  register: nginx_confs
   when: site_uses_letsencrypt
   with_dict: "{{ wordpress_sites }}"
 
-- name: Create Nginx sites for challenges
+- name: Create Nginx conf for challenges location
+  template:
+    src: acme-challenge-location.conf.j2
+    dest: "{{ nginx_path }}/acme-challenge-location.conf"
+  when: sites_need_confs
+
+- name: Create needed Nginx confs for challenges
   template:
     src: nginx-challenge-site.conf.j2
     dest: "{{ nginx_path }}/sites-available/letsencrypt-{{ item.item.key }}.conf"
   when: not item | skipped and not item.stat.exists
-  with_items: "{{ letsencrypt_existing_certs.results }}"
+  with_items: "{{ nginx_confs.results }}"
 
-- name: Enable Nginx site
+- name: Enable Nginx sites
   file:
     src: "{{ nginx_path }}/sites-available/letsencrypt-{{ item.item.key }}.conf"
     dest: "{{ nginx_path }}/sites-enabled/letsencrypt-{{ item.item.key }}.conf"
     state: link
   when: not item | skipped and not item.stat.exists
-  with_items: "{{ letsencrypt_existing_certs.results }}"
+  with_items: "{{ nginx_confs.results }}"
 
-- name: Trigger nginx reload
-  service:
-    name: nginx
-    state: reloaded
-  changed_when: false
+- include: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
+  when: sites_need_confs
 
 - name: Create test Acme Challenge file
   shell: touch {{ acme_tiny_challenges_directory }}/ping.txt
