@@ -1,3 +1,6 @@
+### HEAD
+* Enable Let's Encrypt to transition http sites to https ([#565](https://github.com/roots/trellis/pull/565))
+
 ### 0.9.7: April 10th, 2016
 * Fix #550 - Properly skip permalink setup for MU ([#551](https://github.com/roots/trellis/pull/551))
 * Escape salts and keys to avoid templating errors ([#548](https://github.com/roots/trellis/pull/548))

@@ -36,6 +36,10 @@ server {
     {{ lookup('template', 'https.conf.j2') }}
   {% endif %}
 
+  {% if item.value.ssl is not defined or not item.value.ssl.enabled | default(false) -%}
+    include acme-challenge-location.conf;
+  {% endif %}
+
   include includes.d/{{ item.key }}/*.conf;
   include wordpress.conf;
 
@@ -102,6 +106,15 @@ server {
   {% endif -%}
 
   server_name {{ host | reverse_www(append=false) }};
-  return 301 $scheme://{{ host }}$request_uri;
+
+  {% if item.value.ssl is not defined or not item.value.ssl.enabled | default(false) -%}
+    include acme-challenge-location.conf;
+
+    location / {
+      return 301 $scheme://{{ host }}$request_uri;
+    }
+  {% else %}
+    return 301 $scheme://{{ host }}$request_uri;
+  {% endif %}
 }
 {% endfor %}

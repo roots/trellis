@@ -1,6 +1,7 @@
 sites_using_letsencrypt: "[{% for name, site in wordpress_sites.iteritems() if site.ssl.enabled and site.ssl.provider | default('manual') == 'letsencrypt' %}'{{ name }}',{% endfor %}]"
 letsencrypt_enabled: "{{ sites_using_letsencrypt | count > 0 }}"
 site_uses_letsencrypt: "{{ item.value.ssl is defined and item.value.ssl.enabled | default(false) and item.value.ssl.provider | default('manual') == 'letsencrypt' }}"
+sites_need_confs: "False in [{% for item in nginx_confs.results if 'stat' in item %}{{ item.stat.exists }},{% endfor %}]"
 
 acme_tiny_repo: 'https://github.com/diafygi/acme-tiny.git'
 acme_tiny_commit: '69a457269a6392ac31b629b4e103e8ea7dd282c9'

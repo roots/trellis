@@ -37,19 +37,12 @@
     chdir: "{{ acme_tiny_data_directory }}"
   register: generate_initial_cert
   changed_when: generate_initial_cert.stdout is defined and 'Created' in generate_initial_cert.stdout
+  notify: reload nginx
 
 - name: Disable Nginx site
   file:
     path: "{{ nginx_path }}/sites-enabled/letsencrypt-{{ item.key }}.conf"
     state: absent
   with_dict: "{{ wordpress_sites }}"
-
-- name: Test nginx conf
-  command: nginx -t
-  changed_when: false
-
-- name: Trigger nginx reload
-  service:
-    name: nginx
-    state: reloaded
-  changed_when: false
+  when: sites_need_confs
+  notify: reload nginx

@@ -10,6 +10,4 @@
     state: reloaded
 
 - name: reload nginx
-  service:
-    name: nginx
-    state: reloaded
+  include: reload_nginx.yml
