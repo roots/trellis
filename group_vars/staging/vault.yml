@@ -11,7 +11,7 @@ vault_wordpress_sites:
   example.com:
     env:
       db_password: example_dbpassword
-      # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/
+      # Generate your keys here: https://roots.io/salts.html
       auth_key: "generateme"
       secure_auth_key: "generateme"
       logged_in_key: "generateme"
