@@ -8,7 +8,17 @@ import re
 import textwrap
 
 from ansible import __version__
+from ansible import constants as C
 from ansible.utils.unicode import to_unicode
+
+def load_configs(obj):
+    obj.wrap_width = int(C.get_config(C.p, 'trellis_output', 'wrap_width', 'TRELLIS_WRAP_WIDTH', 80))
+    obj.display_include_tasks = (obj._display.verbosity or
+        C.get_config(C.p, 'trellis_output', 'display_include_tasks', 'TRELLIS_DISPLAY_INCLUDE_TASKS', False, boolean=True))
+    obj.display_skipped_items = (obj._display.verbosity or
+        C.get_config(C.p, 'trellis_output', 'display_skipped_items', 'TRELLIS_DISPLAY_SKIPPED_ITEMS', False, boolean=True))
+    obj.truncate_items = (not obj._display.verbosity and
+        C.get_config(C.p, 'trellis_output', 'truncate_items', 'TRELLIS_TRUNCATE_ITEMS', True, boolean=True))
 
 def system(vagrant_version=None):
     # Get most recent Trellis CHANGELOG entry
@@ -46,17 +56,26 @@ def reset_task_info(obj, task=None):
 
 # Display dict key only, instead of full json dump
 def replace_item_with_key(obj, result):
-    if not obj._display.verbosity:
+    if obj.truncate_items:
         if 'key' in result._result['item']:
             result._result['item'] = result._result['item']['key']
         elif 'item' in result._result['item'] and 'key' in result._result['item']['item']:
             result._result['item'] = result._result['item']['item']['key']
 
+# Display item's first line only
+def truncate_item(obj, result):
+    if obj.truncate_items:
+        status = 'changed' if result._result.get('changed', False) else 'ok'
+        pre = '{0}: [{1}] => (item=)'.format(status, result._host.get_name())
+        item = to_unicode(obj._get_item(result._result))
+        if (len(pre) + len(item)) > obj.wrap_width:
+            result._result['item'] = '{0}...'.format(item[:(obj.wrap_width - len(pre) - 3)])
+
 def display(obj, result):
     msg = ''
     result = result._result
     display = obj._display.display
-    wrap_width = 77
+    wrap_width = obj.wrap_width
     first = obj.first_host and obj.first_item
     failed = 'failed' in result or 'unreachable' in result
 
