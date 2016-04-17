@@ -26,13 +26,13 @@ def reverse_www(hosts, enabled=True, append=True):
     elif isinstance(hosts, string_types):
         host = hosts
 
-        if len(host.split('.')) > 2:
-            return host
-
         if host.startswith('www.'):
             return host[4:]
         else:
-            return 'www.{0}'.format(host)
+            if len(host.split('.')) > 2:
+                return host
+            else:
+                return 'www.{0}'.format(host)
 
     # Handle invalid input type
     else:
