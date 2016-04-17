@@ -1,4 +1,5 @@
 ### HEAD
+* Fix #569 - Only skip subdomains for non-www domains ([#570](https://github.com/roots/trellis/pull/570))
 * Enable Let's Encrypt to transition http sites to https ([#565](https://github.com/roots/trellis/pull/565))
 
 ### 0.9.7: April 10th, 2016
