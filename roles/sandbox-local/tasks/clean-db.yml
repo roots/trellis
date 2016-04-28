@@ -1,0 +1,12 @@
+---
+- name: Get the list of all the tables that match '*_comment*'
+  shell: wp db tables --allow-root --network | grep '_comment'
+  args:
+    chdir: "{{ wp_dir }}"
+  register: wp_tables_to_truncate
+
+- name: Clean the comments and commentmeta
+  command: "wp db query --allow-root 'TRUNCATE {{ item }};'"
+  args:
+    chdir: "{{ wp_dir }}"
+  with_items: "{{ wp_tables_to_truncate.stdout_lines }}"
