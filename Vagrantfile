@@ -48,6 +48,13 @@ Vagrant.configure('2') do |config|
   # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
   config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
 
+  if Vagrant.has_plugin? 'vagrant-hostmanager'
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+  else
+    fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager"
+  end
+
   ############################################################################
   # default devbox definition
   ############################################################################
@@ -64,13 +71,8 @@ Vagrant.configure('2') do |config|
     aliases.concat static_sites.flat_map { |(_name, site)| site['site_hosts'] } # add aliases from the static sites
     www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
 
-    if Vagrant.has_plugin? 'vagrant-hostmanager'
-      default.hostmanager.enabled = true
-      default.hostmanager.manage_host = true
-      default.hostmanager.aliases = (aliases + www_aliases).uniq
-    else
-      fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager"
-    end
+    default.hostmanager.aliases = (aliases + www_aliases).uniq
+
 
     if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
       wordpress_sites.each_pair do |name, site|
