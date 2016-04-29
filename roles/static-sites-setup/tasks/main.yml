@@ -1,6 +1,6 @@
 ---
 - include: self-signed-certificate.yml
-- include: nginx.yml
+  tags: statis-sites-setup-self-signed-certificate
 
 - name: Create web root
   file:
@@ -9,7 +9,7 @@
     group: "{{ web_group }}"
     mode: 0755
     state: directory
-  with_dict: static_sites
+  with_dict: "{{ static_sites }}"
 
 - name: Create logs folder of sites
   file:
@@ -18,4 +18,7 @@
     group: "{{ web_group }}"
     mode: 0755
     state: directory
-  with_dict: static_sites
+  with_dict: "{{ static_sites }}"
+
+- include: nginx.yml
+  tags: static-sites-setup-nginx
