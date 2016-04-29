@@ -3,7 +3,3 @@
 
 [sbs]
 localhost ansible_connection=local
-
-[sandbox_internal:children]
-as
-sbs

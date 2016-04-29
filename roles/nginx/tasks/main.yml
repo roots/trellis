@@ -12,7 +12,8 @@
 
 - name: Create SSL directory
   file:
-    dest: "{{ nginx_path }}/ssl"
+    mode: 0700
+    path: "{{ nginx_path }}/ssl"
     state: directory
 
 - name: Generate strong unique Diffie-Hellman group.
@@ -21,6 +22,7 @@
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
   notify: reload nginx
+  tags: [diffie-hellman]
 
 - name: Grab h5bp/server-configs-nginx
   git:

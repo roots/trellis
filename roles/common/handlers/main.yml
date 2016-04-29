@@ -1,9 +1,13 @@
 ---
-- name: restart hhvm
-  service: name=hhvm state=restarted
-
-- name: reload nginx
-  service: name=nginx state=reloaded
+- name: restart memcached
+  service:
+    name: memcached
+    state: restarted
 
 - name: reload php-fpm
-  service: name=php5-fpm state=reloaded
+  service:
+    name: php7.0-fpm
+    state: reloaded
+
+- name: reload nginx
+  include: reload_nginx.yml

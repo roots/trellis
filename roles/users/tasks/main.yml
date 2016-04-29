@@ -1,13 +1,16 @@
 ---
 - name: Ensure sudo group is present
-  group: name=sudo state=present
+  group:
+    name: sudo
+    state: present
 
 - name: Ensure sudo group has sudo privileges
-  lineinfile: dest=/etc/sudoers
-              state=present
-              regexp="^%sudo"
-              line="%sudo ALL=(ALL:ALL) NOPASSWD:ALL"
-              validate="/usr/sbin/visudo -cf %s"
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^%sudo"
+    line: "%sudo ALL=(ALL:ALL) NOPASSWD:ALL"
+    validate: "/usr/sbin/visudo -cf %s"
 
 - name: Fail if root login will be disabled but admin_user will not be a sudoer
   assert:
@@ -18,12 +21,13 @@
   when: not sshd_permit_root_login
 
 - name: Setup users
-  user: name="{{ item.name }}"
-        group="{{ item.groups[0] }}"
-        groups="{{ item.groups | join(',') }}"
-        state=present
-        shell=/bin/bash
-  with_items: users
+  user:
+    name: "{{ item.name }}"
+    group: "{{ item.groups[0] }}"
+    groups: "{{ item.groups | join(',') }}"
+    state: present
+    shell: /bin/bash
+  with_items: "{{ users }}"
 
 - name: Add web user sudoers items for services
   template:
@@ -36,16 +40,18 @@
   when: web_sudoers
 
 - name: Add SSH keys
-  authorized_key: user="{{ item.0.name }}" key="{{ item.1 }}"
+  authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ item.1 }}"
   with_subelements:
-    - users | default([])
+    - "{{ users | default([]) }}"
     - keys
 
 - name: Check whether Ansible can connect as admin_user
   local_action: command ansible {{ inventory_hostname }} -m ping{{ (inventory_file == None) | ternary('', ' -i ' + inventory_file | string) }} -u {{ admin_user }}
   failed_when: false
   changed_when: false
-  sudo: no
+  become: no
   register: admin_user_status
   when: not sshd_permit_root_login
 

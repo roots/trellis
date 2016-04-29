@@ -11,3 +11,4 @@
           Environment missing. Use `-e` to define `env`:
           ansible-playbook {{ playbook }} -e {{ extra_vars_command }}
       when: env is not defined
+      tags: [variable-check]

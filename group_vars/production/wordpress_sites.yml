@@ -1,4 +1,7 @@
 # Documentation: https://roots.io/trellis/docs/remote-server-setup/
+# `wordpress_sites` options: https://roots.io/trellis/docs/wordpress-sites
+# Define accompanying passwords/secrets in group_vars/production/vault.yml
+
 wordpress_sites:
   demo.proteusthemes.com:
     site_hosts:
@@ -8,25 +11,7 @@ wordpress_sites:
       enabled: true
       subdomains: false
     ssl:
-      enabled: false
+      enabled: true
+      provider: letsencrypt
     cache:
       enabled: false
-      duration: 30s
-    env:
-      disable_wp_cron: true
-      wp_home: https://demo.proteusthemes.com
-      wp_siteurl: https://demo.proteusthemes.com
-      wp_env: production
-      db_name: demo_network
-      db_user: example_dbuser
-      db_password: example_dbpassword
-      # Generate your keys here: https://api.wordpress.org/secret-key/1.1/salt/
-      # These CANNOT contain the characters "{%" in succession
-      auth_key: "generateme"
-      secure_auth_key: "generateme"
-      logged_in_key: "generateme"
-      nonce_key: "generateme"
-      auth_salt: "generateme"
-      secure_auth_salt: "generateme"
-      logged_in_salt: "generateme"
-      nonce_salt: "generateme"

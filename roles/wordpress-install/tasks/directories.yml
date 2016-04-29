@@ -1,8 +1,18 @@
 ---
+- name: Create web root of sites
+  file:
+    path: "{{ www_root }}/{{ item.key }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0775
+    state: directory
+  with_dict: "{{ wordpress_sites }}"
+
 - name: Change site owner to user
-  file: path="{{ www_root }}/{{ item.key }}"
-        owner="{{ web_user }}"
-        group="{{ web_group }}"
-        state=directory
-        recurse=yes
-  with_dict: wordpress_sites
+  file:
+    path: "{{ www_root }}/{{ item.key }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    state: directory
+    recurse: yes
+  with_dict: "{{ wordpress_sites }}"

@@ -1,3 +1,7 @@
+- name: composer
+  src: geerlingguy.composer
+  version: 1.2.7
+
 - name: ntp
   src: resmo.ntp
   version: 0.3.0
@@ -6,17 +10,16 @@
   src: nickhammond.logrotate
   version: fc3ea4
 
-- name: php5-xdebug
-  src: MaximeThoonsen.php5-xdebug
-  version: v1.0.5
-
 - name: swapfile
   src: kamaln7.swapfile
   version: 0.4
 
+- src: geerlingguy.daemonize
+  version: 1.1.0
+
 - name: mailhog
   src: geerlingguy.mailhog
-  version: 1.0.3
+  version: 1.0.5
 
 - name: ansible
   src: AsianChris.ansible

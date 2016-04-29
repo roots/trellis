@@ -1,0 +1,5 @@
+server {
+  listen 80;
+  server_name {{ item.item.value.site_hosts | reverse_www(enabled=item.item.value.www_redirect | default(true)) | join(' ') }};
+  include acme-challenge-location.conf;
+}

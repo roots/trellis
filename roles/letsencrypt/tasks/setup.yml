@@ -1,0 +1,51 @@
+- name: Create directories and set permissions
+  file:
+    mode: "{{ item.mode | default(omit) }}"
+    path: "{{ item.path }}"
+    state: directory
+  with_items:
+    - path: "{{ acme_tiny_data_directory }}"
+      mode: '0700'
+    - path: "{{ acme_tiny_data_directory }}/csrs"
+    - path: "{{ acme_tiny_software_directory }}"
+    - path: "{{ acme_tiny_challenges_directory }}"
+    - path: "{{ letsencrypt_certs_dir }}"
+      mode: '0700'
+
+- name: Clone acme-tiny repository
+  git:
+    dest: "{{ acme_tiny_software_directory }}"
+    repo: "{{ acme_tiny_repo }}"
+    version: "{{ acme_tiny_commit }}"
+    accept_hostkey: yes
+
+- name: Copy Lets Encrypt account key source file
+  copy:
+    src: "{{ letsencrypt_account_key_source_file }}"
+    dest: "{{ letsencrypt_account_key }}"
+  when: letsencrypt_account_key_source_file is defined
+
+- name: Copy Lets Encrypt account key source contents
+  copy:
+    content: "{{ letsencrypt_account_key_source_content | trim }}"
+    dest: "{{ letsencrypt_account_key }}"
+  when: letsencrypt_account_key_source_content is defined
+
+- name: Generate a new account key
+  shell: openssl genrsa 4096 > {{ letsencrypt_account_key }}
+  args:
+    creates: "{{ letsencrypt_account_key }}"
+  register: generate_account_key
+  when: letsencrypt_account_key_source_content is not defined and letsencrypt_account_key_source_file is not defined
+
+- name: Generate certificate renewal script
+  template:
+    src: renew-certs.py
+    dest: "{{ acme_tiny_data_directory }}/renew-certs.py"
+    mode: 0700
+
+- name: Download intermediate certificate
+  get_url:
+    url: "{{ letsencrypt_intermediate_cert_url }}"
+    dest: "{{ letsencrypt_intermediate_cert_path }}"
+    sha256sum: "{{ letsencrypt_intermediate_cert_sha256sum }}"

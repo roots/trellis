@@ -1,25 +1,33 @@
 ---
 - name: Copy SSL cert
-  copy: src="{{ item.value.ssl.cert }}" dest=/etc/nginx/ssl/{{ item.value.ssl.cert | basename }} mode=0640
-  with_dict: wordpress_sites
-  when: item.value.ssl.enabled and item.value.ssl.cert is defined | default(False)
+  copy:
+    src: "{{ item.value.ssl.cert }}"
+    dest: "{{ nginx_ssl_path }}/{{ item.value.ssl.cert | basename }}"
+    mode: 0640
+  with_dict: "{{ wordpress_sites }}"
+  when: item.value.ssl.enabled and item.value.ssl.cert is defined
 
 - name: Copy SSL key
-  copy: src="{{ item.value.ssl.key }}" dest=/etc/nginx/ssl/{{ item.value.ssl.key | basename }} mode=0600
-  with_dict: wordpress_sites
-  when: item.value.ssl.enabled and item.value.ssl.key is defined | default(False)
+  copy:
+    src: "{{ item.value.ssl.key }}"
+    dest: "{{ nginx_ssl_path }}/{{ item.value.ssl.key | basename }}"
+    mode: 0600
+  with_dict: "{{ wordpress_sites }}"
+  when: item.value.ssl.enabled and item.value.ssl.key is defined
 
 - name: Create includes.d directories
-  file: path="/etc/nginx/includes.d/{{ item }}"
-        state=directory
-        mode=0755
-  with_items: wordpress_sites.keys()
+  file:
+    path: "{{ nginx_path }}/includes.d/{{ item }}"
+    state: directory
+    mode: 0755
+  with_items: "{{ wordpress_sites.keys() }}"
   register: nginx_includes_paths
 
 - name: Template files out to includes.d
-  template: src="includes.d/{{ item }}"
-            dest="/etc/nginx/includes.d/{{ item[:-3] }}"
-  with_lines: "cd ../templates/includes.d && find {{ wordpress_sites.keys() | join(' ') }} -type f -name \\*.conf.j2 2>/dev/null || :"
+  template:
+    src: "includes.d/{{ item }}"
+    dest: "{{ nginx_path }}/includes.d/{{ item[:-3] }}"
+  with_lines: "cd {{ role_path }}/templates/includes.d && find {{ wordpress_sites.keys() | join(' ') }} -type f -name \\*.conf.j2 2>/dev/null || :"
   register: nginx_includes_managed
   notify: reload nginx
 
@@ -29,22 +37,35 @@
   changed_when: false
 
 - name: Remove unmanaged files from includes.d
-  file: path="{{ item }}"
-        state=absent
-  with_items: "{{ nginx_includes_existing.stdout_lines | difference(nginx_includes_managed.results | default([]) | map(attribute='item') | map('regex_replace', '(.*)\\.j2', '/etc/nginx/includes.d/\\\\1') | list) }}"
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ nginx_includes_existing.stdout_lines |
+                  difference(nginx_includes_managed.results | default([]) | map(attribute='item') |
+                    map('regex_replace', '(.*)\\.j2', '/etc/nginx/includes.d/\\1') | list
+                  )
+               }}"
+  notify: reload nginx
+
+- name: Create Nginx conf for challenges location
+  template:
+    src: "{{ playbook_dir }}/roles/letsencrypt/templates/acme-challenge-location.conf.j2"
+    dest: "{{ nginx_path }}/acme-challenge-location.conf"
   notify: reload nginx
 
 - name: Create WordPress configuration for Nginx
-  template: src="wordpress-site.conf.j2"
-            dest="/etc/nginx/sites-available/{{ item.key }}.conf"
-  with_dict: wordpress_sites
+  template:
+    src: "wordpress-site.conf.j2"
+    dest: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
+  with_dict: "{{ wordpress_sites }}"
   notify: reload nginx
 
 - name: Enable WordPress site
-  file: src="/etc/nginx/sites-available/{{ item.key }}.conf"
-        dest="/etc/nginx/sites-enabled/{{ item.key }}.conf"
-        owner=root
-        group=root
-        state=link
-  with_dict: wordpress_sites
+  file:
+    src: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
+    dest: "{{ nginx_path }}/sites-enabled/{{ item.key }}.conf"
+    owner: root
+    group: root
+    state: link
+  with_dict: "{{ wordpress_sites }}"
   notify: reload nginx

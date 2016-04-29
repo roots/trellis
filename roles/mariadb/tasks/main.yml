@@ -1,26 +1,43 @@
 ---
 - name: Add MariaDB MySQL apt-key
-  apt_key: url="http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ keyserver_fingerprint }}"
-           state=present
+  apt_key:
+    url: "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ keyserver_fingerprint }}"
+    state: present
 
 - name: Add MariaDB MySQL deb and deb-src
-  apt_repository: repo="{{ item }}" state=present
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
   with_items:
   - "deb http://{{ mirror }}/mariadb/repo/{{ version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
   - "deb-src http://{{ mirror }}/mariadb/repo/{{ version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
 
 - name: Install MariaDB MySQL server
-  apt: name=mariadb-server state=present
+  apt:
+    name: mariadb-server
+    state: present
 
-- name: Start MariaDB MySQL Server
-  service: name=mysql state=started enabled=true
+- name: Disable MariaDB binary logging
+  template:
+    src: disable-binary-logging.cnf
+    dest: /etc/mysql/conf.d
+    owner: root
+    group: root
+  when: binary_logging_disabled
+
+- name: Restart MariaDB MySQL Server
+  service:
+    name: mysql
+    state: restarted
+    enabled: true
 
 - name: Set root user password
-  mysql_user: name=root
-              host="{{ item }}"
-              password="{{ mysql_root_password }}"
-              check_implicit_admin=yes
-              state=present
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    password: "{{ mysql_root_password }}"
+    check_implicit_admin: yes
+    state: present
   with_items:
     - "{{ inventory_hostname }}"
     - 127.0.0.1
@@ -36,14 +53,16 @@
     mode: 0600
 
 - name: Delete anonymous MySQL server users
-  mysql_user: user=""
-              host="{{ item }}"
-              state=absent
+  mysql_user:
+    user: ""
+    host: "{{ item }}"
+    state: absent
   with_items:
     - localhost
     - "{{ inventory_hostname }}"
     - "{{ ansible_hostname }}"
 
 - name: Remove the test database
-  mysql_db: name=test
-            state=absent
+  mysql_db:
+    name: test
+    state: absent
