@@ -56,52 +56,52 @@ Vagrant.configure('2') do |config|
   end
 
   ############################################################################
-  # default devbox definition
+  # local_as devbox definition
   ############################################################################
-  config.vm.define "default", primary: true do |default|
+  config.vm.define "local_as", primary: true do |local_as|
 
     # Required for NFS to work
-    default.vm.network :private_network, ip: ip, hostsupdater: 'skip'
+    local_as.vm.network :private_network, ip: ip, hostsupdater: 'skip'
 
     # disable default mount
-    default.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
+    local_as.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
 
     hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
-    default.vm.hostname = hostname
+    local_as.vm.hostname = hostname
     aliases.concat static_sites.flat_map { |(_name, site)| site['site_hosts'] } # add aliases from the static sites
     www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
 
-    default.hostmanager.aliases = (aliases + www_aliases).uniq
+    local_as.hostmanager.aliases = (aliases + www_aliases).uniq
 
 
     if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
       wordpress_sites.each_pair do |name, site|
-        default.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+        local_as.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
       end
-      default.vm.synced_folder File.join(ANSIBLE_PATH, 'hosts'), File.join(ANSIBLE_PATH.sub(__dir__, '/vagrant'), 'hosts'), mount_options: ['dmode=755', 'fmode=644']
+      local_as.vm.synced_folder File.join(ANSIBLE_PATH, 'hosts'), File.join(ANSIBLE_PATH.sub(__dir__, '/vagrant'), 'hosts'), mount_options: ['dmode=755', 'fmode=644']
     else
       if !Vagrant.has_plugin? 'vagrant-bindfs'
         fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
       else
         wordpress_sites.merge(static_sites).each_pair do |name, site|
-          default.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
-          default.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
+          local_as.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
+          local_as.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
         end
       end
     end
 
     if Vagrant::Util::Platform.windows?
-      default.vm.provision :shell do |sh|
+      local_as.vm.provision :shell do |sh|
         sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
         sh.args = [Vagrant::VERSION]
       end
     else
-      default.vm.provision :ansible do |ansible|
+      local_as.vm.provision :ansible do |ansible|
         ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
         ansible.vault_password_file = "../vault-key"
         ansible.groups = {
-          'web' => ['default'],
-          'development' => ['default']
+          'web' => ['local_as'],
+          'development' => ['local_as']
         }
 
         ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
@@ -121,7 +121,7 @@ Vagrant.configure('2') do |config|
     # These scripts are run on the host machine, so we use `vagrant ssh` to tunnel back
     # into the VM and execute things.
     if Vagrant.has_plugin? 'vagrant-triggers'
-      default.trigger.before [:halt, :destroy], :stdout => true do
+      local_as.trigger.before [:halt, :destroy], :stdout => true do
         wordpress_sites.each_key do |wp_site_folder|
           info "Exporting db for #{wp_site_folder}"
           run_remote "cd #{www_root}/#{wp_site_folder}/ && wp db export --allow-root"
