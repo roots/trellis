@@ -6,6 +6,7 @@ wordpress_sites:
   sandbox.proteusthemes.com:
     site_hosts:
       - sandbox.proteusthemes.com
+    site_install: true
     site_title: ProteusThemes
     admin_user: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].admin_user }}"
     admin_password: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].admin_password }}"
@@ -27,6 +28,7 @@ wordpress_sites:
   xml-io.proteusthemes.com:
     site_hosts:
       - xml-io.proteusthemes.com
+    site_install: true
     site_title: ProteusThemes
     admin_user: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].admin_user }}"
     admin_password: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].admin_password }}"
