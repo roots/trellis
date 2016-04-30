@@ -1,3 +1,0 @@
-mariadb_dist: trusty
-mysql_remote_database: false
-mysql_root_user: root
