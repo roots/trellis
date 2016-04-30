@@ -1,2 +1,4 @@
+# {{ ansible_managed }}
+
 [mysqld]
 skip-log-bin
