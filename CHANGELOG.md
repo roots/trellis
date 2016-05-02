@@ -1,4 +1,5 @@
 ### HEAD
+* Add connection-related cli options to ping command ([#578](https://github.com/roots/trellis/pull/578))
 * Wrap my.cnf password in quotes ([#577](https://github.com/roots/trellis/pull/577))
 * Update to WP-CLI v0.23.1 ([#576](https://github.com/roots/trellis/pull/576))
 * Fix #563 - Improve remote databases ([#573](https://github.com/roots/trellis/pull/573))
