@@ -23,7 +23,7 @@
   - php7.0-xml
   - php7.0-xmlrpc
   - php7.0-zip
-  # - php5-imagick https://gist.github.com/nivv/5d9a12af5472b91606e6
+  - php-imagick
 
 - name: Install Xdebug
   apt:
