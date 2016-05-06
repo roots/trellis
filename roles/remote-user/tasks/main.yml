@@ -1,13 +1,13 @@
 ---
 - name: Determine whether to connect as root or admin_user
-  local_action: command ansible {{ inventory_hostname }} -m ping {{ cli_options_ping }}
+  local_action: command ansible {{ inventory_hostname }} -m ping -u {{ ansible_user | default('root') }} {{ cli_options_ping | default('') }}
   failed_when: false
   changed_when: false
   register: root_status
 
 - name: Set remote user for each host
   set_fact:
-    ansible_user: "{{ root_status | success | ternary('root', admin_user) }}"
+    ansible_user: "{{ root_status | success | ternary(ansible_user | default('root'), admin_user) }}"
 
 - name: Announce which user was selected
   debug:

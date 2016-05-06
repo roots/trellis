@@ -51,7 +51,7 @@
     - keys
 
 - name: Check whether Ansible can connect as admin_user
-  local_action: command ansible {{ inventory_hostname }} -m ping{{ (inventory_file == None) | ternary('', ' -i ' + inventory_file | string) }} -u {{ admin_user }}
+  local_action: command ansible {{ inventory_hostname }} -m ping -u {{ admin_user }} {{ cli_options_ping | default('') }}
   failed_when: false
   changed_when: false
   become: no

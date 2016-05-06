@@ -32,9 +32,6 @@ class VarsModule(object):
     def cli_options_ping(self):
         options = []
 
-        remote_user = getattr(self._options, 'remote_user')
-        options.append("--user='{0}'".format(remote_user if remote_user else 'root'))
-
         strings = {
             '--connection': 'connection',
             '--inventory-file': 'inventory',
