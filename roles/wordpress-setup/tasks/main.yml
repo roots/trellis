@@ -30,7 +30,7 @@
     name: "{{ item.key }} WordPress cron"
     minute: "*/15"
     user: "{{ web_user }}"
-    job: "curl -k -s {{ site_env.wp_siteurl }}/wp-cron.php > /dev/null 2>&1"
+    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp cron event run --due-now"
     cron_file: "wordpress-{{ item.key | replace('.', '_') }}"
   with_dict: "{{ wordpress_sites }}"
   when: site_env.disable_wp_cron and not item.value.multisite.enabled | default(false)
