@@ -19,6 +19,18 @@ ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars_plugins/:/usr/share/ansib
 
 config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
 
+def local_site_path(site)
+  File.expand_path(site['local_path'], ANSIBLE_PATH)
+end
+
+def nfs_path(site_name)
+  "/vagrant-nfs-#{site_name}"
+end
+
+def remote_site_path(site_name)
+  "/srv/www/#{site_name}/current"
+end
+
 def fail_with_message(msg)
   fail Vagrant::Errors::VagrantError.new, msg
 end
@@ -34,11 +46,25 @@ if !Dir.exists?(ENV['ANSIBLE_ROLES_PATH']) && !Vagrant::Util::Platform.windows?
   fail_with_message "You are missing the required Ansible Galaxy roles, please install them with this command:\nansible-galaxy install -r requirements.yml"
 end
 
+post_up_message = "Your Vagrant box is ready to use!
+\n* SSH into the machine with `vagrant ssh`
+\n* Navigate to the WordPress site directory to run `composer` and WP-CLI commands with `wp`:"
+
+wordpress_sites.each_pair do |name, site|
+  post_up_message += "\n\n  `cd " + remote_site_path(name) + "`"
+end
+
+wordpress_sites.each_pair do |name, site|
+  post_up_message += "\n\n* You can also now access your site in your browser at: " + site['site_hosts'].first + "\n\n"
+end
+
 Vagrant.require_version '>= 1.5.1'
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'ubuntu/trusty64'
   config.ssh.forward_agent = true
+
+  config.vm.post_up_message = post_up_message
 
   # Fix for: "stdin: is not a tty"
   # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
@@ -126,16 +152,4 @@ Vagrant.configure('2') do |config|
     prl.memory = memory
   end
 
-end
-
-def local_site_path(site)
-  File.expand_path(site['local_path'], ANSIBLE_PATH)
-end
-
-def nfs_path(site_name)
-  "/vagrant-nfs-#{site_name}"
-end
-
-def remote_site_path(site_name)
-  "/srv/www/#{site_name}/current"
 end
