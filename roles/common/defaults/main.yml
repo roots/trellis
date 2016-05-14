@@ -1,2 +1,2 @@
-minimum_ansible_version: 2.0.0.2
+minimum_ansible_version: 2.0.2.0
 default_timezone: Etc/UTC

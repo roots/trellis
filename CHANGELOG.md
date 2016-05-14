@@ -1,4 +1,5 @@
 ### HEAD
+* Require Ansible 2.0.2 and remove deploy_helper ([#579](https://github.com/roots/trellis/pull/579))
 * Add connection-related cli options to ping command ([#578](https://github.com/roots/trellis/pull/578))
 * Wrap my.cnf password in quotes ([#577](https://github.com/roots/trellis/pull/577))
 * Update to WP-CLI v0.23.1 ([#576](https://github.com/roots/trellis/pull/576))
