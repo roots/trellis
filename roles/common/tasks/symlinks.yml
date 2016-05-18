@@ -5,5 +5,5 @@
     src: "{{item.src}}"
     dest: "{{item.dest}}"
     state: link
-  with_items: default_symlinks
+  with_items: "{{ default_symlinks }}"
   ignore_errors: yes

@@ -1,0 +1,48 @@
+- name: Generate private keys
+  shell: openssl genrsa 4096 > {{ letsencrypt_keys_dir }}/{{ item.key }}.key
+  args:
+    creates: "{{ letsencrypt_keys_dir }}/{{ item.key }}.key"
+  when: site_uses_letsencrypt
+  with_dict: "{{ wordpress_sites }}"
+  tags: [letsencrypt_keys]
+
+- name: Ensure correct permissions on private keys
+  file:
+    path: "{{ letsencrypt_keys_dir }}/{{ item.key }}.key"
+    mode: 0600
+  when: site_uses_letsencrypt
+  with_dict: "{{ wordpress_sites }}"
+  tags: [letsencrypt_keys]
+
+- name: Generate CSRs for single domain keys
+  shell: openssl req -new -sha256 -key "{{ letsencrypt_keys_dir }}/{{ item.key }}.key" -subj "/CN={{ item.value.site_hosts[0] }}" > {{ acme_tiny_data_directory }}/csrs/{{ item.key }}.csr
+  args:
+    creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.key }}.csr"
+  when: site_uses_letsencrypt and item.value.site_hosts | length == 1 and not item.value.www_redirect | default(true)
+  with_dict: "{{ wordpress_sites }}"
+  tags: [letsencrypt_keys]
+
+- name: Generate CSRs for multiple domain keys
+  shell: "openssl req -new -sha256 -key '{{ letsencrypt_keys_dir }}/{{ item.key }}.key' -subj '/' -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) | join(',DNS:') }}')) > {{ acme_tiny_data_directory }}/csrs/{{ item.key }}.csr"
+  args:
+    executable: /bin/bash
+    creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.key }}.csr"
+  when: site_uses_letsencrypt and item.value.www_redirect | default(true)
+  with_dict: "{{ wordpress_sites }}"
+  tags: [letsencrypt_keys]
+
+- name: Generate the initial certificate
+  command: ./renew-certs.py
+  args:
+    chdir: "{{ acme_tiny_data_directory }}"
+  register: generate_initial_cert
+  changed_when: generate_initial_cert.stdout is defined and 'Created' in generate_initial_cert.stdout
+  notify: reload nginx
+
+- name: Disable Nginx site
+  file:
+    path: "{{ nginx_path }}/sites-enabled/letsencrypt-{{ item.key }}.conf"
+    state: absent
+  with_dict: "{{ wordpress_sites }}"
+  when: sites_need_confs
+  notify: reload nginx

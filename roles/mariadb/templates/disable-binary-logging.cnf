@@ -1,0 +1,2 @@
+[mysqld]
+skip-log-bin

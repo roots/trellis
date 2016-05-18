@@ -1,13 +1,13 @@
 # {{ ansible_managed }}
 
 server {
-  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
+  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
   listen 443 ssl http2;
   {% else -%}
   listen 80;
   {% endif %}
 
-  server_name  {% for host in item.value.site_hosts %} {{ host }} {% if item.value.multisite.subdomains %} *.{{ host }} {% endif %} {% endfor %};
+  server_name  {% for host in item.value.site_hosts %} {{ host }} {% if item.value.multisite.subdomains | default(false) %} *.{{ host }} {% endif %} {% endfor %};
   access_log   {{ www_root }}/logs/{{ item.key }}/access.log;
   error_log    {{ www_root }}/logs/{{ item.key }}/error.log;
 
@@ -16,7 +16,7 @@ server {
 
   charset utf-8;
 
-  {% if item.value.env.wp_env == 'development' -%}
+  {% if env == 'development' -%}
   # See Virtualbox section at http://wiki.nginx.org/Pitfalls
   sendfile off;
   {%- endif %}
@@ -32,27 +32,12 @@ server {
 
   add_header Fastcgi-Cache $upstream_cache_status;
 
-  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
-    include h5bp/directive-only/ssl.conf;
-    include h5bp/directive-only/ssl-stapling.conf;
+  {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
+    {{ lookup('template', 'https.conf.j2') }}
+  {% endif %}
 
-    ssl_dhparam /etc/nginx/ssl/dhparams.pem;
-    ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
-
-    {% set hsts_max_age = item.value.ssl.hsts_max_age | default(nginx_hsts_max_age) %}
-    {% set hsts_include_subdomains = item.value.ssl.hsts_include_subdomains | default(nginx_hsts_include_subdomains) | ternary('includeSubdomains', None) %}
-    {% set hsts_preload = item.value.ssl.hsts_preload | default(nginx_hsts_preload) | ternary('preload', None) %}
-    add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
-
-    {% if item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
-      ssl_certificate         /etc/nginx/ssl/{{ item.value.ssl.cert | basename }};
-      ssl_trusted_certificate /etc/nginx/ssl/{{ item.value.ssl.cert | basename }};
-      ssl_certificate_key     /etc/nginx/ssl/{{ item.value.ssl.key | basename }};
-    {% else -%}
-      ssl_certificate         /etc/nginx/ssl/{{ item.key }}_self_signed.pem;
-      ssl_trusted_certificate /etc/nginx/ssl/{{ item.key }}_self_signed.pem;
-      ssl_certificate_key     /etc/nginx/ssl/{{ item.key }}_self_signed.key;
-    {% endif -%}
+  {% if item.value.ssl is not defined or not item.value.ssl.enabled | default(false) -%}
+    include acme-challenge-location.conf;
   {% endif %}
 
   include includes.d/{{ item.key }}/*.conf;
@@ -88,32 +73,48 @@ server {
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
-
-    {% if hhvm -%}
-      fastcgi_pass unix:/var/run/hhvm/hhvm.sock;
-    {% else -%}
-      fastcgi_pass unix:/var/run/php5-fpm-wordpress.sock;
-    {% endif -%}
+    fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
   }
 }
 
-{% if item.value.ssl is defined and item.value.ssl.enabled | default(False) %}
+{% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
 server {
   listen 80;
-  server_name {{ item.value.site_hosts | join(' ') }};
+
+  server_name {{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) | join(' ') }};
+
+  {% if item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+  include acme-challenge-location.conf;
+
+  location / {
+    return 301 https://$host$request_uri;
+  }
+  {% else %}
   return 301 https://$host$request_uri;
+  {% endif -%}
 }
 {% endif %}
 
-{% for host in item.value.site_hosts if strip_www %}
+{% for host in item.value.site_hosts if item.value.www_redirect | default(true) %}
 server {
   {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
     listen 443 ssl http2;
+
+    {{ lookup('template', 'https.conf.j2') }}
   {% else -%}
     listen 80;
   {% endif -%}
 
-  server_name www.{{ host }};
-  return 301 $scheme://{{ host }}$request_uri;
+  server_name {{ host | reverse_www(append=false) }};
+
+  {% if item.value.ssl is not defined or not item.value.ssl.enabled | default(false) -%}
+    include acme-challenge-location.conf;
+
+    location / {
+      return 301 $scheme://{{ host }}$request_uri;
+    }
+  {% else %}
+    return 301 $scheme://{{ host }}$request_uri;
+  {% endif %}
 }
 {% endfor %}

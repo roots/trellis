@@ -1,3 +1,4 @@
 keyserver_fingerprint: "0xcbcb082a1bb943db"
 mirror: ams2.mirrors.digitalocean.com
 version: "10.1"
+binary_logging_disabled: true

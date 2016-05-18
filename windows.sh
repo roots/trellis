@@ -6,7 +6,6 @@
 # @version 1.0
 
 ANSIBLE_PATH="$(find /vagrant -name 'windows.sh' -printf '%h' -quit)"
-TEMP_HOSTS="/tmp/ansible_hosts"
 
 # Create an ssh key if not already created.
 if [ ! -f ~/.ssh/id_rsa ]; then
@@ -24,6 +23,7 @@ printf "\033[0m\n\n"
 
 # Check that add-apt-repository is installed for non-standard Vagrant boxes
 if [ ! -f /usr/bin/add-apt-repository ]; then
+  sudo apt-get -y update
   echo "Adding add-apt-repository..."
   sudo apt-get -y install software-properties-common
 fi
@@ -43,13 +43,6 @@ if [ ! -d ${ANSIBLE_PATH}/vendor ]; then
   ansible-galaxy install -r ${ANSIBLE_PATH}/requirements.yml -p ${ANSIBLE_PATH}/vendor/roles
 fi
 
-if [ -d ${TEMP_HOSTS} ]; then
-  echo "Cleaning old Ansible Hosts"
-  rm -rf ${TEMP_HOSTS}
-fi
-
-cp -R ${ANSIBLE_PATH}/hosts ${TEMP_HOSTS} && chmod -x ${TEMP_HOSTS}/*
 echo "Running Ansible Playbooks"
 cd ${ANSIBLE_PATH}/
-ansible-playbook ${ANSIBLE_PATH}/dev.yml -i ${TEMP_HOSTS}/development --sudo --user=vagrant --connection=local
-rm -rf ${TEMP_HOSTS}
+ansible-playbook dev.yml -e vagrant_version=$1

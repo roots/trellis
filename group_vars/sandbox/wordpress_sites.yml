@@ -1,4 +1,7 @@
 # Documentation: https://roots.io/trellis/docs/remote-server-setup/
+# `wordpress_sites` options: https://roots.io/trellis/docs/wordpress-sites
+# Define accompanying passwords/secrets in group_vars/sandbox/vault/wordpress_sites.yml
+
 wordpress_sites:
   sandbox.proteusthemes.com:
     site_hosts:
@@ -15,12 +18,9 @@ wordpress_sites:
       enabled: false
     cache:
       enabled: false
-      duration: 30s
     env:
-      disable_wp_cron: true
       wp_home: http://sandbox.proteusthemes.com
       wp_siteurl: http://sandbox.proteusthemes.com
-      wp_env: sandbox
       db_name: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].env.db_name }}"
       db_user: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].env.db_user }}"
       db_password: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].env.db_password }}"
@@ -40,12 +40,9 @@ wordpress_sites:
       enabled: false
     cache:
       enabled: false
-      duration: 30s
     env:
-      disable_wp_cron: true
       wp_home: http://xml-io.proteusthemes.com
       wp_siteurl: http://xml-io.proteusthemes.com
-      wp_env: sandbox
       db_name: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].env.db_name }}"
       db_user: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].env.db_user }}"
       db_password: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].env.db_password }}"

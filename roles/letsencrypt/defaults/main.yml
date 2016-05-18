@@ -1,0 +1,44 @@
+sites_using_letsencrypt: "[{% for name, site in wordpress_sites.iteritems() if site.ssl.enabled and site.ssl.provider | default('manual') == 'letsencrypt' %}'{{ name }}',{% endfor %}]"
+letsencrypt_enabled: "{{ sites_using_letsencrypt | count > 0 }}"
+site_uses_letsencrypt: "{{ item.value.ssl is defined and item.value.ssl.enabled | default(false) and item.value.ssl.provider | default('manual') == 'letsencrypt' }}"
+sites_need_confs: "False in [{% for item in nginx_confs.results if 'stat' in item %}{{ item.stat.exists }},{% endfor %}]"
+
+acme_tiny_repo: 'https://github.com/diafygi/acme-tiny.git'
+acme_tiny_commit: '69a457269a6392ac31b629b4e103e8ea7dd282c9'
+
+acme_tiny_software_directory: /usr/local/letsencrypt
+acme_tiny_data_directory: /var/lib/letsencrypt
+acme_tiny_challenges_directory: "{{ www_root }}/letsencrypt"
+
+# Path to the local file containing the account key to copy to the server.
+# Secure this file using Git-crypt for example.
+# Leave this blank to generate a new account key that will need to be registered manually with Letsencrypt.org
+#letsencrypt_account_key_source_file: /my/account.key
+
+# Content of the account key to copy to the server.
+# Secure this key using Ansible Vault for example.
+# Leave this blank to generate a new account key that will need to be registered manually with Letsencrypt.org
+#letsencrypt_account_key_source_content: |
+#  -----BEGIN RSA PRIVATE KEY-----
+#  MIIJKAJBBBKCaGEA63J7t9dqyua5+Q+P6M3iHtLEKpF/AZcZNBHr1F2Oo8+Hfyvl
+#  KWXliiWjUORxDxI1c56Rw2VCIExnFjWJAdSLv6/XaQWo2T7U28bkKbAlCF9=
+#  -----END RSA PRIVATE KEY-----
+
+letsencrypt_ca: 'https://acme-v01.api.letsencrypt.org'
+
+letsencrypt_account_key: '{{ acme_tiny_data_directory }}/account.key'
+
+letsencrypt_intermediate_cert_path: /etc/ssl/certs/lets-encrypt-x3-cross-signed.pem
+letsencrypt_intermediate_cert_url: 'https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem'
+letsencrypt_intermediate_cert_sha256sum: 'e446c5e9dbef9d09ac9f7027c034602492437a05ff6c40011d7235fca639c79a'
+
+letsencrypt_keys_dir: "{{ nginx_ssl_path }}/letsencrypt"
+letsencrypt_certs_dir: "{{ nginx_ssl_path }}/letsencrypt"
+
+# the minimum age (in days) after which a certificate will be renewed
+letsencrypt_min_renewal_age: 60
+
+# the days of a month the cronjob should be run. Make sure to run it rather often, three times per month is a pretty
+# good value. It does not harm to run it often, as it will only regenerate certificates that have passed a certain age
+# (60 days by default).
+letsencrypt_cronjob_daysofmonth: 1,11,21

@@ -1,4 +1,6 @@
 # Documentation: https://roots.io/trellis/docs/local-development-setup/
+# `wordpress_sites` options: https://roots.io/trellis/docs/wordpress-sites
+
 wordpress_sites:
   demo.proteusthemes.com:
     site_hosts:
@@ -14,14 +16,11 @@ wordpress_sites:
       subdomains: false
     ssl:
       enabled: false
+      provider: self-signed
     cache:
       enabled: false
-      duration: 30s
     env:
       disable_wp_cron: false
-      wp_home: http://demo.proteusthemes.dev
-      wp_siteurl: http://demo.proteusthemes.dev
-      wp_env: development
       db_name: demo_network
       db_user: proteusnet
       db_password: devpw

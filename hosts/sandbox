@@ -1,5 +1,8 @@
+# Add each host to the [production] group and to a "type" group such as [web] or [db].
+# List each machine only once per [group], even if it will host multiple sites.
+
 [sandbox]
-188.166.31.58
+178.62.227.227
 
 [web]
-188.166.31.58
+178.62.227.227
