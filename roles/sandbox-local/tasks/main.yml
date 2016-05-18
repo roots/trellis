@@ -87,9 +87,9 @@
     state: directory
 
 - name: Clean all old XML files within exports directory
-  command: "rm *.xml"
-  args:
-    chdir: "{{ xml_paths.local }}"
+  file:
+    path: "{{ xml_paths.local }}/*.xml"
+    state: absent
 
 - name: Export XML files
   command: "wp export --dir={{ xml_paths.local }}/ --url='{{ export_domain }}/{{ item }}' --allow-root"
