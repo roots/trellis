@@ -70,4 +70,4 @@ sites_to_export:
 
 xml_paths:
   local:  "/tmp/xml-exports"
-  remote: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports-new"
+  remote: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports"
