@@ -37,7 +37,7 @@
       git:
         repo:    https://github.com/proteusthemes/pt-ops.git
         dest:    /opt/proteusnet/ops/
-        version: new-sbs
+        version: master
       tags: after-roles
 
     - name: Add cron to reset every day
