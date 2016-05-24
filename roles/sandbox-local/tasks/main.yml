@@ -97,7 +97,7 @@
     chdir: "{{ www_root }}/{{ export_domain }}"
   with_items: "{{ sites_to_export }}"
 
-- name: Rename rename the XMLs that are not properly exported
+- name: Rename XMLs that are not properly named when exported
   command: "mv {{ item.value }}.wordpress.{{ ansible_date_time.date }}.000.xml {{ item.key }}.wordpress.{{ ansible_date_time.date }}.000.xml"
   args:
     chdir: "{{ xml_paths.local }}/"
