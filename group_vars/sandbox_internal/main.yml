@@ -72,6 +72,12 @@ sites_to_export:
   - bolts-factory
   - bolts-industry
 
+xmls_to_rename:
+  hairpress: "hairpresswptheme"
+  bolts-factory: "boltsfactory"
+  bolts-industry: "boltsindustry"
+  bolts-transport: "boltstransport"
+
 xml_paths:
   local:  "/tmp/xml-exports"
   remote: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports"

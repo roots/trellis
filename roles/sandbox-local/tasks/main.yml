@@ -97,7 +97,8 @@
     chdir: "{{ www_root }}/{{ export_domain }}"
   with_items: "{{ sites_to_export }}"
 
-- name: Rename hairpresswptheme > hairpress
-  command: "mv hairpresswptheme.wordpress.{{ ansible_date_time.date }}.000.xml hairpress.wordpress.{{ ansible_date_time.date }}.000.xml"
+- name: Rename rename the XMLs that are not properly exported
+  command: "mv {{ item.value }}.wordpress.{{ ansible_date_time.date }}.000.xml {{ item.key }}.wordpress.{{ ansible_date_time.date }}.000.xml"
   args:
     chdir: "{{ xml_paths.local }}/"
+  with_dict: "{{ xmls_to_rename }}"
