@@ -68,6 +68,9 @@ sites_to_export:
   - auto
   - hammer
   - bolts
+  - bolts-transport
+  - bolts-factory
+  - bolts-industry
 
 xml_paths:
   local:  "/tmp/xml-exports"
