@@ -1,9 +1,21 @@
 ---
+- name: Get default symlink directories
+  find:
+    file_type: directory
+    paths: "{{ www_root }}/"
+  register: default_symlink_dirs
+
+- name: Get some extra symlinks for themes and plugins
+  find:
+    file_type: directory
+    paths: "{{ www_root }}/demo.proteusthemes.com/wp-content/"
+    patterns: "plugins,themes"
+  register: extra_symlink_dirs
+
 - name: Set default symlinks
   become: no
   file:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
+    src: "{{ item.path }}"
+    dest: "~/{{ item.path | basename }}"
     state: link
-  with_items: "{{ default_symlinks }}"
-  ignore_errors: yes
+  with_items: "{{ default_symlink_dirs.files | union(extra_symlink_dirs.files) }}"
