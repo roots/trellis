@@ -22,4 +22,5 @@
   version: 1.0.5
 
 - name: ansible
-  src: AsianChris.ansible
+  src: geerlingguy.ansible
+  version: 1.0.4

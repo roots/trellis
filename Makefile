@@ -4,6 +4,7 @@ provision_sandbox:
 	ansible-playbook server-sandbox.yml -e env=sandbox
 
 install_ansible_deps:
+	rm -rf vendor/
 	ansible-galaxy install -r requirements.yml
 
 vagrant_manual_provisioning:
