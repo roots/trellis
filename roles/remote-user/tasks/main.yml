@@ -1,14 +1,14 @@
 ---
 - name: Determine whether to connect as root or admin_user
-  local_action: command ansible {{ inventory_hostname }} -m ping{{ (inventory_file == None) | ternary('', ' -i ' + inventory_file | string) }} -u root {{ cli_args_vault | default('') }}
+  local_action: command ansible {{ inventory_hostname }} -m ping -u {{ ansible_user | default('root') }} {{ cli_options_ping | default('') }}
   failed_when: false
   changed_when: false
   register: root_status
 
 - name: Set remote user for each host
   set_fact:
-    ansible_ssh_user: "{{ root_status | success | ternary('root', admin_user) }}"
+    ansible_user: "{{ root_status | success | ternary(ansible_user | default('root'), admin_user) }}"
 
 - name: Announce which user was selected
   debug:
-    msg: "Note: Ansible will attempt connections as user = {{ ansible_ssh_user }}"
+    msg: "Note: Ansible will attempt connections as user = {{ ansible_user }}"
