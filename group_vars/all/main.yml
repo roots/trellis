@@ -20,4 +20,3 @@ site_env: "{{ wordpress_env_defaults | combine(item.value.env | default({}), vau
 
 mariadb_mirror: ams2.mirrors.digitalocean.com
 mariadb_version: "10.1"
-
