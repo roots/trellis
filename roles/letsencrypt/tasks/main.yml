@@ -7,7 +7,7 @@
     cron_file: letsencrypt-certificate-renewal
     name: letsencrypt certificate renewal
     user: root
-    job: cd {{ acme_tiny_data_directory }} && ./renew-certs.py
+    job: cd {{ acme_tiny_data_directory }} && ./renew-certs.py && service nginx reload
     day: "{{ letsencrypt_cronjob_daysofmonth }}"
     hour: 4
     minute: 30
