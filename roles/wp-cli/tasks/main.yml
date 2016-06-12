@@ -5,8 +5,15 @@
     dest: "{{ wp_cli_bin_path }}"
     mode: 0755
 
+- name: Retrieve WP-CLI tab completions
+  command: curl -4Ls {{ wp_cli_completion_url }} -o /tmp/wp-completion-{{ wp_cli_version }}.bash
+  args:
+    creates: /tmp/wp-completion-{{ wp_cli_version }}.bash
+    warn: false
+
 - name: Install WP-CLI tab completions
-  get_url:
-    url: "{{ wp_cli_completion_url }}"
-    dest: "{{ wp_cli_completion_path }}"
-    mode: 0644
+  command: rsync -c --chmod=0644 --info=name /tmp/wp-completion-{{ wp_cli_version }}.bash {{ wp_cli_completion_path }}
+  args:
+    warn: false
+  register: wp_cli_completion
+  changed_when: wp_cli_completion.stdout == "wp-completion-{{ wp_cli_version }}.bash"
