@@ -8,7 +8,7 @@
   remote_user: "{{ web_user }}"
 
   vars:
-    deploy_build_before: "{{ playbook_dir }}/deploy-hooks/build-before.yml"
+    deploy_build_before: "{{ playbook_dir }}/deploy-hooks/{{ build_before_file.stat.exists | ternary(site + '-', '') }}build-before.yml"
     deploy_build_after: "{{ playbook_dir }}/roles/deploy/hooks/build-after.yml"
     deploy_finalize_after: "{{ playbook_dir }}/roles/deploy/hooks/finalize-after.yml"
     project: "{{ wordpress_sites[site] }}"
@@ -39,6 +39,10 @@
           More info:
           > https://roots.io/trellis/docs/deploys/
       when: project.repo is not defined or not project.repo | match(".*@.*:.*\.git")
+
+    - name: Ensure deploy hook exist
+      local_action: stat path={{ playbook_dir }}/deploy-hooks/{{ site }}-build-before.yml
+      register: build_before_file
 
   roles:
     - deploy
