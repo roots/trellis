@@ -33,7 +33,7 @@ Make sure all dependencies have been installed before moving on:
 
 * [Ansible](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-pip) 2.0.2
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) >= 4.3.10
-* [Vagrant](http://www.vagrantup.com/downloads.html) >= 1.5.4
+* [Vagrant](http://www.vagrantup.com/downloads.html) <= 1.8.1
 * [vagrant-bindfs](https://github.com/gael-ian/vagrant-bindfs#installation) >= 0.3.1 (Windows users may skip this)
 * [vagrant-hostmanager](https://github.com/smdahlen/vagrant-hostmanager#installation)
 
