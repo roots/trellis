@@ -81,7 +81,7 @@ server {
 server {
   listen 80;
 
-  server_name {{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) | join(' ') }};
+  server_name {{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) | join(' ') }}  {% if item.value.multisite.subdomains | default(false) %} *.{{ item.value.site_hosts | join(' *.') }} {% endif %};
 
   {% if item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
   include acme-challenge-location.conf;
