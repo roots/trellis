@@ -40,6 +40,8 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'ubuntu/trusty64'
   config.ssh.forward_agent = true
 
+  config.vm.post_up_message = post_up_message
+
   # Fix for: "stdin: is not a tty"
   # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
   config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
@@ -134,6 +136,15 @@ end
 
 def nfs_path(site_name)
   "/vagrant-nfs-#{site_name}"
+end
+
+def post_up_message
+  msg = 'Your Trellis Vagrant box is ready to use!'
+  msg << "\n* Composer and WP-CLI commands need to be run on the virtual machine."
+  msg << "\n* You can SSH into the machine with `vagrant ssh`."
+  msg << "\n* Then navigate to your WordPress sites at `/srv/www`."
+
+  msg
 end
 
 def remote_site_path(site_name)
