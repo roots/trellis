@@ -12,13 +12,13 @@ Ansible playbooks for setting up a LEMP stack for WordPress.
 
 Trellis will configure a server with the following and more:
 
-* Ubuntu 14.04 Trusty LTS
+* Ubuntu 16.04 Xenial LTS
 * Nginx (with optional FastCGI micro-caching)
 * PHP 7.0
 * MariaDB (a drop-in MySQL replacement)
 * SSL support (scores an A+ on the [Qualys SSL Labs Test](https://www.ssllabs.com/ssltest/))
 * Let's Encrypt integration for free SSL certificates
-* HTTP/2 support (requires SSL)
+* HTTP/2 + ALPN support (requires SSL)
 * Composer
 * WP-CLI
 * sSMTP (mail delivery)

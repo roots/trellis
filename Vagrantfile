@@ -37,7 +37,7 @@ end
 Vagrant.require_version '>= 1.5.1'
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'ubuntu/trusty64'
+  config.vm.box = 'geerlingguy/ubuntu1604'
   config.ssh.forward_agent = true
 
   config.vm.post_up_message = post_up_message
