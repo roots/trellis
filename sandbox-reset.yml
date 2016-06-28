@@ -9,8 +9,9 @@
   hosts: sbs
   become: yes
   roles:
-    - { role: wordpress-mail-toggle, tags: [wordpress-mail-toggle] }
+    - { role: wordpress-mail-toggle, wordpress_disable_emails: true, tags: [wordpress-mail-toggle] }
     - { role: sandbox-local, tags: [sandbox-local] }
+    - { role: wordpress-mail-toggle, wordpress_disable_emails: false, tags: [wordpress-mail-toggle] }
 
 - name: Deploy XML files
   hosts: as
