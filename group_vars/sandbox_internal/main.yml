@@ -44,6 +44,7 @@ wp_rsync_opts:
 wp_emails:
   from:
     # - 'primoz@proteusnet\.com'
+    - 'marusa\.barle@proteusnet\.com'
     - 'info@proteusthemes\.com'
     - 'gregor\.capuder@proteusnet\.com'
     - 'jejcic\.jaka@gmail\.com'
