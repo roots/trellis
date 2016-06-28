@@ -9,6 +9,23 @@
   roles:
     - { role: remote-user, tags: [remote-user, always] }
 
+- name: Ensure Ansible can connect to the server
+  hosts: web:&{{ env }}
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Install Python interpreter
+      raw: sudo apt update -qq && sudo apt install -qq -y python-minimal
+
+    - name: Check if softlink exists
+      stat:
+        path: /usr/bin/python
+      register: python_file
+
+    - name: Create softlink for Python 2.7
+      raw: ln -s /usr/bin/python2.7 /usr/bin/python
+      when: python_file.stat.islnk is not defined
+
 - name: WordPress Server - Install LEMP Stack with PHP 7.0 and MariaDB MySQL
   hosts: web:&{{ env }}
   become: yes

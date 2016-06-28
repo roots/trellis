@@ -29,7 +29,7 @@ class VarsModule(object):
                         hostvars['vault_wordpress_sites'][name]['env'][key] = ''.join(['{% raw %}', value, '{% endraw %}'])
             host.vars['vault_wordpress_sites'] = hostvars['vault_wordpress_sites']
 
-    def cli_options_ping(self):
+    def cli_options(self):
         options = []
 
         strings = {
@@ -59,5 +59,5 @@ class VarsModule(object):
 
     def get_host_vars(self, host, vault_password=None):
         self.wrap_salts_in_raw(host, host.get_group_vars())
-        host.vars['cli_options_ping'] = self.cli_options_ping()
+        host.vars['cli_options'] = self.cli_options()
         return {}
