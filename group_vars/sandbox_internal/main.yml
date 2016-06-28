@@ -49,7 +49,6 @@ wp_emails:
     - 'gregor\.capuder@proteusnet\.com'
     - 'jejcic\.jaka@gmail\.com'
     - 'jaka@spaka\.si'
-    - 'lena\.gregorcic@proteusnet\.com'
     - 'marko\.prelec@proteusnet\.com'
   to: 'info@example.com'
 
