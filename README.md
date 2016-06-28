@@ -18,7 +18,7 @@ Trellis will configure a server with the following and more:
 * MariaDB (a drop-in MySQL replacement)
 * SSL support (scores an A+ on the [Qualys SSL Labs Test](https://www.ssllabs.com/ssltest/))
 * Let's Encrypt integration for free SSL certificates
-* HTTP/2 + ALPN support (requires SSL)
+* HTTP/2 support (requires SSL)
 * Composer
 * WP-CLI
 * sSMTP (mail delivery)
