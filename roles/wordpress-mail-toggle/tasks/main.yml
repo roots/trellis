@@ -1,20 +1,23 @@
 ---
 - name: Ensure that folder mu-plugins exists
   file:
-    path: "{{ www_root }}/xml-io.proteusthemes.com/wp-content/mu-plugins/"
+    path: "{{ www_root }}/{{ item.key }}/wp-content/mu-plugins/"
     state: directory
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
   when: wordpress_disable_emails
+  with_dict: "{{ sb_wp_sites }}"
 
 - name: Install the MU plugin that completely disables emails
   template:
     src: wp-disable-emails.php.j2
-    dest: "{{ www_root }}/xml-io.proteusthemes.com/wp-content/mu-plugins/wp-disable-emails.php"
+    dest: "{{ www_root }}/{{ item.key }}/wp-content/mu-plugins/wp-disable-emails.php"
   when: wordpress_disable_emails
+  with_dict: "{{ sb_wp_sites }}"
 
 - name: Remove the MU plugin that completely disables emails
   file:
-    path: "{{ www_root }}/xml-io.proteusthemes.com/wp-content/mu-plugins/wp-disable-emails.php"
+    path: "{{ www_root }}/{{ item.key }}/wp-content/mu-plugins/wp-disable-emails.php"
     state: absent
   when: not wordpress_disable_emails
+  with_dict: "{{ sb_wp_sites }}"
