@@ -7,7 +7,7 @@
 
 - name: Set remote user for each host
   set_fact:
-    ansible_user: "{{ root_status | success | ternary(ansible_user | default('root'), admin_user) }}"
+    ansible_user: "{{ ('root' in root_status.stdout_lines) | ternary(ansible_user | default('root'), admin_user) }}"
 
 - name: Announce which user was selected
   debug:
