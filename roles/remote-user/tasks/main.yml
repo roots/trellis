@@ -1,4 +1,11 @@
 ---
+- name: Require manual definition of remote-user
+  fail:
+    msg: |
+      When using `--ask-pass` option, use `-u` option to define remote-user:
+      ansible-playbook server.yml -e env={{ env }} -u username --ask-pass
+  when: cli_options | search('--ask-pass')
+
 - name: Determine whether to connect as root or admin_user
   local_action: command ansible {{ inventory_hostname }} -m raw -a whoami -u {{ ansible_user | default('root') }} {{ cli_options | default('') }}
   failed_when: false

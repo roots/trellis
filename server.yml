@@ -7,7 +7,7 @@
   hosts: web:&{{ env }}
   gather_facts: false
   roles:
-    - { role: remote-user, tags: [remote-user, always] }
+    - { role: remote-user, tags: [remote-user, always], when: ansible_user is not defined }
 
 - name: Ensure Ansible can connect to the server
   hosts: web:&{{ env }}
