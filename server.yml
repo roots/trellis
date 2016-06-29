@@ -7,7 +7,7 @@
   hosts: web:&{{ env }}
   gather_facts: false
   roles:
-    - { role: remote-user, tags: [remote-user, always] }
+    - { role: remote-user, tags: [remote-user, always], when: ansible_user is not defined }
 
 - name: Ensure Ansible can connect to the server
   hosts: web:&{{ env }}
@@ -25,7 +25,6 @@
     - name: Create softlink for Python 2.7
       raw: ln -s /usr/bin/python2.7 /usr/bin/python
       when: python_file.stat.islnk is not defined
-
 
 - name: WordPress Server - Install LEMP Stack with PHP 7.0 and MariaDB MySQL
   hosts: web:&{{ env }}
