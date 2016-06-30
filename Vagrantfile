@@ -63,7 +63,7 @@ Vagrant.configure('2') do |config|
 
   if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
     wordpress_sites.each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
     config.vm.synced_folder File.join(ANSIBLE_PATH, 'hosts'), File.join(ANSIBLE_PATH.sub(__dir__, '/vagrant'), 'hosts'), mount_options: ['dmode=755', 'fmode=644']
   else
@@ -72,7 +72,7 @@ Vagrant.configure('2') do |config|
     else
       wordpress_sites.each_pair do |name, site|
         config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
-        config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
+        config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'vagrant', g: 'www-data', o: 'nonempty'
       end
     end
   end
@@ -147,6 +147,6 @@ def post_up_message
   msg
 end
 
-def remote_site_path(site_name)
-  "/srv/www/#{site_name}/current"
+def remote_site_path(site_name, site)
+  "/srv/www/#{site_name}/#{site['current_path'] || 'current'}"
 end
