@@ -63,18 +63,18 @@ class CallbackModule(CallbackModule_default):
         if 'vagrant_version' in play_vars:
             self.vagrant_version = play_vars['vagrant_version']
 
-    def v2_playbook_item_on_ok(self, result):
+    def v2_runner_item_on_ok(self, result):
         output.display_item(self, result)
         output.replace_item_with_key(self, result)
-        super(CallbackModule, self).v2_playbook_item_on_ok(result)
+        super(CallbackModule, self).v2_runner_item_on_ok(result)
 
-    def v2_playbook_item_on_failed(self, result):
+    def v2_runner_item_on_failed(self, result):
         self.task_failed = True
         output.display_item(self, result)
         output.replace_item_with_key(self, result)
-        super(CallbackModule, self).v2_playbook_item_on_failed(result)
+        super(CallbackModule, self).v2_runner_item_on_failed(result)
 
-    def v2_playbook_item_on_skipped(self, result):
+    def v2_runner_item_on_skipped(self, result):
         output.display_item(self, result)
         output.replace_item_with_key(self, result)
-        super(CallbackModule, self).v2_playbook_item_on_skipped(result)
+        super(CallbackModule, self).v2_runner_item_on_skipped(result)
