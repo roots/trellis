@@ -12,10 +12,11 @@
     failed_when: false
     changed_when: false
     register: root_status
+    tags: [connection-tests]
 
   - name: Set remote user for each host
     set_fact:
-      ansible_user: "{{ root_status | success | ternary('root', admin_user) }}"
+      ansible_user: "{{ root_status | default({'failed':false}) | success | ternary('root', admin_user) }}"
 
   when: ansible_user is not defined
 
