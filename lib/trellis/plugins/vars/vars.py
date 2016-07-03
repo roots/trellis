@@ -29,7 +29,7 @@ class VarsModule(object):
                         hostvars['vault_wordpress_sites'][name]['env'][key] = ''.join(['{% raw %}', value, '{% endraw %}'])
             host.vars['vault_wordpress_sites'] = hostvars['vault_wordpress_sites']
 
-    def cli_options_ping(self):
+    def cli_options(self):
         options = []
 
         strings = {
@@ -46,18 +46,13 @@ class VarsModule(object):
             if getattr(self._options, value, False):
                 options.append("{0}='{1}'".format(option, str(getattr(self._options, value))))
 
-        booleans = {
-            '--ask-pass': 'ask_pass',
-            '--ask-vault-pass': 'ask_vault_pass',
-            }
-
-        for option,value in booleans.iteritems():
-            if getattr(self._options, value, False):
-                options.append(option)
+        if getattr(self._options, 'ask_vault_pass', False):
+            options.append('--ask-vault-pass')
 
         return ' '.join(options)
 
     def get_host_vars(self, host, vault_password=None):
         self.wrap_salts_in_raw(host, host.get_group_vars())
-        host.vars['cli_options_ping'] = self.cli_options_ping()
+        host.vars['cli_options'] = self.cli_options()
+        host.vars['cli_ask_pass'] = getattr(self._options, 'ask_pass', False)
         return {}

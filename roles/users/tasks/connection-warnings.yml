@@ -1,0 +1,40 @@
+---
+- name: Fail if root login will be disabled but admin_user cannot connect
+  fail:
+    msg: 'The admin_user `{{ admin_user }}` is unable to connect to the server. To prevent you from losing access to your server, the playbook has halted before disabling root login (`sshd_permit_root_login: false`). Ensure that the admin_user appears in your `users` hash with a valid entry for `keys`.'
+  when: not cli_ask_pass | default(false) and ansible_user == 'root'
+
+- block:
+  - name: Confirm that a non-root user can connect
+    pause:
+      prompt: |
+
+        The play will disable SSH login for `root` (because `sshd_permit_root_login: false`)
+        but the admin_user named `{{ admin_user }}` appears unable to connect via SSH key.
+
+        Be careful to avoid losing SSH access to your server.
+        Continue only if `{{ admin_user }}` will be able to connect via password or if
+        a different user will be able to connect and invoke sudo.
+
+        (press RETURN to continue or CTRL+C to abort)
+    when: not sshd_permit_root_login and ansible_user == 'root'
+
+  - name: Confirm disabling of SSH password authentication
+    pause:
+      prompt: |
+
+        The play will disable password login (because `sshd_password_authentication: false`)
+        but the admin_user named `{{ admin_user }}` appears unable to connect via SSH key.
+
+        Be careful to avoid losing SSH access to your server.
+        Continue only if you are certain you will have another means of connecting,
+        such as via SSH keys.
+
+        If you prefer to continue to allow SSH password authentication (less secure),
+        abort now and make the following edit in `group_vars/all/security.yml`:
+        `sshd_password_authentication: true`
+
+        (press RETURN to continue or CTRL+C to abort)
+    when: not sshd_password_authentication
+
+  when: cli_ask_pass | default(false)

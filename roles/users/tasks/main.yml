@@ -20,6 +20,7 @@
       - "{{ admin_user in sudoer_passwords.keys() }}"
     msg: "When `sshd_permit_root_login: false`, you must add `sudo` to the `groups` for admin_user (in `users` hash), and set a password for admin_user in `sudoer_passwords`. Otherwise Ansible could lose the ability to run the necessary sudo commands."
   when: not sshd_permit_root_login
+  tags: sshd
 
 - name: Setup users
   user:
@@ -51,14 +52,14 @@
     - keys
 
 - name: Check whether Ansible can connect as admin_user
-  local_action: command ansible {{ inventory_hostname }} -m ping -u {{ admin_user }} {{ cli_options_ping | default('') }}
+  local_action: command ansible {{ inventory_hostname }} -m ping -u {{ admin_user }} {{ cli_options | default('') }}
   failed_when: false
   changed_when: false
   become: no
   register: admin_user_status
-  when: not sshd_permit_root_login
+  when: (ansible_user != admin_user and not sshd_permit_root_login) or (cli_ask_pass and not sshd_password_authentication)
+  tags: [connection-tests, sshd]
 
-- name: Fail if root login will be disabled but admin_user cannot connect
-  fail:
-    msg: 'The admin_user is unable to connect to the server. To prevent you from losing access to your server, the playbook has halted before disabling root login (`sshd_permit_root_login: false`). Ensure that the admin_user appears in your `users` hash with a valid entry for `keys`.'
-  when: not sshd_permit_root_login and admin_user_status | failed
+- include: connection-warnings.yml
+  when: admin_user_status | failed
+  tags: [connection-tests, sshd]
