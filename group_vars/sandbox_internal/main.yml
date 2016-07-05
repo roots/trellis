@@ -71,6 +71,7 @@ sites_to_export:
   - bolts-transport
   - bolts-factory
   - bolts-industry
+  - shaka
 
 xmls_to_rename:
   hairpress: "hairpresswptheme"
