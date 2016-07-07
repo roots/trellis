@@ -2,6 +2,7 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 import re
+import sys
 
 from ansible import __version__
 from ansible.errors import AnsibleError
@@ -15,6 +16,12 @@ from ansible.compat.six import iteritems
 from ansible.parsing.dataloader import DataLoader
 from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
 from ansible.template import Templar
+
+try:
+    import passlib.hash
+except:
+    if sys.platform.startswith('darwin'):
+        raise AnsibleError('Ansible on OS X requires the python passlib module to create user password hashes.\nsudo easy_install pip\npip install passlib')
 
 
 class VarsModule(object):
@@ -79,4 +86,5 @@ class VarsModule(object):
         self.raw_vars(host, host.get_group_vars())
         host.vars['cli_options'] = self.cli_options()
         host.vars['cli_ask_pass'] = getattr(self._options, 'ask_pass', False)
+        host.vars['cli_ask_become_pass'] = getattr(self._options, 'become_ask_pass', False)
         return {}
