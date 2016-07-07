@@ -1,6 +1,8 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+import re
+
 from ansible import __version__
 from ansible.errors import AnsibleError
 
@@ -10,6 +12,7 @@ if __version__.startswith('1'):
 # These imports will produce Traceback in Ansible 1.x, so place after version check
 from __main__ import cli
 from ansible.compat.six import iteritems
+from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
 
 
 class VarsModule(object):
@@ -20,14 +23,57 @@ class VarsModule(object):
         self.inventory_basedir = inventory.basedir()
         self._options = cli.options if cli else None
 
-    # Wrap salts and keys variables in {% raw %} to prevent jinja templating errors
-    def wrap_salts_in_raw(self, host, hostvars):
-        if 'vault_wordpress_sites' in hostvars:
-            for name, site in hostvars['vault_wordpress_sites'].iteritems():
-                for key, value in site['env'].iteritems():
-                    if key.endswith(('_key', '_salt')) and not value.startswith(('{% raw', '{%raw')):
-                        hostvars['vault_wordpress_sites'][name]['env'][key] = ''.join(['{% raw %}', value, '{% endraw %}'])
-            host.vars['vault_wordpress_sites'] = hostvars['vault_wordpress_sites']
+    def raw_triage(self, key_string, item, patterns):
+        # process dict values
+        if isinstance(item, AnsibleMapping):
+            dict = {}
+            for key,value in item.iteritems():
+                dict[key] = self.raw_triage('.'.join([key_string, key]), value, patterns)
+            return dict
+
+        # process list values
+        elif isinstance(item, AnsibleSequence):
+            list = []
+            for i,value in enumerate(item):
+                raw = self.raw_triage('.'.join([key_string, str(i)]), value, patterns)
+                list.append(raw)
+            return list
+
+        # wrap values if they match raw_vars pattern
+        elif isinstance(item, AnsibleUnicode):
+            matches = False
+            for pattern in patterns:
+                if re.match(pattern, key_string) is not None:
+                    matches = True
+                    break
+
+            if not item.startswith(('{% raw', '{%raw')) and matches:
+                item = ''.join(['{% raw %}', item, '{% endraw %}'])
+
+            return item
+
+    def raw_vars(self, host, hostvars):
+        if 'raw_vars' not in hostvars:
+            return
+
+        raw_vars = list((var for var in hostvars['raw_vars'] if var.split('.')[0] in hostvars))
+
+        # prepare regex match patterns
+        patterns = []
+        for pattern in raw_vars:
+            pattern = re.sub(r'\.', '\.', pattern)
+            pattern = re.sub(r'\*', '(.)*', pattern)
+            patterns.append(pattern)
+
+        # wrap matching vars under each key
+        keys = set()
+        for var in raw_vars:
+            key = var.split('.')[0]
+            if key in keys:
+                continue
+
+            host.vars[key] = self.raw_triage(key, hostvars[key], patterns)
+            keys.add(key)
 
     def cli_options(self):
         options = []
@@ -52,7 +98,7 @@ class VarsModule(object):
         return ' '.join(options)
 
     def get_host_vars(self, host, vault_password=None):
-        self.wrap_salts_in_raw(host, host.get_group_vars())
+        self.raw_vars(host, host.get_group_vars())
         host.vars['cli_options'] = self.cli_options()
         host.vars['cli_ask_pass'] = getattr(self._options, 'ask_pass', False)
         return {}
