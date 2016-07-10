@@ -31,12 +31,11 @@ fi
 
 # Install Ansible and its dependencies if not installed.
 if [ ! -f /usr/bin/ansible ]; then
-  echo "Adding Ansible repository..."
-  sudo apt-add-repository -y ppa:ansible/ansible
-  echo "Updating system..."
-  sudo apt-get -y update
-  echo "Installing Ansible..."
-  sudo apt-get -y install ansible
+  echo "Installing pip..."
+  sudo apt-get -y install python-pip
+  echo "Installing Ansible with pip..."
+  sudo pip install ansible=='2.0.2.0'
+  sudo pip install markupsafe
 fi
 
 if [ ! -d ${ANSIBLE_PATH}/vendor ]; then
