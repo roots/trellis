@@ -1,0 +1,27 @@
+---
+- name: Copy this repo
+  git:
+    repo: "{{ sb_provision_repo_url }}"
+    dest: "{{ sb_provision_repo_dest }}"
+    version: "{{ sb_provision_repo_version }}"
+
+- name: Add cron to reset every day
+  become: yes
+  become_user: root
+  cron:
+    name: "reset sandbox every day"
+    state: present"
+    minute: "{{ sb_reset_cron_minute }}"
+    hour: "{{ sb_reset_cron_hour }}"
+    job: "cd /opt/proteusnet/ops && ANSIBLE_NOCOLOR='1' ansible-playbook sandbox-reset.yml -i hosts/sandbox_internal --vault-password-file ../vault-key > {{ sb_reset_log_path }}/ansible-reset.log 2>&1"
+
+- name: Ensure the sandbox reset log dir is present
+  file:
+    path: "{{ sb_reset_log_path }}"
+    state: directory
+
+- name: Ensure blurify.sh script is present
+  copy:
+    src: blurify.sh
+    dest: /usr/local/bin/blurify.sh
+    mode: 0755
