@@ -1,7 +1,7 @@
 .PHONY: provision_sandbox install_ansible_deps vagrant_manual_provisioning clean
 
 provision_sandbox:
-	ansible-playbook server-sandbox.yml -e env=sandbox
+	ansible-playbook server.yml -e env=sandbox
 
 install_ansible_deps:
 	rm -rf vendor/

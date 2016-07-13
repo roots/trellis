@@ -7,11 +7,13 @@
   hosts: web:&{{ env }}
   gather_facts: false
   roles:
-    - { role: remote-user, tags: [remote-user, always] }
+    - { role: remote-user, tags: [remote-user, always], when: false }
 
 - name: WordPress Server - Install LEMP Stack with PHP 7.0 and MariaDB MySQL
   hosts: web:&{{ env }}
   become: yes
+  vars:
+    ansible_user: admin
   roles:
     - { role: common, tags: [common] }
     - { role: swapfile, swapfile_size: 1GB, tags: [swapfile] }
@@ -19,6 +21,7 @@
     - { role: ferm, tags: [ferm] }
     - { role: ntp, tags: [ntp] }
     - { role: users, tags: [users] }
+    - { role: dotfiles, tags: [dotfiles], become: yes, become_user: primoz }
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb] }
     - { role: ssmtp, tags: [ssmtp, mail] }
@@ -26,7 +29,9 @@
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }
+    - { role: ansible, tags: [ansible] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: letsencrypt, tags: [letsencrypt], when: letsencrypt_enabled }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup, letsencrypt] }
     - { role: wordpress-install, tags: [wordpress, wordpress-install] }
+    - { role: sandbox-setup, tags: [sandbox, sandbox-setup], when: env == "sandbox" }
