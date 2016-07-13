@@ -62,3 +62,10 @@
   with_dict: "{{ wordpress_sites }}"
   when: item.value.site_install | default(true) and item.value.multisite.enabled | default(false)
   changed_when: "'The network already exists.' not in wp_install_results.stdout"
+
+- name: Update WP Multisite Home URL
+  command: wp option update home {{ site_env.wp_home }} --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/current/"
+  with_dict: "{{ wordpress_sites }}"
+  when: item.value.site_install | default(true) and item.value.multisite.enabled | default(false)
