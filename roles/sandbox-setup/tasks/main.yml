@@ -10,7 +10,7 @@
   become_user: root
   cron:
     name: "reset sandbox every day"
-    state: present"
+    state: present
     minute: "{{ sb_reset_cron_minute }}"
     hour: "{{ sb_reset_cron_hour }}"
     job: "cd /opt/proteusnet/ops && ANSIBLE_NOCOLOR='1' ansible-playbook sandbox-reset.yml -i hosts/sandbox_internal --vault-password-file ../vault-key > {{ sb_reset_log_path }}/ansible-reset.log 2>&1"

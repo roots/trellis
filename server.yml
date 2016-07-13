@@ -7,11 +7,13 @@
   hosts: web:&{{ env }}
   gather_facts: false
   roles:
-    - { role: remote-user, tags: [remote-user, always] }
+    - { role: remote-user, tags: [remote-user, always], when: false }
 
 - name: WordPress Server - Install LEMP Stack with PHP 7.0 and MariaDB MySQL
   hosts: web:&{{ env }}
   become: yes
+  vars:
+    ansible_user: admin
   roles:
     - { role: common, tags: [common] }
     - { role: swapfile, swapfile_size: 1GB, tags: [swapfile] }
