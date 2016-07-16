@@ -1,4 +1,5 @@
 ### HEAD
+* Fix `wp_home` option in Multisite after install in development ([#616](https://github.com/roots/trellis/pull/616))
 * Add Vagrant post up message ([#602](https://github.com/roots/trellis/pull/602))
 * Fix #468 - Use curl to install wp-cli tab completions ([#593](https://github.com/roots/trellis/pull/593))
 * Require Ansible 2.0.2 and remove deploy_helper ([#579](https://github.com/roots/trellis/pull/579))
