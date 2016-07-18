@@ -8,3 +8,7 @@ vault_wordpress_sites:
     admin_password: admin
     env:
       db_password: devpw
+  www.proteusthemes.com:
+    admin_password: admin
+    env:
+      db_password: devpw

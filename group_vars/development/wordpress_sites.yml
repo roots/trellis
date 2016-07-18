@@ -25,3 +25,26 @@ wordpress_sites:
       db_user: proteusnet
       db_password: devpw
       db_prefix: wpsites_
+  www.proteusthemes.com:
+    site_hosts:
+      - www.proteusthemes.dev
+    local_path: ../www/www.proteusthemes.com
+    site_install: true
+    site_title: ProteusThemes
+    admin_user: proteusnet
+    admin_password: admin
+    admin_email: admin@proteusthemes.dev
+    multisite:
+      enabled: false
+      # subdomains: false
+    ssl:
+      enabled: false
+      provider: self-signed
+    cache:
+      enabled: false
+    env:
+      disable_wp_cron: false
+      db_name: pt_core
+      db_user: proteusnet
+      db_password: devpw
+      db_prefix: ptcore_
