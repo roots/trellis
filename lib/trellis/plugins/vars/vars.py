@@ -12,7 +12,9 @@ if __version__.startswith('1'):
 # These imports will produce Traceback in Ansible 1.x, so place after version check
 from __main__ import cli
 from ansible.compat.six import iteritems
+from ansible.parsing.dataloader import DataLoader
 from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
+from ansible.template import Templar
 
 
 class VarsModule(object):
@@ -21,6 +23,7 @@ class VarsModule(object):
     def __init__(self, inventory):
         self.inventory = inventory
         self.inventory_basedir = inventory.basedir()
+        self.loader = DataLoader()
         self._options = cli.options if cli else None
 
     def raw_triage(self, key_string, item, patterns):
@@ -41,10 +44,11 @@ class VarsModule(object):
         if 'raw_vars' not in hostvars:
             return
 
-        if not isinstance(hostvars['raw_vars'], AnsibleSequence):
+        raw_vars = Templar(variables=hostvars, loader=self.loader).template(hostvars['raw_vars'])
+        if not isinstance(raw_vars, list):
             raise AnsibleError('The `raw_vars` variable must be defined as a list.')
 
-        patterns = [re.sub(r'\*', '(.)*', re.sub(r'\.', '\.', var)) for var in hostvars['raw_vars'] if var.split('.')[0] in hostvars]
+        patterns = [re.sub(r'\*', '(.)*', re.sub(r'\.', '\.', var)) for var in raw_vars if var.split('.')[0] in hostvars]
         keys = set(pattern.split('\.')[0] for pattern in patterns)
         for key in keys:
             host.vars[key] = self.raw_triage(key, hostvars[key], patterns)
