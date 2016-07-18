@@ -26,54 +26,25 @@ class VarsModule(object):
     def raw_triage(self, key_string, item, patterns):
         # process dict values
         if isinstance(item, AnsibleMapping):
-            dict = {}
-            for key,value in item.iteritems():
-                dict[key] = self.raw_triage('.'.join([key_string, key]), value, patterns)
-            return dict
+            return dict((key,self.raw_triage('.'.join([key_string, key]), value, patterns)) for key,value in item.iteritems())
 
         # process list values
         elif isinstance(item, AnsibleSequence):
-            list = []
-            for i,value in enumerate(item):
-                raw = self.raw_triage('.'.join([key_string, str(i)]), value, patterns)
-                list.append(raw)
-            return list
+            return [self.raw_triage('.'.join([key_string, str(i)]), value, patterns) for i,value in enumerate(item)]
 
         # wrap values if they match raw_vars pattern
         elif isinstance(item, AnsibleUnicode):
-            matches = False
-            for pattern in patterns:
-                if re.match(pattern, key_string) is not None:
-                    matches = True
-                    break
-
-            if not item.startswith(('{% raw', '{%raw')) and matches:
-                item = ''.join(['{% raw %}', item, '{% endraw %}'])
-
-            return item
+            match = next((pattern for pattern in patterns if re.match(pattern, key_string)), None)
+            return ''.join(['{% raw %}', item, '{% endraw %}']) if not item.startswith(('{% raw', '{%raw')) and match else item
 
     def raw_vars(self, host, hostvars):
         if 'raw_vars' not in hostvars:
             return
 
-        raw_vars = list((var for var in hostvars['raw_vars'] if var.split('.')[0] in hostvars))
-
-        # prepare regex match patterns
-        patterns = []
-        for pattern in raw_vars:
-            pattern = re.sub(r'\.', '\.', pattern)
-            pattern = re.sub(r'\*', '(.)*', pattern)
-            patterns.append(pattern)
-
-        # wrap matching vars under each key
-        keys = set()
-        for var in raw_vars:
-            key = var.split('.')[0]
-            if key in keys:
-                continue
-
+        patterns = [re.sub(r'\*', '(.)*', re.sub(r'\.', '\.', var)) for var in hostvars['raw_vars'] if var.split('.')[0] in hostvars]
+        keys = set(pattern.split('\.')[0] for pattern in patterns)
+        for key in keys:
             host.vars[key] = self.raw_triage(key, hostvars[key], patterns)
-            keys.add(key)
 
     def cli_options(self):
         options = []
