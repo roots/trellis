@@ -41,6 +41,9 @@ class VarsModule(object):
         if 'raw_vars' not in hostvars:
             return
 
+        if not isinstance(hostvars['raw_vars'], AnsibleSequence):
+            raise AnsibleError('The `raw_vars` variable must be defined as a list.')
+
         patterns = [re.sub(r'\*', '(.)*', re.sub(r'\.', '\.', var)) for var in hostvars['raw_vars'] if var.split('.')[0] in hostvars]
         keys = set(pattern.split('\.')[0] for pattern in patterns)
         for key in keys:
