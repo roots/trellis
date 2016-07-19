@@ -6,12 +6,35 @@ wordpress_sites:
   demo.proteusthemes.com:
     site_hosts:
       - demo.proteusthemes.com
-    local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
+    local_path: ../demo.proteusthemes.com
+    repo: null
     multisite:
       enabled: true
       subdomains: false
     ssl:
       enabled: true
-      provider: letsencrypt
+      provider: self-signed
     cache:
       enabled: false
+    env:
+      wp_home: "https://demo.proteusthemes.com"
+      wp_siteurl: "https://demo.proteusthemes.com"
+      db_user: "{{ vault_wordpress_sites['demo.proteusthemes.com'].env.db_user }}"
+      db_password: "{{ vault_wordpress_sites['demo.proteusthemes.com'].env.db_password }}"
+  www.proteusthemes.com:
+    site_hosts:
+      - www.proteusthemes.com
+    local_path: ../www.proteusthemes.com
+    repo: null
+    multisite:
+      enabled: false
+    ssl:
+      enabled: true
+      provider: self-signed
+    cache:
+      enabled: false
+    env:
+      wp_home: "https://www.proteusthemes.com"
+      wp_siteurl: "https://www.proteusthemes.com"
+      db_user: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_user }}"
+      db_password: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_password }}"
