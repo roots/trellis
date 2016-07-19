@@ -6,8 +6,11 @@ wordpress_sites:
   demo.proteusthemes.com:
     site_hosts:
       - demo.proteusthemes.com
-    local_path: ../demo.proteusthemes.com
-    repo: null
+    site_install: true
+    site_title: ProteusThemes Demos
+    admin_user: "{{ vault_wordpress_sites['demo.proteusthemes.com'].admin_user }}"
+    admin_password: "{{ vault_wordpress_sites['demo.proteusthemes.com'].admin_password }}"
+    admin_email: "{{ vault_wordpress_sites['demo.proteusthemes.com'].admin_email }}"
     multisite:
       enabled: true
       subdomains: false
@@ -21,11 +24,15 @@ wordpress_sites:
       wp_siteurl: "https://demo.proteusthemes.com"
       db_user: "{{ vault_wordpress_sites['demo.proteusthemes.com'].env.db_user }}"
       db_password: "{{ vault_wordpress_sites['demo.proteusthemes.com'].env.db_password }}"
+      db_prefix: "{{ vault_wordpress_sites['demo.proteusthemes.com'].env.db_prefix }}"
   www.proteusthemes.com:
     site_hosts:
       - www.proteusthemes.com
-    local_path: ../www.proteusthemes.com
-    repo: null
+    site_install: true
+    site_title: ProteusThemes
+    admin_user: "{{ vault_wordpress_sites['www.proteusthemes.com'].admin_user }}"
+    admin_password: "{{ vault_wordpress_sites['www.proteusthemes.com'].admin_password }}"
+    admin_email: "{{ vault_wordpress_sites['www.proteusthemes.com'].admin_email }}"
     multisite:
       enabled: false
     ssl:
@@ -38,3 +45,4 @@ wordpress_sites:
       wp_siteurl: "https://www.proteusthemes.com"
       db_user: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_user }}"
       db_password: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_password }}"
+      db_prefix: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_prefix }}"
