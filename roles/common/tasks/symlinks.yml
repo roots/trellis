@@ -13,7 +13,9 @@
   register: extra_symlink_dirs
 
 - name: Set default symlinks
-  become: no
+  become: yes
+  become_user: primoz
+  failed_when: false # if the user does not exist yet
   file:
     src: "{{ item.path }}"
     dest: "~/{{ item.path | basename }}"
