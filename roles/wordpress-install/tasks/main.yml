@@ -28,10 +28,10 @@
   command: |
             wp core config
             --allow-root
-            --dbname="{{ item.value.env.db_name }}"
-            --dbuser="{{ item.value.env.db_user }}"
-            --dbpass="{{ item.value.env.db_password }}"
-            --dbprefix="{{ item.value.env.db_prefix }}"
+            --dbname="{{ site_env.db_name }}"
+            --dbuser="{{ site_env.db_user }}"
+            --dbpass="{{ site_env.db_password }}"
+            --dbprefix="{{ site_env.db_prefix }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/wp-config.php"
