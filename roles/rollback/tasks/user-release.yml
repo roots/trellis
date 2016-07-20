@@ -5,7 +5,7 @@
   register: specified
 
 - name: Get name of current symlinked release
-  shell: "basename $(readlink current)"
+  shell: "basename $(readlink {{ project_current_path }})"
   args:
     chdir: "{{ project_root }}"
   register: current_release

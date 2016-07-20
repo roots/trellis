@@ -40,3 +40,7 @@ project_shared_children:
 #   WP_ENV: "production"
 project_environment:
   WP_ENV: "{{ env }}"
+
+# The project_current_path is the symlink used for the latest or active deployment
+# - default is 'current'
+project_current_path: "{{ project.current_path | default('current') }}"
