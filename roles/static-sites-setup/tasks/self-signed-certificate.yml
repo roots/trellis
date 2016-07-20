@@ -8,8 +8,6 @@
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ item.key }}.*"
   with_dict: "{{ static_sites }}"
-  when: >
-    item.value.ssl.enabled and item.value.site_hosts | first
-    not in self_signed_domains.results | default([]) | map(attribute='stdout') | list
+  when: item.value.ssl.enabled and item.value.ssl.provider | default('manual') == 'self-signed'
   notify:
     - reload nginx
