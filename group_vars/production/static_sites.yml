@@ -1,0 +1,11 @@
+static_sites:
+  apps.proteusthemes.com:
+    site_hosts:
+      - apps.proteusthemes.com
+    ssl:
+      enabled: true
+      provider: self-signed
+    cache:
+      enabled: false
+      duration: 30s
+    env: production
