@@ -72,6 +72,7 @@ sites_to_export:
   - bolts-factory
   - bolts-industry
   - shaka
+  - buildpress-light
 
 xmls_to_rename:
   hairpress: "hairpresswptheme"
