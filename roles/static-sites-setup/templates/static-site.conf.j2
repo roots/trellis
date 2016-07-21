@@ -12,7 +12,7 @@ server {
   error_log    {{ www_root }}/logs/{{ item.key }}/error.log;
 
   root  {{ www_root }}/{{ item.key }};
-  index index.php index.html index.htm;
+  index index.php index.htm index.html;
 
   charset utf-8;
 
@@ -32,17 +32,7 @@ server {
   {% endif %}
 
   include includes.d/{{ item.key }}/*.conf;
-
-  location / {
-    try_files $uri $uri/ /index.php?$args;
-  }
-
-  # Set the max body size equal to PHP's max POST size.
-  client_max_body_size {{ php_post_max_size | default('25m') | lower }};
-
-  include h5bp/directive-only/x-ua-compatible.conf;
-  include h5bp/location/cross-domain-fonts.conf;
-  include h5bp/location/protect-system-files.conf;
+  include wordpress.conf;
 
   location ~ \.php$ {
     try_files $uri =404;
