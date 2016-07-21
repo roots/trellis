@@ -1,7 +1,10 @@
-.PHONY: provision_sandbox provision_production install_ansible_deps vagrant_manual_provisioning clean
+.PHONY: provision_sandbox provision_sandbox_only_sb_setup provision_production install_ansible_deps vagrant_manual_provisioning clean
 
 provision_sandbox:
 	ansible-playbook server.yml -e env=sandbox
+
+provision_sandbox_only_sb_setup:
+	ansible-playbook server.yml -e env=sandbox --tags sandbox-setup
 
 provision_production:
 	ansible-playbook server.yml -e env=production
