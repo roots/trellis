@@ -4,8 +4,14 @@ __metaclass__ = type
 
 import types
 
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
 from ansible import errors
 from ansible.compat.six import string_types
+from ansible.module_utils.urls import open_url
 
 def reverse_www(hosts, enabled=True, append=True):
     ''' Add or remove www subdomain '''
@@ -30,9 +36,17 @@ def reverse_www(hosts, enabled=True, append=True):
             return host[4:]
         else:
             if len(host.split('.')) > 2:
-                return host
-            else:
-                return 'www.{0}'.format(host)
+                try:
+                    url = 'https://tldextract.appspot.com/api/extract?url={0}'.format(host)
+                    data = json.load(open_url(url, timeout=5))
+                    subdomain = data.get('subdomain', '')
+                except IOError:
+                    subdomain = ''
+
+                if subdomain != '':
+                    return host
+
+            return 'www.{0}'.format(host)
 
     # Handle invalid input type
     else:

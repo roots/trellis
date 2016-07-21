@@ -95,7 +95,7 @@ server {
 }
 {% endif %}
 
-{% for host in item.value.site_hosts if item.value.www_redirect | default(true) %}
+{% for host in item.value.site_hosts if item.value.www_redirect | default(true) and host != host | reverse_www %}
 server {
   {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
     listen 443 ssl http2;
