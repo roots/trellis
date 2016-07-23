@@ -1,4 +1,5 @@
 ### HEAD
+* Fix #612 - Bump nginx_fastcgi_buffer_size to `8k` ([#620](https://github.com/roots/trellis/pull/620))
 * Setup permalink structure for multisite installs too ([#617](https://github.com/roots/trellis/pull/617))
 * Fix `wp_home` option in Multisite after install in development ([#616](https://github.com/roots/trellis/pull/616))
 * Add `current_path` var and default to enable custom current release path ([#607](https://github.com/roots/trellis/pull/607))
