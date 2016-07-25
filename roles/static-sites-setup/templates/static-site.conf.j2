@@ -34,6 +34,7 @@ server {
   include includes.d/{{ item.key }}/*.conf;
   include wordpress.conf;
 
+  {% if item.value.php | default(true) -%}
   location ~ \.php$ {
     try_files $uri =404;
 
@@ -64,6 +65,7 @@ server {
     fastcgi_param DOCUMENT_ROOT $realpath_root;
     fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
   }
+  {% endif %}
 }
 
 {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) %}
