@@ -9,3 +9,12 @@ static_sites:
       enabled: false
       duration: 30s
     env: production
+  artifacts.proteusthemes.com:
+    site_hosts:
+      - artifacts.proteusthemes.com
+    ssl:
+      enabled: false
+    cache:
+      enabled: false
+    php: false
+    env: production
