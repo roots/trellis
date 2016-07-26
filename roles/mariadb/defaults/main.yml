@@ -9,6 +9,8 @@ sites_using_remote_db: "[{% for name, site in wordpress_sites.iteritems() if sit
 
 mariadb_backup_dir: /opt/proteusnet/backup/mysql
 mariadb_backup_days_retention: 6
+mariadb_mysqldump_command: /usr/bin/mysqldump -qfeR
+mariadb_mysql_command: /usr/bin/mysql
 mariadb_backup_time:
   hour: 4
   minute: 0

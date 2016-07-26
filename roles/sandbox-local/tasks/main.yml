@@ -1,20 +1,23 @@
 ---
 - name: Remove old DB file
   file:
-    path: /tmp/as1_db_file.sql
+    path: "/tmp/{{ item }}.sql"
     state: absent
+  with_items: "{{ shared_dbs_names }}"
 
 - name: Unzip DB
-  command: gunzip as1_db_file.sql.gz
+  command: "gunzip {{ item }}.sql.gz"
   args:
     chdir: /tmp/
+  with_items: "{{ shared_dbs_names }}"
 
 - name: Replace emails
   replace:
-    dest: /tmp/as1_db_file.sql
+    dest: "/tmp/{{ item }}.sql"
     regexp: "({{ wp_emails.from | join( '|' ) }})"
     replace: "{{ wp_emails.to }}"
     backup: yes
+  with_items: "{{ shared_dbs_names }}"
 
 - name: Drop old DBs
   mysql_db:
@@ -38,7 +41,7 @@
   mysql_db:
     name: "{{ item.value.env.db_name }}"
     state: import
-    target: /tmp/as1_db_file.sql
+    target: /tmp/{{ shared_dbs_names[0] }}.sql
   with_dict: "{{ sb_wp_sites }}"
 
 - name: Search/replace domain - table wp_blogs

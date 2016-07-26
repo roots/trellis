@@ -4,20 +4,32 @@
 
 host=127.0.0.1
 
-mysqldump_command="/usr/bin/mysqldump -qfeR "
-mysql_command=/usr/bin/mysql
-
 today=$(date "+%Y%m%d")
 
 # Get a list of all databases
-databases=$(echo "SHOW DATABASES" | $mysql_command -h $host | grep -v "Database" | grep -v "information_schema" | grep -v "performance_schema")
+databases=$(echo "SHOW DATABASES" | {{ mariadb_mysql_command }} -h $host | grep -v "Database" | grep -v "information_schema" | grep -v "performance_schema")
 
 for db in $databases; do
   date=`date`
   file="{{ mariadb_backup_dir }}/$db-$today.sql.gz"
   echo "Backing up '$db' from '$host' on '$date' to: "
   echo "  $file"
-  $mysqldump_command -h $host $db | gzip > $file
+  {{ mariadb_mysqldump_command }} -h $host $db | gzip > $file
 done
 
+# clean old exports
 find {{ mariadb_backup_dir }}/* -mtime +{{ mariadb_backup_days_retention }} -exec rm {} \;
+
+# prepare db dumps for as <> sandbox connection
+shared_dbs_names=({% for db_name in shared_dbs_names %}'{{ db_name }}' {% endfor %})
+
+for db in ${shared_dbs_names[@]}; do
+  link_name="{{ mariadb_backup_dir }}/${db}-latest.sql.gz"
+  actual_export_file="{{ mariadb_backup_dir }}/${db}-${today}.sql.gz"
+  if [[ -f ${actual_export_file} ]]; then
+    echo "Symlinking:"
+    echo "  ${link_name} >>> ${actual_export_file}"
+
+    ln -f -s ${actual_export_file} ${link_name}
+  fi
+done
