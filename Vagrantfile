@@ -49,20 +49,23 @@ Vagrant.configure('2') do |config|
   # Required for NFS to work
   config.vm.network :private_network, ip: ip, hostsupdater: 'skip'
 
-  wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }.each do |host|
+  site_hosts = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
+
+  site_hosts.each do |host|
     if !host.is_a?(Hash) or !host.has_key?('canonical')
       fail_with_message File.read(File.join(ANSIBLE_PATH, 'roles/common/templates/site_hosts.j2')).sub!('{{ env }}', 'development').gsub!(/com$/, 'dev')
     end
   end
 
-  hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'].map { |host| host['canonical'] } }
-  config.vm.hostname = hostname
-  redirects = wordpress_sites.flat_map { |(_name, site)|  site['site_hosts'].select { |host| host.has_key?('redirects') }.flat_map { |host| host['redirects'] } }
+  main_hostname, *hostnames = site_hosts.map { |host| host['canonical'] }
+  config.vm.hostname = main_hostname
+
+  redirects = site_hosts.flat_map { |host| host['redirects'] }.compact
 
   if Vagrant.has_plugin? 'vagrant-hostmanager'
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
-    config.hostmanager.aliases = aliases + redirects
+    config.hostmanager.aliases = hostnames + redirects
   else
     fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager"
   end
