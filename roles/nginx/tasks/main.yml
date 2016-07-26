@@ -73,3 +73,14 @@
   template:
     src: static-site.conf.j2
     dest: "{{ nginx_path }}/static-site.conf"
+
+- name: Create web root
+  file:
+    path: "{{ www_root }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: "u+rwx,g+rwxs,o-w" # http://brunogirin.blogspot.si/2010/03/shared-folders-in-ubuntu-with-setgid.html
+    state: directory
+
+- name: Set default ACL on web root to be group writeable
+  command: "setfacl -d -m u::rwx,g::rwx,o::r-x {{ www_root }}"

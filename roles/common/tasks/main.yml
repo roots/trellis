@@ -27,6 +27,7 @@
   - imagemagick
   - htop
   - dbus
+  - acl
 
 - name: Validate timezone variable
   stat:
