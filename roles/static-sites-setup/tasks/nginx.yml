@@ -69,3 +69,9 @@
     state: link
   with_dict: "{{ static_sites }}"
   notify: reload nginx
+
+- name: Template htpasswd file to includes.d
+  template:
+    src: "includes.d/htpasswd.j2"
+    dest: "{{ nginx_path }}/includes.d/htpasswd"
+  notify: reload nginx
