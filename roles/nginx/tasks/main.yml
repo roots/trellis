@@ -63,3 +63,13 @@
   template:
     src: wordpress_multisite_subdirectories.conf.j2
     dest: "{{ nginx_path }}/wordpress_multisite_subdirectories.conf"
+
+- name: Create WordPress config for variable $cache_uri
+  template:
+    src: set-cache-uri.conf.j2
+    dest: "{{ nginx_path }}/set-cache-uri.conf"
+
+- name: Create base static site config
+  template:
+    src: static-site.conf.j2
+    dest: "{{ nginx_path }}/static-site.conf"

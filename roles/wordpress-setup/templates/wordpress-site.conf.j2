@@ -19,6 +19,8 @@ server {
   {% if env == 'development' -%}
   # See Virtualbox section at http://wiki.nginx.org/Pitfalls
   sendfile off;
+  {%- else -%}
+  include set-cache-uri.conf;
   {%- endif %}
 
   {% if item.value.multisite.enabled | default(false) -%}

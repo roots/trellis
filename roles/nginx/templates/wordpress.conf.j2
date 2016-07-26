@@ -5,8 +5,17 @@ location ~* /wp-content/uploads/.*\.php$ {
   deny all;
 }
 
+if ($cache_uri = '') {
+  set $cache_uri 'null cache';
+}
+
 location / {
-  try_files $uri $uri/ /index.php?$args;
+  try_files
+    /wp-content/cache/supercache/$http_host/$cache_uri/index-https.html
+    /wp-content/cache/wp-rocket/$http_host/$cache_uri/index-https.html
+    $uri
+    $uri/
+    /index.php?$args;
 }
 
 # Set the max body size equal to PHP's max POST size.

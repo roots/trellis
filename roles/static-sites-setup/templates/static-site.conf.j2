@@ -32,7 +32,7 @@ server {
   {% endif %}
 
   include includes.d/{{ item.key }}/*.conf;
-  include wordpress.conf;
+  include static-site.conf;
 
   {% if item.value.php | default(true) -%}
   location ~ \.php$ {
