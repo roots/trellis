@@ -6,3 +6,9 @@ mariadb_dist: trusty
 mysql_root_user: root
 
 sites_using_remote_db: "[{% for name, site in wordpress_sites.iteritems() if site.env is defined and site.env.db_host | default('localhost') != 'localhost' %}'{{ name }}',{% endfor %}]"
+
+mariadb_backup_dir: /opt/proteusnet/backup/mysql
+mariadb_backup_days_retention: 6
+mariadb_backup_time:
+  hour: 4
+  minute: 0

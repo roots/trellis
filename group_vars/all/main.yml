@@ -4,6 +4,7 @@ composer_global_packages:
 apt_cache_valid_time: 86400
 default_timezone: Etc/UTC
 www_root: /opt/proteusnet/www
+scripts_root: /opt/proteusnet/scripts
 ip_whitelist:
   - "{{ lookup('pipe', 'curl -4 -s https://api.ipify.org') }}"
 

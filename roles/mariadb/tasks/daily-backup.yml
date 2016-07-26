@@ -1,0 +1,27 @@
+---
+- name: Ensure folders for backups and scripts are present
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  with_items:
+    - "{{ scripts_root }}"
+    - "{{ mariadb_backup_dir }}"
+
+- name: Install script for the mysql backup
+  template:
+    src: mysql-backup.sh.j2
+    dest: "{{ scripts_root }}/mysql-backup.sh"
+    owner: root
+    group: root
+    mode: "u+x"
+
+- name: Add cronjob for daily backup
+  cron:
+    name: "daily mysql backup"
+    state: present
+    hour: "{{ mariadb_backup_time.hour }}"
+    minute: "{{ mariadb_backup_time.minute }}"
+    job: "{{ scripts_root }}/mysql-backup.sh > {{ mariadb_backup_dir }}/mysql-backup.log 2>&1"
+    user: root

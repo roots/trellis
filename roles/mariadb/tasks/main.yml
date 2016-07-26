@@ -73,4 +73,6 @@
       name: test
       state: absent
 
+  - include: daily-backup.yml
+
   when: not sites_using_remote_db | count
