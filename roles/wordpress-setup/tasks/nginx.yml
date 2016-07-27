@@ -5,7 +5,7 @@
     dest: "{{ nginx_ssl_path }}/{{ item.value.ssl.cert | basename }}"
     mode: 0640
   with_dict: "{{ wordpress_sites }}"
-  when: item.value.ssl.enabled and item.value.ssl.cert is defined
+  when: ssl_enabled and item.value.ssl.cert is defined
 
 - name: Copy SSL key
   copy:
@@ -13,7 +13,7 @@
     dest: "{{ nginx_ssl_path }}/{{ item.value.ssl.key | basename }}"
     mode: 0600
   with_dict: "{{ wordpress_sites }}"
-  when: item.value.ssl.enabled and item.value.ssl.key is defined
+  when: ssl_enabled and item.value.ssl.key is defined
 
 - name: Create Nginx conf for challenges location
   template:
