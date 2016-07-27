@@ -20,7 +20,6 @@ wordpress_sites:
     cache:
       enabled: false
     env:
-      disable_wp_cron: false
       wp_home: "http://demo.proteusthemes.dev"
       wp_siteurl: "http://demo.proteusthemes.dev"
       db_name: demo_network
@@ -45,7 +44,6 @@ wordpress_sites:
     cache:
       enabled: false
     env:
-      disable_wp_cron: false
       wp_home: "http://www.proteusthemes.dev"
       wp_siteurl: "http://www.proteusthemes.dev"
       db_name: pt_core
