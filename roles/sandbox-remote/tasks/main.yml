@@ -1,7 +1,10 @@
 ---
+- include_vars: "{{ playbook_dir }}/roles/mariadb/defaults/main.yml"
+  when: "{{ mariadb_backup_dir is not defined }}"
+
 - name: Fetch DB files
   fetch:
-    src: "/opt/proteusnet/backup/mysql/{{ item }}-latest.sql.gz"
+    src: "{{ mariadb_backup_dir }}/{{ item }}-latest.sql.gz"
     dest: "/tmp/{{ item }}.sql.gz"
     fail_on_missing: yes
     flat: yes

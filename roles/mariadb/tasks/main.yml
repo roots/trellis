@@ -74,5 +74,6 @@
       state: absent
 
   - include: daily-backup.yml
+    when: env == "production"
 
   when: not sites_using_remote_db | count
