@@ -23,7 +23,7 @@
         state: directory
         path: "{{ xml_paths.remote }}/"
 
-    - name: Deploy latest XML files to as
+    - name: "Deploy latest XML files to {{ ansible_hostname }}"
       copy:
         src: "{{ xml_paths.local }}/{{ item }}.wordpress.{{ ansible_date_time.date }}.000.xml"
         dest: "{{ xml_paths.remote }}/"
