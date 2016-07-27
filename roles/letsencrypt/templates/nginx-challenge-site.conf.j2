@@ -1,5 +1,5 @@
 server {
   listen 80;
-  server_name {{ item.item.value.site_hosts | reverse_www(enabled=item.item.value.www_redirect | default(true)) | join(' ') }};
+  server_name{% for item in item.item.value.site_hosts %} {{ item.canonical }}{% for redirect in item.redirects | default([]) %} {{ redirect }}{% endfor %}{% endfor %};
   include acme-challenge-location.conf;
 }

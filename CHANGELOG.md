@@ -1,4 +1,5 @@
 ### HEAD
+* Require explicit redirects and drop www_redirect ([#622](https://github.com/roots/trellis/pull/622))
 * Fix #612 - Bump nginx_fastcgi_buffer_size to `8k` ([#620](https://github.com/roots/trellis/pull/620))
 * Setup permalink structure for multisite installs too ([#617](https://github.com/roots/trellis/pull/617))
 * Fix `wp_home` option in Multisite after install in development ([#616](https://github.com/roots/trellis/pull/616))
