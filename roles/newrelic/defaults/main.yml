@@ -1,0 +1,5 @@
+---
+# https://docs.newrelic.com/docs/servers/new-relic-servers-linux/getting-started/new-relic-servers-linux#installation
+newrelic_license_key: "set in vault"
+newrelic_gpg_key_url: "https://download.newrelic.com/548C16BF.gpg"
+newrelic_deb_url: "deb http://apt.newrelic.com/debian/ newrelic non-free"

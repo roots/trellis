@@ -1,0 +1,26 @@
+---
+- name: Add New Relic GPG key
+  apt_key:
+    url: "{{ newrelic_gpg_key_url }}"
+    state: present
+
+- name: Add New Relic apt repository
+  apt_repository:
+    repo: "{{ newrelic_deb_url }}"
+    update_cache: yes
+
+- name: Install the Server Monitor package
+  apt:
+    name: newrelic-sysmond
+    state: present
+
+- name: Configure the Server Monitor daemon
+  command: "nrsysmond-config --set license_key={{ newrelic_license_key }}"
+  when: "{{ newrelic_license_key is defined }}"
+  notify: restart newrelic-sysmond
+
+- name: Start the Server Monitor daemon
+  service:
+    name: newrelic-sysmond
+    state: started
+    enabled: yes
