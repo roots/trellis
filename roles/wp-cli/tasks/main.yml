@@ -3,6 +3,7 @@
   get_url:
     url: "{{ wp_cli_phar_url }}"
     dest: "{{ wp_cli_bin_path }}"
+    force: true
     mode: 0755
 
 - name: Retrieve WP-CLI tab completions
