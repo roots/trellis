@@ -37,7 +37,7 @@ end
 Vagrant.require_version '>= 1.8.5'
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'ubuntu/xenial64'
+  config.vm.box = 'geerlingguy/ubuntu1604'
   config.ssh.forward_agent = true
 
   config.vm.post_up_message = post_up_message
@@ -72,7 +72,7 @@ Vagrant.configure('2') do |config|
 
   if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
     wordpress_sites.each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'ubuntu', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
     config.vm.synced_folder File.join(ANSIBLE_PATH, 'hosts'), File.join(ANSIBLE_PATH.sub(__dir__, '/vagrant'), 'hosts'), mount_options: ['dmode=755', 'fmode=644']
   else
@@ -81,7 +81,7 @@ Vagrant.configure('2') do |config|
     else
       wordpress_sites.each_pair do |name, site|
         config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
-        config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'ubuntu', g: 'www-data', o: 'nonempty'
+        config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'vagrant', g: 'www-data', o: 'nonempty'
       end
     end
   end
