@@ -11,13 +11,17 @@
   with_dict: "{{ wordpress_sites }}"
 
 - name: Copy .env file into web root
+  become: yes
+  become_user: "{{ web_user }}"
   command: rsync -ac --info=NAME /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/.env
   with_dict: "{{ wordpress_sites }}"
   register: env_file
   changed_when: env_file.stdout == "{{ item.key }}.env"
 
 - name: Download WP Core
-  command: wp core download --allow-root
+  become: yes
+  become_user: "{{ web_user }}"
+  command: wp core download
   args:
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/index.php"
@@ -25,9 +29,10 @@
   when: "{{ item.value.site_install | default(False) }} == True"
 
 - name: Create wp-config.php
+  become: yes
+  become_user: "{{ web_user }}"
   command: |
             wp core config
-            --allow-root
             --dbname="{{ site_env.db_name }}"
             --dbuser="{{ site_env.db_user }}"
             --dbpass="{{ site_env.db_password }}"
