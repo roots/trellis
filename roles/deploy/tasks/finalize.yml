@@ -4,6 +4,7 @@
 
 - name: Finalize the deploy
   deploy_helper:
+    current_path: "{{ project_current_path }}"
     path: "{{ project_root }}"
     release: "{{ deploy_helper.new_release }}"
     state: finalize

@@ -49,21 +49,30 @@ Vagrant.configure('2') do |config|
   # Required for NFS to work
   config.vm.network :private_network, ip: ip, hostsupdater: 'skip'
 
-  hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
-  config.vm.hostname = hostname
-  www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
+  site_hosts = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
+
+  site_hosts.each do |host|
+    if !host.is_a?(Hash) or !host.has_key?('canonical')
+      fail_with_message File.read(File.join(ANSIBLE_PATH, 'roles/common/templates/site_hosts.j2')).sub!('{{ env }}', 'development').gsub!(/com$/, 'dev')
+    end
+  end
+
+  main_hostname, *hostnames = site_hosts.map { |host| host['canonical'] }
+  config.vm.hostname = main_hostname
+
+  redirects = site_hosts.flat_map { |host| host['redirects'] }.compact
 
   if Vagrant.has_plugin? 'vagrant-hostmanager'
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
-    config.hostmanager.aliases = aliases + www_aliases
+    config.hostmanager.aliases = hostnames + redirects
   else
     fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager"
   end
 
   if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
     wordpress_sites.each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
     config.vm.synced_folder File.join(ANSIBLE_PATH, 'hosts'), File.join(ANSIBLE_PATH.sub(__dir__, '/vagrant'), 'hosts'), mount_options: ['dmode=755', 'fmode=644']
   else
@@ -72,7 +81,7 @@ Vagrant.configure('2') do |config|
     else
       wordpress_sites.each_pair do |name, site|
         config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
-        config.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
+        config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'vagrant', g: 'www-data', o: 'nonempty'
       end
     end
   end
@@ -147,6 +156,6 @@ def post_up_message
   msg
 end
 
-def remote_site_path(site_name)
-  "/srv/www/#{site_name}/current"
+def remote_site_path(site_name, site)
+  "/srv/www/#{site_name}/#{site['current_path'] || 'current'}"
 end

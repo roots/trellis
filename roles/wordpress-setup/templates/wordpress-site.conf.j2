@@ -7,11 +7,11 @@ server {
   listen 80;
   {% endif %}
 
-  server_name  {% for host in item.value.site_hosts %} {{ host }} {% if item.value.multisite.subdomains | default(false) %} *.{{ host }} {% endif %} {% endfor %};
+  server_name  {% for host in site_hosts_canonical %}{{ host }} {% if item.value.multisite.subdomains | default(false) %}*.{{ host }} {% endif %}{% endfor %};
   access_log   {{ www_root }}/{{ item.key }}/logs/access.log;
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
 
-  root  {{ www_root }}/{{ item.key }}/current/web;
+  root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;
   index index.php index.htm index.html;
 
   charset utf-8;
@@ -81,7 +81,7 @@ server {
 server {
   listen 80;
 
-  server_name {{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) | join(' ') }}  {% if item.value.multisite.subdomains | default(false) %} *.{{ item.value.site_hosts | join(' *.') }} {% endif %};
+  server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
 
   {% if item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
   include acme-challenge-location.conf;
@@ -95,7 +95,7 @@ server {
 }
 {% endif %}
 
-{% for host in item.value.site_hosts if item.value.www_redirect | default(true) %}
+{% for host in item.value.site_hosts if host.redirects | default([]) %}
 server {
   {% if item.value.ssl is defined and item.value.ssl.enabled | default(false) -%}
     listen 443 ssl http2;
@@ -105,16 +105,16 @@ server {
     listen 80;
   {% endif -%}
 
-  server_name {{ host | reverse_www(append=false) }};
+  server_name {{ host.redirects | join(' ') }};
 
   {% if item.value.ssl is not defined or not item.value.ssl.enabled | default(false) -%}
     include acme-challenge-location.conf;
 
     location / {
-      return 301 $scheme://{{ host }}$request_uri;
+      return 301 $scheme://{{ host.canonical }}$request_uri;
     }
   {% else %}
-    return 301 $scheme://{{ host }}$request_uri;
+    return 301 $scheme://{{ host.canonical }}$request_uri;
   {% endif %}
 }
 {% endfor %}

@@ -4,6 +4,7 @@
 
 - name: Initialize
   deploy_helper:
+    current_path: "{{ project_current_path }}"
     path: "{{ project_root }}"
     state: present
 

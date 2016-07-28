@@ -37,7 +37,7 @@
 
 - name: Test Acme Challenges
   test_challenges:
-    hosts: "{{ item.value.site_hosts | reverse_www(enabled=item.value.www_redirect | default(true)) }}"
+    hosts: "{{ site_hosts }}"
   register: letsencrypt_test_challenges
   ignore_errors: true
   when: site_uses_letsencrypt

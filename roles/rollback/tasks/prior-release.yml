@@ -1,6 +1,6 @@
 ---
 - name: Get list position of current symlinked release
-  shell: "ls releases | grep -n $(basename $(readlink current)) | cut -f1 -d:"
+  shell: "ls releases | grep -n $(basename $(readlink {{ project_current_path }})) | cut -f1 -d:"
   args:
     chdir: "{{ project_root }}"
   register: current_release_position

@@ -11,7 +11,7 @@
   with_dict: "{{ wordpress_sites }}"
 
 - name: Copy .env file into web root
-  command: rsync -ac --info=NAME /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/current/.env
+  command: rsync -ac --info=NAME /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/.env
   with_dict: "{{ wordpress_sites }}"
   register: env_file
   changed_when: env_file.stdout == "{{ item.key }}.env"
@@ -19,7 +19,7 @@
 - name: Install Dependencies with Composer
   command: composer install
   args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   register: composer_results
   with_dict: "{{ wordpress_sites }}"
   changed_when: "'Nothing to install or update' not in composer_results.stderr"
@@ -33,18 +33,11 @@
            --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   register: wp_install_results
   with_dict: "{{ wordpress_sites }}"
   when: item.value.site_install | default(true) and not item.value.multisite.enabled | default(false)
   changed_when: "'WordPress is already installed.' not in wp_install_results.stdout"
-
-- name: Setup Permalink Structure
-  command: wp rewrite structure {{ item.value.initial_permalink_structure | default("/%postname%/") }} --allow-root
-  args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
-  with_dict: "{{ wordpress_sites }}"
-  when: wp_install_results | changed and not item.value.multisite.enabled | default(false)
 
 - name: Install WP Multisite
   command: wp core multisite-install
@@ -57,8 +50,22 @@
            --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
-    chdir: "{{ www_root }}/{{ item.key }}/current/"
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   register: wp_install_results
   with_dict: "{{ wordpress_sites }}"
   when: item.value.site_install | default(true) and item.value.multisite.enabled | default(false)
   changed_when: "'The network already exists.' not in wp_install_results.stdout"
+
+- name: Setup Permalink Structure
+  command: wp rewrite structure {{ item.value.initial_permalink_structure | default("/%postname%/") }} --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+  when: wp_install_results | changed
+
+- name: Update WP Multisite Home URL
+  command: wp option update home {{ site_env.wp_home }} --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+  when: item.value.site_install | default(true) and item.value.multisite.enabled | default(false)
