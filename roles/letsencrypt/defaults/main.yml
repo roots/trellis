@@ -4,7 +4,7 @@ site_uses_letsencrypt: "{{ item.value.ssl is defined and item.value.ssl.enabled 
 sites_need_confs: "False in [{% for item in nginx_confs.results if 'stat' in item %}{{ item.stat.exists }},{% endfor %}]"
 
 acme_tiny_repo: 'https://github.com/diafygi/acme-tiny.git'
-acme_tiny_commit: '69a457269a6392ac31b629b4e103e8ea7dd282c9'
+acme_tiny_commit: '5a7b4e79bc9bd5b51739c0d8aaf644f62cc440e6'
 
 acme_tiny_software_directory: /usr/local/letsencrypt
 acme_tiny_data_directory: /var/lib/letsencrypt
