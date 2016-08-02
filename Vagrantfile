@@ -34,10 +34,10 @@ if !Dir.exists?(ENV['ANSIBLE_ROLES_PATH']) && !Vagrant::Util::Platform.windows?
   fail_with_message "You are missing the required Ansible Galaxy roles, please install them with this command:\nansible-galaxy install -r requirements.yml"
 end
 
-Vagrant.require_version '>= 1.5.1'
+Vagrant.require_version '>= 1.8.5'
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'ubuntu/trusty64'
+  config.vm.box = 'bento/ubuntu-16.04'
   config.ssh.forward_agent = true
 
   config.vm.post_up_message = post_up_message

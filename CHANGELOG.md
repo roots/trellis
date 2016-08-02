@@ -1,4 +1,5 @@
 ### HEAD
+* Upgraded Ubuntu from 14.04 Trusty to 16.04 Xenial ([#604](https://github.com/roots/trellis/pull/604))
 * Fix #581 - Use WP-CLI to run WP cron ([#583](https://github.com/roots/trellis/pull/583))
 * Require explicit redirects and drop www_redirect ([#622](https://github.com/roots/trellis/pull/622))
 * Fix #612 - Bump nginx_fastcgi_buffer_size to `8k` ([#620](https://github.com/roots/trellis/pull/620))
