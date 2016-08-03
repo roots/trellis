@@ -72,7 +72,7 @@ Trellis documentation is available at [https://roots.io/trellis/docs/](https://r
 
 ## Remote server setup (staging/production)
 
-A base Ubuntu 14.04 server is required for setting up remote servers.
+A base Ubuntu 16.04 server is required for setting up remote servers.
 
 1. Configure your WordPress sites in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://roots.io/trellis/docs/vault/) for how to encrypt files containing passwords)
 2. Add your server IP/hostnames to `hosts/<environment>`
