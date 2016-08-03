@@ -14,4 +14,6 @@ ip_whitelist:
 raw_vars:
   - vault_mail_password
   - vault_mysql_root_password
+  - vault_users.*.password
+  - vault_users.*.salt
   - vault_wordpress_sites
