@@ -9,6 +9,14 @@
   roles:
     - { role: remote-user, tags: [remote-user, always] }
 
+- name: Install prerequisites
+  hosts: web:&{{ env }}
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Install Python 2.x
+      raw: sudo apt-get install -qq -y python-simplejson
+
 - name: WordPress Server - Install LEMP Stack with PHP 7.0 and MariaDB MySQL
   hosts: web:&{{ env }}
   become: yes

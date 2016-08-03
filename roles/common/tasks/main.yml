@@ -17,6 +17,23 @@
   when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count
   tags: [letsencrypt, wordpress]
 
+- name: Validate Ubuntu version
+  debug:
+    msg: |
+      Trellis is built for Ubuntu 16.04 Xenial as of https://github.com/roots/trellis/pull/626
+
+      Your Ubuntu version is {{ ansible_distribution_version }} {{ ansible_distribution_release }}
+
+      We recommend you re-create your server to get the best experience.
+
+      Note: both of these methods will delete all your existing data. It's up to you to backup what's needed and restore it.
+
+      Development via Vagrant: `vagrant destroy && vagrant up`
+
+      Staging/Production: Create a new server with Ubuntu 16.04 and provision
+  when: ansible_distribution_release == 'trusty'
+  run_once: true
+
 - name: Update Apt
   apt:
     update_cache: yes
