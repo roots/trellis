@@ -34,6 +34,11 @@
   when: ansible_distribution_release == 'trusty'
   run_once: true
 
+- name: Validate user salts
+  fail:
+    msg: "Some users (`{{ users_with_invalid_salts | map(attribute='name') | list | join('`, `') }}`) have disallowed characters in their salts. Please edit `vault_users` in `group_vars/{{ env }}/vault.yml`, limiting user salts to 1-16 characters from the set ./a-zA-Z0-9."
+  when: users_with_invalid_salts | count
+
 - name: Update Apt
   apt:
     update_cache: yes
