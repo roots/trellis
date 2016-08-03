@@ -2,6 +2,7 @@
 vault_mysql_root_password: stagingpw
 
 # Documentation: https://roots.io/trellis/docs/security/
+# User salts must be limited to 1-16 characters from the set ./a-zA-Z0-9
 vault_users:
   - name: "{{ admin_user }}"
     password: example_password
