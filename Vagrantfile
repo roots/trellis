@@ -86,6 +86,48 @@ Vagrant.configure('2') do |config|
     end
   end
 
+  # Prevent annoying "stdin: not a tty" errors
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+  config.ssh.username = "vagrant"
+
+  # Replace insecure Vagrant ssh public key with user generated private/public keys
+  public_key = File.join(Dir.home, ".ssh", "id_rsa.pub")
+  private_key = File.join(Dir.home, ".ssh", "id_rsa")
+
+  if File.exists?(private_key)
+    # A public key MUST be accompanied by a private key
+    if File.exists?(public_key)
+      # Copy user's public key to the vm so it can be validated and applied
+      config.vm.provision "file", source: public_key, destination: "/home/vagrant/.ssh/" + File.basename(public_key)
+
+      # Add user's private key to all Vagrant-usable local private keys so all
+      # required login scenarios will keep functioning as expected:
+      # - initial non-secure vagrant up
+      # - users protecting their box with a personally generated public key
+      config.ssh.private_key_path = [
+        private_key,
+        '~/.vagrant.d/insecure_private_key' 
+      ]
+
+      # Run bash script to replace insecure public key in authorized_keys
+      config.vm.provision :shell do |sh|
+        sh.path = File.join(ANSIBLE_PATH, 'ssh-authentication.sh')
+        sh.args = [ File.basename(public_key), File.basename(private_key) ]
+      end
+
+      # Prevent Vagrant 1.7.x from generating a new private key and inserting
+      # corresponding public key (overwriting our just set custom key).
+      config.ssh.insert_key = false
+
+      # Always display SSH Agent Forwarding sanity checks
+      config.vm.provision :shell do |sh|
+        sh.path = File.join(ANSIBLE_PATH, 'check-ssh-agent.sh')
+        sh.privileged = false
+      end
+    end
+  end
+
+
   if Vagrant::Util::Platform.windows?
     config.vm.provision :shell do |sh|
       sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
