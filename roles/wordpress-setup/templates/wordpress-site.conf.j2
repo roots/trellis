@@ -76,15 +76,11 @@ server {
 
   server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
 
-  {% if item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
   include acme-challenge-location.conf;
 
   location / {
     return 301 https://$host$request_uri;
   }
-  {% else %}
-  return 301 https://$host$request_uri;
-  {% endif -%}
 }
 {% endif %}
 
