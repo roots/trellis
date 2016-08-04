@@ -9,5 +9,4 @@
     creates: "{{ item.key }}.*"
   with_dict: "{{ wordpress_sites }}"
   when: ssl_enabled and item.value.ssl.provider | default('manual') == 'self-signed'
-  notify:
-    - reload nginx
+  notify: reload nginx
