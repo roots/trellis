@@ -42,7 +42,6 @@ def reset_task_info(obj, task=None):
     obj.first_host = True
     obj.first_item = True
     obj.task_failed = False
-    obj.vagrant_version = None
 
 # Display dict key only, instead of full json dump
 def replace_item_with_key(obj, result):

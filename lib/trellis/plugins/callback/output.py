@@ -27,6 +27,7 @@ class CallbackModule(CallbackModule_default):
     def __init__(self):
         super(CallbackModule, self).__init__()
         output.reset_task_info(self)
+        self.vagrant_version = None
 
     def v2_runner_on_failed(self, result, ignore_errors=False):
         self.task_failed = True
