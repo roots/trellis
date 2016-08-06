@@ -1,4 +1,5 @@
 ### HEAD
+* Ansible 2.1 compatibility fixes ([#631](https://github.com/roots/trellis/pull/631))
 * [BREAKING] Upgrade Ubuntu from 14.04 Trusty to 16.04 Xenial ([#626](https://github.com/roots/trellis/pull/626))
 * [BREAKING] Add `vault_users` for easier password management ([#614](https://github.com/roots/trellis/pull/614))
 * Fix #581 - Use WP-CLI to run WP cron ([#583](https://github.com/roots/trellis/pull/583))
