@@ -51,11 +51,19 @@
     mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}site set domain='{{ item.key }}' where domain='{{ src_domain }}';"
   with_dict: "{{ sb_wp_sites }}"
 
-- name: Preform WP search-replace for the remaining strings
+- name: WP search-replace for the URLs
   command: "wp search-replace '{{ src_url }}' 'http://{{ item.key }}' --all-tables --allow-root"
   args:
     chdir: "{{ www_root }}/{{ item.key }}"
   with_dict: "{{ sb_wp_sites }}"
+
+- name: WP search-replace for the other strings only in xml-io
+  become: yes
+  become_user: "{{ web_user }}"
+  command: "wp search-replace --network '{{ item.from }}' '{{ item.to }}'"
+  args:
+    chdir: "{{ www_root }}/xml-io.proteusthemes.com"
+  with_items: "{{ strings_to_replace }}"
 
 - name: Get list of all user IDs
   command: wp user list --network --format=csv --fields=ID --allow-root
