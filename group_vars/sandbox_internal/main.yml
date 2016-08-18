@@ -52,6 +52,11 @@ wp_emails:
     - 'marko\.prelec@proteusnet\.com'
   to: 'info@example.com'
 
+# strings like API keys etc
+strings_to_replace:
+  - from: "{{ vault_forecastio_api_key }}"
+    to: ""
+
 sites_to_export:
   - hairpress
   - webmarket
