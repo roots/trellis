@@ -1,3 +1,6 @@
+### HEAD
+* Fix #639 - WP 4.6 compatibility: update WP-CLI to 0.24.1 ([#640](https://github.com/roots/trellis/pull/640))
+
 ### 0.9.8: August 14th, 2016
 * Ansible 2.1 compatibility fixes ([#631](https://github.com/roots/trellis/pull/631))
 * [BREAKING] Upgrade Ubuntu from 14.04 Trusty to 16.04 Xenial ([#626](https://github.com/roots/trellis/pull/626))
