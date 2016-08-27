@@ -59,9 +59,3 @@
     src: php.ini.j2
     dest: /etc/php/7.0/fpm/php.ini
   notify: reload php-fpm
-
-- name: php-fpm configuration file
-  template:
-    src: php-fpm.conf.j2
-    dest: /etc/php/7.0/fpm/pool.d/wordpress.conf
-  notify: reload php-fpm
