@@ -17,12 +17,6 @@ from ansible.parsing.dataloader import DataLoader
 from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
 from ansible.template import Templar
 
-try:
-    import passlib.hash
-except:
-    if sys.platform.startswith('darwin'):
-        raise AnsibleError('Ansible on OS X requires the python passlib module to create user password hashes.\nsudo easy_install pip\npip install passlib')
-
 
 class VarsModule(object):
     ''' Creates and modifies host variables '''
@@ -82,9 +76,20 @@ class VarsModule(object):
 
         return ' '.join(options)
 
+    def darwin_without_passlib(self):
+        if not sys.platform.startswith('darwin'):
+            return False
+
+        try:
+            import passlib.hash
+            return False
+        except:
+            return True
+
     def get_host_vars(self, host, vault_password=None):
         self.raw_vars(host, host.get_group_vars())
         host.vars['cli_options'] = self.cli_options()
         host.vars['cli_ask_pass'] = getattr(self._options, 'ask_pass', False)
         host.vars['cli_ask_become_pass'] = getattr(self._options, 'become_ask_pass', False)
+        host.vars['darwin_without_passlib'] = self.darwin_without_passlib()
         return {}
