@@ -22,3 +22,6 @@ vault_wordpress_sites:
       secure_auth_salt: "generateme"
       logged_in_salt: "generateme"
       nonce_salt: "generateme"
+      # Uncomment if you use backups
+      # backup_target_user: example_user
+      # backup_target_pass: example_backup_password

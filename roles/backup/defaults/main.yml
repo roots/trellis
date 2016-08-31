@@ -1,0 +1,3 @@
+site_uses_backup: "{{ item.value.backup is defined and item.value.backup.enabled | default(false) }}"
+site_purge_backup: "{{ item.value.backup is defined and item.value.backup.purge | default(false) }}"
+site_purge_backup: "{{ item.value.backup is defined and item.value.backup.enabled and item.value.backup.auto and item.value.backup.purge | default(false) }}"

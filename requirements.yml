@@ -20,3 +20,7 @@
 - name: mailhog
   src: geerlingguy.mailhog
   version: 2.1.0
+
+- name: Stouts.backup
+  src: Stouts.backup
+  version: 3.4.5

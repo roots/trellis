@@ -1,0 +1,48 @@
+---
+- name: Ensure python pip and paramiko dependencies are installed
+  apt:
+    name:
+      - python-pip
+      - python-dev
+      - libffi-dev
+    state: present
+
+- name: Ensure paramiko is installed
+  pip:
+    name: paramiko
+    state: present
+
+- name: List backup jobs
+  set_fact:
+    backup_user: "{{ admin_user }}"
+    backup_group: sudo
+
+    backup_mysql_user: "{{ mysql_root_user }}"
+    backup_mysql_pass: "{{ mysql_root_password }}"
+
+    # Define the backup jobs
+    backup_profiles:
+    # Backup uploads
+      - name: "{{ item.key }}_uploads"
+        schedule: "{{ item.value.backup.schedule | default(omit) }}"
+        source: "{{ www_root }}/{{ item.key }}/shared/uploads"
+        target: "{{ item.value.backup.target }}/uploads"
+        target_user: "{{ site_env.backup_target_user }}"
+        target_pass: "{{ site_env.backup_target_pass }}"
+        action: "{{ site_purge_backup | ternary('purge_backup --force', 'backup') }}"
+
+    # Backup database
+      - name: "{{ item.key }}_database"
+        schedule: "{{ item.value.backup.schedule | default(omit) }}"
+        source: "mysql://{{ item.key | underscore }}_{{ env }}"          # Backup prefixes: postgresql://, maysql://, mongo://
+        target: "{{ item.value.backup.target }}/database"
+        target_user: "{{ site_env.backup_target_user }}"
+        target_pass: "{{ site_env.backup_target_pass }}"
+        action: "{{ site_purge_backup | ternary('purge_backup --force', 'backup') }}"
+
+  when: site_uses_backup
+  with_dict: "{{ wordpress_sites }}"
+  register: backup_jobs
+
+- name: Configure backup jobs
+  set_fact: backup_profiles="{{ backup_jobs.results | selectattr('ansible_facts', 'defined') | map(attribute='ansible_facts.backup_profiles.0') | list }} + {{ backup_jobs.results | selectattr('ansible_facts', 'defined') | map(attribute='ansible_facts.backup_profiles.1') | list }}"
