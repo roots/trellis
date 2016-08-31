@@ -100,6 +100,10 @@ Vagrant.configure('2') do |config|
         'development' => ['default']
       }
 
+      if tags = ENV['ANSIBLE_TAGS']
+        ansible.tags = tags
+      end
+
       ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
       if vars = ENV['ANSIBLE_VARS']
         extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
