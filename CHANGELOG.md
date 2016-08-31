@@ -1,4 +1,6 @@
 ### HEAD
+* Create WordPress php-fpm conf after web_root exists ([#642](https://github.com/roots/trellis/pull/642))
+* Fix #637 - Fix condition for permalink structure task ([#643](https://github.com/roots/trellis/pull/643))
 * Fix #639 - WP 4.6 compatibility: update WP-CLI to 0.24.1 ([#640](https://github.com/roots/trellis/pull/640))
 
 ### 0.9.8: August 14th, 2016
