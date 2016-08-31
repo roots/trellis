@@ -51,17 +51,17 @@
            --admin_email="{{ item.value.admin_email }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
-  register: wp_install_results
+  register: wp_multisite_install_results
   with_dict: "{{ wordpress_sites }}"
   when: item.value.site_install | default(true) and item.value.multisite.enabled | default(false)
-  changed_when: "'The network already exists.' not in wp_install_results.stdout"
+  changed_when: "'The network already exists.' not in wp_multisite_install_results.stdout"
 
 - name: Setup Permalink Structure
   command: wp rewrite structure {{ item.value.initial_permalink_structure | default("/%postname%/") }} --allow-root
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   with_dict: "{{ wordpress_sites }}"
-  when: wp_install_results | changed
+  when: wp_install_results | changed or wp_multisite_install_results | changed
 
 - name: Update WP Multisite Home URL
   command: wp option update home {{ site_env.wp_home }} --allow-root
