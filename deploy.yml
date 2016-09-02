@@ -19,8 +19,8 @@
       db_user: "{{ site | underscore }}"
       disable_wp_cron: true
       wp_env: "{{ env }}"
-      wp_home: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://${HTTP_HOST}"
-      wp_siteurl: "${WP_HOME}/wp"
+      wp_home: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}"
+      wp_siteurl: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}/wp"
     site_env: "{{ wordpress_env_defaults | combine(project.env | default({}), vault_wordpress_sites[site].env) }}"
 
   pre_tasks:
