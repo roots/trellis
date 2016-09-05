@@ -36,6 +36,12 @@
     dest: /etc/php/7.0/mods-available/xdebug.ini
   when: xdebug_install | default(false)
 
+- name: Disable xdebug CLI
+  file:
+    path: /etc/php/7.0/cli/conf.d/20-xdebug.ini
+    state: absent
+  when: xdebug_install | default(false)
+
 - name: Start php7.0-fpm service
   service:
     name: php7.0-fpm
