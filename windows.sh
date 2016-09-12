@@ -33,7 +33,7 @@ fi
 if [ ! -f /usr/bin/ansible ]; then
   echo "Installing pip..."
   sudo apt-get -y update
-  sudo apt-get -y install python-pip
+  sudo apt-get -y install python-pip libssl-dev libffi-dev
   echo "Installing Ansible with pip..."
   sudo pip install ansible=='2.0.2.0'
   sudo pip install markupsafe

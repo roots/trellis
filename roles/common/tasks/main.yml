@@ -34,6 +34,16 @@
   when: ansible_distribution_release == 'trusty'
   run_once: true
 
+- name: Check whether passlib is needed
+  fail:
+    msg: |
+      Ansible on OS X requires python passlib module to create user password hashes
+
+      sudo easy_install pip
+      pip install passlib
+  when: env != 'development' and darwin_without_passlib | default(false)
+  run_once: true
+
 - name: Update Apt
   apt:
     update_cache: yes

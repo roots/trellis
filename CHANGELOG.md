@@ -1,4 +1,10 @@
 ### HEAD
+* WP 4.6 Compat: set WP_HOME/SITEURL directly ([#647](https://github.com/roots/trellis/pull/647))
+* Create WordPress php-fpm conf after web_root exists ([#642](https://github.com/roots/trellis/pull/642))
+* Fix #637 - Fix condition for permalink structure task ([#643](https://github.com/roots/trellis/pull/643))
+* Fix #639 - WP 4.6 compatibility: update WP-CLI to 0.24.1 ([#640](https://github.com/roots/trellis/pull/640))
+
+### 0.9.8: August 14th, 2016
 * Ansible 2.1 compatibility fixes ([#631](https://github.com/roots/trellis/pull/631))
 * [BREAKING] Upgrade Ubuntu from 14.04 Trusty to 16.04 Xenial ([#626](https://github.com/roots/trellis/pull/626))
 * [BREAKING] Add `vault_users` for easier password management ([#614](https://github.com/roots/trellis/pull/614))
