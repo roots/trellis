@@ -18,6 +18,12 @@ location / {
     /index.php?$args;
 }
 
+# EDD
+# http://docs.easydigitaldownloads.com/article/682-protected-download-files-on-nginx
+location ~ ^/wp-content/uploads/edd/(.*?)\.zip$ {
+  rewrite / permanent;
+}
+
 # Set the max body size equal to PHP's max POST size.
 client_max_body_size {{ php_post_max_size | default('25m') | lower }};
 
