@@ -128,7 +128,7 @@ Vagrant.configure('2') do |config|
         end
       end
     else
-      info "vagrant-triggers missing, please install the plugin with this command:\nvagrant plugin install vagrant-triggers"
+      fail_with_message "vagrant-triggers missing, please install the plugin with this command:\nvagrant plugin install vagrant-triggers"
     end
   end
 
