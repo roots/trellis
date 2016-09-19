@@ -1,12 +1,10 @@
 ---
-- name: test nginx conf
+- name: reload nginx
   command: nginx -t
   register: nginx_test
-  changed_when: false
+  notify: "{{ (ansible_version.full | version_compare('2.1.1.0', '>=') and role_path | basename == 'common') | ternary('perform nginx reload', omit) }}"
 
-- name: reload nginx
+- name: perform nginx reload
   service:
     name: nginx
     state: reloaded
-  when: nginx_test | success
-  changed_when: false
