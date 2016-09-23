@@ -1,18 +1,18 @@
 # {{ ansible_managed }}
 
 # redirects from old HTML demos to new subdomains
-location /themes/hairpress/ {
-  return 301 https://html-demo.proteusthemes.com/hairpress/;
+location ~ ^/themes/hairpress/(.*)$ {
+  return 301 https://html-demo.proteusthemes.com/hairpress/$1;
 }
 
-location /themes/webmarket-html/ {
-  return 301 https://html-demo.proteusthemes.com/webmarket/;
+location ~ ^/themes/webmarket-html/(.*)$ {
+  return 301 https://html-demo.proteusthemes.com/webmarket/$1;
 }
 
-location /themes/organique-html/ {
-  return 301 https://html-demo.proteusthemes.com/organique/;
+location ~ ^/themes/organique-html/(.*)$ {
+  return 301 https://html-demo.proteusthemes.com/organique/$1;
 }
 
-location /themes/readable-html/ {
-  return 301 https://html-demo.proteusthemes.com/readable/;
+location ~ ^/themes/readable-html/(.*)$ {
+  return 301 https://html-demo.proteusthemes.com/readable/$1;
 }
