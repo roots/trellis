@@ -26,3 +26,11 @@ static_sites:
     cache:
       enabled: false
     env: production
+  html-demo.proteusthemes.com:
+    site_hosts:
+      - html-demo.proteusthemes.com
+    ssl:
+      enabled: false
+    cache:
+      enabled: false
+    env: production
