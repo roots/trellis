@@ -22,7 +22,7 @@ location /pricelist.html {
   return 301 /pricelist/;
 }
 
-location ~ ^/payment-form\.php {
+location ^~ /payment-form.php {
   return 301 https://apps.proteusthemes.com/customization-form/$is_args$args;
 }
 
