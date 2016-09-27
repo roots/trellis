@@ -22,6 +22,10 @@ location /pricelist.html {
   return 301 /pricelist/;
 }
 
+location ~ ^/payment-form\.php {
+  return 301 https://apps.proteusthemes.com/customization-form/$is_args$args;
+}
+
 # blog permalinks (remove date and month)
 
 location ~ "^/blog/\d{4}/\d{2}/([a-z0-9-]+)/$" {
