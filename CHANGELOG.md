@@ -1,4 +1,5 @@
 ### HEAD
+* Enable per-site setup for permalink structure ([#661](https://github.com/roots/trellis/pull/661))
 * WP 4.6 Compat: set WP_HOME/SITEURL directly ([#647](https://github.com/roots/trellis/pull/647))
 * Create WordPress php-fpm conf after web_root exists ([#642](https://github.com/roots/trellis/pull/642))
 * Fix #637 - Fix condition for permalink structure task ([#643](https://github.com/roots/trellis/pull/643))
