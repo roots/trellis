@@ -24,10 +24,44 @@ php_opcache_max_accelerated_files: 4000
 php_opcache_memory_consumption: 128
 php_opcache_revalidate_freq: 60
 
-php_xdebug_remote_enable: "false"
-php_xdebug_remote_connect_back: "false"
+# XDebug Remote Debugging
+php_xdebug_remote_enable: 'false'
+php_xdebug_remote_connect_back: 'false'
 php_xdebug_remote_host: localhost
-php_xdebug_remote_port: "9000"
+php_xdebug_remote_port: '9000'
 php_xdebug_remote_log: /tmp/xdebug.log
 php_xdebug_idekey: XDEBUG
+php_xdebug_extended_info: 1
 php_max_nesting_level: 200
+
+# XDebug Display Settings
+php_xdebug_display_max_children: 128
+php_xdebug_display_max_data: 512
+php_xdebug_display_max_depth: 3
+php_xdebug_force_display_errors: 0
+php_xdebug_force_error_reporting: 0
+php_xdebug_scream: 0
+
+# XDebug Function/Stack Traces
+php_xdebug_collect_assignments: 0
+php_xdebug_collect_includes: 1
+php_xdebug_collect_params: 0
+php_xdebug_collect_return: 0
+php_xdebug_collect_vars: 0
+php_xdebug_show_exception_trace: 0
+php_xdebug_show_local_vars: 0
+php_xdebug_show_mem_delta: 0
+php_xdebug_trace_enable_trigger: 0
+php_xdebug_trace_enable_trigger_value: ''
+php_xdebug_trace_format: 0
+php_xdebug_trace_options: 0
+php_xdebug_trace_output_dir: '/tmp'
+php_xdebug_trace_output_name: 'trace.%c'
+
+# XDebug Profiler
+php_xdebug_profiler_append: 0
+php_xdebug_profiler_enable: 0
+php_xdebug_profiler_enable_trigger: 0
+php_xdebug_profiler_enable_trigger_value: ''
+php_xdebug_profiler_output_dir: '/tmp'
+php_xdebug_profiler_output_name: 'cachegrind.out.%p'

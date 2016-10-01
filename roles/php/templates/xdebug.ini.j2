@@ -2,6 +2,8 @@
 
 [XDebug]
 zend_extension="xdebug.so"
+
+; Remote Debugging
 xdebug.remote_enable={{ php_xdebug_remote_enable }}
 xdebug.remote_connect_back={{ php_xdebug_remote_connect_back }}
 xdebug.remote_host={{ php_xdebug_remote_host }}
@@ -9,4 +11,37 @@ xdebug.remote_port={{ php_xdebug_remote_port }}
 xdebug.remote_handler="dbgp"
 xdebug.remote_log={{ php_xdebug_remote_log }}
 xdebug.idekey="{{ php_xdebug_idekey }}"
-xdebug.max_nesting_level = {{ php_max_nesting_level }}
+xdebug.extended_info={{ php_xdebug_extended_info }}
+xdebug.max_nesting_level={{ php_max_nesting_level }}
+
+; Display Settings
+xdebug.force_display_errors={{ php_xdebug_display_max_depth }}
+xdebug.force_error_reporting={{ php_xdebug_force_error_reporting }}
+xdebug.scream={{ php_xdebug_scream }}
+xdebug.var_display_max_children={{ php_xdebug_display_max_children }}
+xdebug.var_display_max_data={{ php_xdebug_display_max_data }}
+xdebug.var_display_max_depth={{ php_xdebug_display_max_depth }}
+
+; Function/Stack Traces
+xdebug.collect_assignments={{ php_xdebug_collect_assignments }}
+xdebug.collect_includes={{ php_xdebug_collect_includes }}
+xdebug.collect_params={{ php_xdebug_collect_params }}
+xdebug.collect_return={{ php_xdebug_collect_return }}
+xdebug.collect_vars={{ php_xdebug_collect_vars }}
+xdebug.show_exception_trace={{ php_xdebug_show_exception_trace }}
+xdebug.show_local_vars={{ php_xdebug_show_local_vars }}
+xdebug.show_mem_delta={{ php_xdebug_show_mem_delta }}
+xdebug.trace_enable_trigger={{ php_xdebug_trace_enable_trigger }}
+xdebug.trace_enable_trigger_value="{{ php_xdebug_trace_enable_trigger_value }}"
+xdebug.trace_format={{ php_xdebug_trace_format }}
+xdebug.trace_options={{ php_xdebug_trace_options }}
+xdebug.trace_output_dir="{{ php_xdebug_trace_output_dir }}"
+xdebug.trace_output_name="{{ php_xdebug_trace_output_name }}"
+
+; Profiler
+xdebug.profiler_append={{ php_xdebug_profiler_append }}
+xdebug.profiler_enable={{ php_xdebug_profiler_enable }}
+xdebug.profiler_enable_trigger={{ php_xdebug_profiler_enable_trigger }}
+xdebug.profiler_enable_trigger_value="{{ php_xdebug_profiler_enable_trigger_value }}"
+xdebug.profiler_output_dir="{{ php_xdebug_profiler_output_dir }}"
+xdebug.profiler_output_name="{{ php_xdebug_profiler_output_name }}"
