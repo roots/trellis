@@ -38,6 +38,7 @@ Vagrant.require_version '>= 1.8.5'
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'bento/ubuntu-16.04'
+  config.vm.box_version = '2.2.9'
   config.ssh.forward_agent = true
 
   config.vm.post_up_message = post_up_message
