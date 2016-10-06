@@ -1,7 +1,6 @@
 # {{ ansible_managed }}
 
 # static HTML sites
-
 location /themes.html {
   return 301 /wordpress-themes/;
 }
@@ -27,7 +26,16 @@ location ^~ /payment-form.php {
 }
 
 # blog permalinks (remove date and month)
-
 location ~ "^/blog/\d{4}/\d{2}/([a-z0-9-]+)/$" {
   return 301 /blog/$1;
+}
+
+# documentation root goes to zendesk article
+location = /docs/ {
+  return 301 https://support.proteusthemes.com/hc/en-us/articles/202614041-Theme-Documentation;
+}
+
+# strip `-pt` from the end of the docs URLs
+location ~ "^/docs/(\w+)-pt/?$" {
+  return 301 /docs/$1/;
 }
