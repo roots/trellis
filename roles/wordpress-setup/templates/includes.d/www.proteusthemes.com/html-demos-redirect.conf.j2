@@ -16,3 +16,16 @@ location ~ ^/themes/organique-html/(.*)$ {
 location ~ ^/themes/readable-html/(.*)$ {
   return 301 https://html-demo.proteusthemes.com/readable/$1;
 }
+
+# google search console
+location ^~ /themes/webmarket-wp {
+  return 301 https://demo.proteusthemes.com/webmarket/;
+}
+
+location ^~ /themes/webmarket-wp/documentation {
+  return 301 /docs/webmarket/;
+}
+
+location ^~ /themes/hairpress-wp {
+  return 301 https://demo.proteusthemes.com/hairpress/;
+}
