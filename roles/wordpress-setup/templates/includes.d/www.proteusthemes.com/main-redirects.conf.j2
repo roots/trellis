@@ -1,23 +1,27 @@
 # {{ ansible_managed }}
 
 # static HTML sites
-location /themes.html {
+location = /index.html {
+  return 301 /;
+}
+
+location = /themes.html {
   return 301 /wordpress-themes/;
 }
 
-location /freebies.html {
+location = /freebies.html {
   return 301 /wordpress-themes/;
 }
 
-location /contact.html {
+location = /contact.html {
   return 301 /contact/;
 }
 
-location /the-team.html {
+location = /the-team.html {
   return 301 /our-team/;
 }
 
-location /pricelist.html {
+location = /pricelist.html {
   return 301 /services/;
 }
 
