@@ -35,9 +35,9 @@ php_xdebug_extended_info: 1
 php_max_nesting_level: 200
 
 # XDebug Display Settings
-php_xdebug_display_max_children: 128
-php_xdebug_display_max_data: 512
-php_xdebug_display_max_depth: 3
+php_xdebug_var_display_max_children: 128
+php_xdebug_var_display_max_data: 512
+php_xdebug_var_display_max_depth: 3
 php_xdebug_force_display_errors: 0
 php_xdebug_force_error_reporting: 0
 php_xdebug_scream: 0
