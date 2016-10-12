@@ -25,6 +25,10 @@ location = /pricelist.html {
   return 301 /services/;
 }
 
+location = /pt-pricelist.pdf {
+  return 301 /services/;
+}
+
 location ^~ /payment-form.php {
   return 301 https://apps.proteusthemes.com/customization-form/$is_args$args;
 }
