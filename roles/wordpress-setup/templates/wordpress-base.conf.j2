@@ -4,6 +4,7 @@ location ~* /app/uploads/.*\.php$ {
 }
 
 location / {
+  {{ item.value.nginx_location | default(nginx_location) | indent(2) }}
   try_files $uri $uri/ /index.php?$args;
 }
 

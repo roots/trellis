@@ -27,6 +27,7 @@
     dest: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
   with_dict: "{{ wordpress_sites }}"
   notify: reload nginx
+  tags: nginx-includes
 
 - name: Enable WordPress site
   file:
