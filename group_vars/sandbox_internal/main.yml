@@ -33,7 +33,7 @@ wp_rsync_opts:
     - "--exclude='/wp-content/plugins/wp-rocket/'"
     - "--exclude='/wp-content/plugins/js-style-swicher-*/'"
     - "--exclude='/wp-content/plugins/*-style-switcher/'"
-    - "--exclude='/wp-content/mu-plugins/wp-password-bcrypt.php'"
+    - "--exclude='/wp-content/mu-plugins/'"
   uploads:
     - "--delete"
     - "--ignore-existing"
