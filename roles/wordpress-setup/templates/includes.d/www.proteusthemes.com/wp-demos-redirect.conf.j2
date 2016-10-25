@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+
+location = /themes/ {
+  if ($arg_theme = 'webmarket-wp') {
+    return 302 https://demo.proteusthemes.com/webmarket/;
+  }
+}
