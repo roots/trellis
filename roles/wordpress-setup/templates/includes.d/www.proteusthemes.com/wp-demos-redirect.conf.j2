@@ -2,6 +2,10 @@
 
 location = /themes/ {
   if ($arg_theme = 'webmarket-wp') {
-    return 302 https://demo.proteusthemes.com/webmarket/;
+    return 301 https://demo.proteusthemes.com/webmarket/;
+  }
+
+  if ($arg_theme = 'auto-wp') {
+    return 301 https://demo.proteusthemes.com/auto/;
   }
 }
