@@ -1,0 +1,24 @@
+---
+- name: Install unzip
+  apt:
+    name: unzip
+    state: present
+- name: Install JDK
+  apt:
+    name: default-jdk
+    state: present
+- name: Download EpubCheck package
+  get_url:
+    url: "{{ epubcheck_package_uri }}"
+    dest: "/tmp/epubcheck-{{ epubcheck_version }}.zip"
+- name: Unarchive EpubCheck
+  unarchive:
+    src: "/tmp/epubcheck-{{ epubcheck_version }}.zip"
+    dest: /tmp/
+    copy: no
+- name: Move EpubCheck to destination directory
+  command: "mv /tmp/epubcheck-{{ epubcheck_version }}/ /opt/epubcheck/"
+- name: Remove EpubCheck package
+  file:
+    path: "/tmp/epubcheck-{{ epubcheck_version }}.zip"
+    state: absent

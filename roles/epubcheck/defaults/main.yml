@@ -1,0 +1,3 @@
+---
+epubcheck_version: 4.0.1
+epubcheck_package_uri: "https://github.com/IDPF/epubcheck/releases/download/v{{ epubcheck_version }}/epubcheck-{{ epubcheck_version }}.zip"
