@@ -36,6 +36,7 @@
     - { role: logrotate, tags: [logrotate] }
     - { role: libxml2, tags: [libxml2] }
     - { role: princexml, tags: [princexml] }
+    - { role: kindlegen, tags: [kindlegen] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: letsencrypt, tags: [letsencrypt], when: letsencrypt_enabled }
