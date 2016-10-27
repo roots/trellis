@@ -1,18 +1,12 @@
 ---
-- include: variable-check.yml
-  vars:
-    playbook: server.yml
-
 - name: Determine Remote User
   hosts: "{{ xdebug_tunnel_ssh_host }}"
-  gather_facts: false
   roles:
     - { role: remote-user, tags: [remote-user, always] }
 
 - name: Manage XDebug SSH Tunnel
-  hosts: "{{ xdebug_tunnel_ssh_host }}"
+  hosts: localhost
   vars:
-    xdebug_tunnel: false
     xdebug_tunnel_close: false
     xdebug_tunnel_remote_port: 9000
     xdebug_tunnel_host: localhost
@@ -20,12 +14,11 @@
     xdebug_tunnel_control_socket: "/tmp/trellis-xdebug-{{ xdebug_tunnel_ssh_host }}"
     xdebug_tunnel_control_identity: "{{ ansible_user_id }}"
   tasks:
+    - debug: var=ansible_user
     - name: Create XDebug SSH Tunnel
-      connection: local
-      command: "ssh -M -S '{{ xdebug_tunnel_control_socket }}' -fnNT -L {{ xdebug_tunnel_remote_port }}:{{ xdebug_tunnel_host }}:{{ xdebug_tunnel_local_port }} {{ hostvars[xdebug_tunnel_ssh_host]['ansible_ssh_user'] | default(admin_user) }}@{{ hostvars[xdebug_tunnel_ssh_host]['ansible_ssh_host'] }} '{{ xdebug_tunnel_control_identity }}'"
+      command: "ssh -M -S '{{ xdebug_tunnel_control_socket }}' -fnNT -L {{ xdebug_tunnel_remote_port }}:{{ xdebug_tunnel_host }}:{{ xdebug_tunnel_local_port }} {{ hostvars[xdebug_tunnel_ssh_host]['ansible_user'] | default(admin_user) }}@{{ hostvars[xdebug_tunnel_ssh_host]['ansible_host'] }} '{{ xdebug_tunnel_control_identity }}'"
       when: xdebug_tunnel_close == false
 
     - name: Close XDebug SSH Tunnel
-      connection: local
       command: "ssh -S '{{ xdebug_tunnel_control_socket }}' -O exit '{{ xdebug_tunnel_control_identity }}'"
       when: xdebug_tunnel_close
