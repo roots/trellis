@@ -23,4 +23,4 @@
 
 - name: princexml
   src: pressbooks.princexml
-  version: 1.0
+  version: 1.0.1
