@@ -1,16 +1,12 @@
 # {{ ansible_managed }}
 
 location = /themes/ {
-  if ($arg_theme = 'webmarket-wp') {
-    return 301 https://demo.proteusthemes.com/webmarket/;
-  }
-
-  if ($arg_theme = 'auto-wp') {
-    return 301 https://demo.proteusthemes.com/auto/;
-  }
-
   if ($arg_theme = 'hairpress-wp') {
     return 301 https://demo.proteusthemes.com/hairpress/;
+  }
+
+  if ($arg_theme = 'webmarket-wp') {
+    return 301 https://demo.proteusthemes.com/webmarket/;
   }
 
   if ($arg_theme = 'carpress-wp') {
@@ -51,5 +47,21 @@ location = /themes/ {
 
   if ($arg_theme = 'structurepress-wp') {
     return 301 https://demo.proteusthemes.com/structurepress/;
+  }
+
+  if ($arg_theme = 'beauty-wp') {
+    return 301 https://demo.proteusthemes.com/beauty/;
+  }
+
+  if ($arg_theme = 'auto-wp') {
+    return 301 https://demo.proteusthemes.com/auto/;
+  }
+
+  if ($arg_theme = 'bolts-wp') {
+    return 301 https://demo.proteusthemes.com/bolts-landing-page/;
+  }
+
+  if ($arg_theme = 'shaka-wp') {
+    return 301 https://demo.proteusthemes.com/shaka/;
   }
 }
