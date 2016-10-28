@@ -1,4 +1,4 @@
-wp_cli_version: 0.24.1
+wp_cli_version: 0.25.0
 wp_cli_bin_path: /usr/bin/wp
 wp_cli_phar_url: "https://github.com/wp-cli/wp-cli/releases/download/v{{ wp_cli_version }}/wp-cli-{{ wp_cli_version }}.phar"
 wp_cli_completion_url: "https://raw.githubusercontent.com/wp-cli/wp-cli/v{{ wp_cli_version }}/utils/wp-completion.bash"
