@@ -1,0 +1,7 @@
+---
+- name: Install Saxon-HE
+  maven_artifact:
+    group_id: net.sf.saxon
+    artifact_id: Saxon-HE
+    version: "{{ saxon_he_version }}"
+    dest: /opt/saxon-he/saxon-he.jar

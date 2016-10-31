@@ -21,6 +21,7 @@
     - { role: princexml, tags: [princexml] }
     - { role: epubcheck, tags: [epubcheck] }
     - { role: kindlegen, tags: [kindlegen] }
+    - { role: saxon-he, tags: [saxon-he] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }

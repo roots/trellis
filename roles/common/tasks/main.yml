@@ -54,6 +54,7 @@
     state: present
   with_items:
   - python-software-properties
+  - python-lxml
   - python-pycurl
   - build-essential
   - python-mysqldb
