@@ -6,7 +6,7 @@ xdebug_remote_port: '9000'
 xdebug_remote_log: /tmp/xdebug.log
 xdebug_idekey: XDEBUG
 xdebug_extended_info: 1
-max_nesting_level: 200
+xdebug_max_nesting_level: 200
 
 # XDebug Display Settings
 xdebug_var_display_max_children: 128
