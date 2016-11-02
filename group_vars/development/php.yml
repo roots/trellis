@@ -8,8 +8,3 @@ php_opcache_enable: 0
 xdebug_install: true
 xdebug_remote_enable: true
 xdebug_remote_connect_back: true
-xdebug_remote_host: localhost
-xdebug_remote_port: 9000
-xdebug_remote_log: /tmp/xdebug.log
-xdebug_idekey: XDEBUG
-xdebug_max_nesting_level: 200
