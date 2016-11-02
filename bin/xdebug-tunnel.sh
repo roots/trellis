@@ -6,9 +6,16 @@
 SSH_HOST="-e xdebug_tunnel_ssh_host=${1}"
 MAYBE_CLOSE="${2}"
 CLOSE_CONNECTION=
+DEBUG="${DEBUG:-}"
+VERBOSITY="${VERBOSITY:--vvvv}"
+EXTRA_PARAMs="${EXTRA_PARAMS:-}"
 
 if [[ "${MAYBE_CLOSE}" == 'close' ]]; then
   CLOSE_CONNECTION="-e xdebug_tunnel_close=true"
 fi
 
-ansible-playbook xdebug-tunnel.yml ${SSH_HOST} ${CLOSE_CONNECTION}
+if [[ -n "${DEBUG}" ]]; then
+  EXTRA_PARAMS="${EXTRA_PARAMS} ${VERBOSITY}"
+fi
+
+ansible-playbook xdebug-tunnel.yml ${SSH_HOST} ${CLOSE_CONNECTION} ${EXTRA_PARAMS}
