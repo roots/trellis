@@ -1,0 +1,16 @@
+---
+- include: open.yml
+  when: xdebug_tunnel_close == false
+
+- include: close.yml
+  when: xdebug_tunnel_close
+
+- name: Announce tunnel was created
+  debug:
+    msg: "SSH Tunnel {{ xdebug_tunnel_creation.failed | default(false) | ternary('was not', 'was') }} created!"
+  when: xdebug_tunnel_creation is defined and xdebug_tunnel_creation.changed
+
+- name: Announce tunnel was closed
+  debug:
+    msg: "SSH Tunnel {{ xdebug_tunnel_closing.failed | default(false) | ternary('was not', 'was') }} closed!"
+  when: xdebug_tunnel_closing is defined and xdebug_tunnel_closing.changed
