@@ -1,0 +1,19 @@
+---
+- name: Install Xdebug
+  apt:
+    name: php-xdebug
+    state: latest
+  when: xdebug_install | default(false)
+
+- name: xdebug configuration file
+  template:
+    src: xdebug.ini.j2
+    dest: /etc/php/7.0/mods-available/xdebug.ini
+  when: xdebug_install | default(false)
+  notify: reload php-fpm
+
+- name: Disable xdebug CLI
+  file:
+    path: /etc/php/7.0/cli/conf.d/20-xdebug.ini
+    state: absent
+  when: xdebug_install | default(false)
