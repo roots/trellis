@@ -8,14 +8,17 @@ MAYBE_CLOSE="${2}"
 CLOSE_CONNECTION=
 DEBUG="${DEBUG:-}"
 VERBOSITY="${VERBOSITY:--vvvv}"
-EXTRA_PARAMs="${EXTRA_PARAMS:-}"
+PARAMs="${PARAMS:-}"
 
 if [[ "${MAYBE_CLOSE}" == 'close' ]]; then
-  CLOSE_CONNECTION="-e xdebug_tunnel_close=true"
+  PARAMS="${PARAMS} -e xdebug_tunnel_close=true -e xdebug_install=false"
+else
+  PARAMS="${PARAMS} -e xdebug_install=true"
 fi
 
 if [[ -n "${DEBUG}" ]]; then
-  EXTRA_PARAMS="${EXTRA_PARAMS} ${VERBOSITY}"
+  PARAMS="${PARAMS} ${VERBOSITY}"
 fi
 
-ansible-playbook xdebug-tunnel.yml ${SSH_HOST} ${CLOSE_CONNECTION} ${EXTRA_PARAMS}
+PARAMS="${SSH_HOST} ${CLOSE_CONNECTION} ${PARAMS}"
+ansible-playbook xdebug-tunnel.yml ${PARAMS}

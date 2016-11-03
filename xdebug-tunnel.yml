@@ -11,4 +11,5 @@
 - name: Manage XDebug SSH Tunnel
   hosts: localhost
   roles:
+    - { role: xdebug, tags: [xdebug] }
     - { role: xdebug-tunnel, tags: [xdebug-tunnel] }
