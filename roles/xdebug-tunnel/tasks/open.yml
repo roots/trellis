@@ -1,8 +1,6 @@
 ---
-- debug: var=xdebug_tunnel_inventory_host
-- debug: var=hostvars[xdebug_tunnel_inventory_host]
 - name: Create XDebug SSH Tunnel
-  command: "ssh -M -S '{{ xdebug_tunnel_control_socket }}' -fnNT -L {{ xdebug_tunnel_port_mapping }} {{ xdebug_tunnel_user_at_host}} '{{ xdebug_tunnel_control_identity }}'"
+  command: "ssh -M -S '{{ xdebug_tunnel_control_socket }}' -fnNT -R {{ xdebug_tunnel_port_mapping }} {{ xdebug_tunnel_user_at_host}} '{{ xdebug_tunnel_control_identity }}'"
   when: xdebug_tunnel_close == false
   register: xdebug_tunnel_creation
   ignore_errors: true
