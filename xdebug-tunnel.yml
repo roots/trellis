@@ -1,0 +1,14 @@
+---
+- name: Determine Remote User
+  hosts: "{{ xdebug_tunnel_inventory_host }}"
+  gather_facts: false
+  roles:
+    - { role: remote-user, tags: [remote-user, always] }
+  post_tasks:
+    - name: Gather Facts
+      setup:
+
+- name: Manage XDebug SSH Tunnel
+  hosts: localhost
+  roles:
+    - { role: xdebug-tunnel, tags: [xdebug-tunnel] }

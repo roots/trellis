@@ -1,0 +1,10 @@
+---
+- name: Close XDebug SSH Tunnel
+  command: "ssh -S '{{ xdebug_tunnel_control_socket }}' -O exit '{{ xdebug_tunnel_control_identity }}'"
+  when: xdebug_tunnel_close
+  register: xdebug_tunnel_closing
+  ignore_errors: true
+
+- name: Fail the play if tunnel was already closed
+  fail: msg="SSH tunnel already closed!"
+  when: "'No such file or directory' in xdebug_tunnel_closing.stderr | default('')"
