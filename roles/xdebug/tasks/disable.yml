@@ -1,0 +1,7 @@
+---
+- name: Disable xdebug fpm when xdebug_install is false
+  file:
+    path: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+    state: absent
+  when: not xdebug_install
+  notify: reload php-fpm

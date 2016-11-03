@@ -1,16 +1,9 @@
 ---
-- name: Install Xdebug
-  apt:
-    name: php-xdebug
-    state: latest
-  when: xdebug_install | default(false)
+- include: enable.yml
+  when: xdebug_install
 
-- name: xdebug configuration file
-  template:
-    src: xdebug.ini.j2
-    dest: /etc/php/7.0/mods-available/xdebug.ini
-  when: xdebug_install | default(false)
-  notify: reload php-fpm
+- include: disable.yml
+  when: not xdebug_install
 
 - name: Disable xdebug CLI
   file:
