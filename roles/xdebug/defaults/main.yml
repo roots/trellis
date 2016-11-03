@@ -1,0 +1,41 @@
+# XDebug Remote Debugging
+xdebug_remote_enable: 0
+xdebug_remote_connect_back: 0
+xdebug_remote_host: localhost
+xdebug_remote_port: 9000
+xdebug_remote_log: /tmp/xdebug.log
+xdebug_idekey: XDEBUG
+xdebug_extended_info: 1
+xdebug_max_nesting_level: 200
+
+# XDebug Display Settings
+xdebug_force_display_errors: 0
+xdebug_force_error_reporting: 0
+xdebug_scream: 0
+xdebug_var_display_max_children: 128
+xdebug_var_display_max_data: 512
+xdebug_var_display_max_depth: 3
+
+# XDebug Function/Stack Traces
+xdebug_collect_assignments: 0
+xdebug_collect_includes: 1
+xdebug_collect_params: 0
+xdebug_collect_return: 0
+xdebug_collect_vars: 0
+xdebug_show_exception_trace: 0
+xdebug_show_local_vars: 0
+xdebug_show_mem_delta: 0
+xdebug_trace_enable_trigger: 0
+xdebug_trace_enable_trigger_value:
+xdebug_trace_format: 0
+xdebug_trace_options: 0
+xdebug_trace_output_dir: /tmp
+xdebug_trace_output_name: trace.%c
+
+# XDebug Profiler
+xdebug_profiler_append: 0
+xdebug_profiler_enable: 0
+xdebug_profiler_enable_trigger: 0
+xdebug_profiler_enable_trigger_value:
+xdebug_profiler_output_dir: /tmp
+xdebug_profiler_output_name: cachegrind.out.%p
