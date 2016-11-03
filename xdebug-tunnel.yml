@@ -4,12 +4,15 @@
   gather_facts: false
   roles:
     - { role: remote-user, tags: [remote-user, always] }
-  post_tasks:
-    - name: Gather Facts
-      setup:
+
+- name: Enable/Disable Xdebug
+  hosts: "{{ xdebug_tunnel_inventory_host }}"
+  roles:
+    - { role: xdebug, tags: [xdebug] }
+  handlers:
+    - include: roles/common/handlers/main.yml
 
 - name: Manage XDebug SSH Tunnel
   hosts: localhost
   roles:
-    - { role: xdebug, tags: [xdebug] }
     - { role: xdebug-tunnel, tags: [xdebug-tunnel] }

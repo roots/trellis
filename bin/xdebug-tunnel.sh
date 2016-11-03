@@ -13,7 +13,7 @@ PARAMs="${PARAMS:-}"
 if [[ "${MAYBE_CLOSE}" == 'close' ]]; then
   PARAMS="${PARAMS} -e xdebug_tunnel_close=true -e xdebug_install=false"
 else
-  PARAMS="${PARAMS} -e xdebug_install=true"
+  PARAMS="${PARAMS} -e xdebug_install=true -e xdebug_remote_enable=1"
 fi
 
 if [[ -n "${DEBUG}" ]]; then
