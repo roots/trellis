@@ -16,4 +16,3 @@
   file:
     path: /etc/php/7.0/cli/conf.d/20-xdebug.ini
     state: absent
-  when: xdebug_install | default(false)
