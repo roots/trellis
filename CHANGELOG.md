@@ -157,7 +157,7 @@
 * Fix PHP error handling
 * Flush wp db theme roots on deploy
 * Stop recursive copying of vendor
-* Update the windows.sh script with absolute path
+* Update the bin/windows.sh script with absolute path
 * Conditionally copy .env into web root
 * Add subtree commented out
 * Add Composer binary path to the default path

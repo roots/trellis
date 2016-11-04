@@ -85,7 +85,7 @@ A base Ubuntu 16.04 server is required for setting up remote servers. OS X users
 
 1. Add the `repo` (Git URL) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file
 2. Set the `branch` you want to deploy
-3. Run `./deploy.sh <environment> <site name>`
+3. Run `./bin/deploy.sh <environment> <site name>`
 4. To rollback a deploy, run `ansible-playbook rollback.yml -e "site=<site name> env=<environment>"`
 
 [Read the deploys docs](https://roots.io/trellis/docs/deploys/) for more information.
