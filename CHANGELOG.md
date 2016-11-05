@@ -1,4 +1,5 @@
 ### HEAD
+* Update galaxy roles for Ansible 2.2 compatibility ([#681](https://github.com/roots/trellis/pull/681))
 * Update to WP-CLI 0.25.0 for WP 4.7 compat ([#673](https://github.com/roots/trellis/pull/673))
 * Enable per-site setup for permalink structure ([#661](https://github.com/roots/trellis/pull/661))
 * WP 4.6 Compat: set WP_HOME/SITEURL directly ([#647](https://github.com/roots/trellis/pull/647))
