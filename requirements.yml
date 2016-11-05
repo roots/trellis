@@ -3,8 +3,8 @@
   version: 1.5.0
 
 - name: ntp
-  src: resmo.ntp
-  version: 0.3.0
+  src: geerlingguy.ntp
+  version: 1.3.0
 
 - name: logrotate
   src: nickhammond.logrotate
