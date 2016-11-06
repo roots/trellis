@@ -53,13 +53,6 @@
     path: /var/run/php7.0-fpm/
     state: directory
 
-- name: Disable default pool
-  command: mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.disabled
-  args:
-    creates: /etc/php/7.0/fpm/pool.d/www.disabled
-  when: disable_default_pool
-  notify: reload php-fpm
-
 - name: PHP configuration file
   template:
     src: php.ini.j2
