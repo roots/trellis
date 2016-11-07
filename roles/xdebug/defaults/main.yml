@@ -1,5 +1,3 @@
-xdebug_install: false
-
 # XDebug Remote Debugging
 xdebug_remote_enable: 0
 xdebug_remote_connect_back: 0

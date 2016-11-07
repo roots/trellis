@@ -3,7 +3,7 @@
   fail:
     msg: |
       When using `--ask-pass` option, use `-u` option to define remote-user:
-      ansible-playbook server.yml -e env={{ env }} -u root --ask-pass
+      ansible-playbook server.yml -e env={{ env | default('production') }} -u root --ask-pass
   when: ansible_user is not defined and cli_ask_pass | default(false)
 
 - name: Check whether Ansible can connect as root

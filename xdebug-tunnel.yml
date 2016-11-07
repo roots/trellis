@@ -5,14 +5,13 @@
   roles:
     - { role: remote-user, tags: [remote-user, always] }
 
-- name: Enable/Disable Xdebug
+- name: Enable or Disable Xdebug and SSH Tunnel
   hosts: "{{ xdebug_tunnel_inventory_host }}"
   roles:
     - { role: xdebug, tags: [xdebug] }
-  handlers:
-    - include: roles/common/handlers/main.yml
-
-- name: Manage XDebug SSH Tunnel
-  hosts: localhost
-  roles:
     - { role: xdebug-tunnel, tags: [xdebug-tunnel] }
+  handlers:
+    - name: reload php-fpm
+      service:
+        name: php7.0-fpm
+        state: reloaded
