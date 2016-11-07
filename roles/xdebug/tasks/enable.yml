@@ -1,0 +1,18 @@
+---
+- name: Install Xdebug
+  apt:
+    name: php-xdebug
+    state: latest
+
+- name: xdebug configuration file
+  template:
+    src: xdebug.ini.j2
+    dest: /etc/php/7.0/mods-available/xdebug.ini
+  notify: reload php-fpm
+
+- name: Ensure 20-xdebug.ini present
+  file:
+    src: /etc/php/7.0/mods-available/xdebug.ini
+    dest: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+    state: link
+  notify: reload php-fpm

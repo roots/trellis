@@ -1,0 +1,10 @@
+---
+- name: Create XDebug SSH Tunnel
+  command: "ssh -M -S '{{ xdebug_tunnel_control_socket }}' -fnNT -R {{ xdebug_tunnel_port_mapping }} {{ xdebug_tunnel_user_at_host}} '{{ xdebug_tunnel_control_identity }}'"
+  when: xdebug_tunnel_close == false
+  register: xdebug_tunnel_creation
+  ignore_errors: true
+
+- name: Fail the play if tunnel already exists
+  fail: msg="SSH tunnel already exists! Refer to TODO for help. Error:\n{{ xdebug_tunnel_creation.stderr | default('') }}"
+  when: "'bind: Address already in use' in xdebug_tunnel_creation.stderr | default('')"

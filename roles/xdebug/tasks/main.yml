@@ -1,0 +1,11 @@
+---
+- include: enable.yml
+  when: xdebug_install
+
+- include: disable.yml
+  when: not xdebug_install
+
+- name: Disable xdebug CLI
+  file:
+    path: /etc/php/7.0/cli/conf.d/20-xdebug.ini
+    state: absent
