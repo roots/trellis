@@ -43,7 +43,7 @@
     name: "{{ item.key }} WordPress cron"
     minute: "*/15"
     user: "{{ web_user }}"
-    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp cron event run --due-now"
+    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp cron event run --due-now > /dev/null 2>&1"
     cron_file: "wordpress-{{ item.key | replace('.', '_') }}"
   with_dict: "{{ wordpress_sites }}"
   when: site_env.disable_wp_cron and not item.value.multisite.enabled | default(false)
