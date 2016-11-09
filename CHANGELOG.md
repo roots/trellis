@@ -1,4 +1,6 @@
 ### HEAD
+* Add `bin/xdebug-tunnel.sh` to manage Xdebug and SSH tunnels on remote hosts ([#678](https://github.com/roots/trellis/pull/678))
+* Move Xdebug installation/configuration into its own role ([#678](https://github.com/roots/trellis/pull/678))
 * Disable wp-cron emails ([#685](https://github.com/roots/trellis/pull/685))
 * Make `raw_vars` compatible with play vars and Ansible 2.1 ([#684](https://github.com/roots/trellis/pull/684))
 * Ensure there is always at least one PHP-FPM pool defined ([#682](https://github.com/roots/trellis/pull/682))

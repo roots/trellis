@@ -1,0 +1,33 @@
+---
+- block:
+  - name: Install Xdebug
+    apt:
+      name: php-xdebug
+      state: latest
+
+  - name: Template the Xdebug configuration file
+    template:
+      src: xdebug.ini.j2
+      dest: /etc/php/7.0/mods-available/xdebug.ini
+    notify: reload php-fpm
+
+  - name: Ensure 20-xdebug.ini is present
+    file:
+      src: /etc/php/7.0/mods-available/xdebug.ini
+      dest: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+      state: link
+    notify: reload php-fpm
+
+  when: xdebug_remote_enable | bool
+
+- name: Disable Xdebug
+  file:
+    path: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+    state: absent
+  when: not xdebug_remote_enable | bool
+  notify: reload php-fpm
+
+- name: Disable Xdebug CLI
+  file:
+    path: /etc/php/7.0/cli/conf.d/20-xdebug.ini
+    state: absent
