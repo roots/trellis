@@ -1,0 +1,10 @@
+xdebug_tunnel_remote_port: 9000
+xdebug_tunnel_host: localhost
+xdebug_tunnel_local_port: 9000
+xdebug_tunnel_control_socket: /tmp/trellis-xdebug-{{ xdebug_tunnel_inventory_host }}
+xdebug_tunnel_control_identity: "{{ ansible_user_id }}"
+
+xdebug_tunnel_port_mapping: "{{ xdebug_tunnel_remote_port }}:{{ xdebug_tunnel_host }}:{{ xdebug_tunnel_local_port }}"
+xdebug_tunnel_ssh_user: "{{ hostvars[xdebug_tunnel_inventory_host]['ansible_user'] | default(admin_user) }}"
+xdebug_tunnel_ssh_host: "{{ hostvars[xdebug_tunnel_inventory_host]['ansible_host'] | default(xdebug_tunnel_inventory_host) }}"
+xdebug_tunnel_user_at_host: "{{ xdebug_tunnel_ssh_user }}@{{ xdebug_tunnel_ssh_host }}"

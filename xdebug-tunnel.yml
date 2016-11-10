@@ -1,0 +1,17 @@
+---
+- name: Determine Remote User
+  hosts: "{{ xdebug_tunnel_inventory_host }}"
+  gather_facts: false
+  roles:
+    - { role: remote-user, tags: [remote-user, always] }
+
+- name: Enable or Disable Xdebug and SSH Tunnel
+  hosts: "{{ xdebug_tunnel_inventory_host }}"
+  roles:
+    - { role: xdebug, tags: [xdebug] }
+    - { role: xdebug-tunnel, tags: [xdebug-tunnel] }
+  handlers:
+    - name: reload php-fpm
+      service:
+        name: php7.0-fpm
+        state: reloaded

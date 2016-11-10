@@ -1,0 +1,47 @@
+; {{ ansible_managed }}
+
+[XDebug]
+zend_extension=xdebug.so
+
+; Remote Debugging
+xdebug.remote_enable={{ xdebug_remote_enable }}
+xdebug.remote_connect_back={{ xdebug_remote_connect_back }}
+xdebug.remote_host={{ xdebug_remote_host }}
+xdebug.remote_port={{ xdebug_remote_port }}
+xdebug.remote_handler=dbgp
+xdebug.remote_log={{ xdebug_remote_log }}
+xdebug.idekey={{ xdebug_idekey }}
+xdebug.extended_info={{ xdebug_extended_info }}
+xdebug.max_nesting_level={{ xdebug_max_nesting_level }}
+
+; Display Settings
+xdebug.force_display_errors={{ xdebug_force_display_errors }}
+xdebug.force_error_reporting={{ xdebug_force_error_reporting }}
+xdebug.scream={{ xdebug_scream }}
+xdebug.var_display_max_children={{ xdebug_var_display_max_children }}
+xdebug.var_display_max_data={{ xdebug_var_display_max_data }}
+xdebug.var_display_max_depth={{ xdebug_var_display_max_depth }}
+
+; Function/Stack Traces
+xdebug.collect_assignments={{ xdebug_collect_assignments }}
+xdebug.collect_includes={{ xdebug_collect_includes }}
+xdebug.collect_params={{ xdebug_collect_params }}
+xdebug.collect_return={{ xdebug_collect_return }}
+xdebug.collect_vars={{ xdebug_collect_vars }}
+xdebug.show_exception_trace={{ xdebug_show_exception_trace }}
+xdebug.show_local_vars={{ xdebug_show_local_vars }}
+xdebug.show_mem_delta={{ xdebug_show_mem_delta }}
+xdebug.trace_enable_trigger={{ xdebug_trace_enable_trigger }}
+xdebug.trace_enable_trigger_value={{ xdebug_trace_enable_trigger_value }}
+xdebug.trace_format={{ xdebug_trace_format }}
+xdebug.trace_options={{ xdebug_trace_options }}
+xdebug.trace_output_dir={{ xdebug_trace_output_dir }}
+xdebug.trace_output_name={{ xdebug_trace_output_name }}
+
+; Profiler
+xdebug.profiler_append={{ xdebug_profiler_append }}
+xdebug.profiler_enable={{ xdebug_profiler_enable }}
+xdebug.profiler_enable_trigger={{ xdebug_profiler_enable_trigger }}
+xdebug.profiler_enable_trigger_value={{ xdebug_profiler_enable_trigger_value }}
+xdebug.profiler_output_dir={{ xdebug_profiler_output_dir }}
+xdebug.profiler_output_name={{ xdebug_profiler_output_name }}
