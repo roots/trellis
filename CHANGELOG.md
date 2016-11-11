@@ -1,4 +1,5 @@
 ### HEAD
+* Add myhostname to nsswitch.conf to ensure resolvable hostname ([#686](https://github.com/roots/trellis/pull/686))
 * Add `bin/xdebug-tunnel.sh` to manage Xdebug and SSH tunnels on remote hosts ([#678](https://github.com/roots/trellis/pull/678))
 * Move Xdebug installation/configuration into its own role ([#678](https://github.com/roots/trellis/pull/678))
 * Disable wp-cron emails ([#685](https://github.com/roots/trellis/pull/685))

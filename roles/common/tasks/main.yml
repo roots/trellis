@@ -60,6 +60,7 @@
   - curl
   - git-core
   - dbus
+  - libnss-myhostname
 
 - name: Validate timezone variable
   stat:
@@ -71,3 +72,12 @@
   fail:
     msg: "{{ ntp_timezone }} is not a valid timezone. For a list of valid timezones, check https://php.net/manual/en/timezones.php"
   when: not timezone_path.stat.exists
+
+- name: Add myhostname to nsswitch.conf to ensure resolvable hostname
+  lineinfile:
+    backrefs: yes
+    backup: yes
+    dest: /etc/nsswitch.conf
+    line: \1 myhostname
+    regexp: ^(hosts\:((?!myhostname).)*)$
+    state: present
