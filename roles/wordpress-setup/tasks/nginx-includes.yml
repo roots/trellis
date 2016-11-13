@@ -24,28 +24,30 @@
                   map('regex_replace', '^(' + nginx_includes_templates_path + '|.*includes\\.d)\\/(.*)$', '\\2') |
                   map('dirname') | unique | select | list | sort
                }}"
-  register: nginx_includes_paths
 
 - name: Template files out to includes.d
   template:
     src: "{{ item }}"
     dest: "{{ nginx_path }}/includes.d/{{ item | regex_replace('^(' + nginx_includes_templates_path + '|.*includes\\.d)\\/(.*)\\.j2$', '\\2') }}"
   with_items: "{{ nginx_includes_templates.files | map(attribute='path') | list | sort(True) }}"
-  register: nginx_includes_managed
   notify: reload nginx
 
 - name: Retrieve list of existing files in includes.d
-  shell: "find {{ nginx_includes_paths.results | map(attribute='path') | join(' ') }} -type f -name \\*.conf 2>/dev/null || :"
+  find:
+    paths: "{{ nginx_path }}/includes.d"
+    pattern: "*.conf"
+    recurse: yes
   register: nginx_includes_existing
-  changed_when: false
+  when: nginx_includes_d_cleanup
 
 - name: Remove unmanaged files from includes.d
   file:
     path: "{{ item }}"
     state: absent
-  with_items: "{{ nginx_includes_existing.stdout_lines |
-                  difference(nginx_includes_managed.results | default([]) | map(attribute='item') |
-                    map('regex_replace', '(.*)\\.j2', '/etc/nginx/includes.d/\\1') | list
-                  )
+  with_items: "{{ nginx_includes_existing.files | default({}) | map(attribute='path') |
+                  difference(nginx_includes_templates.files | map(attribute='path') |
+                    map('regex_replace', '^(' + nginx_includes_templates_path + '|.*includes\\.d)(.*)\\.j2$', nginx_path + '/includes.d\\2') | unique
+                  ) | list
                }}"
+  when: nginx_includes_d_cleanup
   notify: reload nginx

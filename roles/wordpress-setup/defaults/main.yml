@@ -1,2 +1,3 @@
 site_uses_local_db: "{{ site_env.db_host == 'localhost' }}"
 nginx_includes_templates_path: nginx-includes
+nginx_includes_d_cleanup: true
