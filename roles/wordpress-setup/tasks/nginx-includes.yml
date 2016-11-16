@@ -3,7 +3,7 @@
   find:
     paths:
       - "{{ nginx_includes_templates_path }}"
-      - roles/wordpress-setup/templates/includes.d
+      - "{{ nginx_includes_deprecated }}"
     pattern: "*.conf.j2"
     recurse: yes
   become: no
@@ -12,8 +12,8 @@
 
 - name: Warn about deprecated Nginx includes directory
   debug:
-    msg: "[DEPRECATION WARNING]: The `roles/wordpress-setup/templates/includes.d` directory for Trellis Nginx includes templates is deprecated and will no longer function beginning with Trellis 1.0. Please move these templates to a directory named `{{ nginx_includes_templates_path }}` in the root of this project. For more information, see https://roots.io/trellis/docs/nginx-includes/"
-  when: True in nginx_includes_templates.files | map(attribute='path') | map('search', 'roles/wordpress-setup/templates/includes.d') | list
+    msg: "[DEPRECATION WARNING]: The `{{ nginx_includes_deprecated }}` directory for Trellis Nginx includes templates is deprecated and will no longer function beginning with Trellis 1.0. Please move these templates to a directory named `{{ nginx_includes_templates_path }}` in the root of this project. For more information, see https://roots.io/trellis/docs/nginx-includes/"
+  when: True in nginx_includes_templates.files | map(attribute='path') | map('search', nginx_includes_deprecated | regex_escape) | list
 
 - name: Create includes.d directories
   file:
@@ -21,14 +21,14 @@
     state: directory
     mode: 0755
   with_items: "{{ nginx_includes_templates.files | map(attribute='path') |
-                  map('regex_replace', '^(' + nginx_includes_templates_path + '|.*includes\\.d)\\/(.*)$', '\\2') |
+                  map('regex_replace', nginx_includes_pattern, '\\2') |
                   map('dirname') | unique | select | list | sort
                }}"
 
 - name: Template files out to includes.d
   template:
     src: "{{ item }}"
-    dest: "{{ nginx_path }}/includes.d/{{ item | regex_replace('^(' + nginx_includes_templates_path + '|.*includes\\.d)\\/(.*)\\.j2$', '\\2') }}"
+    dest: "{{ nginx_path }}/includes.d/{{ item | regex_replace(nginx_includes_pattern, '\\2') }}"
   with_items: "{{ nginx_includes_templates.files | map(attribute='path') | list | sort(True) }}"
   notify: reload nginx
 
@@ -46,7 +46,7 @@
     state: absent
   with_items: "{{ nginx_includes_existing.files | default({}) | map(attribute='path') |
                   difference(nginx_includes_templates.files | map(attribute='path') |
-                    map('regex_replace', '^(' + nginx_includes_templates_path + '|.*includes\\.d)(.*)\\.j2$', nginx_path + '/includes.d\\2') | unique
+                    map('regex_replace', nginx_includes_pattern, nginx_path + '/includes.d/\\2') | unique
                   ) | list
                }}"
   when: nginx_includes_d_cleanup

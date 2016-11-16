@@ -1,4 +1,5 @@
 ### HEAD
+* Nginx includes: Move templates dir, fix 'No such file' error ([#687](https://github.com/roots/trellis/pull/687))
 * [BREAKING] Move shell scripts to bin/ directory ([#680](https://github.com/roots/trellis/pull/680))
 * Add myhostname to nsswitch.conf to ensure resolvable hostname ([#686](https://github.com/roots/trellis/pull/686))
 * Add `bin/xdebug-tunnel.sh` to manage Xdebug and SSH tunnels on remote hosts ([#678](https://github.com/roots/trellis/pull/678))
