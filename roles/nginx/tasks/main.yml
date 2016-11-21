@@ -42,6 +42,8 @@
     dest: "{{ nginx_path }}/nginx.conf"
   notify: reload nginx
 
+- include: cloudflare.yml
+
 - name: Disable default server
   file:
     path: "{{ nginx_path }}/sites-enabled/default"

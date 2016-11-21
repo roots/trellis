@@ -135,4 +135,7 @@ http {
   # gzip_static on;
 
   include sites-enabled/*;
+
+  # CloudFlare
+  include cloudflare.conf;
 }

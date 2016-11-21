@@ -1,0 +1,21 @@
+---
+- name: Get list of CloudFlare v4 IPs
+  uri:
+    url: https://www.cloudflare.com/ips-v4
+    return_content: yes
+  register: cloudflare_ips_v4
+  tags: [cloudflare]
+
+- name: Get list of CloudFlare v6 IPs
+  uri:
+    url: https://www.cloudflare.com/ips-v6
+    return_content: yes
+  register: cloudflare_ips_v6
+  tags: [cloudflare]
+
+- name: Create cloudflare.conf
+  template:
+    src: cloudflare.conf.j2
+    dest: "{{ nginx_path }}/cloudflare.conf"
+  notify: reload nginx
+  tags: [cloudflare]
