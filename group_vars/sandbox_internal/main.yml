@@ -22,6 +22,7 @@ wp_rsync_opts:
   root:
     - "--delete"
     - "--exclude='.git/'"
+    - "--exclude='robots.txt'"
     - "--exclude='wp-config.php'"
     - "--exclude='wp-cli.yml'"
     - "--exclude='/google*.html'"
