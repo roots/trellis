@@ -9,6 +9,7 @@ users:
     keys:
       # - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       - https://github.com/primozcigler.keys
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXeBJwAmnwzpsDPivM+T2OJFnruMT2xXCPpmwT9pnQQzB/Tl70LN0oDh0WDj2FwAJ8FMGMQbzaJ59gEPj565bBttb6j4TL1INLTmKTIXBYYrH8s2HAjcAJjtpE3bZQAm64vM1gn5VKWUEhUKRAJ8/yA+fzRhlAtDPTv3KB7N4yZS3C54S3NA2irt7sTyskU/+l7nz9ZrIM/KPMOQ5jsaPNoJhMyntJkyITMx4FBQu7Fa3UE3x3EwIxEw8YOzjbY/eLEbC42WW42/ECqwvQXCFAcqBesN2azzNtNoAo4JyDB/JxCdF0Opn9+Ank3BiRXaTlnQapSNuiuJETUJ7zN5JR VaultPress"
   - name: "{{ admin_user }}"
     groups:
       - "{{ web_group }}"
