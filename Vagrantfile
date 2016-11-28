@@ -30,10 +30,6 @@ else
   fail_with_message "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
 end
 
-if !Dir.exists?(ENV['ANSIBLE_ROLES_PATH']) && !Vagrant::Util::Platform.windows?
-  fail_with_message "You are missing the required Ansible Galaxy roles, please install them with this command:\nansible-galaxy install -r requirements.yml"
-end
-
 Vagrant.require_version '>= 1.8.5'
 
 Vagrant.configure('2') do |config|
@@ -87,44 +83,32 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  groups = {
-    'web' => ['default'],
-    'development' => ['default']
-  }
-
-  if Vagrant::Util::Platform.windows?
-    config.vm.provision "ansible_local" do |ansible|
+  provisioner = Vagrant::Util::Platform.windows? ? :ansible_local : :ansible
+  provisioning_path = Vagrant::Util::Platform.windows? ? ANSIBLE_PATH.sub(__dir__, '/vagrant') : ANSIBLE_PATH
+  config.vm.provision provisioner do |ansible|
+    if Vagrant::Util::Platform.windows?
       ansible.install_mode = 'pip'
-      ansible.version = '2.1.3'
-      ansible.galaxy_roles_path = 'vendor/roles'
-      ansible.galaxy_role_file = 'requirements.yml'
-      ansible.playbook = 'dev.yml'
-      ansible.groups = groups
-
-      if tags = ENV['ANSIBLE_TAGS']
-        ansible.tags = tags
-      end
-
-      ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
-      if vars = ENV['ANSIBLE_VARS']
-        extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
-        ansible.extra_vars.merge(extra_vars)
-      end
+      ansible.provisioning_path = provisioning_path
+      ansible.version = '2.2.0'
     end
-  else
-    config.vm.provision :ansible do |ansible|
-      ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
-      ansible.groups = groups
 
-      if tags = ENV['ANSIBLE_TAGS']
-        ansible.tags = tags
-      end
+    ansible.playbook = File.join(provisioning_path, 'dev.yml')
+    ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml')
+    ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
 
-      ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
-      if vars = ENV['ANSIBLE_VARS']
-        extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
-        ansible.extra_vars.merge(extra_vars)
-      end
+    ansible.groups = {
+      'web' => ['default'],
+      'development' => ['default']
+    }
+
+    if tags = ENV['ANSIBLE_TAGS']
+      ansible.tags = tags
+    end
+
+    ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
+    if vars = ENV['ANSIBLE_VARS']
+      extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
+      ansible.extra_vars.merge(extra_vars)
     end
   end
 

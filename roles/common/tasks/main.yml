@@ -81,3 +81,9 @@
     line: \1 myhostname
     regexp: ^(hosts\:((?!myhostname).)*)$
     state: present
+
+- name: Generate SSH key for vagrant user
+  user:
+    name: vagrant
+    generate_ssh_key: yes
+  when: env == 'development'
