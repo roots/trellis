@@ -1,16 +1,15 @@
 ---
-- name: "WordPress Server: Install LEMP Stack with PHP 7.0 and MariaDB MySQL"
+- name: "WordPress Server: Install LEMP Stack with PHP 7.0 and chosen MySQL"
   hosts: web:&development
   become: yes
   remote_user: vagrant
-
   roles:
     - { role: common, tags: [common] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
     - { role: ntp, tags: [ntp] }
     - { role: sshd, tags: [sshd] }
-    - { role: mariadb, tags: [mariadb] }
+    - { role: mysql-server, tags: [database]}
     - { role: mailhog, tags: [mailhog, mail] }
     - { role: php, tags: [php] }
     - { role: xdebug, tags: [php, xdebug] }

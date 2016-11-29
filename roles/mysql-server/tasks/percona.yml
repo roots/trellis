@@ -1,0 +1,76 @@
+---
+- name: Add Percona MySQL apt-key
+  apt_key:
+    url: "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ percona_keyserver_fingerprint }}"
+    state: present
+
+- name: Add Percona MySQL deb and deb-src
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - "deb http://repo.percona.com/apt {{ percona_dist | default(ansible_distribution_release) }} main"
+    - "deb-src http://repo.percona.com/apt {{ percona_dist | default(ansible_distribution_release) }} main"
+
+- name: Install MySQL client
+  apt:
+    name: "percona-server-client-{{ percona_version }}"
+    state: present
+
+- block:
+  - name: Install Percona MySQL server
+    apt:
+      name: "percona-server-server-{{ percona_version }}"
+      state: present
+
+  - name: Disable Percona binary logging
+    template:
+      src: disable-binary-logging.cnf
+      dest: /etc/mysql/conf.d
+      owner: root
+      group: root
+    when: percona_binary_logging_disabled
+
+  - name: Restart Percona MySQL Server
+    service:
+      name: mysql
+      state: restarted
+      enabled: true
+
+  - name: Set root user password
+    mysql_user:
+      name: root
+      host: "{{ item }}"
+      password: "{{ mysql_root_password }}"
+      check_implicit_admin: yes
+      state: present
+    with_items:
+      - "{{ inventory_hostname }}"
+      - 127.0.0.1
+      - ::1
+      - localhost
+
+  - name: Copy .my.cnf file with root password credentials.
+    template:
+      src: my.cnf.j2
+      dest: ~/.my.cnf
+      owner: root
+      group: root
+      mode: 0600
+
+  - name: Delete anonymous MySQL server users
+    mysql_user:
+      user: ""
+      host: "{{ item }}"
+      state: absent
+    with_items:
+      - localhost
+      - "{{ inventory_hostname }}"
+      - "{{ ansible_hostname }}"
+
+  - name: Remove the test database
+    mysql_db:
+      name: test
+      state: absent
+
+  when: not sites_using_remote_db | count

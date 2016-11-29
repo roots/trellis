@@ -17,7 +17,7 @@
     - name: Install Python 2.x
       raw: sudo apt-get install -qq -y python-simplejson
 
-- name: WordPress Server - Install LEMP Stack with PHP 7.0 and MariaDB MySQL
+- name: "WordPress Server - Install LEMP Stack with PHP 7.0 and chosen MySQL"
   hosts: web:&{{ env }}
   become: yes
   roles:
@@ -28,7 +28,7 @@
     - { role: ntp, tags: [ntp] }
     - { role: users, tags: [users] }
     - { role: sshd, tags: [sshd] }
-    - { role: mariadb, tags: [mariadb] }
+    - { role: mysql-server, tags: [database]}
     - { role: ssmtp, tags: [ssmtp, mail] }
     - { role: php, tags: [php] }
     - { role: memcached, tags: [memcached] }
