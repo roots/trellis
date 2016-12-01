@@ -1,4 +1,7 @@
 ### HEAD
+* Fix 404s by moving skip_cache conditions to server block ([#692](https://github.com/roots/trellis/pull/692))
+* Nginx includes: Move templates dir, fix 'No such file' error ([#687](https://github.com/roots/trellis/pull/687))
+* [BREAKING] Move shell scripts to bin/ directory ([#680](https://github.com/roots/trellis/pull/680))
 * Add myhostname to nsswitch.conf to ensure resolvable hostname ([#686](https://github.com/roots/trellis/pull/686))
 * Add `bin/xdebug-tunnel.sh` to manage Xdebug and SSH tunnels on remote hosts ([#678](https://github.com/roots/trellis/pull/678))
 * Move Xdebug installation/configuration into its own role ([#678](https://github.com/roots/trellis/pull/678))
@@ -157,7 +160,7 @@
 * Fix PHP error handling
 * Flush wp db theme roots on deploy
 * Stop recursive copying of vendor
-* Update the windows.sh script with absolute path
+* Update the bin/windows.sh script with absolute path
 * Conditionally copy .env into web root
 * Add subtree commented out
 * Add Composer binary path to the default path

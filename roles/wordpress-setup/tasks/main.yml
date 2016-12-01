@@ -35,6 +35,9 @@
   when: disable_default_pool | default(true)
   notify: reload php-fpm
 
+- include: nginx-includes.yml
+  tags: [wordpress-setup-nginx-includes, wordpress-setup-nginx]
+
 - include: nginx.yml
   tags: wordpress-setup-nginx
 

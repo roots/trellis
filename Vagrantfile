@@ -89,7 +89,7 @@ Vagrant.configure('2') do |config|
 
   if Vagrant::Util::Platform.windows?
     config.vm.provision :shell do |sh|
-      sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
+      sh.path = File.join(ANSIBLE_PATH, 'bin/windows.sh')
       sh.args = [Vagrant::VERSION]
       sh.keep_color = true
     end
