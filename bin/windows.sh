@@ -5,7 +5,7 @@
 # @author Andrea Brandi
 # @version 1.0
 
-ANSIBLE_PATH="$(find /vagrant -name 'windows.sh' -printf '%h' -quit)"
+ANSIBLE_PATH="$(find /vagrant -name 'bin/windows.sh' -printf '%h' -quit)"
 export PYTHONUNBUFFERED=1
 
 # Create an ssh key if not already created.
