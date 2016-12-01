@@ -15,38 +15,6 @@
   with_dict: "{{ wordpress_sites }}"
   when: item.value.ssl.enabled and item.value.ssl.key is defined
 
-- name: Create includes.d directories
-  file:
-    path: "{{ nginx_path }}/includes.d/{{ item }}"
-    state: directory
-    mode: 0755
-  with_items: "{{ wordpress_sites.keys() }}"
-  register: nginx_includes_paths
-
-- name: Template files out to includes.d
-  template:
-    src: "includes.d/{{ item }}"
-    dest: "{{ nginx_path }}/includes.d/{{ item[:-3] }}"
-  with_lines: "cd {{ role_path }}/templates/includes.d && find {{ wordpress_sites.keys() | join(' ') }} -type f -name \\*.conf.j2 2>/dev/null || :"
-  register: nginx_includes_managed
-  notify: reload nginx
-
-- name: Retrieve list of existing files in includes.d
-  shell: "find {{ nginx_includes_paths.results | map(attribute='path') | join(' ') }} -type f -name \\*.conf 2>/dev/null || :"
-  register: nginx_includes_existing
-  changed_when: false
-
-- name: Remove unmanaged files from includes.d
-  file:
-    path: "{{ item }}"
-    state: absent
-  with_items: "{{ nginx_includes_existing.stdout_lines |
-                  difference(nginx_includes_managed.results | default([]) | map(attribute='item') |
-                    map('regex_replace', '(.*)\\.j2', '/etc/nginx/includes.d/\\1') | list
-                  )
-               }}"
-  notify: reload nginx
-
 - name: Create Nginx conf for challenges location
   template:
     src: "{{ playbook_dir }}/roles/letsencrypt/templates/acme-challenge-location.conf.j2"
