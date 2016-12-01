@@ -1,7 +1,7 @@
 ---
 - name: Add Percona MySQL apt-key
   apt_key:
-    url: "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ percona_keyserver_fingerprint }}"
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ percona_keyserver_fingerprint }}"
     state: present
 
 - name: Add Percona MySQL deb and deb-src

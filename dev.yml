@@ -1,5 +1,5 @@
 ---
-- name: "WordPress Server: Install LEMP Stack with PHP 7.0 and chosen MySQL"
+- name: "WordPress Server: Install LEMP Stack"
   hosts: web:&development
   become: yes
   remote_user: vagrant

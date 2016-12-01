@@ -1,7 +1,7 @@
 ---
 - name: Add MariaDB MySQL apt-key
   apt_key:
-    url: "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ mariadb_keyserver_fingerprint }}"
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ mariadb_keyserver_fingerprint }}"
     state: present
 
 - name: Add MariaDB MySQL deb and deb-src

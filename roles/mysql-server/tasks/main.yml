@@ -9,7 +9,7 @@
       dest: /etc/mysql/conf.d
       owner: root
       group: root
-    when: binary_logging_disabled
+    when: mysql_binary_logging_disabled
 
   - name: Restart MySQL Server
     service:

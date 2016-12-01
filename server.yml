@@ -17,7 +17,7 @@
     - name: Install Python 2.x
       raw: sudo apt-get install -qq -y python-simplejson
 
-- name: "WordPress Server - Install LEMP Stack with PHP 7.0 and chosen MySQL"
+- name: "WordPress Server - Install LEMP Stack"
   hosts: web:&{{ env }}
   become: yes
   roles:
