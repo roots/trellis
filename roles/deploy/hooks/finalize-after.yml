@@ -31,7 +31,7 @@
   when: wp_installed | success and project.multisite.enabled | default(false)
 
 - name: Reload php-fpm
-  shell: sudo service php7.0-fpm reload
+  shell: sudo service php7.1-fpm reload
   args:
     chdir: "{{ deploy_helper.new_release_path }}"
     warn: false
