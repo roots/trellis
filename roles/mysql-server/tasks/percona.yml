@@ -1,0 +1,24 @@
+---
+- name: Add Percona MySQL apt-key
+  apt_key:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ percona_keyserver_fingerprint }}"
+    state: present
+
+- name: Add Percona MySQL deb and deb-src
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - "deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
+    - "deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main"
+
+- name: Install Percona MySQL client
+  apt:
+    name: "percona-server-client-{{ percona_version }}"
+    state: present
+
+- name: Install Percona MySQL server
+  apt:
+    name: "percona-server-server-{{ percona_version }}"
+    state: present
+  when: not sites_using_remote_db | count

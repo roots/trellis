@@ -1,0 +1,24 @@
+---
+- name: Add MariaDB MySQL apt-key
+  apt_key:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ mariadb_keyserver_fingerprint }}"
+    state: present
+
+- name: Add MariaDB MySQL deb and deb-src
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  with_items:
+    - "deb http://{{ mariadb_mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
+    - "deb-src http://{{ mariadb_mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
+
+- name: Install MariaDB MySQL client
+  apt:
+    name: mariadb-client
+    state: present
+
+- name: Install MariaDB MySQL server
+  apt:
+    name: mariadb-server
+    state: present
+  when: not sites_using_remote_db | count
