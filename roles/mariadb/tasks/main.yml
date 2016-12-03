@@ -1,8 +1,25 @@
 ---
 - name: Add MariaDB MySQL apt-key
   apt_key:
+    url: "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xcbcb082a1bb943db"
+    state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+
+- name: Add MariaDB MySQL apt-key
+  apt_key:
     url: "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ mariadb_keyserver_fingerprint }}"
     state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
+
+- name: Remove mismatched releases in MariaDB MySQL repo
+  apt_repository:
+    repo: "{{ item }}"
+    state: absent
+  with_items:
+    - "deb http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main"
+    - "deb-src http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.0/ubuntu trusty main"
+  register: mariadbrepomismatched
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'xenial'
 
 - name: Add MariaDB MySQL deb and deb-src
   apt_repository:
@@ -11,6 +28,20 @@
   with_items:
     - "deb http://{{ mariadb_mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
     - "deb-src http://{{ mariadb_mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
+
+- name: Update MariaDB MySQL client when releases are mismatched
+  apt:
+    name: mariadb-client
+    state: latest
+    update_cache: yes
+  when: mariadbrepomismatched.changed
+
+- name: Update MariaDB MySQL server when releases are mismatched
+  apt:
+    name: mariadb-server
+    state: latest
+    update_cache: yes
+  when: mariadbrepomismatched.changed and not sites_using_remote_db
 
 - name: Install MySQL client
   apt:
