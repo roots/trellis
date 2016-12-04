@@ -5,7 +5,7 @@
     state: present
 
 - block:
-  - name: Install MariaDB MySQL server
+  - name: Install MySQL server
     apt:
       name: mariadb-server
       state: present
@@ -16,9 +16,9 @@
       dest: /etc/mysql/conf.d
       owner: root
       group: root
-    when: mariadb_binary_logging_disabled
+    when: mysql_binary_logging_disabled
 
-  - name: Restart MariaDB MySQL Server
+  - name: Restart MySQL Server
     service:
       name: mysql
       state: restarted

@@ -1,4 +1,4 @@
-mariadb_binary_logging_disabled: true
+mysql_binary_logging_disabled: true
 mysql_root_user: root
 
 sites_using_remote_db: "[{% for name, site in wordpress_sites.iteritems() if site.env is defined and site.env.db_host | default('localhost') != 'localhost' %}'{{ name }}',{% endfor %}]"
