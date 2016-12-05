@@ -8,7 +8,7 @@ server {
   {% endif %}
 
   server_name  {% for host in site_hosts_canonical %}{{ host }} {% if item.value.multisite.subdomains | default(false) %}*.{{ host }} {% endif %}{% endfor %};
-  access_log   {{ www_root }}/{{ item.key }}/logs/access.log;
+  access_log   {{ www_root }}/{{ item.key }}/logs/access.log main;
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
 
   root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;

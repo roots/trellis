@@ -17,12 +17,12 @@
   changed_when: env_file.stdout == "{{ item.key }}.env"
 
 - name: Install Dependencies with Composer
-  command: composer install
-  args:
-    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
-  register: composer_results
+  composer:
+    no_dev: no
+    optimize_autoloader: no
+    working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  become: no
   with_dict: "{{ wordpress_sites }}"
-  changed_when: "'Nothing to install or update' not in composer_results.stderr"
 
 - name: Install WP
   command: wp core {{ item.value.multisite.enabled | default(false) | ternary('multisite-install', 'install') }}
