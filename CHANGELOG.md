@@ -1,5 +1,6 @@
 ### HEAD
 * Ansible-Local for Vagrant boxes on Windows ([#690](https://github.com/roots/trellis/pull/690))
+* Fix 404s by moving skip_cache conditions to server block ([#692](https://github.com/roots/trellis/pull/692))
 * Nginx includes: Move templates dir, fix 'No such file' error ([#687](https://github.com/roots/trellis/pull/687))
 * [BREAKING] Move shell scripts to bin/ directory ([#680](https://github.com/roots/trellis/pull/680))
 * Add myhostname to nsswitch.conf to ensure resolvable hostname ([#686](https://github.com/roots/trellis/pull/686))
