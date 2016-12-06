@@ -1,7 +1,7 @@
 ---
 - name: Fail if root login will be disabled but admin_user cannot connect
   fail:
-    msg: 'The admin_user `{{ admin_user }}` is unable to connect to the server. To prevent you from losing access to your server, the playbook has halted before disabling root login (`sshd_permit_root_login: false`). Ensure that the admin_user appears in your `users` hash with a valid entry for `keys`.'
+    msg: 'The admin_user `{{ admin_user }}` is unable to connect to the server. To prevent you from losing access to your server, the playbook has halted before disabling root login (`ssh_allow_root_with_key: false`). Ensure that the admin_user appears in your `users` hash with a valid entry for `keys`.'
   when: not cli_ask_pass | default(false) and ansible_user == 'root'
 
 - block:
@@ -9,7 +9,7 @@
     pause:
       prompt: |
 
-        The play will disable SSH login for `root` (because `sshd_permit_root_login: false`)
+        The play will disable SSH login for `root` (because `ssh_allow_root_with_key: false`)
         but the admin_user named `{{ admin_user }}` appears unable to connect via SSH key.
 
         Be careful to avoid losing SSH access to your server.
@@ -17,13 +17,13 @@
         a different user will be able to connect and invoke sudo.
 
         (press RETURN to continue or CTRL+C to abort)
-    when: not sshd_permit_root_login and ansible_user == 'root'
+    when: not ssh_allow_root_with_key and ansible_user == 'root'
 
   - name: Confirm disabling of SSH password authentication
     pause:
       prompt: |
 
-        The play will disable password login (because `sshd_password_authentication: false`)
+        The play will disable password login (because `ssh_server_password_login: false`)
         but the admin_user named `{{ admin_user }}` appears unable to connect via SSH key.
 
         Be careful to avoid losing SSH access to your server.
@@ -32,9 +32,9 @@
 
         If you prefer to continue to allow SSH password authentication (less secure),
         abort now and make the following edit in `group_vars/all/security.yml`:
-        `sshd_password_authentication: true`
+        `ssh_server_password_login: true`
 
         (press RETURN to continue or CTRL+C to abort)
-    when: not sshd_password_authentication
+    when: not ssh_server_password_login
 
   when: cli_ask_pass | default(false)

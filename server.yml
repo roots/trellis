@@ -27,7 +27,7 @@
     - { role: ferm, tags: [ferm] }
     - { role: ntp, tags: [ntp] }
     - { role: users, tags: [users] }
-    - { role: sshd, tags: [sshd] }
+    - { role: ssh-hardening, tags: [sshd] }
     - { role: mariadb, tags: [mariadb] }
     - { role: ssmtp, tags: [ssmtp, mail] }
     - { role: php, tags: [php] }
