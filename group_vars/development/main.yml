@@ -3,3 +3,4 @@ env: development
 ferm_enabled: false
 mysql_root_password: "{{ vault_mysql_root_password }}" # Define this variable in group_vars/development/vault.yml
 web_user: vagrant
+basic_auth_passwd: demo
