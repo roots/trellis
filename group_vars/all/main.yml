@@ -17,6 +17,3 @@ raw_vars:
   - vault_users.*.password
   - vault_users.*.salt
   - vault_wordpress_sites
-
-# Pressbooks-specific variables
-prince_package_uri: http://www.princexml.com/download/prince_20161018-1_ubuntu16.04_amd64.deb

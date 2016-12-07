@@ -1,11 +1,5 @@
 ---
-- name: Install JDK
-  apt:
-    name: default-jdk
-    state: present
 - name: Install Epubcheck
-  maven_artifact:
-    group_id: org.idpf
-    artifact_id: epubcheck
-    version: "{{ epubcheck_version }}"
-    dest: /opt/epubcheck/epubcheck.jar
+  apt:
+    name: epubcheck
+    state: present
