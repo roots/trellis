@@ -4,4 +4,4 @@ ansible_requirements:
   - version: 2.1.0.0
     operator: '!='
 
-default_timezone: Etc/UTC
+ntp_timezone: Etc/UTC

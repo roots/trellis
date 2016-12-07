@@ -61,26 +61,33 @@
   - curl
   - git-core
   - dbus
+  - libnss-myhostname
   - ghostscript
   - imagemagick
   - poppler-utils
 
 - name: Validate timezone variable
   stat:
-    path: /usr/share/zoneinfo/{{ default_timezone }}
+    path: /usr/share/zoneinfo/{{ ntp_timezone }}
   register: timezone_path
   changed_when: false
 
 - name: Explain timezone error
   fail:
-    msg: "{{ default_timezone }} is not a valid timezone. For a list of valid timezones, check https://php.net/manual/en/timezones.php"
+    msg: "{{ ntp_timezone }} is not a valid timezone. For a list of valid timezones, check https://php.net/manual/en/timezones.php"
   when: not timezone_path.stat.exists
 
-- name: Get current timezone
-  command: cat /etc/timezone
-  register: current_timezone
-  changed_when: false
+- name: Add myhostname to nsswitch.conf to ensure resolvable hostname
+  lineinfile:
+    backrefs: yes
+    backup: yes
+    dest: /etc/nsswitch.conf
+    line: \1 myhostname
+    regexp: ^(hosts\:((?!myhostname).)*)$
+    state: present
 
-- name: Set timezone
-  command: timedatectl set-timezone {{ default_timezone }}
-  when: current_timezone.stdout != default_timezone
+- name: Generate SSH key for vagrant user
+  user:
+    name: vagrant
+    generate_ssh_key: yes
+  when: env == 'development'

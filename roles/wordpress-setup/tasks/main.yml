@@ -28,6 +28,16 @@
     dest: /etc/php/7.0/fpm/pool.d/wordpress.conf
   notify: reload php-fpm
 
+- name: Disable default PHP-FPM pool
+  command: mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.disabled
+  args:
+    creates: /etc/php/7.0/fpm/pool.d/www.disabled
+  when: disable_default_pool | default(true)
+  notify: reload php-fpm
+
+- include: nginx-includes.yml
+  tags: [wordpress-setup-nginx-includes, wordpress-setup-nginx]
+
 - include: nginx.yml
   tags: wordpress-setup-nginx
 
@@ -36,7 +46,7 @@
     name: "{{ item.key }} WordPress cron"
     minute: "*/15"
     user: "{{ web_user }}"
-    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp cron event run --due-now"
+    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp cron event run --due-now > /dev/null 2>&1"
     cron_file: "wordpress-{{ item.key | replace('.', '_') }}"
   with_dict: "{{ wordpress_sites }}"
   when: site_env.disable_wp_cron and not item.value.multisite.enabled | default(false)

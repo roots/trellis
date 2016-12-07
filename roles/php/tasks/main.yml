@@ -24,24 +24,6 @@
   - php7.0-xmlrpc
   - php7.0-zip
 
-- name: Install Xdebug
-  apt:
-    name: php-xdebug
-    state: latest
-  when: xdebug_install | default(false)
-
-- name: xdebug configuration file
-  template:
-    src: xdebug.ini.j2
-    dest: /etc/php/7.0/mods-available/xdebug.ini
-  when: xdebug_install | default(false)
-
-- name: Disable xdebug CLI
-  file:
-    path: /etc/php/7.0/cli/conf.d/20-xdebug.ini
-    state: absent
-  when: xdebug_install | default(false)
-
 - name: Start php7.0-fpm service
   service:
     name: php7.0-fpm
@@ -52,13 +34,6 @@
   file:
     path: /var/run/php7.0-fpm/
     state: directory
-
-- name: Disable default pool
-  command: mv /etc/php/7.0/fpm/pool.d/www.conf /etc/php/7.0/fpm/pool.d/www.disabled
-  args:
-    creates: /etc/php/7.0/fpm/pool.d/www.disabled
-  when: disable_default_pool
-  notify: reload php-fpm
 
 - name: PHP configuration file
   template:

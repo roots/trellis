@@ -1,4 +1,16 @@
 ### HEAD
+* Ansible-Local for Vagrant boxes on Windows ([#690](https://github.com/roots/trellis/pull/690))
+* Install MariaDB via Ubuntu's official distro packages ([#693](https://github.com/roots/trellis/pull/693))
+* Fix 404s by moving skip_cache conditions to server block ([#692](https://github.com/roots/trellis/pull/692))
+* Nginx includes: Move templates dir, fix 'No such file' error ([#687](https://github.com/roots/trellis/pull/687))
+* [BREAKING] Move shell scripts to bin/ directory ([#680](https://github.com/roots/trellis/pull/680))
+* Add myhostname to nsswitch.conf to ensure resolvable hostname ([#686](https://github.com/roots/trellis/pull/686))
+* Add `bin/xdebug-tunnel.sh` to manage Xdebug and SSH tunnels on remote hosts ([#678](https://github.com/roots/trellis/pull/678))
+* Move Xdebug installation/configuration into its own role ([#678](https://github.com/roots/trellis/pull/678))
+* Disable wp-cron emails ([#685](https://github.com/roots/trellis/pull/685))
+* Make `raw_vars` compatible with play vars and Ansible 2.1 ([#684](https://github.com/roots/trellis/pull/684))
+* Ensure there is always at least one PHP-FPM pool defined ([#682](https://github.com/roots/trellis/pull/682))
+* Update galaxy roles for Ansible 2.2 compatibility ([#681](https://github.com/roots/trellis/pull/681))
 * Update to WP-CLI 0.25.0 for WP 4.7 compat ([#673](https://github.com/roots/trellis/pull/673))
 * Enable per-site setup for permalink structure ([#661](https://github.com/roots/trellis/pull/661))
 * WP 4.6 Compat: set WP_HOME/SITEURL directly ([#647](https://github.com/roots/trellis/pull/647))
@@ -150,7 +162,7 @@
 * Fix PHP error handling
 * Flush wp db theme roots on deploy
 * Stop recursive copying of vendor
-* Update the windows.sh script with absolute path
+* Update the bin/windows.sh script with absolute path
 * Conditionally copy .env into web root
 * Add subtree commented out
 * Add Composer binary path to the default path

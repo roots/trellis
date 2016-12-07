@@ -4,44 +4,40 @@ __metaclass__ = type
 import re
 import sys
 
-from ansible import __version__
-from ansible.errors import AnsibleError
-
-if __version__.startswith('1'):
-    raise AnsibleError('Trellis no longer supports Ansible 1.x. Please upgrade to Ansible 2.x.')
-
-# These imports will produce Traceback in Ansible 1.x, so place after version check
 from __main__ import cli
 from ansible.compat.six import iteritems
+from ansible.errors import AnsibleError
 from ansible.parsing.dataloader import DataLoader
 from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
+from ansible.plugins.callback import CallbackBase
 from ansible.template import Templar
 
 
-class VarsModule(object):
-    ''' Creates and modifies host variables '''
+class CallbackModule(CallbackBase):
+    ''' Creates and modifies play and host variables '''
 
-    def __init__(self, inventory):
-        self.inventory = inventory
-        self.inventory_basedir = inventory.basedir()
+    CALLBACK_VERSION = 2.0
+    CALLBACK_NAME = 'vars'
+
+    def __init__(self):
         self.loader = DataLoader()
         self._options = cli.options if cli else None
 
     def raw_triage(self, key_string, item, patterns):
         # process dict values
         if isinstance(item, AnsibleMapping):
-            return dict((key,self.raw_triage('.'.join([key_string, key]), value, patterns)) for key,value in item.iteritems())
+            return AnsibleMapping(dict((key,self.raw_triage('.'.join([key_string, key]), value, patterns)) for key,value in item.iteritems()))
 
         # process list values
         elif isinstance(item, AnsibleSequence):
-            return [self.raw_triage('.'.join([key_string, str(i)]), value, patterns) for i,value in enumerate(item)]
+            return AnsibleSequence([self.raw_triage('.'.join([key_string, str(i)]), value, patterns) for i,value in enumerate(item)])
 
         # wrap values if they match raw_vars pattern
         elif isinstance(item, AnsibleUnicode):
             match = next((pattern for pattern in patterns if re.match(pattern, key_string)), None)
-            return ''.join(['{% raw %}', item, '{% endraw %}']) if not item.startswith(('{% raw', '{%raw')) and match else item
+            return AnsibleUnicode(''.join(['{% raw %}', item, '{% endraw %}'])) if not item.startswith(('{% raw', '{%raw')) and match else item
 
-    def raw_vars(self, host, hostvars):
+    def raw_vars(self, play, host, hostvars):
         if 'raw_vars' not in hostvars:
             return
 
@@ -52,7 +48,10 @@ class VarsModule(object):
         patterns = [re.sub(r'\*', '(.)*', re.sub(r'\.', '\.', var)) for var in raw_vars if var.split('.')[0] in hostvars]
         keys = set(pattern.split('\.')[0] for pattern in patterns)
         for key in keys:
-            host.vars[key] = self.raw_triage(key, hostvars[key], patterns)
+            if key in play.vars:
+                play.vars[key] = self.raw_triage(key, play.vars[key], patterns)
+            elif key in hostvars:
+                host.vars[key] = self.raw_triage(key, hostvars[key], patterns)
 
     def cli_options(self):
         options = []
@@ -86,10 +85,11 @@ class VarsModule(object):
         except:
             return True
 
-    def get_host_vars(self, host, vault_password=None):
-        self.raw_vars(host, host.get_group_vars())
-        host.vars['cli_options'] = self.cli_options()
-        host.vars['cli_ask_pass'] = getattr(self._options, 'ask_pass', False)
-        host.vars['cli_ask_become_pass'] = getattr(self._options, 'become_ask_pass', False)
-        host.vars['darwin_without_passlib'] = self.darwin_without_passlib()
-        return {}
+    def v2_playbook_on_play_start(self, play):
+        for host in play.get_variable_manager()._inventory.list_hosts(play.hosts[0]):
+            hostvars = play.get_variable_manager().get_vars(loader=self.loader, play=play, host=host)
+            self.raw_vars(play, host, hostvars)
+            host.vars['cli_options'] = self.cli_options()
+            host.vars['cli_ask_pass'] = getattr(self._options, 'ask_pass', False)
+            host.vars['cli_ask_become_pass'] = getattr(self._options, 'become_ask_pass', False)
+            host.vars['darwin_without_passlib'] = self.darwin_without_passlib()

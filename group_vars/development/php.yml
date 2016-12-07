@@ -5,11 +5,5 @@ php_track_errors: 'On'
 php_mysqlnd_collect_memory_statistics: 'On'
 php_opcache_enable: 0
 
-xdebug_install: true
-php_xdebug_remote_enable: true
-php_xdebug_remote_connect_back: true
-php_xdebug_remote_host: localhost
-php_xdebug_remote_port: 9000
-php_xdebug_remote_log: /tmp/xdebug.log
-php_xdebug_idekey: XDEBUG
-php_max_nesting_level: 200
+xdebug_remote_enable: 1
+xdebug_remote_connect_back: 1

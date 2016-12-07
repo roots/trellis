@@ -8,7 +8,7 @@ server {
   {% endif %}
 
   server_name  {% for host in site_hosts_canonical %}{{ host }} {% if item.value.multisite.subdomains | default(false) %}*.{{ host }} {% endif %}{% endfor %};
-  access_log   {{ www_root }}/{{ item.key }}/logs/access.log;
+  access_log   {{ www_root }}/{{ item.key }}/logs/access.log main;
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
 
   root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;
@@ -40,30 +40,31 @@ server {
     include acme-challenge-location.conf;
   {% endif %}
 
+  {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+    set $skip_cache 0;
+
+    if ($query_string != "") {
+      set $skip_cache 1;
+    }
+
+    # Don't cache uris containing the following segments
+    if ($request_uri ~* "{{ item.value.cache.skip_cache_uri | default(nginx_skip_cache_uri) }}") {
+      set $skip_cache 1;
+    }
+
+    # Don't use the cache if cookies includes the following
+    if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
+      set $skip_cache 1;
+    }
+  {% endif -%}
+
   include includes.d/{{ item.key }}/*.conf;
   include wordpress.conf;
 
   location ~ \.php$ {
-    try_files $uri =404;
-    error_page 404 /index.php;
+    try_files $uri /index.php;
 
     {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
-      set $skip_cache 0;
-
-      if ($query_string != "") {
-        set $skip_cache 1;
-      }
-
-      # Don't cache uris containing the following segments
-      if ($request_uri ~* "{{ item.value.cache.skip_cache_uri | default(nginx_skip_cache_uri) }}") {
-        set $skip_cache 1;
-      }
-
-      # Don't use the cache if cookies includes the following
-      if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
-        set $skip_cache 1;
-      }
-
       fastcgi_cache wordpress;
       fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
       fastcgi_cache_bypass $skip_cache;

@@ -14,7 +14,7 @@ php_sendmail_path: /usr/sbin/ssmtp -t
 php_session_save_path: /tmp
 php_upload_max_filesize: 25M
 php_track_errors: 'Off'
-php_default_timezone: '{{ default_timezone }}'
+php_timezone: '{{ ntp_timezone }}'
 
 php_opcache_enable: 1
 php_opcache_enable_cli: 1
@@ -23,11 +23,3 @@ php_opcache_interned_strings_buffer: 8
 php_opcache_max_accelerated_files: 4000
 php_opcache_memory_consumption: 128
 php_opcache_revalidate_freq: 60
-
-php_xdebug_remote_enable: "false"
-php_xdebug_remote_connect_back: "false"
-php_xdebug_remote_host: localhost
-php_xdebug_remote_port: "9000"
-php_xdebug_remote_log: /tmp/xdebug.log
-php_xdebug_idekey: XDEBUG
-php_max_nesting_level: 200
