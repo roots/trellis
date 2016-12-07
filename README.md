@@ -46,7 +46,7 @@ example.com/      # → Root folder for the project
 ├── trellis/      # → Your clone of this repository
 └── site/         # → A Bedrock-based WordPress site
     └── web/
-        ├── app/  # → WordPress content directory (themes, plugins, etc.)
+        ├── wp-content/  # → WordPress content directory (themes, plugins, etc.)
         └── wp/   # → WordPress core (don't touch!)
 ```
 
