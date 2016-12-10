@@ -1,4 +1,5 @@
 ### HEAD
+* Update to WP-CLI 1.0.0 ([#703](https://github.com/roots/trellis/pull/703))
 * Ansible-Local for Vagrant boxes on Windows ([#690](https://github.com/roots/trellis/pull/690))
 * Install MariaDB via Ubuntu's official distro packages ([#693](https://github.com/roots/trellis/pull/693))
 * Fix 404s by moving skip_cache conditions to server block ([#692](https://github.com/roots/trellis/pull/692))
