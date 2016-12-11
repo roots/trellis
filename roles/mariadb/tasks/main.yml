@@ -3,6 +3,8 @@
   apt:
     name: mariadb-client
     state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - block:
   - name: Install MySQL server

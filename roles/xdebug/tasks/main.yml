@@ -4,6 +4,8 @@
     apt:
       name: php-xdebug
       state: latest
+      update_cache: true
+      cache_valid_time: "{{ apt_cache_valid_time }}"
 
   - name: Template the Xdebug configuration file
     template:
