@@ -1,10 +1,15 @@
 ---
-- name: Install WP-CLI
+- name: Download WP-CLI
   get_url:
     url: "{{ wp_cli_phar_url }}"
-    dest: "{{ wp_cli_bin_path }}"
-    force: true
-    mode: 0755
+    dest: /tmp/wp-cli-{{ wp_cli_version }}.phar
+
+- name: Install WP-CLI
+  command: rsync -c --chmod=0755 --info=name /tmp/wp-cli-{{ wp_cli_version }}.phar {{ wp_cli_bin_path }}
+  args:
+    warn: false
+  register: wp_cli
+  changed_when: wp_cli.stdout == "wp-cli{{ wp_cli_version }}.phar"
 
 - name: Retrieve WP-CLI tab completions
   command: curl -4Ls {{ wp_cli_completion_url }} -o /tmp/wp-completion-{{ wp_cli_version }}.bash
