@@ -1,4 +1,8 @@
 ---
+- name: Install JDK
+  apt:
+    name: default-jdk
+    state: present
 - name: Install Saxon-HE
   maven_artifact:
     group_id: net.sf.saxon
