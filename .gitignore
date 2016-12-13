@@ -3,3 +3,6 @@
 vendor/roles
 *.py[co]
 *.retry
+group_vars/*/wordpress_sites.yml
+group_vars/*vault.yml
+hosts/*
