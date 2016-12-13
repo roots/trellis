@@ -15,7 +15,6 @@ ENV['ANSIBLE_CALLBACK_PLUGINS'] = "~/.ansible/plugins/callback_plugins/:/usr/sha
 ENV['ANSIBLE_FILTER_PLUGINS'] = "~/.ansible/plugins/filter_plugins/:/usr/share/ansible_plugins/filter_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/filter')}"
 ENV['ANSIBLE_LIBRARY'] = "/usr/share/ansible:#{File.join(ANSIBLE_PATH, 'lib/trellis/modules')}"
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
-ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars_plugins/:/usr/share/ansible_plugins/vars_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/vars')}"
 
 config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
 
@@ -28,10 +27,6 @@ if File.exists?(config_file)
   fail_with_message "No sites found in #{config_file}." if wordpress_sites.to_h.empty?
 else
   fail_with_message "#{config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
-end
-
-if !Dir.exists?(ENV['ANSIBLE_ROLES_PATH']) && !Vagrant::Util::Platform.windows?
-  fail_with_message "You are missing the required Ansible Galaxy roles, please install them with this command:\nansible-galaxy install -r requirements.yml"
 end
 
 Vagrant.require_version '>= 1.8.5'
@@ -87,29 +82,32 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  if Vagrant::Util::Platform.windows?
-    config.vm.provision :shell do |sh|
-      sh.path = File.join(ANSIBLE_PATH, 'bin/windows.sh')
-      sh.args = [Vagrant::VERSION]
-      sh.keep_color = true
+  provisioner = Vagrant::Util::Platform.windows? ? :ansible_local : :ansible
+  provisioning_path = Vagrant::Util::Platform.windows? ? ANSIBLE_PATH.sub(__dir__, '/vagrant') : ANSIBLE_PATH
+  config.vm.provision provisioner do |ansible|
+    if Vagrant::Util::Platform.windows?
+      ansible.install_mode = 'pip'
+      ansible.provisioning_path = provisioning_path
+      ansible.version = '2.2.0'
     end
-  else
-    config.vm.provision :ansible do |ansible|
-      ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
-      ansible.groups = {
-        'web' => ['default'],
-        'development' => ['default']
-      }
 
-      if tags = ENV['ANSIBLE_TAGS']
-        ansible.tags = tags
-      end
+    ansible.playbook = File.join(provisioning_path, 'dev.yml')
+    ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml')
+    ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
 
-      ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
-      if vars = ENV['ANSIBLE_VARS']
-        extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
-        ansible.extra_vars.merge(extra_vars)
-      end
+    ansible.groups = {
+      'web' => ['default'],
+      'development' => ['default']
+    }
+
+    if tags = ENV['ANSIBLE_TAGS']
+      ansible.tags = tags
+    end
+
+    ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
+    if vars = ENV['ANSIBLE_VARS']
+      extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
+      ansible.extra_vars.merge(extra_vars)
     end
   end
 

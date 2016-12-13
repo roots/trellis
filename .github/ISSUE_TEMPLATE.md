@@ -5,6 +5,7 @@
 - [ ] This is a bug report
 - [ ] This request isn't a duplicate of an [existing issue](https://github.com/roots/trellis/issues)
 - [ ] I've read the [docs](https://roots.io/trellis/docs) and followed them (if applicable)
+- [ ] This is not a personal support request that should be posted on the [Roots Discourse](https://discourse.roots.io/c/trellis) forums
 
 Replace any `X` with your information.
 

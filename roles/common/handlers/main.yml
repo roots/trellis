@@ -6,7 +6,7 @@
 
 - name: reload php-fpm
   service:
-    name: php7.0-fpm
+    name: php7.1-fpm
     state: reloaded
 
 - name: reload nginx

@@ -1,24 +1,13 @@
 ---
-- name: Add MariaDB MySQL apt-key
-  apt_key:
-    url: "http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search={{ mariadb_keyserver_fingerprint }}"
-    state: present
-
-- name: Add MariaDB MySQL deb and deb-src
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  with_items:
-    - "deb http://{{ mariadb_mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
-    - "deb-src http://{{ mariadb_mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ mariadb_dist | default(ansible_distribution_release) }} main"
-
 - name: Install MySQL client
   apt:
     name: mariadb-client
     state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - block:
-  - name: Install MariaDB MySQL server
+  - name: Install MySQL server
     apt:
       name: mariadb-server
       state: present
@@ -29,9 +18,9 @@
       dest: /etc/mysql/conf.d
       owner: root
       group: root
-    when: mariadb_binary_logging_disabled
+    when: mysql_binary_logging_disabled
 
-  - name: Restart MariaDB MySQL Server
+  - name: Restart MySQL Server
     service:
       name: mysql
       state: restarted

@@ -44,14 +44,12 @@
   when: env != 'development' and darwin_without_passlib | default(false)
   run_once: true
 
-- name: Update Apt
-  apt:
-    update_cache: yes
-
 - name: Checking essentials
   apt:
     name: "{{ item }}"
     state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time }}"
   with_items:
   - python-software-properties
   - python-pycurl
@@ -81,3 +79,9 @@
     line: \1 myhostname
     regexp: ^(hosts\:((?!myhostname).)*)$
     state: present
+
+- name: Generate SSH key for vagrant user
+  user:
+    name: vagrant
+    generate_ssh_key: yes
+  when: env == 'development'
