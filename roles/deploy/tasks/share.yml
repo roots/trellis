@@ -4,10 +4,19 @@
 
 - name: Ensure shared sources are present -- directories
   file:
-    path: "{{ deploy_helper.shared_path }}/{{ project_shared_file | ternary(item.src | dirname, item.src) }}"
-    state: "{{ project_shared_file | ternary('directory', item.type | default('directory')) | lower }}"
-    mode: "{{ project_shared_file | ternary('0755', item.mode | default('0755')) }}"
+    path: "{{ deploy_helper.shared_path }}/{{ item.src }}"
+    state: directory
+    mode: "{{ item.mode | default('0755') }}"
   with_items: "{{ project_shared_children }}"
+  when: item.type | default('directory') | lower == 'directory'
+
+- name: Ensure shared sources are present -- files' parent directories
+  file:
+    path: "{{ deploy_helper.shared_path }}/{{ item.src | dirname }}"
+    state: directory
+    mode: '0755'
+  with_items: "{{ project_shared_children }}"
+  when: item.type | default('directory') | lower == 'file'
 
 - name: Ensure shared sources are present -- files
   file:
@@ -15,28 +24,26 @@
     state: touch
     mode: "{{ item.mode | default('0644') }}"
   with_items: "{{ project_shared_children }}"
-  when: project_shared_file
+  when: item.type | default('directory') | lower == 'file'
 
 - name: Ensure parent directories for shared paths are present
   file:
-    path: "{{ deploy_helper.new_release_path }}/{{ item.path | default('') | dirname }}"
+    path: "{{ deploy_helper.new_release_path }}/{{ item.path | dirname }}"
     state: directory
   with_items: "{{ project_shared_children }}"
 
 - name: Ensure shared paths are absent
   file:
-    path: "{{ deploy_helper.new_release_path }}/{{ item.path  | default('') }}"
+    path: "{{ deploy_helper.new_release_path }}/{{ item.path }}"
     state: absent
   with_items: "{{ project_shared_children }}"
-  when: item.type | default('directory') | lower != 'absent'
 
 - name: Create shared symlinks
   file:
-    path: "{{ deploy_helper.new_release_path }}/{{ item.path | default('') }}"
+    path: "{{ deploy_helper.new_release_path }}/{{ item.path }}"
     src: "{{ deploy_helper.shared_path }}/{{ item.src }}"
     state: link
   with_items: "{{ project_shared_children }}"
-  when: item.type | default('directory') | lower != 'absent'
 
 - include: "{{ deploy_share_after | default('../hooks/example.yml') }}"
   tags: deploy-share-after

@@ -23,13 +23,13 @@ project_templates:
 
 # The shared_children is a list of all files/folders in your project that need to be linked to a path in `/shared`.
 # For example a sessions directory or an uploads folder. They are created if they don't exist, with the type
-# specified in the `type` key (file or directory). Use `type: absent` to remove an item from `/shared`.
+# specified in the `type` key (file or directory).
 # Example:
 # project_shared_children:
-#   - path: app/sessions  // <- required for type `directory` and `file`, optional for type `absent`
-#     src: sessions       // <- required
+#   - path: app/sessions
+#     src: sessions
 #     mode: '0755'        // <- optional, must be quoted, defaults to `'0755'` if `directory` or `'0644'` if `file`
-#     type: directory     // <- optional, defaults to `directory`, options: `directory`, `file`, `absent`
+#     type: directory     // <- optional, defaults to `directory`, options: `directory` or `file`
 project_shared_children:
   - path: web/app/uploads
     src: uploads
@@ -44,6 +44,3 @@ project_environment:
 # The project_current_path is the symlink used for the latest or active deployment
 # - default is 'current'
 project_current_path: "{{ project.current_path | default('current') }}"
-
-# Helpers
-project_shared_file: "{{ item.type | default('directory') | lower in ['file', 'touch'] }}"
