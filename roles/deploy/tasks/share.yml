@@ -2,11 +2,34 @@
 - include: "{{ deploy_share_before | default('../hooks/example.yml') }}"
   tags: deploy-share-before
 
-- name: Ensure shared sources are present
+- name: Ensure shared sources are present -- directories
   file:
     path: "{{ deploy_helper.shared_path }}/{{ item.src }}"
-    state: "{{ item.type | default('directory') }}"
+    state: directory
     mode: "{{ item.mode | default('0755') }}"
+  with_items: "{{ project_shared_children }}"
+  when: item.type | default('directory') | lower == 'directory'
+
+- name: Ensure shared sources are present -- files' parent directories
+  file:
+    path: "{{ deploy_helper.shared_path }}/{{ item.src | dirname }}"
+    state: directory
+    mode: '0755'
+  with_items: "{{ project_shared_children }}"
+  when: item.type | default('directory') | lower == 'file'
+
+- name: Ensure shared sources are present -- files
+  file:
+    path: "{{ deploy_helper.shared_path }}/{{ item.src }}"
+    state: touch
+    mode: "{{ item.mode | default('0644') }}"
+  with_items: "{{ project_shared_children }}"
+  when: item.type | default('directory') | lower == 'file'
+
+- name: Ensure parent directories for shared paths are present
+  file:
+    path: "{{ deploy_helper.new_release_path }}/{{ item.path | dirname }}"
+    state: directory
   with_items: "{{ project_shared_children }}"
 
 - name: Ensure shared paths are absent

@@ -1,4 +1,5 @@
 ### HEAD
+* Create `project_shared_children` files if they do not exist ([#706](https://github.com/roots/trellis/pull/706))
 * Diffie-Hellman params now conditional on SSL status ([#709](https://github.com/roots/trellis/pull/709))
 * Update PHP to 7.1 ([#695](https://github.com/roots/trellis/pull/695))
 * Update WP-CLI to 1.0.0 ([#708](https://github.com/roots/trellis/pull/708))
