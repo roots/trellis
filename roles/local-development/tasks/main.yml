@@ -1,0 +1,44 @@
+- name: Network activate Pressbooks
+  command: wp plugin activate pressbooks --network --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+- name: List themes
+  command: wp theme list --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+- name: Enable default themes
+  command: wp theme enable {{ item[0] }} --network --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item[1].key }}/{{ item[0].value.current_path | default('current') }}/"
+  with_dict:
+    - ['pressbooks-book', 'pressbooks-custom-css', 'pressbooks-publisher', 'austen', 'clarke', 'donham', 'fitzgerald']
+    - "{{ wordpress_sites }}"
+- name: Allow new book registration
+  command: wp network meta update 1 registration blog --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+- name: Allow book-level plugin administration
+  commaned: wp network meta update 1 menu_items '{"plugins":"1"}' --format=json --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+- name: Update network title
+  command: wp network meta update 1 site_name Pressbooks --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+- name: Create unit testing database
+  mysql_db:
+    name: pressbooks_tests
+    state: present
+    login_host: "{{ site_env.db_host }}"
+    login_user: "{{ mysql_root_user }}"
+    login_password: "{{ mysql_root_password }}"
+- name: Install unit testing framework
+  command: bash bin/install-wp-tests.sh pressbooks_tests {{ mysql_root_user }} {{ mysql_root_password }}
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web/wp-content/plugins/pressbooks/"
+  with_dict: "{{ wordpress_sites }}"
