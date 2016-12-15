@@ -11,9 +11,14 @@ wordpress_sites:
     local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
     admin_email: admin@example.dev
     multisite:
-      enabled: false
+      enabled: true
+      subdomains: false
     ssl:
       enabled: false
       provider: self-signed
     cache:
       enabled: false
+    env:
+      domain_current_site: example.dev
+      wp_home: http://example.dev
+      wp_siteurl: http://example.dev/wp
