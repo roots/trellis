@@ -80,6 +80,7 @@ sites_to_export:
   - shaka
   - buildpress-light
   - adrenaline
+  - consultpress
 
 xmls_to_rename:
   hairpress: "hairpresswptheme"
