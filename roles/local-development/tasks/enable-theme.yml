@@ -1,0 +1,7 @@
+- name: Enable theme
+  command: wp theme enable {{ theme }} --network
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+  become: true
+  become_user: "{{ web_user }}"
