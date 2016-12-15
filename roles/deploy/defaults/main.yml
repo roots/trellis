@@ -21,15 +21,15 @@ project_templates:
     src: roles/deploy/templates/env.j2
     dest: .env
 
-# The shared_children is a list of all files/folders in your project that need to be linked to a path in "/shared".
+# The shared_children is a list of all files/folders in your project that need to be linked to a path in `/shared`.
 # For example a sessions directory or an uploads folder. They are created if they don't exist, with the type
 # specified in the `type` key (file or directory).
 # Example:
 # project_shared_children:
-#   - path: "app/sessions"
-#     src: "sessions"
-#     mode: "0755"
-#     type: "file" / "directory"  // <- optional, defaults to "directory"
+#   - path: app/sessions
+#     src: sessions
+#     mode: '0755'        // <- optional, must be quoted, defaults to `'0755'` if `directory` or `'0644'` if `file`
+#     type: directory     // <- optional, defaults to `directory`, options: `directory` or `file`
 project_shared_children:
   - path: web/app/uploads
     src: uploads
