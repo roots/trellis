@@ -30,11 +30,6 @@
     state: started
     enabled: true
 
-- name: Create socket directory
-  file:
-    path: /var/run/php7.1-fpm/
-    state: directory
-
 - name: PHP configuration file
   template:
     src: php.ini.j2

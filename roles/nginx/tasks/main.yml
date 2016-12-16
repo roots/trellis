@@ -21,6 +21,7 @@
   args:
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
+  when: true in [{% for key, site in wordpress_sites.iteritems() %}{{ site.ssl.enabled }},{% endfor %}]
   notify: reload nginx
   tags: [diffie-hellman]
 
