@@ -14,7 +14,7 @@ Trellis will configure a server with the following and more:
 
 * Ubuntu 16.04 Xenial LTS
 * Nginx (with optional FastCGI micro-caching)
-* PHP 7.0
+* PHP 7.1
 * MariaDB (a drop-in MySQL replacement)
 * SSL support (scores an A+ on the [Qualys SSL Labs Test](https://www.ssllabs.com/ssltest/))
 * Let's Encrypt integration for free SSL certificates
