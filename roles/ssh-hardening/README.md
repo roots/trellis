@@ -25,7 +25,7 @@ This role provides secure ssh-client and ssh-server configurations.
 |`ssh_host_key_algorithms` | ['ssh-ed25519-cert-v01@openssh.com', 'ssh-rsa-cert-v01@openssh.com', 'ssh-ed25519', 'ssh-rsa'] |Host key algorithms that the ssh-client wants to use, in order of preference.|
 |`ssh_client_alive_interval` | 600 | specifies an interval for sending keepalive messages |
 |`ssh_client_alive_count` | 3 | defines how often keep-alive messages are sent |
-|`ssh_remote_hosts` | [] | one or more hosts, to which ssh-client can connect to. Default is empty, but should be configured for security reasons!|
+|`ssh_remote_hosts` | [] | one or more hosts and their custom options for the ssh-client. Default is empty. See examples in `defaults/main.yml`.|
 |`ssh_allow_root_with_key` | false | false to disable root login altogether. Set to true to allow root to login via key-based mechanism.|
 |`ssh_allow_tcp_forwarding` | false | false to disable TCP Forwarding. Set to true to allow TCP Forwarding.|
 |`ssh_allow_agent_forwarding` | true | false to disable Agent Forwarding. Set to true to allow Agent Forwarding.|
