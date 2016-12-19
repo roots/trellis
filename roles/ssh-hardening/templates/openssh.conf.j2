@@ -39,6 +39,9 @@ CheckHostIP yes
 # Always ask before adding keys to the `known_hosts` file. Do not set to `yes`.
 StrictHostKeyChecking ask
 
+# Use a more secure preference/sequence of HostKeyAlgorithms
+HostKeyAlgorithms {{ ssh_host_key_algorithms | join(',') }}
+
 # **Ciphers** -- If your clients don't support CTR (eg older versions), cbc will be added
 # CBC: is true if you want to connect with OpenSSL-base libraries
 # eg ruby Net::SSH::Transport::CipherFactory requires cbc-versions of the given openssh ciphers to work

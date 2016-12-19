@@ -21,7 +21,8 @@ This role provides secure ssh-client and ssh-server configurations.
 |`ssh_server_ports` | ['22'] |ports to which ssh-server should listen to|
 |`ssh_client_ports` | ['22'] |ports to which ssh-client should connect to|
 |`ssh_listen_to` | ['0.0.0.0'] |one or more ip addresses, to which ssh-server should listen to. Default is all adresseses, but should be configured to specific addresses for security reasons!|
-|`ssh_host_key_files` | ['/etc/ssh/ssh_host_rsa_key', '/etc/ssh/ssh_host_dsa_key', '/etc/ssh/ssh_host_ecdsa_key'] |Host keys to look for when starting sshd.|
+|`ssh_host_key_files` | ['/etc/ssh/ssh_host_ed25519_key', '/etc/ssh/ssh_host_rsa_key'] |Host keys to look for when starting sshd.|
+|`ssh_host_key_algorithms` | ['ssh-ed25519-cert-v01@openssh.com', 'ssh-rsa-cert-v01@openssh.com', 'ssh-ed25519', 'ssh-rsa'] |Host key algorithms that the ssh-client wants to use, in order of preference.|
 |`ssh_client_alive_interval` | 600 | specifies an interval for sending keepalive messages |
 |`ssh_client_alive_count` | 3 | defines how often keep-alive messages are sent |
 |`ssh_remote_hosts` | [] | one or more hosts, to which ssh-client can connect to. Default is empty, but should be configured for security reasons!|
