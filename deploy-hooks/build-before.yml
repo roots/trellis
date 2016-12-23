@@ -10,14 +10,13 @@
 #   args:
 #     chdir: "{{ project.local_path }}/web/app/themes/sage"
 #
-# - name: Run bower install
-#   command: bower install
-#   connection: local
+# - name: Install Composer dependencies
+#   command: composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
 #   args:
-#     chdir: "{{ project.local_path }}/web/app/themes/sage"
+#     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #
-# - name: Run gulp
-#   command: gulp --production
+# - name: Compile assets for production
+#   command: npm run build:production
 #   connection: local
 #   args:
 #     chdir: "{{ project.local_path }}/web/app/themes/sage"
