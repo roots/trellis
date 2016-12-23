@@ -18,3 +18,10 @@
     owner: root
     group: root
   when: ssh_client_hardening
+
+- name: Remove Diffie-Hellman moduli of size < 2000
+  lineinfile:
+    backup: yes
+    dest: /etc/ssh/moduli
+    regexp: ^(\d+\s){4}1
+    state: absent
