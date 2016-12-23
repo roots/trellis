@@ -1,0 +1,180 @@
+# {{ansible_managed}}
+
+# This is the ssh client system-wide configuration file.
+# See sshd_config(5) for more information on any settings used. Comments will be added only to clarify why a configuration was chosen.
+
+# Basic configuration
+# ===================
+
+# Either disable or only allowssh root login via certificates.
+PermitRootLogin {{ 'without-password' if ssh_allow_root_with_key else 'no' }}
+
+# Define which port sshd should listen to. Default to `22`.
+{% for port in ssh_server_ports -%}
+Port {{port}}
+{% endfor %}
+
+# Address family should always be limited to the active network configuration.
+AddressFamily {{ 'any' if network_ipv6_enable else 'inet' }}
+
+# Define which addresses sshd should listen to. Default to `0.0.0.0`, ie make sure you put your desired address in here, since otherwise sshd will listen to everyone.
+{% for address in ssh_listen_to -%}
+ListenAddress {{address}}
+{% endfor %}
+
+# List HostKeys here.
+{% for key in ssh_host_key_files -%}
+HostKey {{key}}          # Req 20
+{% endfor %}
+
+# Security configuration
+# ======================
+
+# Set the protocol version to 2 for security reasons. Disables legacy support.
+Protocol 2
+
+# Make sure sshd checks file modes and ownership before accepting logins. This prevents accidental misconfiguration.
+StrictModes yes
+
+# Logging, obsoletes QuietMode and FascistLogging
+SyslogFacility AUTH
+LogLevel VERBOSE
+
+# Cryptography
+# ------------
+
+# **Ciphers** -- If your clients don't support CTR (eg older versions), cbc will be added
+# CBC: is true if you want to connect with OpenSSL-base libraries
+# eg ruby Net::SSH::Transport::CipherFactory requires cbc-versions of the given openssh ciphers to work
+# -- see: (http://net-ssh.github.com/net-ssh/classes/Net/SSH/Transport/CipherFactory.html)
+#
+Ciphers {{ ssh_server_cbc_required | ternary(ssh_ciphers_weak, ssh_ciphers_default) | join(',') }}
+
+# **Hash algorithms** -- Make sure not to use SHA1 for hashing, unless it is really necessary.
+# Weak HMAC is sometimes required if older package versions are used
+# eg Ruby's Net::SSH at around 2.2.* doesn't support sha2 for hmac, so this will have to be set true in this case.
+#
+MACs {{ ssh_server_weak_hmac | ternary(ssh_macs_weak, ssh_macs_default) | join(',') }}
+
+# **Key Exchange Algorithms** -- Make sure not to use SHA1 for kex, unless it is really necessary
+# Weak kex is sometimes required if older package versions are used
+# eg ruby's Net::SSH at around 2.2.* doesn't support sha2 for kex, so this will have to be set true in this case.
+# based on: https://bettercrypto.org/static/applied-crypto-hardening.pdf
+KexAlgorithms {{ ssh_server_weak_kex | ternary(ssh_kex_weak, ssh_kex_default) | join(',') }}
+
+# Authentication
+# --------------
+
+# Secure Login directives.
+UseLogin no
+UsePrivilegeSeparation {{ use_privilege_separation }}
+
+PermitUserEnvironment no
+LoginGraceTime 30s
+MaxAuthTries {{ssh_max_auth_retries}}
+MaxSessions 10
+MaxStartups 10:30:100
+
+# Enable public key authentication
+PubkeyAuthentication yes
+
+# Never use host-based authentication. It can be exploited.
+IgnoreRhosts yes
+IgnoreUserKnownHosts yes
+HostbasedAuthentication no
+
+# Enable PAM to enforce system wide rules
+UsePAM {{ 'yes' if ssh_use_pam else 'no' }}
+
+# Disable password-based authentication, it can allow for potentially easier brute-force attacks.
+PasswordAuthentication {{ 'yes' if ssh_server_password_login else 'no' }}
+PermitEmptyPasswords no
+ChallengeResponseAuthentication no
+
+# Only enable Kerberos authentication if it is configured.
+KerberosAuthentication no
+KerberosOrLocalPasswd no
+KerberosTicketCleanup yes
+#KerberosGetAFSToken no
+
+# Only enable GSSAPI authentication if it is configured.
+GSSAPIAuthentication no
+GSSAPICleanupCredentials yes
+
+# In case you don't use PAM (`UsePAM no`), you can alternatively restrict users and groups here. For key-based authentication this is not necessary, since all keys must be explicitely enabled.
+{% if ssh_deny_users -%}
+DenyUsers {{ssh_deny_users}}
+{% endif %}
+
+{% if ssh_allow_users -%}
+AllowUsers {{ssh_allow_users}}
+{% endif %}
+
+{% if ssh_deny_groups -%}
+DenyGroups {{ssh_deny_groups}}
+{% endif %}
+
+{% if ssh_allow_groups -%}
+AllowGroups {{ssh_allow_groups}}
+{% endif %}
+
+# Network
+# -------
+
+# Disable TCP keep alive since it is spoofable. Use ClientAlive messages instead, they use the encrypted channel
+TCPKeepAlive no
+
+# Manage `ClientAlive..` signals via interval and maximum count. This will periodically check up to a `..CountMax` number of times within `..Interval` timeframe, and abort the connection once these fail.
+ClientAliveInterval {{ssh_client_alive_interval}}
+ClientAliveCountMax {{ssh_client_alive_count}}
+
+# Disable tunneling
+PermitTunnel no
+
+# Disable forwarding tcp connections.
+# no real advantage without denied shell access
+AllowTcpForwarding {{ 'yes' if ssh_allow_tcp_forwarding else 'no' }}
+
+# Disable agent formwarding, since local agent could be accessed through forwarded connection.
+# no real advantage without denied shell access
+AllowAgentForwarding {{ 'yes' if ssh_allow_agent_forwarding else 'no' }}
+
+# Do not allow remote port forwardings to bind to non-loopback addresses.
+GatewayPorts no
+
+# Disable X11 forwarding, since local X11 display could be accessed through forwarded connection.
+X11Forwarding no
+X11UseLocalhost yes
+
+
+# Misc. configuration
+# ===================
+
+PrintMotd {{ 'yes' if ssh_print_motd else 'no' }}
+
+PrintLastLog {{ 'yes' if ssh_print_last_log else 'no' }}
+
+Banner {{ '/etc/ssh/banner.txt' if ssh_banner else 'none' }}
+
+DebianBanner {{ 'yes' if ssh_print_debian_banner else 'no' }}
+
+{% if ssh_accept_env -%}
+AcceptEnv {{ ssh_accept_env }}
+{% endif %}
+
+{% if sftp_enabled %}
+# Configuration, in case SFTP is used
+## override default of no subsystems
+## Subsystem sftp /opt/app/openssh5/libexec/sftp-server
+Subsystem sftp internal-sftp -l INFO -f LOCAL6
+#
+## These lines must appear at the *end* of sshd_config
+Match Group sftponly
+ForceCommand internal-sftp -l INFO -f LOCAL6
+ChrootDirectory {{ sftp_chroot_dir }}
+AllowTcpForwarding no
+AllowAgentForwarding no
+PasswordAuthentication no
+PermitRootLogin no
+X11Forwarding no
+{% endif %}
