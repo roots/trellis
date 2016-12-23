@@ -4,8 +4,8 @@
 # Uncomment the lines below and replace `sage` with your theme folder
 #
 # ---
-# - name: Run npm install
-#   command: npm install
+# - name: Run yarn install
+#   command: yarn install
 #   connection: local
 #   args:
 #     chdir: "{{ project.local_path }}/web/app/themes/sage"
@@ -16,7 +16,7 @@
 #     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #
 # - name: Compile assets for production
-#   command: npm run build:production
+#   command: yarn run build:production
 #   connection: local
 #   args:
 #     chdir: "{{ project.local_path }}/web/app/themes/sage"
