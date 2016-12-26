@@ -5,6 +5,9 @@ DEPLOY_CMD="ansible-playbook deploy.yml -e env=$1 -e site=$2"
 ENVIRONMENTS=( hosts/* )
 ENVIRONMENTS=( "${ENVIRONMENTS[@]##*/}" )
 NUM_ARGS=2
+BRANCH_NAME="$(git symbolic-ref HEAD 2>/dev/null)" ||
+BRANCH_NAME="(unnamed branch)"     # detached HEAD
+BRANCH_NAME=${BRANCH_NAME##refs/heads/}
 
 show_usage() {
   echo "Usage: deploy <environment> <site name>
@@ -33,4 +36,15 @@ if [[ ! -e $HOSTS_FILE ]]; then
   exit 0
 fi
 
-$DEPLOY_CMD
+if [[ $BRANCH_NAME != 'master' ]]
+then
+  echo -e 'You are not on master branch. Are you sure you want to continue? [y/N]'
+  read -r RESPONSE
+fi
+if [[ $RESPONSE =~ ^([yY][eE][sS]|[yY])$ ]]
+  then
+    $DEPLOY_CMD
+  else
+    echo -e 'Aborted'
+    exit 0
+fi
