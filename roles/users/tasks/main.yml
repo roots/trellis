@@ -1,8 +1,9 @@
 ---
-- name: Ensure sudo group is present
+- name: Ensure requested groups are present
   group:
-    name: sudo
+    name: "{{ item }}"
     state: present
+  with_items: "{{ users | sum(attribute='groups', start=[]) | list | unique }}"
 
 - name: Ensure sudo group has sudo privileges
   lineinfile:
