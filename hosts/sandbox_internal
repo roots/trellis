@@ -1,5 +1,5 @@
 [as]
-10.133.22.156 ansible_ssh_user=root
+10.133.22.156 ansible_ssh_user=admin
 
 [sbs]
 localhost ansible_connection=local
