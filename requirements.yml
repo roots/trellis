@@ -1,6 +1,6 @@
 - name: composer
   src: geerlingguy.composer
-  version: 1.2.7
+  version: 1.5.0
 
 - name: ntp
   src: resmo.ntp
@@ -8,7 +8,7 @@
 
 - name: logrotate
   src: nickhammond.logrotate
-  version: fc3ea4
+  version: e7a498d
 
 - name: swapfile
   src: kamaln7.swapfile
