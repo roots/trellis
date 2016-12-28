@@ -1,3 +1,6 @@
+### HEAD
+* Create `/home/vagrant/trellis` bindfs mount with proper permissions ([#705](https://github.com/roots/trellis/pull/705))
+
 ### 0.9.9: December 14th, 2016
 * Create `project_shared_children` files if they do not exist ([#706](https://github.com/roots/trellis/pull/706))
 * Diffie-Hellman params now conditional on SSL status ([#709](https://github.com/roots/trellis/pull/709))
