@@ -8,6 +8,6 @@
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ item.key }}.*"
   with_dict: "{{ wordpress_sites }}"
-  when: item.value.ssl.enabled and item.value.ssl.provider | default('manual') == 'self-signed'
+  when: ssl_enabled and item.value.ssl.provider | default('manual') == 'self-signed'
   notify:
     - reload nginx
