@@ -26,6 +26,7 @@ for site in sites:
     print 'Generating certificate for ' + site
 
     cmd = ('/usr/bin/env python {{ acme_tiny_software_directory }}/acme_tiny.py '
+           '--quiet '
            '--ca {{ letsencrypt_ca }} '
            '--account-key {{ letsencrypt_account_key }} '
            '--csr {{ acme_tiny_data_directory }}/csrs/{0}.csr '
