@@ -1,4 +1,5 @@
 ### HEAD
+* Suppress extra output in SSL certificates ([#723](https://github.com/roots/trellis/pull/723))
 * Fix #718 - improve method of updating theme paths ([#720](https://github.com/roots/trellis/pull/720))
 * Create `/home/vagrant/trellis` bindfs mount with proper permissions ([#705](https://github.com/roots/trellis/pull/705))
 
