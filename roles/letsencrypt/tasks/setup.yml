@@ -39,12 +39,6 @@
   register: generate_account_key
   when: letsencrypt_account_key_source_content is not defined and letsencrypt_account_key_source_file is not defined
 
-- name: Generate certificate renewal script
-  template:
-    src: renew-certs.py
-    dest: "{{ acme_tiny_data_directory }}/renew-certs.py"
-    mode: 0700
-
 - name: Download intermediate certificate
   get_url:
     url: "{{ letsencrypt_intermediate_cert_url }}"
