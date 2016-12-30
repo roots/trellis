@@ -59,12 +59,16 @@ Vagrant.configure('2') do |config|
 
   redirects = site_hosts.flat_map { |host| host['redirects'] }.compact
 
-  if Vagrant.has_plugin? 'vagrant-hostmanager'
+  if Vagrant.has_plugin?('vagrant-hostmanager') && !multisite_subdomains?(wordpress_sites)
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
     config.hostmanager.aliases = hostnames + redirects
+  elsif Vagrant.has_plugin?('landrush') && multisite_subdomains?(wordpress_sites)
+    config.landrush.enabled = true
+    config.landrush.tld = config.vm.hostname
+    hostnames.each { |host| config.landrush.host host, ip }
   else
-    fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager"
+    fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager\n\nOr install landrush for multisite subdomains:\nvagrant plugin install landrush"
   end
 
   bin_path = File.join(ANSIBLE_PATH_ON_VM, 'bin')
@@ -149,6 +153,10 @@ end
 
 def local_site_path(site)
   File.expand_path(site['local_path'], ANSIBLE_PATH)
+end
+
+def multisite_subdomains?(wordpress_sites)
+  wordpress_sites.any? { |(_name, site)| site['multisite'].fetch('enabled', false) && site['multisite'].fetch('subdomains', false) }
 end
 
 def nfs_path(site_name)
