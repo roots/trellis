@@ -1,4 +1,5 @@
 ### HEAD
+* Use dynamic `local_path` to accommodate Ansible running on VM ([#725](https://github.com/roots/trellis/pull/725))
 * [BREAKING] Fix #727 - HSTS: default preload to off ([#728](https://github.com/roots/trellis/pull/728))
 * `Vagrantfile`: add automatic support for landrush ([#724](https://github.com/roots/trellis/pull/724))
 * Suppress extra output in SSL certificates ([#723](https://github.com/roots/trellis/pull/723))
