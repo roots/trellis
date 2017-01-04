@@ -1,8 +1,7 @@
 ---
 - name: reload nginx
   command: nginx -t
-  register: nginx_test
-  notify: "{{ (ansible_version.full | version_compare('2.1.1.0', '>=') and role_path | basename == 'common') | ternary('perform nginx reload', omit) }}"
+  notify: "{{ (role_path | basename == 'common') | ternary('perform nginx reload', omit) }}"
 
 - name: perform nginx reload
   service:
