@@ -1,4 +1,10 @@
 # {{ ansible_managed }}
 
-auth_basic "ProteusNet restricted area.";
-auth_basic_user_file includes.d/htpasswd;
+location / {
+	satisfy any;
+
+	allow 194.249.198.130; # TPLJ
+
+	auth_basic "ProteusNet restricted area.";
+	auth_basic_user_file includes.d/htpasswd;
+}
