@@ -1,4 +1,5 @@
 ### HEAD
+* [BREAKING] Fix #727 - HSTS: default preload to off ([#728](https://github.com/roots/trellis/pull/728))
 * `Vagrantfile`: add automatic support for landrush ([#724](https://github.com/roots/trellis/pull/724))
 * Suppress extra output in SSL certificates ([#723](https://github.com/roots/trellis/pull/723))
 * Fix #718 - improve method of updating theme paths ([#720](https://github.com/roots/trellis/pull/720))
