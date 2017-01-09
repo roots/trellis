@@ -19,11 +19,11 @@ server {
 
   {% if item.value.multisite.enabled | default(false) -%}
     {% if item.value.multisite.subdomains | default(false) -%}
-      rewrite ^/(wp-.*.php)$ /wp/$1 last;
-      rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
-    {%- else -%}
       include wordpress_multisite_subdirectories.conf;
     {%- endif %}
+  {%- else -%}
+    rewrite ^/(wp-.*.php)$ /wp/$1 last;
+    rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
   {%- endif %}
 
   add_header Fastcgi-Cache $upstream_cache_status;
