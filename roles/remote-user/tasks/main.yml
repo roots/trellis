@@ -21,9 +21,3 @@
 - name: Announce which user was selected
   debug:
     msg: "Note: Ansible will attempt connections as user = {{ ansible_user }}"
-
-- name: Load become password
-  set_fact:
-    ansible_become_pass: "{% for user in vault_users | default([]) if user.name == ansible_user and user.password is defined %}{% if loop.first %}{{ user.password }}{% endif %}{% endfor %}"
-  when: ansible_user != 'root' and not cli_ask_become_pass | default(false) and ansible_become_pass is not defined
-  no_log: true
