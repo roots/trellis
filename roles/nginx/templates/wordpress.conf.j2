@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 
 # Prevent PHP scripts from being executed inside the uploads folder.
-location ~* /wp-content/uploads/.*\.php$ {
+location ~* /app/uploads/.*\.php$ {
   deny all;
 }
 
