@@ -9,7 +9,7 @@ nginx_ssl_path: "{{ nginx_path }}/ssl"
 # HSTS defaults
 nginx_hsts_max_age: 31536000
 nginx_hsts_include_subdomains: true
-nginx_hsts_preload: true
+nginx_hsts_preload: false
 
 # Fastcgi cache params
 nginx_cache_path: /var/cache/nginx
