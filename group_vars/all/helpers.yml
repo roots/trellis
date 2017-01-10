@@ -12,3 +12,5 @@ site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | l
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"
 ssl_enabled: "{{ item.value.ssl is defined and item.value.ssl.enabled | default(false) }}"
+load_balancer_enabled: "{{ item.value.load_balancer is defined and item.value.load_balancer.enabled | default(false) }}"
+ssl_terminated: "{{ load_balancer_enabled and item.value.load_balancer.ssl_terminated | default(false) }}"

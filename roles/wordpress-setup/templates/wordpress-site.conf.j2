@@ -66,17 +66,20 @@ server {
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
+    {% if ssl_terminated -%}
+    fastcgi_param HTTPS on;
+    {% endif %}
     fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
   }
 }
 
-{% if ssl_enabled %}
+{% if ssl_enabled or ssl_terminated %}
 server {
-  listen 80;
+  listen {{ (ssl_terminated and not ssl_enabled) | ternary('8080', '80') }};
 
   server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
 
-  {% if item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+  {% if ssl_enabled and item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
   include acme-challenge-location.conf;
 
   location / {
