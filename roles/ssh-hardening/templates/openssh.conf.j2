@@ -7,7 +7,7 @@
 # ===================
 
 # Address family should always be limited to the active network configuration.
-AddressFamily {{ 'any' if network_ipv6_enable else 'inet' }}
+AddressFamily {{ network_ipv6_enable | ternary('any', 'inet') }}
 
 {% for host in ssh_remote_hosts -%}
 {% if loop.first %}
@@ -23,12 +23,6 @@ Host *
 
 # The port at the destination should be defined
 Port {{ ssh_client_port }}
-
-# Identity file configuration. You may restrict available identity files. Otherwise ssh will search for a pattern and use any that matches.
-#IdentityFile ~/.ssh/identity
-#IdentityFile ~/.ssh/id_rsa
-#IdentityFile ~/.ssh/id_dsa
-
 
 # Security configuration
 # ======================
@@ -81,7 +75,7 @@ RhostsRSAAuthentication no
 RSAAuthentication yes
 
 # Disable password-based authentication, it can allow for potentially easier brute-force attacks.
-PasswordAuthentication {{ 'yes' if ssh_client_password_login else 'no' }}
+PasswordAuthentication {{ ssh_client_password_login | ternary('yes', 'no') }}
 
 # Only use GSSAPIAuthentication if implemented on the network.
 GSSAPIAuthentication no
@@ -108,4 +102,4 @@ SendEnv {{ ssh_send_env }}
 {% endif %}
 
 # Disable experimental client roaming. This is known to cause potential issues with secrets being disclosed to malicious servers and defaults to being disabled.
-UseRoaming {{ 'yes' if ssh_client_roaming else 'no' }}
+UseRoaming {{ ssh_client_roaming | ternary('yes', 'no') }}

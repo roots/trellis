@@ -7,24 +7,24 @@
 # ===================
 
 # Either disable or only allowssh root login via certificates.
-PermitRootLogin {{ 'without-password' if ssh_allow_root_with_key else 'no' }}
+PermitRootLogin {{ ssh_allow_root_with_key | ternary('without-password', 'no') }}
 
 # Define which port sshd should listen to. Default to `22`.
 {% for port in ssh_server_ports -%}
-Port {{port}}
+Port {{ port }}
 {% endfor %}
 
 # Address family should always be limited to the active network configuration.
-AddressFamily {{ 'any' if network_ipv6_enable else 'inet' }}
+AddressFamily {{i network_ipv6_enable | ternary('any', 'inet') }}
 
 # Define which addresses sshd should listen to. Default to `0.0.0.0`, ie make sure you put your desired address in here, since otherwise sshd will listen to everyone.
 {% for address in ssh_listen_to -%}
-ListenAddress {{address}}
+ListenAddress {{ address }}
 {% endfor %}
 
 # List HostKeys here.
 {% for key in ssh_host_key_files -%}
-HostKey {{key}}          # Req 20
+HostKey {{ key }}          # Req 20
 {% endfor %}
 
 # Security configuration
@@ -71,7 +71,7 @@ UsePrivilegeSeparation {{ use_privilege_separation }}
 
 PermitUserEnvironment no
 LoginGraceTime 30s
-MaxAuthTries {{ssh_max_auth_retries}}
+MaxAuthTries {{ ssh_max_auth_retries }}
 MaxSessions 10
 MaxStartups 10:30:100
 
@@ -84,10 +84,10 @@ IgnoreUserKnownHosts yes
 HostbasedAuthentication no
 
 # Enable PAM to enforce system wide rules
-UsePAM {{ 'yes' if ssh_use_pam else 'no' }}
+UsePAM {{ ssh_use_pam | ternary('yes', 'no') }}
 
 # Disable password-based authentication, it can allow for potentially easier brute-force attacks.
-PasswordAuthentication {{ 'yes' if ssh_server_password_login else 'no' }}
+PasswordAuthentication {{ ssh_server_password_login | ternary('yes', 'no') }}
 PermitEmptyPasswords no
 ChallengeResponseAuthentication no
 
@@ -103,19 +103,19 @@ GSSAPICleanupCredentials yes
 
 # In case you don't use PAM (`UsePAM no`), you can alternatively restrict users and groups here. For key-based authentication this is not necessary, since all keys must be explicitely enabled.
 {% if ssh_deny_users -%}
-DenyUsers {{ssh_deny_users}}
+DenyUsers {{ ssh_deny_users }}
 {% endif %}
 
 {% if ssh_allow_users -%}
-AllowUsers {{ssh_allow_users}}
+AllowUsers {{ ssh_allow_users }}
 {% endif %}
 
 {% if ssh_deny_groups -%}
-DenyGroups {{ssh_deny_groups}}
+DenyGroups {{ ssh_deny_groups }}
 {% endif %}
 
 {% if ssh_allow_groups -%}
-AllowGroups {{ssh_allow_groups}}
+AllowGroups {{ ssh_allow_groups }}
 {% endif %}
 
 # Network
@@ -125,19 +125,19 @@ AllowGroups {{ssh_allow_groups}}
 TCPKeepAlive no
 
 # Manage `ClientAlive..` signals via interval and maximum count. This will periodically check up to a `..CountMax` number of times within `..Interval` timeframe, and abort the connection once these fail.
-ClientAliveInterval {{ssh_client_alive_interval}}
-ClientAliveCountMax {{ssh_client_alive_count}}
+ClientAliveInterval {{ ssh_client_alive_interval }}
+ClientAliveCountMax {{ ssh_client_alive_count }}
 
 # Disable tunneling
 PermitTunnel no
 
 # Disable forwarding tcp connections.
 # no real advantage without denied shell access
-AllowTcpForwarding {{ 'yes' if ssh_allow_tcp_forwarding else 'no' }}
+AllowTcpForwarding {{ ssh_allow_tcp_forwarding | ternary('yes', 'no') }}
 
 # Disable agent formwarding, since local agent could be accessed through forwarded connection.
 # no real advantage without denied shell access
-AllowAgentForwarding {{ 'yes' if ssh_allow_agent_forwarding else 'no' }}
+AllowAgentForwarding {{ ssh_allow_agent_forwarding | ternary('yes', 'no') }}
 
 # Do not allow remote port forwardings to bind to non-loopback addresses.
 GatewayPorts no
@@ -150,13 +150,13 @@ X11UseLocalhost yes
 # Misc. configuration
 # ===================
 
-PrintMotd {{ 'yes' if ssh_print_motd else 'no' }}
+PrintMotd {{ ssh_print_motd | ternary('yes', 'no') }}
 
-PrintLastLog {{ 'yes' if ssh_print_last_log else 'no' }}
+PrintLastLog {{ ssh_print_last_log | ternary('yes', 'no') }}
 
-Banner {{ '/etc/ssh/banner.txt' if ssh_banner else 'none' }}
+Banner {{ ssh_banner | ternary('/etc/ssh/banner.txt', 'none') }}
 
-DebianBanner {{ 'yes' if ssh_print_debian_banner else 'no' }}
+DebianBanner {{ ssh_print_debian_banner | ternary('yes', 'no') }}
 
 {% if ssh_accept_env -%}
 AcceptEnv {{ ssh_accept_env }}
