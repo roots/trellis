@@ -75,7 +75,7 @@ server {
 
 {% if ssl_enabled or ssl_terminated %}
 server {
-  listen {{ (ssl_terminated and not ssl_enabled) | ternary('8080', '80') }};
+  listen {{ (ssl_terminated and not ssl_enabled) | ternary(ssl_terminated_http_port, '80') }};
 
   server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
 
