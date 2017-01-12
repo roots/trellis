@@ -8,7 +8,7 @@
 #   command: yarn install
 #   connection: local
 #   args:
-#     chdir: "{{ project.local_path }}/web/app/themes/sage"
+#     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #
 # - name: Install Composer dependencies
 #   command: composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
@@ -19,11 +19,11 @@
 #   command: yarn run build:production
 #   connection: local
 #   args:
-#     chdir: "{{ project.local_path }}/web/app/themes/sage"
+#     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #
 # - name: Copy project local files
 #   synchronize:
-#     src: "{{ project.local_path }}/web/app/themes/sage/dist"
+#     src: "{{ project_local_path }}/web/app/themes/sage/dist"
 #     dest: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #     group: no
 #     owner: no
