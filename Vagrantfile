@@ -103,7 +103,9 @@ Vagrant.configure('2') do |config|
     end
 
     ansible.playbook = File.join(provisioning_path, 'dev.yml')
-    ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml')
+    unless ENV['SKIP_GALAXY']
+      ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml')
+    end
     ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
 
     ansible.groups = {
