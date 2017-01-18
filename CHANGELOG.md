@@ -1,3 +1,13 @@
+### HEAD
+* Add `SKIP_GALAXY` env var to skip galaxy install in Vagrant ([#734](https://github.com/roots/trellis/pull/734))
+* Avoid `loop.first` variable in conditional jinja loops ([#729](https://github.com/roots/trellis/pull/729))
+* Use dynamic `local_path` to accommodate Ansible running on VM ([#725](https://github.com/roots/trellis/pull/725))
+* [BREAKING] Fix #727 - HSTS: default preload to off ([#728](https://github.com/roots/trellis/pull/728))
+* `Vagrantfile`: add automatic support for landrush ([#724](https://github.com/roots/trellis/pull/724))
+* Suppress extra output in SSL certificates ([#723](https://github.com/roots/trellis/pull/723))
+* Fix #718 - improve method of updating theme paths ([#720](https://github.com/roots/trellis/pull/720))
+* Create `/home/vagrant/trellis` bindfs mount with proper permissions ([#705](https://github.com/roots/trellis/pull/705))
+
 ### 0.9.9: December 14th, 2016
 * Create `project_shared_children` files if they do not exist ([#706](https://github.com/roots/trellis/pull/706))
 * Diffie-Hellman params now conditional on SSL status ([#709](https://github.com/roots/trellis/pull/709))

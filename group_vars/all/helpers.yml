@@ -4,10 +4,11 @@ wordpress_env_defaults:
   db_user: "{{ item.key | underscore }}"
   disable_wp_cron: true
   wp_env: "{{ env }}"
-  wp_home: "{{ item.value.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ site_hosts_canonical | first }}"
-  wp_siteurl: "{{ item.value.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ site_hosts_canonical | first }}/wp"
+  wp_home: "{{ ssl_enabled | ternary('https', 'http') }}://{{ site_hosts_canonical | first }}"
+  wp_siteurl: "{{ ssl_enabled | ternary('https', 'http') }}://{{ site_hosts_canonical | first }}/wp"
 
 site_env: "{{ wordpress_env_defaults | combine(item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"
+ssl_enabled: "{{ item.value.ssl is defined and item.value.ssl.enabled | default(false) }}"
