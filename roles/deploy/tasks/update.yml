@@ -26,6 +26,7 @@
     repo: "{{ project_git_repo }}"
     dest: "{{ project_source_path }}"
     version: "{{ project_version }}"
+    bare: yes
     accept_hostkey: yes
   ignore_errors: true
   no_log: true
