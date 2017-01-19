@@ -12,7 +12,7 @@
     command: wp core update-db
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: project.multisite.enabled | default(false)
+    when: not project.multisite.enabled | default(false)
 
   - name: Warn about updating network database.
     debug:
