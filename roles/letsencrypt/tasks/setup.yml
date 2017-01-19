@@ -1,3 +1,4 @@
+---
 - name: Create directories and set permissions
   file:
     mode: "{{ item.mode | default(omit) }}"

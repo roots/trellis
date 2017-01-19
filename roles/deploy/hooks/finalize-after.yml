@@ -2,36 +2,49 @@
 - name: WordPress Installed?
   command: wp core is-installed {{ project.multisite.enabled | default(false) | ternary('--network', '') }}
   args:
-    chdir: "{{ deploy_helper.new_release_path }}"
+    chdir: "{{ deploy_helper.current_path }}"
   register: wp_installed
   changed_when: false
   failed_when: wp_installed.stderr != ""
 
-- name: Update WP theme paths
-  command: wp eval 'wp_clean_themes_cache(); switch_theme(get_stylesheet());'
-  args:
-    chdir: "{{ deploy_helper.new_release_path }}"
+- block:
+  - name: Update WP database
+    command: wp core update-db
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
+    when: not project.multisite.enabled | default(false)
+
+  - name: Warn about updating network database.
+    debug:
+      msg: "Updating the network database could take a long time with a large number of sites."
+    when: project.multisite.enabled | default(false)
+
+  - name: Update WP network database
+    command: wp core update-db --network
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
+    when: project.multisite.enabled | default(false)
+
+  - name: Get WP theme template root
+    command: wp option get template_root
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
+    register: wp_template_root
+    changed_when: false
+    failed_when: wp_template_root.stderr != ""
+
+  - name: Update WP theme paths
+    command: wp option set {{ item }} {{ deploy_helper.new_release_path }}/web/wp/wp-content/themes
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
+    when: wp_template_root.stdout != '' and wp_template_root.stdout != '/themes'
+    with_items:
+      - stylesheet_root
+      - template_root
+
   when: wp_installed | success
-
-- name: Update WP database
-  command: wp core update-db
-  args:
-    chdir: "{{ deploy_helper.new_release_path }}"
-  when: wp_installed | success and not project.multisite.enabled | default(false)
-
-- name: Warn about updating network database.
-  debug:
-    msg: "Updating the network database could take a long time with a large number of sites."
-  when: wp_installed | success and project.multisite.enabled | default(false)
-
-- name: Update WP network database
-  command: wp core update-db --network
-  args:
-    chdir: "{{ deploy_helper.new_release_path }}"
-  when: wp_installed | success and project.multisite.enabled | default(false)
 
 - name: Reload php-fpm
   shell: sudo service php7.1-fpm reload
   args:
-    chdir: "{{ deploy_helper.new_release_path }}"
     warn: false

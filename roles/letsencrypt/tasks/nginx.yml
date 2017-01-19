@@ -1,3 +1,4 @@
+---
 - name: Check for existing Nginx conf per site
   stat:
     path: "{{ nginx_path }}/sites-enabled/{{ item.key }}.conf"
@@ -25,6 +26,7 @@
     state: link
   when: not item | skipped and not item.stat.exists
   with_items: "{{ nginx_confs.results }}"
+  notify: disable temporary challenge sites
 
 - include: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
   when: sites_need_confs
