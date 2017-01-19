@@ -84,6 +84,7 @@ sites_to_export:
   - adrenaline
   - consultpress
   - buildpress-landscape
+  - buildpress-rtl
 
 xmls_to_rename:
   hairpress: "hairpresswptheme"
@@ -92,6 +93,7 @@ xmls_to_rename:
   bolts-transport: "boltstransport"
   buildpress-light: "buildpresslight"
   buildpress-landscape: "buildpresslandscape"
+  buildpress-rtl: "buildpressrtl"
 
 xml_paths:
   local:  "/tmp/xml-exports"
