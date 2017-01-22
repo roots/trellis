@@ -11,7 +11,7 @@ server {
 
   root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;
   index index.php index.htm index.html;
-
+  add_header Fastcgi-Cache $upstream_cache_status;
   charset utf-8;
 
   # Set the max body size equal to PHP's max POST size.
@@ -40,9 +40,33 @@ server {
   {% endif -%}
   {% endblock -%}
 
-  add_header Fastcgi-Cache $upstream_cache_status;
+  {% block https -%}
+  {% if ssl_enabled -%}
+  # SSL configuration
+  include h5bp/directive-only/ssl.conf;
+  include h5bp/directive-only/ssl-stapling.conf;
 
-  {% if ssl_enabled %}{{ lookup('template', 'https.conf.j2') }}{% endif %}
+  ssl_dhparam /etc/nginx/ssl/dhparams.pem;
+  ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
+
+  add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
+
+  {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
+
+  {% elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}-bundled.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
+
+  {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
+  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ item.key }}.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.key }}.key;
+
+  {% endif -%}
+  {% endif -%}
+  {% endblock -%}
 
   {% if not ssl_enabled %}include acme-challenge-location.conf;{% endif %}
 
@@ -121,7 +145,7 @@ server {
 server {
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
 
-  {% if ssl_enabled %}{{ lookup('template', 'https.conf.j2') }}{% endif %}
+  {{ self.https() -}}
 
   server_name {{ host.redirects | join(' ') }};
 

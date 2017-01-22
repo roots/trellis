@@ -5,12 +5,6 @@ nginx_logs_root: /var/log/nginx
 nginx_user: www-data
 nginx_fastcgi_buffers: 8 8k
 nginx_fastcgi_buffer_size: 8k
-nginx_ssl_path: "{{ nginx_path }}/ssl"
-
-# HSTS defaults
-nginx_hsts_max_age: 31536000
-nginx_hsts_include_subdomains: true
-nginx_hsts_preload: false
 
 # Fastcgi cache params
 nginx_cache_path: /var/cache/nginx
