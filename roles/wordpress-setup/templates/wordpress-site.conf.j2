@@ -68,7 +68,9 @@ server {
   {% endif -%}
   {% endblock -%}
 
-  {% if not ssl_enabled %}include acme-challenge-location.conf;{% endif %}
+  {% block acme_challenge -%}
+  include acme-challenge-location.conf;
+  {% endblock %}
 
   {% block cache_conditions -%}
   {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
@@ -127,36 +129,39 @@ server {
   }
 }
 
+{% block redirects_https %}
 {% if ssl_enabled %}
+# Redirect to https
 server {
   listen 80;
-
   server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
 
-  include acme-challenge-location.conf;
+  {{ self.acme_challenge() -}}
 
   location / {
     return 301 https://$host$request_uri;
   }
 }
-{% endif %}
 
+{% endif %}
+{% endblock -%}
+
+{%- block redirects_domains %}
+{% if site_hosts_redirects | default([]) | count %}
+# Redirect some domains
+{% endif %}
 {% for host in item.value.site_hosts if host.redirects | default([]) %}
 server {
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
+  server_name {{ host.redirects | join(' ') }};
 
   {{ self.https() -}}
 
-  server_name {{ host.redirects | join(' ') }};
+  {{ self.acme_challenge() -}}
 
-  {% if not ssl_enabled -%}
-    include acme-challenge-location.conf;
-
-    location / {
-      return 301 $scheme://{{ host.canonical }}$request_uri;
-    }
-  {% else %}
+  location / {
     return 301 $scheme://{{ host.canonical }}$request_uri;
-  {% endif %}
+  }
 }
 {% endfor %}
+{% endblock %}
