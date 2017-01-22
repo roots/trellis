@@ -1,0 +1,23 @@
+{% for host in item.value.site_hosts if host.redirects | default([]) %}
+server {
+  {% if ssl_enabled -%}
+    listen 443 ssl http2;
+
+    {{ lookup('template', 'https.conf.j2') | indent(4) }}
+  {% else -%}
+    listen 80;
+  {% endif -%}
+
+  server_name {{ host.redirects | join(' ') }};
+
+  {% if not ssl_enabled -%}
+    include acme-challenge-location.conf;
+
+    location / {
+      return 301 $scheme://{{ host.canonical }}$request_uri;
+    }
+  {% else %}
+    return 301 $scheme://{{ host.canonical }}$request_uri;
+  {% endif %}
+}
+{% endfor %}

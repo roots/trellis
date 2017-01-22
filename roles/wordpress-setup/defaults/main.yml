@@ -3,3 +3,7 @@ nginx_includes_templates_path: nginx-includes
 nginx_includes_deprecated: roles/wordpress-setup/templates/includes.d
 nginx_includes_pattern: "^({{ nginx_includes_templates_path | regex_escape }}|{{ nginx_includes_deprecated | regex_escape }})/(.*)\\.j2$"
 nginx_includes_d_cleanup: true
+nginx_server_before: ''
+nginx_location_before: include includes.d/{{ item.key }}/*.conf;
+nginx_location: ''
+nginx_location_php: ''

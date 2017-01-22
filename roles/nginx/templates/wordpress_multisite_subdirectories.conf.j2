@@ -1,7 +1,0 @@
-# {{ ansible_managed }}
-
-if (!-e $request_filename) {
-  rewrite /wp-admin$ $scheme://$host$uri/ permanent;
-  rewrite ^(/[^/]+)?(/wp-.*) /wp$2 last;
-  rewrite ^(/[^/]+)?(/.*\.php) /wp$2 last;
-}
