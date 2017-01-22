@@ -55,11 +55,6 @@
     creates: "{{ nginx_path }}/sites-enabled/no-default.conf"
   notify: reload nginx
 
-- name: Create base WordPress config
-  template:
-    src: wordpress.conf.j2
-    dest: "{{ nginx_path }}/wordpress.conf"
-
 - name: Create base WordPress subdirectory Multisite config
   template:
     src: wordpress_multisite_subdirectories.conf.j2
