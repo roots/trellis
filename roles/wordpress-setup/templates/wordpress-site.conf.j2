@@ -1,5 +1,7 @@
 # {{ ansible_managed }}
 
+{% block server_before %}{% endblock %}
+
 server {
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
 
