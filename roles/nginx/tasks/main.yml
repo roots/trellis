@@ -39,7 +39,7 @@
 
 - name: Create nginx.conf
   template:
-    src: nginx.conf.j2
+    src: "{{ nginx_conf }}"
     dest: "{{ nginx_path }}/nginx.conf"
   notify: reload nginx
 

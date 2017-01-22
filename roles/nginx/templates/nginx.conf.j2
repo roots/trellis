@@ -32,6 +32,8 @@ error_log  {{ nginx_logs_root }}/error.log warn;
 pid        /run/nginx.pid;
 
 http {
+  {% block http_begin %}{% endblock %}
+
   # Hide nginx version information.
   server_tokens off;
 
