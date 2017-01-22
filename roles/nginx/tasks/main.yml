@@ -54,8 +54,3 @@
   args:
     creates: "{{ nginx_path }}/sites-enabled/no-default.conf"
   notify: reload nginx
-
-- name: Create base WordPress subdirectory Multisite config
-  template:
-    src: wordpress_multisite_subdirectories.conf.j2
-    dest: "{{ nginx_path }}/wordpress_multisite_subdirectories.conf"

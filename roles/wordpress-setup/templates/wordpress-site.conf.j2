@@ -27,7 +27,11 @@ server {
       rewrite ^/(wp-.*.php)$ /wp/$1 last;
       rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
     {%- else -%}
-      include wordpress_multisite_subdirectories.conf;
+      if (!-e $request_filename) {
+        rewrite /wp-admin$ $scheme://$host$uri/ permanent;
+        rewrite ^(/[^/]+)?(/wp-.*) /wp$2 last;
+        rewrite ^(/[^/]+)?(/.*\.php) /wp$2 last;
+      }
     {%- endif %}
   {%- endif %}
 
