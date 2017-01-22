@@ -70,23 +70,21 @@ server {
 
   {% if not ssl_enabled %}include acme-challenge-location.conf;{% endif %}
 
+  {% block cache_conditions -%}
   {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
-    set $skip_cache 0;
-
-    if ($query_string != "") {
-      set $skip_cache 1;
-    }
-
-    # Don't cache uris containing the following segments
-    if ($request_uri ~* "{{ item.value.cache.skip_cache_uri | default(nginx_skip_cache_uri) }}") {
-      set $skip_cache 1;
-    }
-
-    # Don't use the cache if cookies includes the following
-    if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
-      set $skip_cache 1;
-    }
+  # Fastcgi cache conditions
+  set $skip_cache 0;
+  if ($query_string != "") {
+    set $skip_cache 1;
+  }
+  if ($request_uri ~* "{{ item.value.cache.skip_cache_uri | default(nginx_skip_cache_uri) }}") {
+    set $skip_cache 1;
+  }
+  if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
+    set $skip_cache 1;
+  }
   {% endif -%}
+  {% endblock %}
 
   include includes.d/{{ item.key }}/*.conf;
 
@@ -113,12 +111,14 @@ server {
   location ~ \.php$ {
     try_files $uri /index.php;
 
+    {% block cache_config -%}
     {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
-      fastcgi_cache wordpress;
-      fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
-      fastcgi_cache_bypass $skip_cache;
-      fastcgi_no_cache $skip_cache;
+    fastcgi_cache wordpress;
+    fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
+    fastcgi_cache_bypass $skip_cache;
+    fastcgi_no_cache $skip_cache;
     {% endif -%}
+    {% endblock -%}
 
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
