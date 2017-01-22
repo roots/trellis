@@ -42,6 +42,7 @@
     src: "{{ nginx_conf }}"
     dest: "{{ nginx_path }}/nginx.conf"
   notify: reload nginx
+  tags: nginx-includes
 
 - name: Disable default server
   file:
