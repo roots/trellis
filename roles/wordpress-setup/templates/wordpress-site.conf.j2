@@ -3,12 +3,17 @@
 {% block server_before %}{% endblock %}
 
 server {
+  {% block server_id -%}
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
-
   server_name  {% for host in site_hosts_canonical %}{{ host }} {% if item.value.multisite.subdomains | default(false) %}*.{{ host }} {% endif %}{% endfor %};
+  {% endblock %}
+
+  {% block logs -%}
   access_log   {{ www_root }}/{{ item.key }}/logs/access.log main;
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
+  {% endblock %}
 
+  {% block server_basic -%}
   root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;
   index index.php index.htm index.html;
   add_header Fastcgi-Cache $upstream_cache_status;
@@ -20,7 +25,9 @@ server {
   {% if env == 'development' -%}
   # https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/#virtualbox
   sendfile off;
-  {%- endif %}
+
+  {% endif -%}
+  {% endblock -%}
 
   {% block multisite_rewrites -%}
   {% if item.value.multisite.enabled | default(false) -%}
@@ -70,7 +77,8 @@ server {
 
   {% block acme_challenge -%}
   include acme-challenge-location.conf;
-  {% endblock %}
+
+  {% endblock -%}
 
   {% block cache_conditions -%}
   {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
@@ -85,10 +93,14 @@ server {
   if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
     set $skip_cache 1;
   }
-  {% endif -%}
-  {% endblock %}
 
+  {% endif -%}
+  {% endblock -%}
+
+  {% block includes_d -%}
   include includes.d/{{ item.key }}/*.conf;
+
+  {% endblock -%}
 
   {% block location_uploads_php -%}
   # Prevent PHP scripts from being executed inside the uploads folder.
@@ -110,23 +122,34 @@ server {
   include h5bp/location/protect-system-files.conf;
   {% endblock %}
 
+  {% block location_php -%}
   location ~ \.php$ {
+    {% block location_php_basic -%}
     try_files $uri /index.php;
+
+    {% endblock -%}
 
     {% block cache_config -%}
     {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+    # Fastcgi cache settings
     fastcgi_cache wordpress;
     fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
     fastcgi_cache_bypass $skip_cache;
     fastcgi_no_cache $skip_cache;
+
     {% endif -%}
     {% endblock -%}
 
+    {% block fastcgi_basic -%}
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
     fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
+    {%- endblock %}
+
   }
+  {%- endblock %}
+
 }
 
 {% block redirects_https %}
