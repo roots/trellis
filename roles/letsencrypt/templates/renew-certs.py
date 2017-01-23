@@ -6,14 +6,12 @@ import time
 
 from subprocess import CalledProcessError, check_output, STDOUT
 
-certs_dir = '{{ letsencrypt_certs_dir }}'
 failed = False
-sites = {{ wordpress_sites }}
-sites = (k for k, v in sites.items() if 'ssl' in v and v['ssl'].get('enabled', False) and v['ssl'].get('provider', 'manual') == 'letsencrypt')
+letsencrypt_cert_ids = {{ letsencrypt_cert_ids }}
 
-for site in sites:
-    cert_path = os.path.join(certs_dir, site + '.cert')
-    bundled_cert_path = os.path.join(certs_dir, site + '-bundled.cert')
+for site in {{ sites_using_letsencrypt }}:
+    cert_path = os.path.join('{{ letsencrypt_certs_dir }}', site + '-' + letsencrypt_cert_ids[site] + '.cert')
+    bundled_cert_path = os.path.join('{{ letsencrypt_certs_dir }}', site + '-' + letsencrypt_cert_ids[site] + '-bundled.cert')
 
     if os.access(cert_path, os.F_OK):
         stat = os.stat(cert_path)
@@ -29,9 +27,9 @@ for site in sites:
            '--quiet '
            '--ca {{ letsencrypt_ca }} '
            '--account-key {{ letsencrypt_account_key }} '
-           '--csr {{ acme_tiny_data_directory }}/csrs/{0}.csr '
+           '--csr {{ acme_tiny_data_directory }}/csrs/{0}-{1}.csr '
            '--acme-dir {{ acme_tiny_challenges_directory }}'
-           ).format(site)
+           ).format(site, letsencrypt_cert_ids[site])
 
     try:
         cert = check_output(cmd, stderr=STDOUT, shell=True)

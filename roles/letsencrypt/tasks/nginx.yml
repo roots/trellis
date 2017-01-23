@@ -1,35 +1,38 @@
 ---
-- name: Check for existing Nginx conf per site
-  stat:
-    path: "{{ nginx_path }}/sites-enabled/{{ item.key }}.conf"
-  register: nginx_confs
-  when: site_uses_letsencrypt
-  with_dict: "{{ wordpress_sites }}"
-
 - name: Create Nginx conf for challenges location
   template:
     src: acme-challenge-location.conf.j2
     dest: "{{ nginx_path }}/acme-challenge-location.conf"
-  when: sites_need_confs
+
+- name: Get list of hosts in current Nginx conf
+  shell: |
+    [ ! -f {{ nginx_path }}/sites-enabled/{{ item.key }}.conf ] ||
+    sed -n -e "/listen 80/,/server_name/{s/server_name \(.*\);/\1/p}" {{ nginx_path }}/sites-enabled/{{ item.key }}.conf
+  register: current_hosts
+  changed_when: false
+  when: site_uses_letsencrypt
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Create needed Nginx confs for challenges
   template:
     src: nginx-challenge-site.conf.j2
-    dest: "{{ nginx_path }}/sites-available/letsencrypt-{{ item.item.key }}.conf"
-  when: not item | skipped and not item.stat.exists
-  with_items: "{{ nginx_confs.results }}"
+    dest: "{{ nginx_path }}/sites-available/letsencrypt-{{ item.key }}.conf"
+  register: challenge_site_confs
+  when: missing_hosts | count
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Enable Nginx sites
   file:
-    src: "{{ nginx_path }}/sites-available/letsencrypt-{{ item.item.key }}.conf"
-    dest: "{{ nginx_path }}/sites-enabled/letsencrypt-{{ item.item.key }}.conf"
+    src: "{{ nginx_path }}/sites-available/letsencrypt-{{ item.key }}.conf"
+    dest: "{{ nginx_path }}/sites-enabled/letsencrypt-{{ item.key }}.conf"
     state: link
-  when: not item | skipped and not item.stat.exists
-  with_items: "{{ nginx_confs.results }}"
+  register: challenge_sites_enabled
+  when: missing_hosts | count
+  with_dict: "{{ wordpress_sites }}"
   notify: disable temporary challenge sites
 
 - include: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
-  when: sites_need_confs
+  when: challenge_site_confs | changed or challenge_sites_enabled | changed
 
 - name: Create test Acme Challenge file
   shell: touch {{ acme_tiny_challenges_directory }}/ping.txt
