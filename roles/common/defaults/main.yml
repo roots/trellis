@@ -17,4 +17,4 @@ apt_packages_default:
   - libnss-myhostname
 
 apt_packages_custom: []
-apt_packages_install: "{{ default_apt_packages + custom_apt_packages }}"
+apt_packages_install: "{{ apt_packages_default + apt_packages_custom }}"
