@@ -1,4 +1,9 @@
 ### HEAD
+* Add `apt_packages_custom` to customize Apt packages ([#735](https://github.com/roots/trellis/pull/735))
+* Enable Let's Encrypt to detect updated `site_hosts` ([#630](https://github.com/roots/trellis/pull/630))
+* Add `SKIP_GALAXY` env var to skip galaxy install in Vagrant ([#734](https://github.com/roots/trellis/pull/734))
+* Avoid `loop.first` variable in conditional jinja loops ([#729](https://github.com/roots/trellis/pull/729))
+* Use dynamic `local_path` to accommodate Ansible running on VM ([#725](https://github.com/roots/trellis/pull/725))
 * [BREAKING] Fix #727 - HSTS: default preload to off ([#728](https://github.com/roots/trellis/pull/728))
 * `Vagrantfile`: add automatic support for landrush ([#724](https://github.com/roots/trellis/pull/724))
 * Suppress extra output in SSL certificates ([#723](https://github.com/roots/trellis/pull/723))

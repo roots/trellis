@@ -50,15 +50,7 @@
     state: present
     update_cache: true
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_items:
-  - python-software-properties
-  - python-pycurl
-  - build-essential
-  - python-mysqldb
-  - curl
-  - git-core
-  - dbus
-  - libnss-myhostname
+  with_items: "{{ apt_packages_install }}"
 
 - name: Validate timezone variable
   stat:

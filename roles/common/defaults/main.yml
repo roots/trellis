@@ -5,3 +5,16 @@ ansible_requirements:
     operator: '!='
 
 ntp_timezone: Etc/UTC
+
+apt_packages_default:
+  - python-software-properties
+  - python-pycurl
+  - build-essential
+  - python-mysqldb
+  - curl
+  - git-core
+  - dbus
+  - libnss-myhostname
+
+apt_packages_custom: []
+apt_packages_install: "{{ apt_packages_default + apt_packages_custom }}"
