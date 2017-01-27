@@ -6,29 +6,14 @@ Protocol {{ sshd_protocol }}
 HostKey {{ sshd_host_rsa_key }}
 HostKey {{ sshd_host_dsa_key }}
 HostKey {{ sshd_host_ecdsa_key }}
-UsePrivilegeSeparation {{ sshd_use_privilege_separation | ternary('yes', 'no') }}
-SyslogFacility {{ sshd_syslog_facility }}
-LogLevel {{ sshd_log_level }}
 LoginGraceTime {{ sshd_login_grace_time }}
 PermitRootLogin {{ sshd_permit_root_login | ternary('yes', 'no') }}
-StrictModes {{ sshd_strict_modes | ternary('yes', 'no') }}
-PubkeyAuthentication {{ sshd_pubkey_authentication | ternary('yes', 'no') }}
-AuthorizedKeysFile {{ sshd_authorized_keys_file }}
-IgnoreRhosts {{ sshd_ignore_rhosts | ternary('yes', 'no') }}
-HostbasedAuthentication {{ sshd_host_based_authentication | ternary('yes', 'no') }}
-IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts | ternary('yes', 'no') }}
-PermitEmptyPasswords {{ sshd_permit_empty_passwords | ternary('yes', 'no') }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}
 PasswordAuthentication {{ sshd_password_authentication | ternary('yes', 'no') }}
-GSSAPIAuthentication {{ sshd_gss_api_authentication | ternary('yes', 'no') }}
-GSSAPICleanupCredentials {{ sshd_gss_api_cleanup_credentials | ternary('yes', 'no') }}
 X11Forwarding {{ sshd_x11_forwarding | ternary('yes', 'no') }}
-X11DisplayOffset {{ sshd_x11_display_offset }}
 PrintMotd {{ sshd_print_motd | ternary('yes', 'no') }}
 PrintLastLog {{ sshd_print_last_log | ternary('yes', 'no') }}
 TCPKeepAlive {{ sshd_tcp_keep_alive | ternary('yes', 'no') }}
-MaxStartups {{ sshd_max_startups }}
-Banner {{ sshd_banner }}
 AcceptEnv {{ sshd_accept_env | join(' ') }}
 Subsystem {{ sshd_subsystem }}
 UsePAM {{ sshd_use_pam | ternary('yes', 'no') }}
