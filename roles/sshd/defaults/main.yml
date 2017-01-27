@@ -8,7 +8,7 @@ sshd_host_ecdsa_key: /etc/ssh/ssh_host_ecdsa_key
 sshd_use_privilege_separation: true
 sshd_syslog_facility: AUTH
 sshd_log_level: INFO
-sshd_login_grace_time: 120
+sshd_login_grace_time: 30
 sshd_permit_root_login: true
 sshd_strict_modes: true
 sshd_pubkey_authentication: true
@@ -21,13 +21,13 @@ sshd_challenge_response_authentication: false
 sshd_password_authentication: false
 sshd_gss_api_authentication: false
 sshd_gss_api_cleanup_credentials: true
-sshd_x11_forwarding: true
+sshd_x11_forwarding: false
 sshd_x11_display_offset: 10
 sshd_print_motd: false
-sshd_print_last_log: true
+sshd_print_last_log: false
 sshd_tcp_keep_alive: true
 sshd_max_startups: 10:30:100
 sshd_banner: none
-sshd_accept_env: LANG LC_*
-sshd_subsystem: sftp /usr/lib/openssh/sftp-server
+sshd_accept_env: []
+sshd_subsystem: sftp internal-sftp
 sshd_use_pam: true

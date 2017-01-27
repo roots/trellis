@@ -29,6 +29,6 @@ PrintLastLog {{ sshd_print_last_log | ternary('yes', 'no') }}
 TCPKeepAlive {{ sshd_tcp_keep_alive | ternary('yes', 'no') }}
 MaxStartups {{ sshd_max_startups }}
 Banner {{ sshd_banner }}
-AcceptEnv {{ sshd_accept_env }}
+AcceptEnv {{ sshd_accept_env | join(' ') }}
 Subsystem {{ sshd_subsystem }}
 UsePAM {{ sshd_use_pam | ternary('yes', 'no') }}
