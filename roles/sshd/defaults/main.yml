@@ -2,17 +2,18 @@
 sshd_port: 22
 sshd_listen_address: 0.0.0.0
 sshd_protocol: 2
+
+sshd_accept_env: []
+sshd_challenge_response_authentication: false
 sshd_host_rsa_key: /etc/ssh/ssh_host_rsa_key
 sshd_host_dsa_key: /etc/ssh/ssh_host_dsa_key
 sshd_host_ecdsa_key: /etc/ssh/ssh_host_ecdsa_key
 sshd_login_grace_time: 30
-sshd_permit_root_login: true
-sshd_challenge_response_authentication: false
 sshd_password_authentication: false
-sshd_x11_forwarding: false
-sshd_print_motd: false
+sshd_permit_root_login: true
 sshd_print_last_log: false
-sshd_tcp_keep_alive: true
-sshd_accept_env: []
+sshd_print_motd: false
 sshd_subsystem: sftp internal-sftp
+sshd_tcp_keep_alive: true
 sshd_use_pam: true
+sshd_x11_forwarding: false

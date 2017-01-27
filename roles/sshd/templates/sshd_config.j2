@@ -3,17 +3,18 @@
 Port {{ sshd_port }}
 ListenAddress {{ sshd_listen_address }}
 Protocol {{ sshd_protocol }}
+
+AcceptEnv {{ sshd_accept_env | join(' ') }}
+ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}
 HostKey {{ sshd_host_rsa_key }}
 HostKey {{ sshd_host_dsa_key }}
 HostKey {{ sshd_host_ecdsa_key }}
 LoginGraceTime {{ sshd_login_grace_time }}
-PermitRootLogin {{ sshd_permit_root_login | ternary('yes', 'no') }}
-ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}
 PasswordAuthentication {{ sshd_password_authentication | ternary('yes', 'no') }}
-X11Forwarding {{ sshd_x11_forwarding | ternary('yes', 'no') }}
-PrintMotd {{ sshd_print_motd | ternary('yes', 'no') }}
+PermitRootLogin {{ sshd_permit_root_login | ternary('yes', 'no') }}
 PrintLastLog {{ sshd_print_last_log | ternary('yes', 'no') }}
-TCPKeepAlive {{ sshd_tcp_keep_alive | ternary('yes', 'no') }}
-AcceptEnv {{ sshd_accept_env | join(' ') }}
+PrintMotd {{ sshd_print_motd | ternary('yes', 'no') }}
 Subsystem {{ sshd_subsystem }}
+TCPKeepAlive {{ sshd_tcp_keep_alive | ternary('yes', 'no') }}
 UsePAM {{ sshd_use_pam | ternary('yes', 'no') }}
+X11Forwarding {{ sshd_x11_forwarding | ternary('yes', 'no') }}
