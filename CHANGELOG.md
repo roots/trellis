@@ -1,4 +1,5 @@
 ### HEAD
+* [BREAKING] Use more secure sshd defaults ([#744](https://github.com/roots/trellis/pull/744))
 * Add basic git repo host keys to `known_hosts` ([#751](https://github.com/roots/trellis/pull/751))
 * Accommodate template inheritance for nginx confs ([#740](https://github.com/roots/trellis/pull/740))
 * Add `apt_packages_custom` to customize Apt packages ([#735](https://github.com/roots/trellis/pull/735))
