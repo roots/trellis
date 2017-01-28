@@ -1,14 +1,20 @@
 # {{ ansible_managed }}
 
-Port {{ sshd_port }}
-ListenAddress {{ sshd_listen_address }}
+{% for port in sshd_ports %}
+Port {{ port }}
+{% endfor -%}
+
+{% for address in sshd_listen_addresses %}
+ListenAddress {{ address }}
+{% endfor -%}
+
 Protocol {{ sshd_protocol }}
 
 AcceptEnv {{ sshd_accept_env | join(' ') }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}
-HostKey {{ sshd_host_rsa_key }}
-HostKey {{ sshd_host_dsa_key }}
-HostKey {{ sshd_host_ecdsa_key }}
+{% for key in sshd_host_keys %}
+HostKey {{ key }}
+{% endfor %}
 LoginGraceTime {{ sshd_login_grace_time }}
 PasswordAuthentication {{ sshd_password_authentication | ternary('yes', 'no') }}
 PermitRootLogin {{ sshd_permit_root_login | ternary('yes', 'no') }}
