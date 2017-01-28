@@ -17,3 +17,9 @@
     mode: 0600
     validate: '/usr/sbin/sshd -T -f %s'
   notify: restart ssh
+
+- name: Create a secure ssh_config
+  template:
+    src: ssh_config.j2
+    dest: /etc/ssh/ssh_config
+    mode: 0644

@@ -1,4 +1,6 @@
 ---
+# sshd_config
+# ----------------------------
 sshd_ports:
   - 22
 
@@ -63,3 +65,25 @@ sshd_tcp_keep_alive: false
 sshd_use_pam: true
 
 sshd_x11_forwarding: false
+
+
+# ssh_config
+# ----------------------------
+ssh_port: 22
+ssh_compression: true
+ssh_gssapi_authentication: false
+
+ssh_host_key_algorithms:
+  - ssh-ed25519-cert-v01@openssh.com
+  - ssh-rsa-cert-v01@openssh.com
+  - ssh-ed25519
+  - ssh-rsa
+
+ssh_identity_files:
+  - ~/.ssh/id_ed25519
+  - ~/.ssh/id_rsa
+
+ssh_send_env: []
+
+ssh_strict_host_key_checking: ask
+ssh_use_roaming: false
