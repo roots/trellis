@@ -21,6 +21,8 @@ sshd_ciphers_default:
 
 sshd_ciphers_extra: []
 
+sshd_client_alive_interval: 600
+
 sshd_host_keys:
   - /etc/ssh/ssh_host_ed25519_key
   - /etc/ssh/ssh_host_rsa_key
@@ -49,6 +51,6 @@ sshd_permit_root_login: true
 sshd_print_last_log: false
 sshd_print_motd: false
 sshd_subsystem: sftp internal-sftp
-sshd_tcp_keep_alive: true
+sshd_tcp_keep_alive: false
 sshd_use_pam: true
 sshd_x11_forwarding: false

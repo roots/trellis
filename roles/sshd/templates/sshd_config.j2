@@ -13,6 +13,7 @@ Protocol {{ sshd_protocol }}
 AcceptEnv {{ sshd_accept_env | join(' ') }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}
 Ciphers {{ (sshd_ciphers_default + sshd_ciphers_extra) | join(',') }}
+ClientAliveInterval {{ sshd_client_alive_interval }}
 {% for key in sshd_host_keys %}
 HostKey {{ key }}
 {% endfor %}
