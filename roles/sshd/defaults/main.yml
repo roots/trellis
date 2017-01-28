@@ -25,6 +25,12 @@ sshd_host_keys:
   - /etc/ssh/ssh_host_ed25519_key
   - /etc/ssh/ssh_host_rsa_key
 
+sshd_kex_algorithms_default:
+  - curve25519-sha256@libssh.org
+  - diffie-hellman-group-exchange-sha256
+
+sshd_kex_algorithms_extra: []
+
 sshd_login_grace_time: 30
 sshd_password_authentication: false
 sshd_permit_root_login: true

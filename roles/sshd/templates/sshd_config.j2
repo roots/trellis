@@ -16,6 +16,7 @@ Ciphers {{ (sshd_ciphers_default + sshd_ciphers_extra) | join(',') }}
 {% for key in sshd_host_keys %}
 HostKey {{ key }}
 {% endfor %}
+KexAlgorithms {{ (sshd_kex_algorithms_default + sshd_kex_algorithms_extra) | join(',') }}
 LoginGraceTime {{ sshd_login_grace_time }}
 PasswordAuthentication {{ sshd_password_authentication | ternary('yes', 'no') }}
 PermitRootLogin {{ sshd_permit_root_login | ternary('yes', 'no') }}
