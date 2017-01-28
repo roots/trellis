@@ -1,16 +1,19 @@
 ---
-- name: ensure ssh server is installed
+- name: Ensure latest SSH server and client are installed
   apt:
-    pkg: openssh-server
+    pkg: "{{ item }}"
     state: latest
     update_cache: true
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  notify:
-    - restart ssh
+  with_items:
+    - openssh-server
+    - openssh-client
+  notify: restart ssh
 
-- name: ensure sshd is configured
+- name: Create a secure sshd_config
   template:
     src: sshd_config.j2
     dest: /etc/ssh/sshd_config
-  notify:
-    - restart ssh
+    mode: 0600
+    validate: '/usr/sbin/sshd -T -f %s'
+  notify: restart ssh
