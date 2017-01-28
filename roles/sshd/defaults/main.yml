@@ -12,9 +12,8 @@ sshd_accept_env: []
 sshd_challenge_response_authentication: false
 
 sshd_host_keys:
+  - /etc/ssh/ssh_host_ed25519_key
   - /etc/ssh/ssh_host_rsa_key
-  - /etc/ssh/ssh_host_dsa_key
-  - /etc/ssh/ssh_host_ecdsa_key
 
 sshd_login_grace_time: 30
 sshd_password_authentication: false
