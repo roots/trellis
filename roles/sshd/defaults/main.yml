@@ -1,6 +1,8 @@
 ---
 # sshd_config
 # ----------------------------
+sshd_config: sshd_config.j2
+
 sshd_ports:
   - 22
 
@@ -69,6 +71,7 @@ sshd_x11_forwarding: false
 
 # ssh_config
 # ----------------------------
+ssh_config: ssh_config.j2
 ssh_port: 22
 ssh_compression: true
 ssh_gssapi_authentication: false

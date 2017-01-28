@@ -1,5 +1,6 @@
 # {{ ansible_managed }}
 
+{% block main %}
 Host *
   Port {{ ssh_port }}
   Protocol {{ ssh_protocol | default(sshd_protocol) }}
@@ -19,3 +20,4 @@ Host *
   SendEnv {{ ssh_send_env | join(' ') }}
   StrictHostKeyChecking {{ ssh_strict_host_key_checking }}
   UseRoaming {{ ssh_use_roaming | ternary('yes','no') }}
+{% endblock %}

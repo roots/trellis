@@ -1,5 +1,6 @@
 # {{ ansible_managed }}
 
+{% block main %}
 {% for port in sshd_ports %}
 Port {{ port }}
 {% endfor -%}
@@ -32,3 +33,4 @@ Subsystem {{ sshd_subsystem }}
 TCPKeepAlive {{ sshd_tcp_keep_alive | ternary('yes', 'no') }}
 UsePAM {{ sshd_use_pam | ternary('yes', 'no') }}
 X11Forwarding {{ sshd_x11_forwarding | ternary('yes', 'no') }}
+{% endblock %}

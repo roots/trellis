@@ -12,7 +12,7 @@
 
 - name: Create a secure sshd_config
   template:
-    src: sshd_config.j2
+    src: "{{ sshd_config }}"
     dest: /etc/ssh/sshd_config
     mode: 0600
     validate: '/usr/sbin/sshd -T -f %s'
@@ -20,6 +20,6 @@
 
 - name: Create a secure ssh_config
   template:
-    src: ssh_config.j2
+    src: "{{ ssh_config }}"
     dest: /etc/ssh/ssh_config
     mode: 0644
