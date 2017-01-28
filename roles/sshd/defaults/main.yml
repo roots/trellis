@@ -11,6 +11,16 @@ sshd_accept_env: []
 
 sshd_challenge_response_authentication: false
 
+sshd_ciphers_default:
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-ctr
+  - aes192-ctr
+  - aes128-ctr
+
+sshd_ciphers_extra: []
+
 sshd_host_keys:
   - /etc/ssh/ssh_host_ed25519_key
   - /etc/ssh/ssh_host_rsa_key
