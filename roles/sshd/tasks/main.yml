@@ -23,3 +23,10 @@
     src: "{{ ssh_config }}"
     dest: /etc/ssh/ssh_config
     mode: 0644
+
+- name: Remove Diffie-Hellman moduli of size < 2000
+  lineinfile:
+    backup: yes
+    dest: /etc/ssh/moduli
+    regexp: ^(\d+\s){4}1
+    state: absent
