@@ -55,7 +55,6 @@ See a complete working example in the [roots-example-project.com repo](https://g
 1. Create a new project directory: `$ mkdir example.com && cd example.com`
 2. Clone Trellis: `$ git clone --depth=1 git@github.com:roots/trellis.git && rm -rf trellis/.git`
 3. Clone Bedrock: `$ git clone --depth=1 git@github.com:roots/bedrock.git site && rm -rf site/.git`
-4. Install the Ansible Galaxy roles: `$ cd trellis && ansible-galaxy install -r requirements.yml`
 
 Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) for slightly different installation instructions. VirtualBox is known to have poor performance in Windows — use VMware or [see some possible solutions](https://discourse.roots.io/t/virtualbox-performance-in-windows/3932).
 
