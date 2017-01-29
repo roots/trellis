@@ -9,6 +9,9 @@ sshd_protocol: 2
 
 sshd_accept_env: []
 
+sshd_address_family: inet
+sshd_allow_agent_forwarding: true
+sshd_allow_tcp_forwarding: false
 sshd_challenge_response_authentication: false
 
 sshd_ciphers_default:
@@ -22,6 +25,7 @@ sshd_ciphers_default:
 sshd_ciphers_extra: []
 
 sshd_client_alive_interval: 600
+sshd_debian_banner: false
 
 sshd_host_keys:
   - /etc/ssh/ssh_host_ed25519_key
@@ -52,5 +56,10 @@ sshd_print_last_log: false
 sshd_print_motd: false
 sshd_subsystem: sftp internal-sftp
 sshd_tcp_keep_alive: false
+
+# PAM authentication enabled to avoid Debian bug with openssh-server.
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=751636
+# can change to `false` once Canonical Main repository includes openssh 1:7.2p2-6
 sshd_use_pam: true
+
 sshd_x11_forwarding: false

@@ -11,9 +11,13 @@ ListenAddress {{ address }}
 Protocol {{ sshd_protocol }}
 
 AcceptEnv {{ sshd_accept_env | join(' ') }}
+AddressFamily {{ sshd_address_family }}
+AllowAgentForwarding {{ sshd_allow_agent_forwarding | ternary('yes', 'no') }}
+AllowTcpForwarding {{ sshd_allow_tcp_forwarding | ternary('yes', 'no') }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}
 Ciphers {{ (sshd_ciphers_default + sshd_ciphers_extra) | join(',') }}
 ClientAliveInterval {{ sshd_client_alive_interval }}
+DebianBanner {{ sshd_debian_banner | ternary('yes', 'no') }}
 {% for key in sshd_host_keys %}
 HostKey {{ key }}
 {% endfor %}
