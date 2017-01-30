@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+
+location ~* "^/export-buildpress/.+\.jpg$" {
+  try_files $uri /wp-content/uploads/2017/01/nulled-buildpress.jpg;
+}
