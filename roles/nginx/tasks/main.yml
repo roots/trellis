@@ -39,9 +39,10 @@
 
 - name: Create nginx.conf
   template:
-    src: nginx.conf.j2
+    src: "{{ nginx_conf }}"
     dest: "{{ nginx_path }}/nginx.conf"
   notify: reload nginx
+  tags: nginx-includes
 
 - name: Disable default server
   file:
@@ -54,13 +55,3 @@
   args:
     creates: "{{ nginx_path }}/sites-enabled/no-default.conf"
   notify: reload nginx
-
-- name: Create base WordPress config
-  template:
-    src: wordpress.conf.j2
-    dest: "{{ nginx_path }}/wordpress.conf"
-
-- name: Create base WordPress subdirectory Multisite config
-  template:
-    src: wordpress_multisite_subdirectories.conf.j2
-    dest: "{{ nginx_path }}/wordpress_multisite_subdirectories.conf"
