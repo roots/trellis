@@ -9,7 +9,7 @@
   vars:
     dynamic_user: false
   roles:
-    - { role: remote-user, tags: [remote-user, always] }
+    - { role: connection, tags: [connection, always] }
 
 - name: Deploy WP site
   hosts: web:&{{ env }}

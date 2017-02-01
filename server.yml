@@ -7,7 +7,7 @@
   hosts: web:&{{ env }}
   gather_facts: false
   roles:
-    - { role: remote-user, tags: [remote-user, always] }
+    - { role: connection, tags: [connection, always] }
 
 - name: Install prerequisites
   hosts: web:&{{ env }}
