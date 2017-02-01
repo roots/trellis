@@ -3,7 +3,7 @@
   vars:
     playbook: server.yml
 
-- name: Determine Remote User
+- name: Test Connection and Determine Remote User
   hosts: web:&{{ env }}
   gather_facts: false
   roles:

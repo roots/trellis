@@ -3,6 +3,14 @@
   vars:
     playbook: rollback.yml
 
+- name: Test Connection
+  hosts: web:&{{ env }}
+  gather_facts: false
+  vars:
+    dynamic_user: false
+  roles:
+    - { role: remote-user, tags: [remote-user, always] }
+
 - name: Rollback a Deploy
   hosts: web:&{{ env }}
   remote_user: "{{ web_user }}"

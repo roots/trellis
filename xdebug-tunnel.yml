@@ -1,5 +1,5 @@
 ---
-- name: Determine Remote User
+- name: Test Connection and Determine Remote User
   hosts: "{{ xdebug_tunnel_inventory_host }}"
   gather_facts: false
   roles:
