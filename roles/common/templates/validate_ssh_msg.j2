@@ -1,0 +1,32 @@
+{% macro msg(param_name, ssh_client_values, sshd_config_values, overlap_values, param_var_name) %}
+{% if not overlap_values | count %}
+{{ param_name }} your SSH Client is making available for {{ ansible_host }}:
+{% for item in ssh_client_values.replace(' ',',').split(',') if item != param_name | lower %}
+  - {{ item }}
+{% endfor %}
+
+{{ (param_name != 'HostKeyAlgorithms') | ternary(param_name, 'HostKeys') }} the host {{ ansible_host }} will accept/use after sshd role:
+{% for item in sshd_config_values %}
+  - {{ item }}
+{% endfor %}
+
+Create a corresponding value between the two. Adjust either of the following:
+  - your SSH client's {{ param_name }} option (recommended)
+  - the `{{ param_var_name }}` Trellis variable
+
+---------------------------------------------------
+
+{% endif %}
+{% endmacro -%}
+
+Your local SSH client settings will not support the settings that the sshd role will apply to the SSH server (on {{ ansible_host }}).
+
+See https://github.com/roots/trellis/tree/master/roles/sshd#ciphers-kexalgorithms-and-macs
+---------------------------------------------------
+
+{{ msg('Ciphers', ssh_client_ciphers, sshd_ciphers_default + sshd_ciphers_extra, overlapping_ciphers, 'sshd_ciphers_extra') -}}
+{{ msg('KexAlgorithms', ssh_client_kex, sshd_kex_algorithms_default + sshd_kex_algorithms_extra, overlapping_kex, 'sshd_kex_algorithms_extra') -}}
+{{ msg('MACs', ssh_client_macs, sshd_macs_default + sshd_macs_extra, overlapping_macs, 'sshd_macs_extra') -}}
+{{ msg('HostKeyAlgorithms', ssh_client_host_key_algorithms, sshd_host_keys, overlapping_host_keys, 'sshd_host_keys') -}}
+
+To disable this validation and warning, define `validate_ssh: false`
