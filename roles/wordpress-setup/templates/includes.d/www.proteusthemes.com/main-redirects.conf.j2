@@ -51,3 +51,13 @@ location = /docs/ {
 location ~ "^/docs/(\w+)-pt/?$" {
   return 301 /docs/$1/;
 }
+
+# Yoast SEO Sitemaps
+location ~ ([^/]*)sitemap(.*).x(m|s)l$ {
+  ## this redirects sitemap.xml to /sitemap_index.xml
+    rewrite ^/sitemap.xml$ /sitemap_index.xml permanent;
+  ## this makes the XML sitemaps work
+    rewrite ^/([a-z]+)?-?sitemap.xsl$ /index.php?xsl=$1 last;
+    rewrite ^/sitemap_index.xml$ /index.php?sitemap=1 last;
+    rewrite ^/([^/]+?)-sitemap([0-9]+)?.xml$ /index.php?sitemap=$1&sitemap_n=$2 last;
+}
