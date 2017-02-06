@@ -14,3 +14,8 @@ location /themes/ {
 location ~ ^/themes/.*\.html?$ {
   return 301 /;
 }
+
+# privacy policy, hosted on iubenda.com
+location = /privacy-policy/ {
+  return 301 https://www.iubenda.com/privacy-policy/7949647;
+}
