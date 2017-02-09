@@ -36,7 +36,7 @@
   notify: reload php-fpm
 
 - include: nginx-includes.yml
-  tags: [wordpress-setup-nginx-includes, wordpress-setup-nginx]
+  tags: [nginx-includes, wordpress-setup-nginx]
 
 - include: nginx.yml
   tags: wordpress-setup-nginx
