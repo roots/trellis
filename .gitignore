@@ -3,6 +3,10 @@
 vendor/roles
 *.py[co]
 *.retry
+
+# Remove files that contain site-specific configuration from tracking
+group_vars/*/vault.yml
 group_vars/*/wordpress_sites.yml
-group_vars/*vault.yml
+
+# Remove Ansible host list from tracking
 hosts/*
