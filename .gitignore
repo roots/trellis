@@ -10,3 +10,4 @@ group_vars/*/wordpress_sites.yml
 
 # Remove Ansible host list from tracking
 hosts/*
+!hosts/*.example
