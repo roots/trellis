@@ -79,10 +79,8 @@
   when: env == 'development'
 
 - name: Retrieve SSH client IP
-  command: curl -4 -s https://api.ipify.org
-  args:
-    warn: false
-  changed_when: false
-  register: ssh_client_ip
+  ipify_facts:
+  connection: local
+  become: no
   when: env != 'development' and ssh_client_ip_lookup | default(true)
   tags: [fail2ban, ferm]
