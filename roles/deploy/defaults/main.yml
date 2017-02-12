@@ -32,7 +32,7 @@ project_templates:
 #     type: directory     // <- optional, defaults to `directory`, options: `directory` or `file`
 project_shared_children:
   - path: web/app/uploads
-    src: uploads
+    src: web/app/uploads
 
 # The project_environment is a list of environment variables that can be used in hooks
 # Example:
