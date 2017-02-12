@@ -1,4 +1,5 @@
 ### HEAD
+* Require Ansible 2.2.0.0 or greater ([#726](https://github.com/roots/trellis/pull/726))
 * [BREAKING] Use more secure sshd defaults ([#744](https://github.com/roots/trellis/pull/744))
 * Add basic git repo host keys to `known_hosts` ([#751](https://github.com/roots/trellis/pull/751))
 * Accommodate template inheritance for nginx confs ([#740](https://github.com/roots/trellis/pull/740))
