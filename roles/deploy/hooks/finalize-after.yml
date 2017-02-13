@@ -1,11 +1,32 @@
 ---
+- name: Temporarily disable multisite constants
+  lineinfile:
+    dest: "{{ deploy_helper.current_path }}/config/application.php"
+    line: //\1
+    regexp: ([^/]+['"]{{ item }}["'].+)
+    backrefs: yes
+  with_items:
+    - MULTISITE
+    - SUBDOMAIN_INSTALL
+  register: multisite_constants
+  when: project.multisite.enabled
+
 - name: WordPress Installed?
-  command: wp core is-installed {{ project.multisite.enabled | default(false) | ternary('--network', '') }}
+  command: wp core is-installed
   args:
     chdir: "{{ deploy_helper.current_path }}"
   register: wp_installed
   changed_when: false
   failed_when: wp_installed.stderr != ""
+
+- name: Re-enable multisite constants
+  lineinfile:
+    dest: "{{ deploy_helper.current_path }}/config/application.php"
+    line: \1
+    regexp: ^//{{ item.invocation.module_args.regexp }}
+    backrefs: yes
+  with_items: "{{ multisite_constants.results }}"
+  when: project.multisite.enabled and item | changed
 
 - block:
   - name: Update WP database
