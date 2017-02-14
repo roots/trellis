@@ -61,3 +61,9 @@ location ~ ([^/]*)sitemap(.*).x(m|s)l$ {
     rewrite ^/sitemap_index.xml$ /index.php?sitemap=1 last;
     rewrite ^/([^/]+?)-sitemap([0-9]+)?.xml$ /index.php?sitemap=$1&sitemap_n=$2 last;
 }
+
+location = /blog/beginners-guide-setting-automatic-wordpress-backups/ {
+  if ($arg_utm_campaign = '6872cf6d64-valentines-day-25off') {
+    return 302 https://www.proteusthemes.com/pricing/?utm_source=ProteusThemes+Newsletters&utm_campaign=6872cf6d64-valentines-day-25off&utm_medium=email;
+  }
+}
