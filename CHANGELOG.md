@@ -1,4 +1,5 @@
 ### HEAD
+* Update WP-CLI to 1.1.0 ([#759](https://github.com/roots/trellis/pull/759))
 * Require Ansible 2.2.0.0 or greater ([#726](https://github.com/roots/trellis/pull/726))
 * [BREAKING] Use more secure sshd defaults ([#744](https://github.com/roots/trellis/pull/744))
 * Add basic git repo host keys to `known_hosts` ([#751](https://github.com/roots/trellis/pull/751))
