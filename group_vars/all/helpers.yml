@@ -2,10 +2,12 @@ wordpress_env_defaults:
   db_host: localhost
   db_name: "{{ item.key | underscore }}_{{ env }}"
   db_user: "{{ item.key | underscore }}"
+  db_user_host: localhost
   disable_wp_cron: true
   wp_env: "{{ env }}"
   wp_home: "{{ ssl_enabled | ternary('https', 'http') }}://{{ site_hosts_canonical | first }}"
   wp_siteurl: "{{ ssl_enabled | ternary('https', 'http') }}://{{ site_hosts_canonical | first }}/wp"
+  domain_current_site: "{{ site_hosts_canonical | first }}"
 
 site_env: "{{ wordpress_env_defaults | combine(item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"

@@ -1,8 +1,6 @@
 ansible_requirements:
-  - version: 2.0.2.0
+  - version: 2.2.0.0
     operator: '>='
-  - version: 2.1.0.0
-    operator: '!='
 
 ntp_timezone: Etc/UTC
 
@@ -18,3 +16,9 @@ apt_packages_default:
 
 apt_packages_custom: []
 apt_packages_install: "{{ apt_packages_default + apt_packages_custom }}"
+
+overlapping_ciphers: "[{% for cipher in (sshd_ciphers_default + sshd_ciphers_extra) if cipher in ssh_client_ciphers %}'{{ cipher }}',{% endfor %}]"
+overlapping_kex: "[{% for kex in (sshd_kex_algorithms_default + sshd_kex_algorithms_extra) if kex in ssh_client_kex %}'{{ kex }}',{% endfor %}]"
+overlapping_macs: "[{% for mac in (sshd_macs_default + sshd_macs_extra) if mac in ssh_client_macs %}'{{ mac }}',{% endfor %}]"
+host_key_types: "[{% for path in sshd_host_keys %}'{{ path | regex_replace('/etc/ssh/ssh_host_(.+)_key', '\\1') | regex_replace('dsa', 'ssh-dss')}}',{% endfor %}]"
+overlapping_host_keys: "{% for key in host_key_types if key in ssh_client_host_key_algorithms %}{{ key }},{% endfor %}"

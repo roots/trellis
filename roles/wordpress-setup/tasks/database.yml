@@ -13,6 +13,7 @@
   mysql_user:
     name: "{{ site_env.db_user }}"
     password: "{{ site_env.db_password }}"
+    host: "{{ site_env.db_user_host }}"
     append_privs: yes
     priv: "{{ site_env.db_name }}.*:ALL"
     state: present
