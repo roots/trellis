@@ -1,5 +1,6 @@
 ### HEAD
 * Update WP-CLI to 1.1.0 ([#759](https://github.com/roots/trellis/pull/759))
+* Add DOMAIN_CURRENT_SITE to default env variables ([#760](https://github.com/roots/trellis/pull/760))
 * Fix formatting of `set_fact` for `ansible_become_pass` ([#758](https://github.com/roots/trellis/pull/758))
 * Require Ansible 2.2.0.0 or greater ([#726](https://github.com/roots/trellis/pull/726))
 * [BREAKING] Use more secure sshd defaults ([#744](https://github.com/roots/trellis/pull/744))
