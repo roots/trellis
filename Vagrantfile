@@ -148,6 +148,7 @@ Vagrant.configure('2') do |config|
   config.vm.provider 'parallels' do |prl, override|
     prl.name = config.vm.hostname
     prl.cpus = cpus
+    prl.update_guest_tools = true
     prl.memory = memory
   end
 
