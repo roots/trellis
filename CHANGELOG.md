@@ -1,4 +1,5 @@
 ### HEAD
+* Forward extra bin/deploy.sh parameters to ansible-playbook ([#748](https://github.com/roots/trellis/pull/748))
 * Accommodate template inheritance for nginx confs ([#740](https://github.com/roots/trellis/pull/740))
 * Add `apt_packages_custom` to customize Apt packages ([#735](https://github.com/roots/trellis/pull/735))
 * Enable Let's Encrypt to detect updated `site_hosts` ([#630](https://github.com/roots/trellis/pull/630))
