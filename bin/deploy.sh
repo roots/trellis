@@ -21,6 +21,8 @@ Examples:
 "
 }
 
+[[ $# -lt 2 ]] && { show_usage; exit 0; }
+
 for arg
 do
   [[ $arg = -h ]] && { show_usage; exit 0; }
