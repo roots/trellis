@@ -24,6 +24,13 @@
     state: "{{ item.state | default('present') }}"
   with_items: "{{ known_hosts | default([]) }}"
 
+- name: Setup packagist.com authentication
+  command: "composer config --auth http-basic.repo.packagist.com token {{ site_packagist_token }}"
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  when: site_packagist_token != false
+  with_dict: "{{ wordpress_sites }}"
+
 - name: Install Dependencies with Composer
   composer:
     no_dev: no
