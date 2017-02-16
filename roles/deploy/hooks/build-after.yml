@@ -9,6 +9,12 @@
     msg: "Unable to find a `composer.json` file in the root of '{{ deploy_helper.new_release_path }}'. Make sure your repo has a `composer.json` file in its root or edit `repo_subtree_path` for '{{ site }}' in `wordpress_sites.yml` so it points to the directory with a `composer.json` file."
   when: not composer_json.stat.exists
 
+- name: Setup packagist.com authentication
+  command: "composer config --auth http-basic.repo.packagist.com token {{ project_packagist_token }}"
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: project_packagist_token != false
+
 - name: Install Composer dependencies
   composer:
     no_scripts: yes
