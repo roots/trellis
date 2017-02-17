@@ -15,7 +15,7 @@ sshd_accept_env: []
 
 sshd_address_family: inet
 sshd_allow_agent_forwarding: true
-sshd_allow_tcp_forwarding: false
+sshd_allow_tcp_forwarding: local
 sshd_challenge_response_authentication: false
 
 sshd_ciphers_default:
