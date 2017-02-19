@@ -159,7 +159,7 @@ def local_site_path(site)
 end
 
 def multisite_subdomains?(wordpress_sites)
-  wordpress_sites.any? { |(_name, site)| site['multisite'].fetch('enabled', false) && site['multisite'].fetch('subdomains', false) }
+  wordpress_sites.any? { |(_name, site)| site.fetch('env', false) && site['env'].fetch('multisite', false) && site['env'].fetch('subdomain_install', false) }
 end
 
 def nfs_path(site_name)

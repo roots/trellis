@@ -1,0 +1,22 @@
+{% if site is not defined %}
+{% set site=item.key %}
+{% set project=item.value %}
+{% endif -%}
+
+Warning! The old `multisite.enabled` and `multisite.subdomains`
+settings are now ignored. Multisite must be configured ONLY in
+the `env` vars of `group_vars/{{ env }}/wordpress_sites.yml`.
+
+{% if not project.multisite.enabled | default(false) and not (project.env | default({})).multisite | default(false) %}
+You don't have multisite enabled for {{ site }} so you may completely omit any multisite config for {{ site }} in `group_vars/{{ env }}/wordpress_sites`
+
+{% else %}
+wordpress_sites:
+  {{ site }}:
+    ...
+    env:
+      multisite: {{ (project.env | default({})).multisite | default(project.multisite.enabled | default('false')) | lower }}                      # default: false
+      subdomain_install: {{ (project.env | default({})).subdomain_install | default(project.multisite.subdomains | default('false')) | lower }}              # default: false
+
+{% endif %}
+See https://roots.io/trellis/docs/multisite/

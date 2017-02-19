@@ -17,6 +17,14 @@
   when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count
   tags: [letsencrypt, wordpress]
 
+- name: Validate multisite configuration
+  debug:
+    msg: "{{ lookup('template', 'multisite_config.j2') }}"
+  with_dict: "{{ wordpress_sites }}"
+  when: item.value.multisite is defined
+  failed_when: item.value.multisite.enabled | default(false) and (item.value.env | default({})).multisite is not defined
+  tags: [wordpress]
+
 - name: Validate Ubuntu version
   debug:
     msg: |

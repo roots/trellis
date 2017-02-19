@@ -1,6 +1,6 @@
 ---
 - name: WordPress Installed?
-  command: wp core is-installed {{ project.multisite.enabled | default(false) | ternary('--network', '') }}
+  shell: MULTISITE=false SUBDOMAIN_INSTALL=false wp core is-installed
   args:
     chdir: "{{ deploy_helper.current_path }}"
   register: wp_installed
@@ -12,18 +12,18 @@
     command: wp core update-db
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: not project.multisite.enabled | default(false)
+    when: not site_env.multisite | default(false)
 
   - name: Warn about updating network database.
     debug:
       msg: "Updating the network database could take a long time with a large number of sites."
-    when: project.multisite.enabled | default(false)
+    when: site_env.multisite | default(false)
 
   - name: Update WP network database
     command: wp core update-db --network
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: project.multisite.enabled | default(false)
+    when: site_env.multisite | default(false)
 
   - name: Get WP theme template root
     command: wp option get template_root

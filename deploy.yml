@@ -42,5 +42,11 @@
           > https://roots.io/trellis/docs/deploys/
       when: project.repo is not defined or not project.repo | match(".*@.*:.*\.git")
 
+    - name: Validate multisite configuration
+      debug:
+        msg: "{{ lookup('template', playbook_dir + '/roles/common/templates/multisite_config.j2') }}"
+      when: project.multisite is defined
+      failed_when: project.multisite.enabled | default(false) and (project.env | default({})).multisite is not defined
+
   roles:
     - deploy
