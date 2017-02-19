@@ -1,6 +1,6 @@
 ---
 - name: WordPress Installed?
-  shell: MULTISITE=false SUBDOMAIN_INSTALL=false wp core is-installed
+  command: wp core is-installed {{ project.multisite.enabled | default(false) | ternary('--network', '') }}
   args:
     chdir: "{{ deploy_helper.current_path }}"
   register: wp_installed
