@@ -1,4 +1,5 @@
 ### HEAD
+* Set multisite constants false while checking `wp core is-installed` ([#766](https://github.com/roots/trellis/pull/766))
 * Forward extra bin/deploy.sh parameters to ansible-playbook ([#748](https://github.com/roots/trellis/pull/748))
 * Update WP-CLI to 1.1.0 ([#759](https://github.com/roots/trellis/pull/759))
 * Add DOMAIN_CURRENT_SITE to default env variables ([#760](https://github.com/roots/trellis/pull/760))
