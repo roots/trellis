@@ -33,12 +33,12 @@
   with_dict: "{{ wordpress_sites }}"
 
 - name: Install WP
-  command: wp core {{ item.value.multisite.enabled | default(false) | ternary('multisite-install', 'install') }}
+  command: wp core {{ site_env.multisite | default(false) | ternary('multisite-install', 'install') }}
            --allow-root
            --url="{{ site_env.wp_home }}"
-           {% if item.value.multisite.enabled | default(false) %}
-           --base="{{ item.value.multisite.base_path | default('/') }}"
-           --subdomains="{{ item.value.multisite.subdomains | default('false') }}"
+           {% if site_env.multisite | default(false) %}
+           --base="{{ site_env.path_current_site | default('/') }}"
+           --subdomains="{{ site_env.subdomain_install | default('false') }}"
            {% endif %}
            --title="{{ item.value.site_title | default(item.key) }}"
            --admin_user="{{ item.value.admin_user | default('admin') }}"
@@ -63,4 +63,4 @@
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   with_dict: "{{ wordpress_sites }}"
-  when: item.value.site_install | default(true) and item.value.multisite.enabled | default(false)
+  when: item.value.site_install | default(true) and site_env.multisite | default(false)

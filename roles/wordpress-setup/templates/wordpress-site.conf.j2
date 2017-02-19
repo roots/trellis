@@ -5,7 +5,7 @@
 server {
   {% block server_id -%}
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
-  server_name  {% for host in site_hosts_canonical %}{{ host }} {% if item.value.multisite.subdomains | default(false) %}*.{{ host }} {% endif %}{% endfor %};
+  server_name  {% for host in site_hosts_canonical %}{{ host }} {% if site_env.multisite | default(false) %}*.{{ host }} {% endif %}{% endfor %};
   {% endblock %}
 
   {% block logs -%}
@@ -30,9 +30,9 @@ server {
   {% endblock -%}
 
   {% block multisite_rewrites -%}
-  {% if item.value.multisite.enabled | default(false) -%}
+  {% if site_env.multisite | default(false) -%}
   # Multisite rewrites
-  {% if item.value.multisite.subdomains | default(false) -%}
+  {% if site_env.subdomain_install | default(false) -%}
   rewrite ^/(wp-.*.php)$ /wp/$1 last;
   rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
 
@@ -157,7 +157,7 @@ server {
 # Redirect to https
 server {
   listen 80;
-  server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
+  server_name {{ site_hosts | join(' ') }}{% if site_env.subdomain_install | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
 
   {{ self.acme_challenge() -}}
 
