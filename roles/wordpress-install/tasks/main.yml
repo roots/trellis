@@ -25,9 +25,10 @@
   with_items: "{{ known_hosts | default([]) }}"
 
 - name: Setup packagist.com authentication
-  command: "composer config --auth http-basic.repo.packagist.com token {{ item.value.packagist_token | default(false) }}"
-  args:
-    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  composer:
+    command: config
+    arguments: "--auth http-basic.repo.packagist.com token {{ item.value.packagist_token | default(false) }}"
+    working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   when: item.value.packagist_token is defined
   with_dict: "{{ wordpress_sites }}"
 

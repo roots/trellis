@@ -10,9 +10,11 @@
   when: not composer_json.stat.exists
 
 - name: Setup packagist.com authentication
-  command: "composer config --auth http-basic.repo.packagist.com token {{ project.packagist_token | default(false) }}"
-  args:
-    chdir: "{{ deploy_helper.new_release_path }}"
+  composer:
+    command: config
+    arguments: "--auth http-basic.repo.packagist.com token {{ project.packagist_token | default(false) }}"
+    working_dir: "{{ deploy_helper.new_release_path }}"
+  no_log: true
   when: project.packagist_token is defined
 
 - name: Install Composer dependencies
