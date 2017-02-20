@@ -13,7 +13,7 @@
   command: "composer config --auth http-basic.repo.packagist.com token {{ project.packagist_token | default(false) }}"
   args:
     chdir: "{{ deploy_helper.new_release_path }}"
-  when: project.packagist_token is defined and project.packagist_token != false
+  when: project.packagist_token is defined
 
 - name: Install Composer dependencies
   composer:
