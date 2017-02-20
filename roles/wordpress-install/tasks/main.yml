@@ -27,7 +27,7 @@
 - name: Setup packagist.com authentication
   composer:
     command: config
-    arguments: "--auth http-basic.repo.packagist.com token {{ item.value.packagist_token | default(false) }}"
+    arguments: --auth http-basic.repo.packagist.com token {{ item.value.packagist_token }}
     working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   no_log: true
   when: item.value.packagist_token is defined
