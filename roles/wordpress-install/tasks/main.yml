@@ -25,7 +25,7 @@
   with_items: "{{ known_hosts | default([]) }}"
 
 - name: Setup packagist.com authentication
-  command: "composer config --auth http-basic.repo.packagist.com token {{ site_packagist_token }}"
+  command: "composer config --auth http-basic.repo.packagist.com token {{ item.value.packagist_token | default(false) }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   when: site_packagist_token != false
