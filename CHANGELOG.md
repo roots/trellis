@@ -1,4 +1,5 @@
 ### HEAD
+* Enable per-user `update_password` behavior ([#767](https://github.com/roots/trellis/pull/767))
 * Allow for per-project packagist.com authentication ([#762](https://github.com/roots/trellis/pull/762))
 * Set multisite constants false while checking `wp core is-installed` ([#766](https://github.com/roots/trellis/pull/766))
 * Forward extra bin/deploy.sh parameters to ansible-playbook ([#748](https://github.com/roots/trellis/pull/748))
