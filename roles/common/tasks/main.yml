@@ -50,7 +50,7 @@
     ssh_client_kex: "{{ lookup('pipe', 'ssh -ttG ' + ansible_host + ' | grep kexalgorithms') }}"
     ssh_client_macs: "{{ lookup('pipe', 'ssh -ttG ' + ansible_host + ' | grep macs') }}"
     ssh_client_host_key_algorithms: "{{ lookup('pipe', 'ssh -ttG ' + ansible_host + ' | grep hostkeyalgorithms') }}"
-  when: validate_ssh | default(true)
+  when: openssh_6_8_plus and validate_ssh | default(true)
   tags: [sshd]
 
 - name: Validate compatible settings between SSH client and server
@@ -61,7 +61,7 @@
       - overlapping_macs | count
       - overlapping_host_keys | count
     msg: "{{ lookup('template', 'validate_ssh_msg.j2') }}"
-  when: validate_ssh | default(true)
+  when: openssh_6_8_plus and validate_ssh | default(true)
   tags: [sshd]
 
 - name: Checking essentials
