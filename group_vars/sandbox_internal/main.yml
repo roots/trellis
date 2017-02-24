@@ -85,6 +85,7 @@ sites_to_export:
   - consultpress
   - buildpress-landscape
   - buildpress-rtl
+  - medicpress
 
 xmls_to_rename:
   hairpress: "hairpresswptheme"
