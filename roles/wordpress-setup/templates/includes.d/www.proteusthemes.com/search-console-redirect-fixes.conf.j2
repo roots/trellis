@@ -4,3 +4,18 @@
 location /blog/author/proteusnet {
   return 301 /blog/author/primozcigler/;
 }
+
+# redirect everything from /themes/ subdirectory to the root
+location /themes/ {
+  return 301 /;
+}
+
+# more specific rule of the above for the links that end with .html
+location ~ ^/themes/.*\.html?$ {
+  return 301 /;
+}
+
+# privacy policy, hosted on iubenda.com
+location = /privacy-policy/ {
+  return 301 https://www.iubenda.com/privacy-policy/7949647;
+}

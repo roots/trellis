@@ -3,7 +3,7 @@ sb_provision_repo_dest: "{{ scripts_root }}/ops/"
 sb_provision_repo_version: master
 
 sb_reset_cron:
-  hour: 8
+  hour: 5
   minute: 0
 
 sb_reset_log_path: /var/log/sandbox
