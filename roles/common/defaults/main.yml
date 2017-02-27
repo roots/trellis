@@ -17,6 +17,7 @@ apt_packages_default:
 apt_packages_custom: []
 apt_packages_install: "{{ apt_packages_default + apt_packages_custom }}"
 
+openssh_6_8_plus: "{{ (lookup('pipe', 'ssh -V 2>&1')) | regex_replace('(.*OpenSSH_([\\d\\.]*).*)', '\\2') | version_compare('6.8', '>=') }}"
 overlapping_ciphers: "[{% for cipher in (sshd_ciphers_default + sshd_ciphers_extra) if cipher in ssh_client_ciphers %}'{{ cipher }}',{% endfor %}]"
 overlapping_kex: "[{% for kex in (sshd_kex_algorithms_default + sshd_kex_algorithms_extra) if kex in ssh_client_kex %}'{{ kex }}',{% endfor %}]"
 overlapping_macs: "[{% for mac in (sshd_macs_default + sshd_macs_extra) if mac in ssh_client_macs %}'{{ mac }}',{% endfor %}]"
