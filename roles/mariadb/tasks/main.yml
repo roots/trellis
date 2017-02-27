@@ -19,12 +19,7 @@
       owner: root
       group: root
     when: mysql_binary_logging_disabled
-
-  - name: Restart MySQL Server
-    service:
-      name: mysql
-      state: restarted
-      enabled: true
+    notify: restart mysql server
 
   - name: Set root user password
     mysql_user:
