@@ -10,13 +10,14 @@
   local_action: command ansible {{ inventory_hostname }} -m raw -a whoami -u root {{ cli_options | default('') }}
   failed_when: false
   changed_when: false
+  check_mode: no
   register: root_status
   tags: [connection-tests]
 
 - name: Set remote user for each host
   set_fact:
-    ansible_user: "{{ ('root' in root_status.stdout_lines) | ternary('root', admin_user) }}"
-  when: ansible_user is not defined
+    ansible_user: "{{ ansible_user | default(('root' in root_status.stdout_lines) | ternary('root', admin_user)) }}"
+  check_mode: no
 
 - name: Announce which user was selected
   debug:
