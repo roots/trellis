@@ -12,6 +12,8 @@ php_mysqlnd_collect_memory_statistics: 'Off'
 php_post_max_size: 25M
 php_sendmail_path: /usr/sbin/ssmtp -t
 php_session_save_path: /tmp
+php_session_cookie_httponly: 'On'
+php_session_cookie_secure: 'Off'
 php_upload_max_filesize: 25M
 php_track_errors: 'Off'
 php_timezone: '{{ ntp_timezone }}'

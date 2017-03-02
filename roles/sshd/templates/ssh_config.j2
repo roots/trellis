@@ -1,0 +1,23 @@
+# {{ ansible_managed }}
+
+{% block main %}
+Host *
+  Port {{ ssh_port }}
+  Protocol {{ ssh_protocol | default(sshd_protocol) }}
+
+  AddressFamily {{ ssh_address_family | default(sshd_address_family) }}
+  ChallengeResponseAuthentication {{ ssh_challenge_response_authentication | default(sshd_challenge_response_authentication) | ternary('yes', 'no') }}
+  Ciphers {{ (ssh_ciphers_default | default(sshd_ciphers_default) + ssh_ciphers_extra | default(sshd_ciphers_extra)) | join(',') }}
+  Compression {{ ssh_compression | ternary('yes', 'no') }}
+  GSSAPIAuthentication {{ ssh_gssapi_authentication | ternary('yes', 'no') }}
+  HostKeyAlgorithms {{ ssh_host_key_algorithms | join(',') }}
+  {% for file in ssh_identity_files -%}
+  IdentityFile {{ file }}
+  {% endfor -%}
+  KexAlgorithms {{ (ssh_kex_algorithms_default | default(sshd_kex_algorithms_default) + ssh_kex_algorithms_extra | default(sshd_kex_algorithms_extra)) | join(',') }}
+  MACs {{ (ssh_macs_default | default(sshd_macs_default) + ssh_macs_extra | default(sshd_macs_extra)) | join(',') }}
+  PasswordAuthentication {{ ssh_password_authentication | default(sshd_password_authentication) | ternary('yes', 'no') }}
+  SendEnv {{ ssh_send_env | join(' ') }}
+  StrictHostKeyChecking {{ ssh_strict_host_key_checking }}
+  UseRoaming {{ ssh_use_roaming | ternary('yes','no') }}
+{% endblock %}

@@ -1,16 +1,15 @@
 #!/bin/bash
 shopt -s nullglob
 
-DEPLOY_CMD="ansible-playbook deploy.yml -e env=$1 -e site=$2"
 ENVIRONMENTS=( hosts/* )
 ENVIRONMENTS=( "${ENVIRONMENTS[@]##*/}" )
-NUM_ARGS=2
 
 show_usage() {
-  echo "Usage: deploy <environment> <site name>
+  echo "Usage: deploy <environment> <site name> [options]
 
 <environment> is the environment to deploy to ("staging", "production", etc)
 <site name> is the WordPress site to deploy (name defined in "wordpress_sites")
+[options] is any number of parameters that will be passed to ansible-playbook
 
 Available environments:
 `( IFS=$'\n'; echo "${ENVIRONMENTS[*]}" )`
@@ -18,15 +17,25 @@ Available environments:
 Examples:
   deploy staging example.com
   deploy production example.com
+  deploy staging example.com -vv -T 60
 "
 }
 
-HOSTS_FILE="hosts/$1"
+[[ $# -lt 2 ]] && { show_usage; exit 0; }
 
-[[ $# -ne $NUM_ARGS || $1 = -h ]] && { show_usage; exit 0; }
+for arg
+do
+  [[ $arg = -h ]] && { show_usage; exit 0; }
+done
+
+ENV="$1"; shift
+SITE="$1"; shift
+EXTRA_PARAMS=$@
+DEPLOY_CMD="ansible-playbook deploy.yml -e env=$ENV -e site=$SITE $EXTRA_PARAMS"
+HOSTS_FILE="hosts/$ENV"
 
 if [[ ! -e $HOSTS_FILE ]]; then
-  echo "Error: $1 is not a valid environment ($HOSTS_FILE does not exist)."
+  echo "Error: $ENV is not a valid environment ($HOSTS_FILE does not exist)."
   echo
   echo "Available environments:"
   ( IFS=$'\n'; echo "${ENVIRONMENTS[*]}" )

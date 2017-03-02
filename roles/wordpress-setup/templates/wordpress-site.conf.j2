@@ -1,109 +1,190 @@
 # {{ ansible_managed }}
 
-server {
-  listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
+{% block server_before %}{% endblock %}
 
+server {
+  {% block server_id -%}
+  listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
   server_name  {% for host in site_hosts_canonical %}{{ host }} {% if item.value.multisite.subdomains | default(false) %}*.{{ host }} {% endif %}{% endfor %};
+  {% endblock %}
+
+  {% block logs -%}
   access_log   {{ www_root }}/{{ item.key }}/logs/access.log main;
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
+  {% endblock %}
 
+  {% block server_basic -%}
   root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;
   index index.php index.htm index.html;
-
+  add_header Fastcgi-Cache $upstream_cache_status;
   charset utf-8;
 
+  # Set the max body size equal to PHP's max POST size.
+  client_max_body_size {{ php_post_max_size | default('25m') | lower }};
+
   {% if env == 'development' -%}
-  # See Virtualbox section at http://wiki.nginx.org/Pitfalls
+  # https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/#virtualbox
   sendfile off;
-  {%- endif %}
 
-  {% if item.value.multisite.enabled | default(false) -%}
-    {% if item.value.multisite.subdomains | default(false) -%}
-      rewrite ^/(wp-.*.php)$ /wp/$1 last;
-      rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
-    {%- else -%}
-      include wordpress_multisite_subdirectories.conf;
-    {%- endif %}
-  {%- endif %}
-
-  add_header Fastcgi-Cache $upstream_cache_status;
-
-  {% if ssl_enabled %}{{ lookup('template', 'https.conf.j2') }}{% endif %}
-
-  {% if not ssl_enabled %}include acme-challenge-location.conf;{% endif %}
-
-  {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
-    set $skip_cache 0;
-
-    if ($query_string != "") {
-      set $skip_cache 1;
-    }
-
-    # Don't cache uris containing the following segments
-    if ($request_uri ~* "{{ item.value.cache.skip_cache_uri | default(nginx_skip_cache_uri) }}") {
-      set $skip_cache 1;
-    }
-
-    # Don't use the cache if cookies includes the following
-    if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
-      set $skip_cache 1;
-    }
   {% endif -%}
+  {% endblock -%}
 
+  {% block cache_conditions -%}
+  {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+  # Fastcgi cache conditions
+  set $skip_cache 0;
+  if ($query_string != "") {
+    set $skip_cache 1;
+  }
+  if ($request_uri ~* "{{ item.value.cache.skip_cache_uri | default(nginx_skip_cache_uri) }}") {
+    set $skip_cache 1;
+  }
+  if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
+    set $skip_cache 1;
+  }
+
+  {% endif -%}
+  {% endblock -%}
+  
+  {% block multisite_rewrites -%}
+  {% if item.value.multisite.enabled | default(false) -%}
+  # Multisite rewrites
+  {% if item.value.multisite.subdomains | default(false) -%}
+  rewrite ^/(wp-.*.php)$ /wp/$1 last;
+  rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
+
+  {% else -%}
+  if (!-e $request_filename) {
+    rewrite /wp-admin$ $scheme://$host$uri/ permanent;
+    rewrite ^(/[^/]+)?(/wp-.*) /wp$2 last;
+    rewrite ^(/[^/]+)?(/.*\.php) /wp$2 last;
+  }
+
+  {% endif -%}
+  {% endif -%}
+  {% endblock -%}
+
+  {% block https -%}
+  {% if ssl_enabled -%}
+  # SSL configuration
+  include h5bp/directive-only/ssl.conf;
+  include h5bp/directive-only/ssl-stapling.conf;
+
+  ssl_dhparam /etc/nginx/ssl/dhparams.pem;
+  ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
+
+  add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
+
+  {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
+
+  {% elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}-bundled.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
+
+  {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
+  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ item.key }}.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.key }}.key;
+
+  {% endif -%}
+  {% endif -%}
+  {% endblock -%}
+
+  {% block acme_challenge -%}
+  include acme-challenge-location.conf;
+
+  {% endblock -%}
+
+  {% block includes_d -%}
   include includes.d/{{ item.key }}/*.conf;
-  include wordpress.conf;
 
+  {% endblock -%}
+
+  {% block location_uploads_php -%}
+  # Prevent PHP scripts from being executed inside the uploads folder.
+  location ~* /app/uploads/.*\.php$ {
+    deny all;
+  }
+  {% endblock %}
+
+  {% block location_primary -%}
+  location / {
+    try_files $uri $uri/ /index.php?$args;
+  }
+  {% endblock %}
+
+  {% block h5bp -%}
+  include h5bp/directive-only/x-ua-compatible.conf;
+  include h5bp/directive-only/extra-security.conf;
+  include h5bp/location/cross-domain-fonts.conf;
+  include h5bp/location/protect-system-files.conf;
+  {% endblock %}
+
+  {% block location_php -%}
   location ~ \.php$ {
+    {% block location_php_basic -%}
     try_files $uri /index.php;
 
-    {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
-      fastcgi_cache wordpress;
-      fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
-      fastcgi_cache_bypass $skip_cache;
-      fastcgi_no_cache $skip_cache;
-    {% endif -%}
+    {% endblock -%}
 
+    {% block cache_config -%}
+    {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+    # Fastcgi cache settings
+    fastcgi_cache wordpress;
+    fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
+    fastcgi_cache_bypass $skip_cache;
+    fastcgi_no_cache $skip_cache;
+
+    {% endif -%}
+    {% endblock -%}
+
+    {% block fastcgi_basic -%}
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
     fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
+    {%- endblock %}
+
   }
+  {%- endblock %}
+
 }
 
+{% block redirects_https %}
 {% if ssl_enabled %}
+# Redirect to https
 server {
   listen 80;
-
   server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
 
-  {% if item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
-  include acme-challenge-location.conf;
+  {{ self.acme_challenge() -}}
 
   location / {
     return 301 https://$host$request_uri;
   }
-  {% else %}
-  return 301 https://$host$request_uri;
-  {% endif -%}
 }
-{% endif %}
 
+{% endif %}
+{% endblock -%}
+
+{%- block redirects_domains %}
+{% if site_hosts_redirects | default([]) | count %}
+# Redirect some domains
+{% endif %}
 {% for host in item.value.site_hosts if host.redirects | default([]) %}
 server {
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
-
-  {% if ssl_enabled %}{{ lookup('template', 'https.conf.j2') }}{% endif %}
-
   server_name {{ host.redirects | join(' ') }};
 
-  {% if not ssl_enabled -%}
-    include acme-challenge-location.conf;
+  {{ self.https() -}}
 
-    location / {
-      return 301 $scheme://{{ host.canonical }}$request_uri;
-    }
-  {% else %}
+  {{ self.acme_challenge() -}}
+
+  location / {
     return 301 $scheme://{{ host.canonical }}$request_uri;
-  {% endif %}
+  }
 }
 {% endfor %}
+{% endblock %}
