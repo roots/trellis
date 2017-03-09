@@ -3,9 +3,12 @@
 # nginx Configuration File
 # http://wiki.nginx.org/Configuration
 
+{% block user %}
 # Run as a less privileged user for security reasons.
 user {{ nginx_user }};
+{% endblock %}
 
+{% block worker %}
 # How many worker threads to run;
 # "auto" sets it to the number of CPU cores available in the system, and
 # offers the best performance. Don't set it higher than the number of CPU
@@ -18,23 +21,37 @@ worker_processes auto;
 # Maximum open file descriptors per process;
 # should be > worker_connections.
 worker_rlimit_nofile 8192;
+{% endblock %}
 
+{% block events %}
 events {
   # When you need > 8000 * cpu_cores connections, you start optimizing your OS,
   # and this is probably the point at which you hire people who are smarter than
   # you, as this is *a lot* of requests.
   worker_connections 8000;
 }
+{% endblock %}
 
+{% block error_log %}
 # Default error log file
 # (this is only used when you don't override error_log on a server{} level)
 error_log  {{ nginx_logs_root }}/error.log warn;
+{% endblock %}
+
+{% block pid %}
+# The file storing the process ID of the main process
 pid        /run/nginx.pid;
+{% endblock %}
 
 http {
+  {% block http_begin %}{% endblock %}
+
+  {% block server_tokens -%}
   # Hide nginx version information.
   server_tokens off;
+  {% endblock %}
 
+  {% block cache -%}
   # Setup the fastcgi cache.
   fastcgi_buffers {{ nginx_fastcgi_buffers }};
   fastcgi_buffer_size {{ nginx_fastcgi_buffer_size }};
@@ -45,36 +62,52 @@ http {
   fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
   fastcgi_pass_header Set-Cookie;
   fastcgi_pass_header Cookie;
+  {% endblock %}
 
+  {% block mime_types -%}
   # Define the MIME types for files.
   include       h5bp-server-configs/mime.types;
   default_type  application/octet-stream;
+  {% endblock %}
 
+  {% block charset_types -%}
   # Update charset_types due to updated mime.types
   charset_types text/css text/plain text/vnd.wap.wml application/javascript application/json application/rss+xml application/xml;
+  {% endblock %}
 
+  {% block log_format -%}
   # Format to use in log files
   log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
                     '$status $body_bytes_sent "$http_referer" '
                     '"$http_user_agent" "$http_x_forwarded_for"';
+  {% endblock %}
 
+  {% block access_log -%}
   # Default log file
   # (this is only used when you don't override access_log on a server{} level)
   access_log {{ nginx_logs_root }}/access.log main;
+  {% endblock %}
 
+  {% block keepalive -%}
   # How long to allow each connection to stay idle; longer values are better
   # for each individual client, particularly for SSL, but means that worker
   # connections are tied up longer. (Default: 65)
   keepalive_timeout 20;
+  {% endblock %}
 
+  {% block sendfile -%}
   # Speed up file transfers by using sendfile() to copy directly
   # between descriptors rather than using read()/write().
   sendfile        on;
+  {% endblock %}
 
+  {% block tcp_nopush -%}
   # Tell Nginx not to send out partial frames; this increases throughput
   # since TCP frames are filled up before being sent out. (adds TCP_CORK)
   tcp_nopush      on;
+  {% endblock %}
 
+  {% block compression -%}
   # Compression
 
   # Enable Gzip compressed.
@@ -133,6 +166,9 @@ http {
   # for the check. It is best if you enable this in a location{} block for
   # a specific directory, or on an individual server{} level.
   # gzip_static on;
+  {% endblock %}
 
+  {% block sites_enabled -%}
   include sites-enabled/*;
+  {% endblock %}
 }

@@ -15,6 +15,8 @@
   with_dict: "{{ wordpress_sites }}"
   when: ssl_enabled and item.value.ssl.key is defined
 
+- include: "{{ playbook_dir }}/roles/common/tasks/disable_challenge_sites.yml"
+
 - name: Create Nginx conf for challenges location
   template:
     src: "{{ playbook_dir }}/roles/letsencrypt/templates/acme-challenge-location.conf.j2"
@@ -23,10 +25,11 @@
 
 - name: Create WordPress configuration for Nginx
   template:
-    src: "wordpress-site.conf.j2"
+    src: "{{ item.value.nginx_wordpress_site_conf | default(nginx_wordpress_site_conf) }}"
     dest: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
   with_dict: "{{ wordpress_sites }}"
   notify: reload nginx
+  tags: nginx-includes
 
 - name: Enable WordPress site
   file:

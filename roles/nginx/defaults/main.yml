@@ -1,21 +1,13 @@
 ---
+nginx_conf: nginx.conf.j2
 nginx_path: /etc/nginx
 nginx_logs_root: /var/log/nginx
 nginx_user: www-data
 nginx_fastcgi_buffers: 8 8k
 nginx_fastcgi_buffer_size: 8k
-nginx_ssl_path: "{{ nginx_path }}/ssl"
-
-# HSTS defaults
-nginx_hsts_max_age: 31536000
-nginx_hsts_include_subdomains: true
-nginx_hsts_preload: false
 
 # Fastcgi cache params
 nginx_cache_path: /var/cache/nginx
-nginx_cache_duration: 30s
 nginx_cache_key_storage_size: 10m
 nginx_cache_size: 250m
 nginx_cache_inactive: 1h
-nginx_skip_cache_uri: /wp-admin/|/xmlrpc.php|wp-.*.php|/feed/|index.php|sitemap(_index)?.xml
-nginx_skip_cache_cookie: comment_author|wordpress_[a-f0-9]+|wp-postpass|wordpress_no_cache|wordpress_logged_in

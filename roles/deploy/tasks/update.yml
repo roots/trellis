@@ -2,6 +2,14 @@
 - include: "{{ deploy_update_before | default('../hooks/example.yml') }}"
   tags: deploy-update-before
 
+- name: Add known_hosts
+  known_hosts:
+    name: "{{ item.name }}"
+    key: "{{ item.key | default(omit) }}"
+    path: "{{ item.path | default('/home/' + ansible_user + '/.ssh/known_hosts') }}"
+    state: "{{ item.state | default('present') }}"
+  with_items: "{{ known_hosts | default([]) }}"
+
 - name: Check whether project source path is a git repo
   stat:
     path: "{{ project_source_path }}/.git"
@@ -26,7 +34,7 @@
     repo: "{{ project_git_repo }}"
     dest: "{{ project_source_path }}"
     version: "{{ project_version }}"
-    accept_hostkey: yes
+    accept_hostkey: "{{ repo_accept_hostkey | default(true) }}"
   ignore_errors: true
   no_log: true
   register: git_clone

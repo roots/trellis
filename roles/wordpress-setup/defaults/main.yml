@@ -1,4 +1,23 @@
 site_uses_local_db: "{{ site_env.db_host == 'localhost' }}"
+nginx_wordpress_site_conf: wordpress-site.conf.j2
+nginx_ssl_path: "{{ nginx_path }}/ssl"
+
+# HSTS defaults
+nginx_hsts_max_age: 31536000
+nginx_hsts_include_subdomains: true
+nginx_hsts_preload: false
+
+# HSTS helpers
+hsts_max_age: "{{ item.value.ssl.hsts_max_age | default(nginx_hsts_max_age) }}"
+hsts_include_subdomains: "{{ item.value.ssl.hsts_include_subdomains | default(nginx_hsts_include_subdomains) | ternary('includeSubDomains', None) }}"
+hsts_preload: "{{ item.value.ssl.hsts_preload | default(nginx_hsts_preload) | ternary('preload', None) }}"
+
+# Fastcgi cache params
+nginx_cache_duration: 30s
+nginx_skip_cache_uri: /wp-admin/|/xmlrpc.php|wp-.*.php|/feed/|index.php|sitemap(_index)?.xml
+nginx_skip_cache_cookie: comment_author|wordpress_[a-f0-9]+|wp-postpass|wordpress_no_cache|wordpress_logged_in
+
+# Nginx includes
 nginx_includes_templates_path: nginx-includes
 nginx_includes_deprecated: roles/wordpress-setup/templates/includes.d
 nginx_includes_pattern: "^({{ nginx_includes_templates_path | regex_escape }}|{{ nginx_includes_deprecated | regex_escape }})/(.*)\\.j2$"
