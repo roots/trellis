@@ -17,3 +17,7 @@ wordpress_sites:
       provider: self-signed
     cache:
       enabled: false
+    csp:
+      enabled: false
+      directives:
+        - "default-src 'none'"
