@@ -96,7 +96,7 @@
   with_items: "{{ nginx_sites_enabled_existing.files | default({}) | map(attribute='path') |
                   difference(nginx_sites_enabled_wordpress.results | map(attribute='stat.path')) |
                   difference(nginx_sites_enabled |
-                    map('regex_replace', '^(.*)$', nginx_path + '/sites-enabled/\\1') | unique
+                    map('regex_replace', '^(.*)$', nginx_path + '/sites-enabled/\\1.conf') | unique
                   ) | list
                }}"
   notify: reload nginx
