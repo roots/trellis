@@ -50,8 +50,100 @@
     state: absent
   notify: reload nginx
 
-- name: Enable better default site to drop unknown requests
-  command: cp {{ nginx_path }}/h5bp-server-configs/sites-available/no-default {{ nginx_path }}/sites-enabled/no-default.conf
+- name: Create sites-available/extras directory
+  file:
+    mode: 0755
+    path: "{{ nginx_path }}/sites-available/extras"
+    state: directory
+  tags: nginx-sites
+
+- name: Create sites-enabled/extras directory
+  file:
+    mode: 0755
+    path: "{{ nginx_path }}/sites-enabled/extras"
+    state: directory
+  tags: nginx-sites
+
+- name: Copy better default site configuration to sites-available/extras
+  command: cp {{ nginx_path }}/h5bp-server-configs/sites-available/no-default {{ nginx_path }}/sites-available/extras/no-default.conf
   args:
-    creates: "{{ nginx_path }}/sites-enabled/no-default.conf"
+    creates: "{{ nginx_path }}/sites-available/extras/no-default.conf"
+  tags: nginx-sites
+
+- name: Remove better default site configuration from old location in sites-available
+  file:
+    path: "{{ nginx_path }}/sites-available/no-default.conf"
+    state: absent
   notify: reload nginx
+  tags: nginx-sites
+
+- name: Build list of Nginx extra sites-available templates
+  find:
+    paths:
+      - "{{ nginx_sites_available_templates_path }}"
+    pattern: "*.conf.j2"
+    recurse: yes
+  become: no
+  connection: local
+  register: nginx_sites_available_templates
+  tags: nginx-sites
+
+- name: Template files out to sites-available/extras
+  template:
+    src: "{{ item }}"
+    dest: "{{ nginx_path }}/sites-available/extras/{{ item | regex_replace(nginx_sites_available_pattern, '\\2') }}"
+  with_items: "{{ nginx_sites_available_templates.files | map(attribute='path') | list | sort(True) }}"
+  tags: nginx-sites
+
+- name: Retrieve list of existing files in sites-enabled/extras
+  find:
+    paths: "{{ nginx_path }}/sites-enabled/extras"
+    pattern: "*.conf"
+    recurse: yes
+  register: nginx_sites_enabled_existing
+  tags: nginx-sites
+
+- name: Remove unmanaged files from sites-enabled/extras
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ nginx_sites_enabled_existing.files | default({}) | map(attribute='path') |
+                  difference(nginx_sites_enabled |
+                    map('regex_replace', '^(.*)$', nginx_path + '/sites-enabled/extras/\\1.conf') | unique
+                  ) | list
+               }}"
+  notify: reload nginx
+  tags: nginx-sites
+
+- name: Retrieve list of existing files in sites-available/extras
+  find:
+    paths: "{{ nginx_path }}/sites-available/extras"
+    pattern: "*.conf"
+    recurse: yes
+  register: nginx_sites_available_existing
+  when: nginx_sites_available_cleanup
+  tags: nginx-sites
+
+- name: Remove unmanaged files from sites-available/extras
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ nginx_sites_available_existing.files | default({}) | map(attribute='path') |
+                  difference(nginx_sites_available_templates.files | map(attribute='path') |
+                    map('regex_replace', nginx_sites_available_pattern, nginx_path + '/sites-available/extras/\\2') | unique
+                  ) |
+                  difference([nginx_path + '/sites-available/extras/no-default.conf']) | list
+               }}"
+  when: nginx_sites_available_cleanup
+  tags: nginx-sites
+
+- name: Enable Nginx sites
+  file:
+    src: "{{ nginx_path }}/sites-available/extras/{{ item }}.conf"
+    dest: "{{ nginx_path }}/sites-enabled/extras/{{ item }}.conf"
+    owner: root
+    group: root
+    state: link
+  with_items: "{{ nginx_sites_enabled }}"
+  notify: reload nginx
+  tags: nginx-sites
