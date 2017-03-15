@@ -1,5 +1,12 @@
 ---
 nginx_conf: nginx.conf.j2
+
+nginx_sites_available_templates_path: nginx-sites-available
+nginx_sites_available_pattern: "^({{ nginx_sites_available_templates_path | regex_escape }})/(.*)\\.j2$"
+nginx_sites_available_cleanup: true
+nginx_sites_enabled:
+  - no-default
+
 nginx_path: /etc/nginx
 nginx_logs_root: /var/log/nginx
 nginx_user: www-data
