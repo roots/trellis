@@ -74,9 +74,9 @@
   tags: nginx-sites
 
 - name: Remove Nginx extra enabled sites
-  file:
-    state: absent
-    path: "{{ nginx_path }}/sites-enabled/extras/"
+  command: rm -f {{ nginx_path }}/sites-enabled/extras/*
+  args:
+    warn: false
   notify: reload nginx
   tags: nginx-sites
   when: nginx_sites_enabled_cleanup
