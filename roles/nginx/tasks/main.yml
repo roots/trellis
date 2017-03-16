@@ -73,7 +73,7 @@
     state: directory
   tags: nginx-sites
 
-- name: Remove nginx extra enabled sites
+- name: Remove Nginx extra enabled sites
   file:
     state: absent
     path: "{{ nginx_path }}/sites-enabled/extras/"
