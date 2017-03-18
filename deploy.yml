@@ -3,6 +3,14 @@
   vars:
     playbook: deploy.yml
 
+- name: Test Connection
+  hosts: web:&{{ env }}
+  gather_facts: false
+  vars:
+    dynamic_user: false
+  roles:
+    - { role: connection, tags: [connection, always] }
+
 - name: Deploy WP site
   hosts: web:&{{ env }}
   remote_user: "{{ web_user }}"

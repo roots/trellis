@@ -1,9 +1,9 @@
 ---
-- name: Determine Remote User
+- name: Test Connection and Determine Remote User
   hosts: "{{ xdebug_tunnel_inventory_host }}"
   gather_facts: false
   roles:
-    - { role: remote-user, tags: [remote-user, always] }
+    - { role: connection, tags: [connection, always] }
 
 - name: Enable or Disable Xdebug and SSH Tunnel
   hosts: "{{ xdebug_tunnel_inventory_host }}"

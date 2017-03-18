@@ -1,0 +1,56 @@
+---
+- name: Require manual definition of remote-user
+  fail:
+    msg: |
+      When using `--ask-pass` option, use `-u` option to define remote-user:
+      ansible-playbook server.yml -e env={{ env | default('production') }} -u root --ask-pass
+  when: dynamic_user | default(true) and ansible_user is not defined and cli_ask_pass | default(false)
+
+- name: Check whether Ansible can connect as {{ dynamic_user | default(true) | ternary('root', web_user) }}
+  local_action: command ansible {{ inventory_hostname }} -m raw -a whoami -u {{ dynamic_user | default(true) | ternary('root', web_user) }} {{ cli_options | default('') }} -vvvv
+  failed_when: false
+  changed_when: false
+  check_mode: no
+  register: connection_status
+  tags: [connection-tests]
+
+- name: Warn about change in host keys
+  fail:
+    msg: |
+      WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+
+      If this change in host keys is expected (e.g., if you rebuilt the server
+      or if the Trellis sshd role made changes recently), then run the following
+      command to clear the old host key from your known_hosts.
+
+        ssh-keygen -R {{ connection_status.stdout | regex_replace('(.|\n)*host key for (.*) has changed(.|\n)*', '\2') }}
+
+      Then try your Trellis playbook or SSH connection again.
+
+      If the change is unexpected, cautiously consider why the host identification
+      may have changed and whether you may be victim to a man-in-the-middle attack.
+
+      ---------------------------------------------------
+      {{ (connection_status.stdout.replace('Please contact your system administrator.\r\n', '') |
+          regex_replace ('(.|\n)*(The fingerprint for the(.|\n)*Host key verification failed.)(.|\n)*', '\2') |
+          regex_replace('(\\r\\n|\\n)', '\n\n')).replace('\"', '"') }}
+  when: "'REMOTE HOST IDENTIFICATION HAS CHANGED' in connection_status.stdout"
+  tags: [connection-tests]
+
+- block:
+  - name: Set remote user for each host
+    set_fact:
+      ansible_user: "{{ ansible_user | default(('root' in connection_status.stdout_lines) | ternary('root', admin_user)) }}"
+    check_mode: no
+
+  - name: Announce which user was selected
+    debug:
+      msg: "Note: Ansible will attempt connections as user = {{ ansible_user }}"
+
+  - name: Load become password
+    set_fact:
+      ansible_become_pass: "{% raw %}{% for user in vault_users | default([]) if user.name == ansible_user %}{{ user.password | default('') }}{% endfor %}{% endraw %}"
+    when: ansible_user != 'root' and not cli_ask_become_pass | default(false) and ansible_become_pass is not defined
+    no_log: true
+
+  when: dynamic_user | default(true)
