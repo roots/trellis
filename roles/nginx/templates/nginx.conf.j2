@@ -169,6 +169,10 @@ http {
   {% endblock %}
 
   {% block sites_enabled -%}
-  include sites-enabled/*;
+  include sites-enabled/*.conf;
+  {% endblock %}
+
+  {% block sites_enabled_extras -%}
+  include sites-enabled/extras/*.conf;
   {% endblock %}
 }
