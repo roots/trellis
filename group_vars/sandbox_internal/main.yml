@@ -37,6 +37,7 @@ wp_rsync_opts:
     - "--exclude='/wp-content/plugins/pt-preview-bar/'"
     - "--exclude='/wp-content/plugins/wordpress-popup/'"
     - "--exclude='/wp-content/plugins/wp-asset-clean-up/'"
+    - "--exclude='/wp-content/plugins/intercom/'"
     - "--exclude='/wp-content/mu-plugins/'"
   uploads:
     - "--delete"
