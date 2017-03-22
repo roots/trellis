@@ -55,3 +55,36 @@
   args:
     creates: "{{ nginx_path }}/sites-enabled/no-default.conf"
   notify: reload nginx
+  tags: nginx-sites
+  when: nginx_default_site_enabled
+
+- name: Disable better default site
+  file:
+    path: "{{ nginx_path }}/sites-enabled/no-default.conf"
+    state: absent
+  notify: reload nginx
+  tags: nginx-sites
+  when: not nginx_default_site_enabled
+
+- name: Create sites-enabled/extras directory
+  file:
+    mode: 0755
+    path: "{{ nginx_path }}/sites-enabled/extras"
+    state: directory
+  tags: nginx-sites
+
+- name: Remove Nginx extra enabled sites
+  command: rm -f {{ nginx_path }}/sites-enabled/extras/*
+  args:
+    warn: false
+  notify: reload nginx
+  tags: nginx-sites
+  when: nginx_sites_enabled_cleanup
+
+- name: Create Nginx extra enabled sites
+  template:
+    src: "{{ item }}"
+    dest: "{{ nginx_path }}/sites-enabled/extras/{{ item | basename | regex_replace('.j2$', '') }}"
+  with_items: "{{ nginx_sites_enabled_templates }}"
+  notify: reload nginx
+  tags: nginx-sites
