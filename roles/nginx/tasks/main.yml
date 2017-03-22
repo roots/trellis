@@ -50,8 +50,118 @@
     state: absent
   notify: reload nginx
 
-- name: Enable better default site to drop unknown requests
-  command: cp {{ nginx_path }}/h5bp-server-configs/sites-available/no-default {{ nginx_path }}/sites-enabled/no-default.conf
+- name: Copy better default site configuration to sites-available
+  command: cp {{ nginx_path }}/h5bp-server-configs/sites-available/no-default {{ nginx_path }}/sites-available/no-default.conf
   args:
-    creates: "{{ nginx_path }}/sites-enabled/no-default.conf"
+    creates: "{{ nginx_path }}/sites-available/no-default.conf"
+  tags: nginx-sites
+
+- name: Build list of Nginx sites-available templates
+  find:
+    paths:
+      - "{{ nginx_sites_available_templates_path }}"
+    pattern: "*.conf.j2"
+    recurse: yes
+  become: no
+  connection: local
+  register: nginx_sites_available_templates
+  tags: nginx-sites
+
+- name: Template files out to sites-available
+  template:
+    src: "{{ item }}"
+    dest: "{{ nginx_path }}/sites-available/{{ item | regex_replace(nginx_sites_available_pattern, '\\2') }}"
+  with_items: "{{ nginx_sites_available_templates.files | map(attribute='path') | list | sort(True) }}"
+  tags: nginx-sites
+
+- name: Retrieve list of existing files in sites-enabled
+  find:
+    paths: "{{ nginx_path }}/sites-enabled"
+    pattern: "*.conf"
+    recurse: yes
+  register: nginx_sites_enabled_existing
+  tags: nginx-sites
+
+- name: Retrieve list of WordPress sites in sites-enabled
+  stat:
+    path: "{{ nginx_path }}/sites-enabled/{{ item.key }}.conf"
+  with_dict: "{{ wordpress_sites }}"
+  register: nginx_sites_enabled_wordpress
+  tags: nginx-sites
+
+- name: Retrieve list of Let's Encrypt sites in sites-enabled
+  find:
+    paths: "{{ nginx_path }}/sites-enabled"
+    pattern: "letsencrypt-*.conf"
+    recurse: yes
+  register: nginx_sites_enabled_letsencrypt
+  when: nginx_sites_available_cleanup
+  tags: nginx-sites
+
+- name: Remove unmanaged files from sites-enabled
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ nginx_sites_enabled_existing.files | default({}) | map(attribute='path') |
+                  difference(nginx_sites_enabled_wordpress.results | map(attribute='stat.path')) |
+                  difference(nginx_sites_enabled_letsencrypt.files | map(attribute='path')) |
+                  difference(nginx_sites_enabled |
+                    map('regex_replace', '^(.*)$', nginx_path + '/sites-enabled/\\1.conf') | unique
+                  ) | list
+               }}"
   notify: reload nginx
+  tags: nginx-sites
+
+- name: Retrieve list of existing files in sites-available
+  find:
+    paths: "{{ nginx_path }}/sites-available"
+    pattern: "*.conf"
+    recurse: yes
+  register: nginx_sites_available_existing
+  when: nginx_sites_available_cleanup
+  tags: nginx-sites
+
+- name: Retrieve list of WordPress sites in sites-available
+  stat:
+    path: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
+  with_dict: "{{ wordpress_sites }}"
+  register: nginx_sites_available_wordpress
+  when: nginx_sites_available_cleanup
+  tags: nginx-sites
+
+- name: Retrieve list of Let's Encrypt sites in sites-available
+  find:
+    paths: "{{ nginx_path }}/sites-available"
+    pattern: "letsencrypt-*.conf"
+    recurse: yes
+  register: nginx_sites_available_letsencrypt
+  when: nginx_sites_available_cleanup
+  tags: nginx-sites
+
+- name: Remove unmanaged files from sites-available
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ nginx_sites_available_existing.files | default({}) | map(attribute='path') |
+                  difference(nginx_sites_available_wordpress.results | map(attribute='stat.path')) |
+                  difference(nginx_sites_available_letsencrypt.files | map(attribute='path')) |
+                  difference(nginx_sites_available_templates.files | map(attribute='path') |
+                    map('regex_replace', nginx_sites_available_pattern, nginx_path + '/sites-available/\\2') | unique
+                  ) |
+                  difference([nginx_path + '/sites-available/no-default.conf']) | list
+               }}"
+  when: nginx_sites_available_cleanup
+  notify: reload nginx
+  tags: nginx-sites
+
+- name: Enable Nginx sites
+  file:
+    src: "{{ nginx_path }}/sites-available/{{ item }}.conf"
+    dest: "{{ nginx_path }}/sites-enabled/{{ item }}.conf"
+    owner: root
+    group: root
+    state: link
+    force: yes
+  with_items: "{{ nginx_sites_enabled }}"
+  notify: reload nginx
+  tags: nginx-sites
