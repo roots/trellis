@@ -5,12 +5,6 @@ __metaclass__ = type
 import os.path
 import sys
 
-from ansible import __version__
-from ansible.errors import AnsibleError
-
-if __version__.startswith('1'):
-    raise AnsibleError('Trellis no longer supports Ansible 1.x. Please upgrade to Ansible 2.x.')
-
 from ansible.plugins.callback.default import CallbackModule as CallbackModule_default
 
 try:
