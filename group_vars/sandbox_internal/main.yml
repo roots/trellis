@@ -61,6 +61,8 @@ wp_emails:
 strings_to_replace:
   - from: "{{ vault_forecastio_api_key }}"
     to: ""
+  - from: "{{ vault_wcappointments_license }}"
+    to: ""
 
 sites_to_export:
   - hairpress
