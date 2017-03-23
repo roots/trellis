@@ -1,4 +1,5 @@
 ### HEAD
+* Add additional Nginx sites configurations support ([#793](https://github.com/roots/trellis/pull/793))
 * Change `remote-user` role to `connection` role: tests host key, user ([#745](https://github.com/roots/trellis/pull/745))
 * Allow customization of PHP extensions ([#787](https://github.com/roots/trellis/pull/787))
 * Allow for per-project packagist.com authentication ([#762](https://github.com/roots/trellis/pull/762))
