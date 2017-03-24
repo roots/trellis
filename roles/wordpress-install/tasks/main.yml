@@ -20,7 +20,7 @@
   known_hosts:
     name: "{{ item.name }}"
     key: "{{ item.key | default(omit) }}"
-    path: "{{ item.path | default('/home/' + ansible_user + '/.ssh/known_hosts') }}"
+    path: "{{ item.path | default(home_root + ansible_user + '/.ssh/known_hosts') }}"
     state: "{{ item.state | default('present') }}"
   with_items: "{{ known_hosts | default([]) }}"
 
