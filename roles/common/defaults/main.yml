@@ -1,7 +1,3 @@
-ansible_requirements:
-  - version: 2.2.0.0
-    operator: '>='
-
 ntp_timezone: Etc/UTC
 
 apt_packages_default:
