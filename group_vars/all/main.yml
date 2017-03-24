@@ -5,7 +5,6 @@ apt_cache_valid_time: 3600
 ntp_timezone: Etc/UTC
 ntp_manage_config: true
 www_root: /srv/www
-home_root: /home/
 ip_whitelist:
   - "{{ (env == 'development') | ternary(ansible_default_ipv4.gateway, ipify_public_ip | default('')) }}"
 
