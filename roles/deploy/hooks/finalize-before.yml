@@ -5,7 +5,7 @@
     dest: "{{ deploy_helper.shared_path }}/tmp_multisite_constants.php"
 
 - name: WordPress Installed?
-  command: wp core is-installed --require={{ deploy_helper.shared_path }}/tmp_multisite_constants.php
+  command: wp core is-installed --skip-plugins --skip-themes --require={{ deploy_helper.shared_path }}/tmp_multisite_constants.php
   args:
     chdir: "{{ deploy_helper.new_release_path }}"
   register: wp_installed
