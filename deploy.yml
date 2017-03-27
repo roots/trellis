@@ -3,6 +3,14 @@
   vars:
     playbook: deploy.yml
 
+- name: Test Connection
+  hosts: web:&{{ env }}
+  gather_facts: false
+  vars:
+    dynamic_user: false
+  roles:
+    - { role: connection, tags: [connection, always] }
+
 - name: Deploy WP site
   hosts: web:&{{ env }}
   remote_user: "{{ web_user }}"
@@ -10,6 +18,7 @@
   vars:
     deploy_build_before: "{{ playbook_dir }}/deploy-hooks/build-before.yml"
     deploy_build_after: "{{ playbook_dir }}/roles/deploy/hooks/build-after.yml"
+    deploy_finalize_before: "{{ playbook_dir }}/roles/deploy/hooks/finalize-before.yml"
     deploy_finalize_after: "{{ playbook_dir }}/roles/deploy/hooks/finalize-after.yml"
     project: "{{ wordpress_sites[site] }}"
     project_root: "{{ www_root }}/{{ site }}"

@@ -1,7 +1,3 @@
-ansible_requirements:
-  - version: 2.2.0.0
-    operator: '>='
-
 ntp_timezone: Etc/UTC
 
 apt_packages_default:
@@ -15,7 +11,7 @@ apt_packages_default:
   - libnss-myhostname
 
 apt_packages_custom: []
-apt_packages_install: "{{ apt_packages_default + apt_packages_custom }}"
+apt_packages: "{{ apt_packages_default + apt_packages_custom }}"
 
 openssh_6_8_plus: "{{ (lookup('pipe', 'ssh -V 2>&1')) | regex_replace('(.*OpenSSH_([\\d\\.]*).*)', '\\2') | version_compare('6.8', '>=') }}"
 overlapping_ciphers: "[{% for cipher in (sshd_ciphers_default + sshd_ciphers_extra) if cipher in ssh_client_ciphers %}'{{ cipher }}',{% endfor %}]"

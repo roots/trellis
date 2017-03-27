@@ -50,8 +50,20 @@
     state: absent
   notify: reload nginx
 
-- name: Enable better default site to drop unknown requests
-  command: cp {{ nginx_path }}/h5bp-server-configs/sites-available/no-default {{ nginx_path }}/sites-enabled/no-default.conf
-  args:
-    creates: "{{ nginx_path }}/sites-enabled/no-default.conf"
+- name: Create Nginx available sites
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
+  with_items: "{{ nginx_sites_confs }}"
+  when: item.enabled | default(true)
+  tags: nginx-sites
+
+- name: Enable or disable Nginx sites
+  file:
+    path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
+    src: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
+    state: "{{ item.enabled | default(true) | ternary('link', 'absent') }}"
+    force: yes
+  with_items: "{{ nginx_sites_confs }}"
   notify: reload nginx
+  tags: nginx-sites

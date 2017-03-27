@@ -5,6 +5,8 @@ nginx_logs_root: /var/log/nginx
 nginx_user: www-data
 nginx_fastcgi_buffers: 8 8k
 nginx_fastcgi_buffer_size: 8k
+nginx_sites_confs:
+  - src: no-default.conf.j2
 
 # Fastcgi cache params
 nginx_cache_path: /var/cache/nginx

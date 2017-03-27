@@ -1,15 +1,4 @@
 ---
-- name: Validate Ansible version
-  fail:
-    msg: |
-      Your Ansible version is {{ ansible_version.full | default('unknown') }}.
-      Please install a version of Ansible that meets these requirements:
-      {% for item in ansible_requirements %}
-        {{ item.operator }} {{ item.version }}
-      {% endfor %}
-  when: ansible_version is not defined or false in [{% for item in ansible_requirements %}{{ ansible_version.full | version_compare(item.version, item.operator) }},{% endfor %}]
-  run_once: true
-
 - name: Validate format of site_hosts
   fail:
     msg: "{{ lookup('template', 'site_hosts.j2') }}"
@@ -70,7 +59,7 @@
     state: present
     update_cache: true
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_items: "{{ apt_packages_install }}"
+  with_items: "{{ apt_packages }}"
 
 - name: Validate timezone variable
   stat:
