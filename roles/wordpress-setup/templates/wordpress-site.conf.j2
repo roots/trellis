@@ -157,7 +157,7 @@ server {
 # Redirect to https
 server {
   listen 80;
-  server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
+  server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ item.value.env.domain_current_site }}{% endif %};
 
   {{ self.acme_challenge() -}}
 
