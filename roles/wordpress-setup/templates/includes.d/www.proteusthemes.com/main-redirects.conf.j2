@@ -33,6 +33,10 @@ location = /pt-pricelist.pdf {
   return 301 /services/;
 }
 
+location = /mp/ {
+  return 301 /medicpress-landing-page-sandbox/;
+}
+
 location ^~ /payment-form.php {
   return 301 https://apps.proteusthemes.com/customization-form/$is_args$args;
 }
