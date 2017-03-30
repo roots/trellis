@@ -9,7 +9,7 @@
   args:
     warn: false
   register: wp_cli
-  changed_when: wp_cli.stdout == "wp-cli{{ wp_cli_version }}.phar"
+  changed_when: wp_cli.stdout == 'wp-cli-' + wp_cli_version + '.phar'
 
 - name: Retrieve WP-CLI tab completions
   command: curl -4Ls {{ wp_cli_completion_url }} -o /tmp/wp-completion-{{ wp_cli_version }}.bash
@@ -22,4 +22,4 @@
   args:
     warn: false
   register: wp_cli_completion
-  changed_when: wp_cli_completion.stdout == "wp-completion-{{ wp_cli_version }}.bash"
+  changed_when: wp_cli_completion.stdout == 'wp-completion-' + wp_cli_version + '.bash'
