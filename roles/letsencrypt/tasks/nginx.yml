@@ -18,7 +18,9 @@
     src: nginx-challenge-site.conf.j2
     dest: "{{ nginx_path }}/sites-available/letsencrypt-{{ item.key }}.conf"
   register: challenge_site_confs
-  when: missing_hosts | count
+  when:
+    - site_uses_letsencrypt
+    - missing_hosts | count
   with_dict: "{{ wordpress_sites }}"
 
 - name: Enable Nginx sites
@@ -27,7 +29,9 @@
     dest: "{{ nginx_path }}/sites-enabled/letsencrypt-{{ item.key }}.conf"
     state: link
   register: challenge_sites_enabled
-  when: missing_hosts | count
+  when:
+    - site_uses_letsencrypt
+    - missing_hosts | count
   with_dict: "{{ wordpress_sites }}"
   notify: disable temporary challenge sites
 
