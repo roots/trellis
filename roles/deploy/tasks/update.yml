@@ -1,5 +1,6 @@
 ---
-- include: "{{ deploy_update_before | default('../hooks/example.yml') }}"
+- include: "{{ item }}"
+  with_items: "{{ deploy_update_before | default([]) }}"
   tags: deploy-update-before
 
 - name: Add known_hosts
@@ -48,5 +49,6 @@
       > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
   when: git_clone | failed
 
-- include: "{{ deploy_update_after | default('../hooks/example.yml') }}"
+- include: "{{ item }}"
+  with_items: "{{ deploy_update_after | default([]) }}"
   tags: deploy-update-after

@@ -1,5 +1,6 @@
 ---
-- include: "{{ deploy_initialize_before | default('../hooks/example.yml') }}"
+- include: "{{ item }}"
+  with_items: "{{ deploy_initialize_before | default([]) }}"
   tags: deploy-initialize-before
 
 - name: Initialize
@@ -8,5 +9,6 @@
     path: "{{ project_root }}"
     state: present
 
-- include: "{{ deploy_initialize_after | default('../hooks/example.yml') }}"
+- include: "{{ item }}"
+  with_items: "{{ deploy_initialize_after | default([]) }}"
   tags: deploy-initialize-after

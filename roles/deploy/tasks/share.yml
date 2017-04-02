@@ -1,5 +1,6 @@
 ---
-- include: "{{ deploy_share_before | default('../hooks/example.yml') }}"
+- include: "{{ item }}"
+  with_items: "{{ deploy_share_before | default([]) }}"
   tags: deploy-share-before
 
 - name: Ensure shared sources are present -- directories
@@ -45,5 +46,6 @@
     state: link
   with_items: "{{ project_shared_children }}"
 
-- include: "{{ deploy_share_after | default('../hooks/example.yml') }}"
+- include: "{{ item }}"
+  with_items: "{{ deploy_share_after | default([]) }}"
   tags: deploy-share-after
