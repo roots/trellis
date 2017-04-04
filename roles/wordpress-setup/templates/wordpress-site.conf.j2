@@ -5,7 +5,7 @@
 server {
   {% block server_id -%}
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
-  server_name  {% for host in site_hosts_canonical %}{{ host }} {% if item.value.multisite.subdomains | default(false) %}*.{{ host }} {% endif %}{% endfor %};
+  server_name {{ site_hosts_canonical | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | map('regex_replace', '^www\.', '') | join(' *.') }}{% endif %};
   {% endblock %}
 
   {% block logs -%}
@@ -157,7 +157,7 @@ server {
 # Redirect to https
 server {
   listen 80;
-  server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | join(' *.') }}{% endif %};
+  server_name {{ site_hosts | join(' ') }}{% if item.value.multisite.subdomains | default(false) %} *.{{ site_hosts_canonical | map('regex_replace', '^www\.', '') | join(' *.') }}{% endif %};
 
   {{ self.acme_challenge() -}}
 
