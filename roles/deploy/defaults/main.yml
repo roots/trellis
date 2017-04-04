@@ -60,4 +60,3 @@ deploy_finalize_before:
 
 deploy_finalize_after:
   - "{{ playbook_dir }}/roles/deploy/hooks/finalize-after.yml"
-    
