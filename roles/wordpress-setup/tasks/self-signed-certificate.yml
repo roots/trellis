@@ -1,4 +1,10 @@
 ---
+- name: Add canonical domains as Subject Alternative Name
+  template:
+    src: "{{ playbook_dir }}/roles/wordpress-setup/templates/openssl.conf.j2"
+    dest: "{{ nginx_ssl_path }}/openssl.cnf"
+  with_dict: "{{ wordpress_sites }}"
+
 - name: Generate self-signed certificates
   shell: >
     openssl req -subj "/CN={{ item.value.site_hosts[0].canonical }}" -new
