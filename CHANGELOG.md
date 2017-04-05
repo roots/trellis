@@ -1,4 +1,5 @@
 ### HEAD
+* Accommodate deploy hook vars formatted as lists of includes ([#815](https://github.com/roots/trellis/pull/815))
 * Check Ansible version before Ansible validates task attributes ([#797](https://github.com/roots/trellis/pull/797))
 * Add additional Nginx sites configurations support ([#793](https://github.com/roots/trellis/pull/793))
 * Change `remote-user` role to `connection` role: tests host key, user ([#745](https://github.com/roots/trellis/pull/745))

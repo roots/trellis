@@ -1,5 +1,8 @@
 ---
-- include: "{{ deploy_build_before | default('../hooks/example.yml') }}"
+- include: "{{ include_path }}"
+  with_items: "{{ deploy_build_before | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-build-before
 
 - name: Copy project templates
@@ -20,5 +23,8 @@
   with_items: "{{ project_folder_paths.results }}"
   when: item.stat.exists
 
-- include: "{{ deploy_build_after | default('../hooks/example.yml') }}"
+- include: "{{ include_path }}"
+  with_items: "{{ deploy_build_after | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-build-after
