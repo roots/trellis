@@ -11,7 +11,7 @@
     -newkey rsa:2048 -days 3650 -nodes -x509 -sha256
     -keyout {{ item.key }}.key -out {{ item.key }}.cert
   args:
-    chdir: "{{ nginx_path }}/ssl"
+    chdir: "{{ nginx_ssl_path }}"
     creates: "{{ item.key }}.*"
   with_dict: "{{ wordpress_sites }}"
   when: ssl_enabled and item.value.ssl.provider | default('manual') == 'self-signed'
