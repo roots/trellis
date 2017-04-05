@@ -1,6 +1,8 @@
 ---
-- include: "{{ item }}"
+- include: "{{ include_path }}"
   with_items: "{{ deploy_finalize_before | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-finalize-before
 
 - name: Finalize the deploy
@@ -10,8 +12,10 @@
     release: "{{ deploy_helper.new_release }}"
     state: finalize
 
-- include: "{{ item }}"
+- include: "{{ include_path }}"
   with_items: "{{ deploy_finalize_after | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-finalize-after
 
 - debug:
