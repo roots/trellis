@@ -1,0 +1,11 @@
+wordpress_env_defaults:
+  db_host: localhost
+  db_name: "{{ site | underscore }}_{{ env }}"
+  db_user: "{{ site | underscore }}"
+  disable_wp_cron: true
+  wp_env: "{{ env }}"
+  wp_home: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}"
+  wp_siteurl: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}/wp"
+  domain_current_site: "{{ project.site_hosts | map(attribute='canonical') | first }}"
+
+site_env: "{{ wordpress_env_defaults | combine(project.env | default({}), vault_wordpress_sites[site].env) }}"
