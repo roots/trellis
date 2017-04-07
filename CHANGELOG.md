@@ -1,4 +1,5 @@
 ### HEAD
+* Use dynamic HostKeyAlgorithms SSH option for unknown hosts ([#798](https://github.com/roots/trellis/pull/798))
 * Accommodate deploy hook vars formatted as lists of includes ([#815](https://github.com/roots/trellis/pull/815))
 * Check Ansible version before Ansible validates task attributes ([#797](https://github.com/roots/trellis/pull/797))
 * Add additional Nginx sites configurations support ([#793](https://github.com/roots/trellis/pull/793))
