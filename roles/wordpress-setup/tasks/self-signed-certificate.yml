@@ -1,13 +1,15 @@
 ---
 - name: Generate self-signed certificates
-  shell: "openssl req -subj \"/CN={{ item.value.site_hosts[0].canonical }}\" -new \
-    -newkey rsa:2048 -days 3650 -nodes -x509 -sha256 \
+  shell: "openssl req -new -newkey rsa:2048 \
+    -days 3650 -nodes -x509 -sha256 \
     -extensions req_ext -config <( \
-cat <<\" EOF\"\n
+cat <<' EOF'\n
 [req]\n
-distinguished_name = dn\n
-[ dn ]\n
-[ req_ext ]\n
+prompt = no\n
+distinguished_name = req_dn\n
+[req_dn]\n
+commonName = {{ item.value.site_hosts[0].canonical }}\n
+[req_ext]\n
 subjectAltName = {{ site_hosts | union(multisite_subdomains_wildcards) | map('regex_replace', '(.*)', 'DNS:\\1') | join(',') }}\n
 EOF\n
     ) \
