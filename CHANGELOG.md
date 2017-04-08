@@ -1,4 +1,4 @@
-### HEAD
+### 1.0.0-rc.1: April 7th, 2017
 * Add vault_wordpress_sites validation ([#823](https://github.com/roots/trellis/pull/823))
 * Use dynamic HostKeyAlgorithms SSH option for unknown hosts ([#798](https://github.com/roots/trellis/pull/798))
 * Accommodate deploy hook vars formatted as lists of includes ([#815](https://github.com/roots/trellis/pull/815))
