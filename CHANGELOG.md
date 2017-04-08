@@ -1,4 +1,5 @@
 ### HEAD
+* Add ansible_local support for non-Windows ([#824](https://github.com/roots/trellis/pull/824))
 * Add `fastcgi_read_timeout` to Nginx config ([#860](https://github.com/roots/trellis/pull/860))
 * Accommodate child themes: Update WP `stylesheet_root` separately ([#850](https://github.com/roots/trellis/pull/850))
 * Deploys: `--skip-themes` when updating WP `template_root` ([#849](https://github.com/roots/trellis/pull/849))
