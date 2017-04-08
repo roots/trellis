@@ -14,7 +14,7 @@ EOF\n
     -keyout {{ item.key | quote }}.key -out {{ item.key | quote }}.cert"
   args:
     executable: "/bin/bash"
-    chdir: "{{ nginx_path }}/ssl"
+    chdir: "{{ nginx_ssl_path }}"
     creates: "{{ item.key }}.*"
   with_dict: "{{ wordpress_sites }}"
   when: ssl_enabled and item.value.ssl.provider | default('manual') == 'self-signed'
