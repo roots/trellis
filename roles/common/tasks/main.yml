@@ -1,4 +1,10 @@
 ---
+- name: Validate wordpress_sites
+  fail:
+    msg: "{{ lookup('template', 'wordpress_sites.j2') }}"
+  when: wordpress_sites.keys() | difference(vault_wordpress_sites.keys()) | count
+  tags: [wordpress]
+
 - name: Validate format of site_hosts
   fail:
     msg: "{{ lookup('template', 'site_hosts.j2') }}"
