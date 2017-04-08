@@ -1,4 +1,5 @@
 ### HEAD
+* Add vault_wordpress_sites validation ([#823](https://github.com/roots/trellis/pull/823))
 * Use dynamic HostKeyAlgorithms SSH option for unknown hosts ([#798](https://github.com/roots/trellis/pull/798))
 * Accommodate deploy hook vars formatted as lists of includes ([#815](https://github.com/roots/trellis/pull/815))
 * Check Ansible version before Ansible validates task attributes ([#797](https://github.com/roots/trellis/pull/797))
