@@ -1,3 +1,6 @@
+### HEAD
+* Remove potentially dangerous `db_import` option ([#825](https://github.com/roots/trellis/pull/825))
+
 ### 1.0.0-rc.1: April 7th, 2017
 * Add vault_wordpress_sites validation ([#823](https://github.com/roots/trellis/pull/823))
 * Use dynamic HostKeyAlgorithms SSH option for unknown hosts ([#798](https://github.com/roots/trellis/pull/798))
