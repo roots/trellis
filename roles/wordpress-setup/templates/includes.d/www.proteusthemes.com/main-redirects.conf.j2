@@ -61,3 +61,8 @@ location ~ ([^/]*)sitemap(.*).x(m|s)l$ {
     rewrite ^/sitemap_index.xml$ /index.php?sitemap=1 last;
     rewrite ^/([^/]+?)-sitemap([0-9]+)?.xml$ /index.php?sitemap=$1&sitemap_n=$2 last;
 }
+
+# Restrict access to FS log
+location = /wp-content/uploads/fastspring/log.txt {
+  deny all;
+}
