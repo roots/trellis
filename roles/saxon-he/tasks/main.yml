@@ -8,4 +8,5 @@
     group_id: net.sf.saxon
     artifact_id: Saxon-HE
     version: "{{ saxon_he_version }}"
+    repository_url: http://repo1.maven.org/maven2
     dest: /opt/saxon-he/saxon-he.jar
