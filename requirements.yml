@@ -20,7 +20,3 @@
 - name: mailhog
   src: geerlingguy.mailhog
   version: 2.1.0
-
-- name: princexml
-  src: pressbooks.princexml
-  version: '1.1'
