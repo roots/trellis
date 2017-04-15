@@ -1,4 +1,5 @@
 ### HEAD
+* Ansible 2.3 compatibility ([#813](https://github.com/roots/trellis/pull/813))
 * Remove potentially dangerous `db_import` option ([#825](https://github.com/roots/trellis/pull/825))
 
 ### 1.0.0-rc.1: April 7th, 2017
