@@ -33,7 +33,7 @@
     name: "{{ item.name }}"
     group: "{{ item.groups[0] }}"
     groups: "{{ item.groups | join(',') }}"
-    password: '{% for user in vault_users | default([]) if user.name == item.name and user.password is defined %}{{ user.password | password_hash("sha512", user.salt | default("") | truncate(16, true, "") | regex_replace("[^\.\/a-zA-Z0-9]", "x")) }}{% else %}{{ None }}{% endfor %}'
+    password: '{% for user in vault_users | default([]) if user.name == item.name and user.password is defined %}{{ user.password | password_hash("sha512", (user.salt | default(""))[:16] | regex_replace("[^\.\/a-zA-Z0-9]", "x")) }}{% else %}{{ None }}{% endfor %}'
     state: present
     shell: /bin/bash
     update_password: always
