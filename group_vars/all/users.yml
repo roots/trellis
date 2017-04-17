@@ -7,13 +7,13 @@ users:
     groups:
       - "{{ web_group }}"
     keys:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - "{{ lookup('pipe', 'ssh-add -L') }}"
       # - https://github.com/username.keys
   - name: "{{ admin_user }}"
     groups:
       - sudo
     keys:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - "{{ lookup('pipe', 'ssh-add -L') }}"
       # - https://github.com/username.keys
 
 web_user: web
