@@ -68,6 +68,15 @@
   with_items: "{{ wp_install.results }}"
   when: item | changed
 
+- name: Setup WP Timezone
+  command: wp option update timezone_string {{ default_timezone }} --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  register: wp_timezone_update_results
+  with_dict: "{{ wordpress_sites }}"
+  changed_when: "'Success: Updated' in wp_timezone_update_results.stdout"
+  when: wp_install_results | changed
+
 - name: Update WP Multisite Home URL
   command: wp option update home {{ site_env.wp_home }} --allow-root
   args:
