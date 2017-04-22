@@ -80,10 +80,12 @@ Vagrant.configure('2') do |config|
       mount_options: folder.fetch('mount_options', [])
     }
 
-    config.vm.synced_folder folder['local_path'], folder['destination'], options
+    destination_folder = folder.fetch('bindfs', true) ? nfs_path(folder['destination']) : folder['destination']
+
+    config.vm.synced_folder folder['local_path'], destination_folder, options
 
     if folder.fetch('bindfs', true)
-      config.bindfs.bind_folder folder['local_path'], folder['destination'], options
+      config.bindfs.bind_folder destination_folder, folder['destination'], folder.fetch('bindfs_options', {})
     end
   end
 

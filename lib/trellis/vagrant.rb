@@ -10,6 +10,18 @@ def fail_with_message(msg)
   fail Vagrant::Errors::VagrantError.new, msg
 end
 
+def hosts(sites)
+  site_hosts = sites.flat_map { |(_name, site)| site['site_hosts'] }
+
+  site_hosts.each do |host|
+    if !host.is_a?(Hash) || !host.has_key?('canonical')
+      fail_with_message File.read(File.join(ANSIBLE_PATH, 'roles/common/templates/site_hosts.j2')).sub!('{{ env }}', 'development').gsub!(/com$/, 'dev')
+    end
+  end
+
+  site_hosts
+end
+
 def load_wordpress_sites
   config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
 
@@ -33,8 +45,8 @@ def multisite_subdomains?(wordpress_sites)
   end
 end
 
-def nfs_path(site_name)
-  "/vagrant-nfs-#{site_name}"
+def nfs_path(path)
+  "/vagrant-nfs-#{File.basename(path)}"
 end
 
 def post_up_message
@@ -49,16 +61,4 @@ end
 
 def remote_site_path(site_name, site)
   "/srv/www/#{site_name}/#{site['current_path'] || 'current'}"
-end
-
-def hosts(sites)
-  site_hosts = sites.flat_map { |(_name, site)| site['site_hosts'] }
-
-  site_hosts.each do |host|
-    if !host.is_a?(Hash) || !host.has_key?('canonical')
-      fail_with_message File.read(File.join(ANSIBLE_PATH, 'roles/common/templates/site_hosts.j2')).sub!('{{ env }}', 'development').gsub!(/com$/, 'dev')
-    end
-  end
-
-  site_hosts
 end
