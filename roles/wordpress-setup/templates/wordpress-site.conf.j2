@@ -45,7 +45,7 @@ server {
 
   {% endif -%}
   {% endblock -%}
-  
+
   {% block multisite_rewrites -%}
   {% if item.value.multisite.enabled | default(false) -%}
   # Multisite rewrites
@@ -100,6 +100,13 @@ server {
   {% block includes_d -%}
   include includes.d/{{ item.key }}/*.conf;
 
+  {% endblock -%}
+
+  {% block csp -%}
+  {% if item.value.csp is defined and item.value.csp.enabled | default(false) -%}
+  add_header Content-Security-Policy "{% for source in item.value.csp.directives %}{{ source }}; {% endfor %}";
+
+  {% endif -%}
   {% endblock -%}
 
   {% block location_uploads_php -%}
