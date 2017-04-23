@@ -8,13 +8,20 @@ ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars_plugins/:/usr/share/ansib
 
 def ensure_plugins(plugins)
   logger = Vagrant::UI::Colored.new
+  installed = false
 
   plugins.each do |plugin|
     manager = Vagrant::Plugin::Manager.instance
     next if manager.installed_plugins.has_key?(plugin)
 
     logger.warn("Installing plugin #{plugin}")
-    manager.install_plugin(plugin)
+    manager.install_plugin(plugin, sources: Vagrant::Bundler::DEFAULT_GEM_SOURCES)
+    installed = true
+  end
+
+  if installed
+    logger.warn('`vagrant up` must be re-run now that plugins are installed')
+    exit
   end
 end
 
