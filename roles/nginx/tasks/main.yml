@@ -1,12 +1,18 @@
 ---
 - name: Add Nginx PPA
   apt_repository:
-    repo: "ppa:nginx/development"
+    repo: "ppa:ondrej/nginx"
     update_cache: yes
 
 - name: Install Nginx
   apt:
     name: nginx
+    state: present
+    force: yes
+
+- name: Install Open SSL
+  apt:
+    name: openssl=1.0.2h-1+deb.sury.org~trusty+1
     state: present
     force: yes
 
