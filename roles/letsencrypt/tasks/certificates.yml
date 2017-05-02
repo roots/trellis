@@ -25,7 +25,7 @@
   changed_when: false
   when: site_uses_letsencrypt
   with_dict: "{{ wordpress_sites }}"
-  tags: [wordpress, wordpress-setup, nginx-includes, nginx-sites]
+  tags: [wordpress, wordpress-setup, wordpress-setup-nginx, nginx-includes]
 
 - name: Generate CSRs
   shell: "openssl req -new -sha256 -key '{{ letsencrypt_keys_dir }}/{{ item.key }}.key' -subj '/' -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ site_hosts | join(',DNS:') }}')) > {{ acme_tiny_data_directory }}/csrs/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}.csr"
@@ -40,6 +40,7 @@
     src: renew-certs.py
     dest: "{{ acme_tiny_data_directory }}/renew-certs.py"
     mode: 0700
+  tags: [wordpress, wordpress-setup, wordpress-setup-nginx, nginx-includes]
 
 - name: Generate the certificates
   command: ./renew-certs.py
@@ -48,3 +49,4 @@
   register: generate_certs
   changed_when: generate_certs.stdout is defined and 'Created' in generate_certs.stdout
   notify: reload nginx
+  tags: [wordpress, wordpress-setup, wordpress-setup-nginx, nginx-includes]
