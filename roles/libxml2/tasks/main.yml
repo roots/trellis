@@ -1,5 +1,0 @@
----
-- name: Install libxml2
-  apt:
-    name: libxml2-utils
-    state: present

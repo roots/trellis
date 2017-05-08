@@ -1,5 +1,0 @@
----
-- name: Install Epubcheck
-  apt:
-    name: epubcheck
-    state: present

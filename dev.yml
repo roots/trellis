@@ -17,8 +17,6 @@
     - { role: memcached, tags: [memcached] }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
-    - { role: libxml2, tags: [libxml2] }
-    - { role: epubcheck, tags: [epubcheck] }
     - { role: kindlegen, tags: [kindlegen] }
     - { role: saxon-he, tags: [saxon-he] }
     - { role: composer, tags: [composer] }

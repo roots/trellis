@@ -2,6 +2,14 @@ composer_keep_updated: true
 composer_global_packages:
  - { name: hirak/prestissimo }
 apt_cache_valid_time: 3600
+apt_packages_custom:
+  - epubcheck
+  - libxml2-utils
+  - default-jdk
+  - ghostscript
+  - imagemagick
+  - poppler-utils
+  - python-lxml
 ntp_timezone: Etc/UTC
 ntp_manage_config: true
 www_root: /srv/www
