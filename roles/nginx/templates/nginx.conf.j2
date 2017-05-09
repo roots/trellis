@@ -136,6 +136,8 @@ http {
 
   include sites-enabled/*;
 
+  {% if env != 'development' -%}
   # CloudFlare
   include cloudflare.conf;
+  {% endif %}
 }
