@@ -43,6 +43,7 @@
   notify: reload nginx
 
 - include: cloudflare.yml
+  when: "env is defined"
 
 - name: Disable default server
   file:
