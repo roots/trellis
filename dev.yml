@@ -24,3 +24,4 @@
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }
     - { role: wordpress-install, tags: [wordpress, wordpress-install] }
     - { role: local-development, tags: [local-development] }
+    - { role: bash-for-pressbooks-dev, tags: [local-development, bash] }

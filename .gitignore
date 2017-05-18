@@ -3,3 +3,4 @@
 vendor/roles
 *.py[co]
 *.retry
+.idea/
