@@ -10,6 +10,8 @@ apt_packages_custom:
   - imagemagick
   - poppler-utils
   - python-lxml
+  - nano
+  - ccze
 ntp_timezone: Etc/UTC
 ntp_manage_config: true
 www_root: /srv/www

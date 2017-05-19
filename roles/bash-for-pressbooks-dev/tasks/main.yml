@@ -2,14 +2,10 @@
   apt_repository:
     repo: "ppa:ultradvorka/ppa"
     update_cache: yes
-- name: Install software referenced in .bash_aliases
+- name: Install hh
   apt:
-    name: "{{ item }}"
+    name: hh
     state: present
-  with_items:
-  - nano
-  - hh
-  - ccze
 - name: Checkout git aware prompt
   become_user: vagrant
   git:
