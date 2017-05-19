@@ -1,0 +1,22 @@
+- name: Add hh PPA
+  apt_repository:
+    repo: "ppa:ultradvorka/ppa"
+    update_cache: yes
+- name: Install hh
+  apt:
+    name: hh
+    state: present
+- name: Checkout git aware prompt
+  become_user: vagrant
+  git:
+    repo: git://github.com/jimeh/git-aware-prompt.git
+    dest: ~/.bash/git-aware-prompt
+- name: Create .bash_aliases file
+  with_dict: "{{ wordpress_sites }}"
+  become_user: vagrant
+  template:
+    src: bash_aliases.j2
+    dest: ~/.bash_aliases
+  vars:
+    pathToLogs: "{{ www_root }}/{{ item.key }}/logs"
+    pathToCurrent: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}"
