@@ -74,3 +74,8 @@ location ~ ([^/]*)sitemap(.*).x(m|s)l$ {
 location = /wp-content/uploads/fastspring/log.txt {
   deny all;
 }
+
+# Restrict access to Custom Dashboard log
+location /wp-content/uploads/customer-dashboard/ {
+  deny all;
+}
