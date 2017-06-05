@@ -11,6 +11,6 @@ location = /docs/dining-restaurant/ {
 }
 
 # fix the pagination in the help center
-location ~ "^/help/{1,2}/" {
+location ~ "^/help/\d{1,2}/" {
   return 301 /help/;
 }
