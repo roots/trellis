@@ -24,3 +24,20 @@ location ~ ^/themes/.*\.html?$ {
 location = /privacy-policy/ {
   return 301 https://www.iubenda.com/privacy-policy/7949647;
 }
+
+# sitemap index
+location = /sitemap-index.xml {
+  return 301 /sitemap_index.xml;
+}
+
+location = /sitemap-index.xml.gz {
+  return 301 /sitemap_index.xml;
+}
+
+location = /sitemap {
+  return 301 /sitemap_index.xml;
+}
+
+location = /sitemap.xml.gz {
+  return 301 /sitemap_index.xml;
+}
