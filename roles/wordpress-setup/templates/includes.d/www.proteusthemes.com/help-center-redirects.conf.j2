@@ -10,6 +10,11 @@ location = /docs/dining-restaurant/ {
   return 301 /docs/restaurant/;
 }
 
+# fix the docs to the ConsultPress Lite theme
+location = /docs/consultpress-lite/ {
+  return 301 /docs/consultpress/;
+}
+
 # fix the pagination in the help center
 location ~ "^/help/\d{1,2}/" {
   return 301 /help/;
