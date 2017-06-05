@@ -9,3 +9,8 @@ location = /docs/ {
 location = /docs/dining-restaurant/ {
   return 301 /docs/restaurant/;
 }
+
+# fix the pagination in the help center
+location ~ "^/help/{1,2}/" {
+  return 301 /help/;
+}
