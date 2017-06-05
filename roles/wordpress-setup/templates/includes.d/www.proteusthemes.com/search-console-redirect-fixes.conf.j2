@@ -5,6 +5,11 @@ location /blog/author/proteusnet {
   return 301 /blog/author/primozcigler/;
 }
 
+# redirect root author to the main author
+location = /blog/author/ {
+  return 301 /blog/author/primozcigler/;
+}
+
 # redirect everything from /themes/ subdirectory to the root
 location /themes/ {
   return 301 /;
