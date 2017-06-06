@@ -19,3 +19,9 @@ wordpress_sites:
       provider: letsencrypt
     cache:
       enabled: false
+    backup:
+      enabled: false # switch to true to enable backup
+      auto: true
+      target: scp://user@example.com/example.com_backups # any location supported by duplicity
+      schedule: '0 4 * * *' # change this value
+      purge: false # switch to true to enable automatic purging of old backups

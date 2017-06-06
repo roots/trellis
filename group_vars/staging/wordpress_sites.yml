@@ -19,3 +19,12 @@ wordpress_sites:
       provider: letsencrypt
     cache:
       enabled: false
+    backup:
+      enabled: false
+      auto: false
+      target: scp://user@example.com/example.com_backups # any location supported by duplicity
+      schedule: '0 4 * * *' # change this value
+      purge: false # switch to true to enable automatic purging of old backups
+      # let "enabled: true" and "auto: false" to install backup profiles but not
+      # actually making backups, for example to restore your production database
+      # on staging
