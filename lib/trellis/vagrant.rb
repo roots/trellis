@@ -6,6 +6,33 @@ ENV['ANSIBLE_LIBRARY'] = "/usr/share/ansible:#{File.join(ANSIBLE_PATH, 'lib/trel
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
 ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars_plugins/:/usr/share/ansible_plugins/vars_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/vars')}"
 
+def ensure_plugins(plugins)
+  logger = Vagrant::UI::Colored.new
+  installed = false
+
+  plugins.each do |plugin|
+    plugin_name = plugin['name']
+    manager = Vagrant::Plugin::Manager.instance
+
+    next if manager.installed_plugins.has_key?(plugin_name)
+
+    logger.warn("Installing plugin #{plugin_name}")
+
+    manager.install_plugin(
+      plugin_name,
+      sources: plugin.fetch('source', %w(https://rubygems.org/ https://gems.hashicorp.com/)),
+      version: plugin['version']
+    )
+
+    installed = true
+  end
+
+  if installed
+    logger.warn('`vagrant up` must be re-run now that plugins are installed')
+    exit
+  end
+end
+
 def fail_with_message(msg)
   fail Vagrant::Errors::VagrantError.new, msg
 end

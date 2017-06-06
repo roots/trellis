@@ -7,6 +7,11 @@ vagrant_box_version: '2.2.9'
 vagrant_ansible_version: '2.3.0'
 vagrant_skip_galaxy: false
 
+vagrant_install_plugins: true
+vagrant_plugins:
+  - name: vagrant-bindfs
+  - name: vagrant-hostmanager
+
 # Array of synced folders:
 # - local_path: .
 #   destination: /path/on/vm

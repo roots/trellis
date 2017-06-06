@@ -14,6 +14,8 @@ if File.exist?("#{ANSIBLE_PATH}/vagrant.local.yml")
   vconfig.merge!(local_config) if local_config
 end
 
+ensure_plugins(vconfig.fetch('vagrant_plugins')) if vconfig.fetch('vagrant_install_plugins')
+
 wordpress_sites = load_wordpress_sites
 site_hosts = hosts(wordpress_sites)
 
