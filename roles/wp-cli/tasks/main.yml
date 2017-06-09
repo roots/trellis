@@ -23,3 +23,8 @@
     warn: false
   register: wp_cli_completion
   changed_when: wp_cli_completion.stdout == 'wp-completion-' + wp_cli_version + '.bash'
+
+- name: Install WP-CLI packages
+  command: "wp package install {{ item }}"
+  become_user: "{{ web_user }}"
+  with_items: "{{ wp_cli_packages }}"
