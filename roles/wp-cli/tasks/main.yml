@@ -27,4 +27,6 @@
 - name: Install WP-CLI packages
   command: "wp package install {{ item }}"
   become_user: "{{ web_user }}"
+  register: wp_cli_packages_installed
+  changed_when: "'Nothing to install or update' not in wp_cli_packages_installed.stdout"
   with_items: "{{ wp_cli_packages }}"
