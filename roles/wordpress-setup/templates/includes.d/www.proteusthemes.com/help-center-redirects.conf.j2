@@ -6,7 +6,7 @@ location = /docs/ {
 }
 
 # fix the docs to the Dining Restaurant theme
-location = /docs/dining-restaurant/ {
+location /docs/dining-restaurant {
   return 301 /docs/restaurant/;
 }
 
@@ -17,5 +17,10 @@ location = /docs/consultpress-lite/ {
 
 # fix the pagination in the help center
 location ~ "^/help/\d{1,2}/" {
+  return 301 /help/;
+}
+
+# fix the link to opening a new ticket
+location = /hc/en-us/requests/new {
   return 301 /help/;
 }
