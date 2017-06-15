@@ -23,7 +23,7 @@
     command: wp option set {{ item }} {{ deploy_helper.new_release_path }}/web/wp/wp-content/themes
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: wp_template_root.stdout != '' and wp_template_root.stdout != '/themes'
+    when: deploy_helper.releases_path in wp_template_root.stdout
     with_items:
       - stylesheet_root
       - template_root
