@@ -23,3 +23,12 @@
     warn: false
   register: wp_cli_completion
   changed_when: wp_cli_completion.stdout == 'wp-completion-' + wp_cli_version + '.bash'
+
+- name: Install WP-CLI packages
+  command: wp package install {{ item }}
+  become_user: "{{ web_user }}"
+  register: wp_cli_packages_installed
+  changed_when:
+    - "'Nothing to install or update' not in wp_cli_packages_installed.stdout"
+    - "'Package operations: 0 installs, 0 updates, 0 removals' not in wp_cli_packages_installed.stdout"
+  with_items: "{{ wp_cli_packages }}"
