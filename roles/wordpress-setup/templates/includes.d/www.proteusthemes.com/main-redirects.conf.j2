@@ -45,6 +45,10 @@ location = /pricing-2/ {
   return 301 /pricing/;
 }
 
+location = /wordpress-themes/adrenaline-alt/ {
+  return 301 /wordpress-themes/adrenaline/;
+}
+
 # blog permalinks (remove date and month)
 location ~ "^/blog/\d{4}/\d{2}/([a-z0-9-]+)/$" {
   return 301 /blog/$1;
