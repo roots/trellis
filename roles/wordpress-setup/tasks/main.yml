@@ -49,9 +49,7 @@
     job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp cron event run --due-now > /dev/null 2>&1"
     cron_file: "wordpress-{{ item.key | replace('.', '_') }}"
   with_dict: "{{ wordpress_sites }}"
-  when:
-    - site_env.disable_wp_cron
-    - not item.value.multisite.enabled | default(false) or (item.value.multisite.enabled | default(false) and item.value.multisite.cron | default(true))
+  when: cron_enabled
 
 - name: Setup WP Multisite system cron
   cron:
@@ -61,6 +59,4 @@
     job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp site list --field=url | xargs -n1 -I \\% wp --url=\\% cron event run --due-now > /dev/null 2>&1"
     cron_file: "wordpress-multisite-{{ item.key | replace('.', '_') }}"
   with_dict: "{{ wordpress_sites }}"
-  when:
-    - site_env.disable_wp_cron 
-    - item.value.multisite.enabled | default(false) and item.value.multisite.cron | default(true)
+  when: item.value.multisite.enabled and cron_enabled
