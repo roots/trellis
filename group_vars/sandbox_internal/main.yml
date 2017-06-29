@@ -90,6 +90,7 @@ sites_to_export:
   - buildpress-landscape
   - buildpress-rtl
   - medicpress
+  - gympress
 
 xmls_to_rename:
   hairpress: "hairpresswptheme"
