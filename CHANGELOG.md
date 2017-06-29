@@ -1,4 +1,5 @@
 ### HEAD
+* Add PHP SOAP extension to defaults ([#844](https://github.com/roots/trellis/pull/844))
 * Option to install WP-CLI packages ([#837](https://github.com/roots/trellis/pull/837))
 * Update WP-CLI to 1.2.1 ([#838](https://github.com/roots/trellis/pull/838))
 * Auto-install Vagrant plugins ([#829](https://github.com/roots/trellis/pull/829))
