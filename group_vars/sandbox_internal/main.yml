@@ -63,6 +63,8 @@ strings_to_replace:
     to: ""
   - from: "{{ vault_wcappointments_license }}"
     to: ""
+  - from: "{{ vault_mc_api_key }}"
+    to: ""
 
 sites_to_export:
   - hairpress
