@@ -8,7 +8,7 @@ from ansible import errors
 from ansible.compat.six import string_types
 
 def to_env(dict_value):
-    envs = ["{0}='{1}'".format(key.upper(), value) for key, value in sorted(dict_value.items())]
+    envs = ["{0}='{1}'".format(key.upper(), str(value).replace("'","\\'")) for key, value in sorted(dict_value.items())]
     return "\n".join(envs)
 
 def underscore(value):

@@ -13,4 +13,5 @@ site_env: "{{ wordpress_env_defaults | combine(item.value.env | default({}), vau
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"
+multisite_subdomains_wildcards: "{{ item.value.multisite.subdomains | default(false) | ternary( site_hosts_canonical | map('regex_replace', '^(www\\.)?(.*)$', '*.\\2') | list, [] ) }}"
 ssl_enabled: "{{ item.value.ssl is defined and item.value.ssl.enabled | default(false) }}"

@@ -1,4 +1,15 @@
 ### HEAD
+* Option to install WP-CLI packages ([#837](https://github.com/roots/trellis/pull/837))
+* Update WP-CLI to 1.2.1 ([#838](https://github.com/roots/trellis/pull/838))
+* Auto-install Vagrant plugins ([#829](https://github.com/roots/trellis/pull/829))
+* Add Vagrant config ([#828](https://github.com/roots/trellis/pull/828))
+* Ansible 2.3 compatibility ([#813](https://github.com/roots/trellis/pull/813))
+* Remove potentially dangerous `db_import` option ([#825](https://github.com/roots/trellis/pull/825))
+
+### 1.0.0-rc.1: April 7th, 2017
+* Add vault_wordpress_sites validation ([#823](https://github.com/roots/trellis/pull/823))
+* Use dynamic HostKeyAlgorithms SSH option for unknown hosts ([#798](https://github.com/roots/trellis/pull/798))
+* Accommodate deploy hook vars formatted as lists of includes ([#815](https://github.com/roots/trellis/pull/815))
 * Check Ansible version before Ansible validates task attributes ([#797](https://github.com/roots/trellis/pull/797))
 * Add additional Nginx sites configurations support ([#793](https://github.com/roots/trellis/pull/793))
 * Change `remote-user` role to `connection` role: tests host key, user ([#745](https://github.com/roots/trellis/pull/745))

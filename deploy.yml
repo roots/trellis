@@ -14,33 +14,12 @@
 - name: Deploy WP site
   hosts: web:&{{ env }}
   remote_user: "{{ web_user }}"
-
-  vars:
-    deploy_build_before: "{{ playbook_dir }}/deploy-hooks/build-before.yml"
-    deploy_build_after: "{{ playbook_dir }}/roles/deploy/hooks/build-after.yml"
-    deploy_finalize_before: "{{ playbook_dir }}/roles/deploy/hooks/finalize-before.yml"
-    deploy_finalize_after: "{{ playbook_dir }}/roles/deploy/hooks/finalize-after.yml"
-    project: "{{ wordpress_sites[site] }}"
-    project_root: "{{ www_root }}/{{ site }}"
-    wordpress_env_defaults:
-      db_host: localhost
-      db_name: "{{ site | underscore }}_{{ env }}"
-      db_user: "{{ site | underscore }}"
-      disable_wp_cron: true
-      wp_env: "{{ env }}"
-      wp_home: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}"
-      wp_siteurl: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}/wp"
-      domain_current_site: "{{ project.site_hosts | map(attribute='canonical') | first }}"
-    site_env: "{{ wordpress_env_defaults | combine(project.env | default({}), vault_wordpress_sites[site].env) }}"
-    project_local_path: "{{ (lookup('env', 'USER') == 'vagrant') | ternary(project_root + '/' + project_current_path, project.local_path) }}"
-
   pre_tasks:
     - name: Ensure site is valid
       connection: local
       fail:
         msg: "Site `{{ site | default('') }}` is not valid. Available sites to deploy: {{ wordpress_sites.keys() | join(', ') }}"
       when: wordpress_sites[site | default('')] is not defined
-
     - name: Ensure repo is valid
       connection: local
       fail:
@@ -50,6 +29,5 @@
           More info:
           > https://roots.io/trellis/docs/deploys/
       when: project.repo is not defined or not project.repo | match(".*@.*:.*\.git")
-
   roles:
     - deploy

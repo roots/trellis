@@ -1,24 +1,18 @@
 ---
 - block:
-  - name: Update WP database
-    command: wp core update-db
-    args:
-      chdir: "{{ deploy_helper.current_path }}"
-    when: not project.multisite.enabled | default(false)
-
   - name: Warn about updating network database.
     debug:
       msg: "Updating the network database could take a long time with a large number of sites."
-    when: project.multisite.enabled | default(false)
+    when: project.update_db_on_deploy | default(update_db_on_deploy) and project.multisite.enabled | default(false)
 
-  - name: Update WP network database
-    command: wp core update-db --network
+  - name: Update WP database
+    command: wp core update-db {{ project.multisite.enabled | default(false) | ternary('--network', '') }}
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: project.multisite.enabled | default(false)
+    when: project.update_db_on_deploy | default(update_db_on_deploy)
 
   - name: Get WP theme template root
-    command: wp option get template_root
+    command: wp option get template_root --skip-plugins
     args:
       chdir: "{{ deploy_helper.current_path }}"
     register: wp_template_root
@@ -29,7 +23,7 @@
     command: wp option set {{ item }} {{ deploy_helper.new_release_path }}/web/wp/wp-content/themes
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: wp_template_root.stdout != '' and wp_template_root.stdout != '/themes'
+    when: deploy_helper.releases_path in wp_template_root.stdout
     with_items:
       - stylesheet_root
       - template_root

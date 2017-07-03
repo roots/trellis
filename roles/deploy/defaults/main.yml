@@ -44,3 +44,27 @@ project_environment:
 # The project_current_path is the symlink used for the latest or active deployment
 # - default is 'current'
 project_current_path: "{{ project.current_path | default('current') }}"
+
+# Whether to run `wp core update-db` at end of each deploy
+update_db_on_deploy: true
+
+# Helpers
+project: "{{ wordpress_sites[site] }}"
+project_root: "{{ www_root }}/{{ site }}"
+project_local_path: "{{ (lookup('env', 'USER') == 'vagrant') | ternary(project_root + '/' + project_current_path, project.local_path) }}"
+
+
+# Deploy hooks
+# For list of hooks and explanation, see https://roots.io/trellis/docs/deploys/#hooks
+deploy_build_before:
+  - "{{ playbook_dir }}/deploy-hooks/build-before.yml"
+
+deploy_build_after:
+  - "{{ playbook_dir }}/roles/deploy/hooks/build-after.yml"
+  # - "{{ playbook_dir }}/deploy-hooks/sites/{{ site }}-build-after.yml"
+
+deploy_finalize_before:
+  - "{{ playbook_dir }}/roles/deploy/hooks/finalize-before.yml"
+
+deploy_finalize_after:
+  - "{{ playbook_dir }}/roles/deploy/hooks/finalize-after.yml"
