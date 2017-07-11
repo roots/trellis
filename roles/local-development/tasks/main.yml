@@ -16,11 +16,9 @@
   include: enable-theme.yml
   with_items:
     - pressbooks-book
-    - pressbooks-custom-css
     - pressbooks-publisher
-    - clarke
-    - donham
-    - fitzgerald
+    - pressbooks-clarke
+    - pressbooks-donham
   loop_control:
     loop_var: theme
 - name: Allow new book registration
