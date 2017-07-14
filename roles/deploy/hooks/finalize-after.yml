@@ -16,7 +16,7 @@
       {% if not project.multisite.enabled | default(false) %}
         wp option get template_root --skip-plugins
       {% else %}
-        wp site list --field=url | xargs -I {} bash -c 'export url="{}"; echo -n "$url " && wp option get template_root --skip-plugins --url=$url'
+        wp site list --field=url | xargs -I {} bash -c 'export url="{}"; echo -n "$url " && wp option get template_root --skip-plugins --url=$url || echo'
       {% endif %}
     args:
       chdir: "{{ deploy_helper.current_path }}"
@@ -32,9 +32,9 @@
       {% if project.multisite.enabled | default(false) %} --url={{ item[0].split(' ')[0] }}{% endif %}
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: update_wp_theme_paths | default(true) | bool and deploy_helper.releases_path in item[0]
+    when: update_wp_theme_paths | default(true) | bool
     with_nested:
-      - "{{ wp_template_root.stdout_lines }}"
+      - "{{ wp_template_root.stdout_lines | select('search', deploy_helper.releases_path) | list }}"
       - ['template_root', 'stylesheet_root']
 
   when: wp_installed | success
