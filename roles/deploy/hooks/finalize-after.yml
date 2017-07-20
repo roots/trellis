@@ -14,9 +14,9 @@
   - name: Get WP theme template and stylesheet roots
     shell: >
       {% if not project.multisite.enabled | default(false) %}
-        wp option get {{ item }} --skip-plugins
+        wp option get {{ item }} --skip-plugins --skip-themes
       {% else %}
-        wp site list --field=url | xargs -I {} bash -c 'export url="{}"; echo -n "$url " && wp option get {{ item }} --skip-plugins --url=$url || echo'
+        wp site list --field=url | xargs -I {} bash -c 'export url="{}"; echo -n "$url " && wp option get {{ item }} --skip-plugins --skip-themes --url=$url || echo'
       {% endif %}
     args:
       chdir: "{{ deploy_helper.current_path }}"
