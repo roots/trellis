@@ -12,7 +12,7 @@
     when: project.update_db_on_deploy | default(update_db_on_deploy)
 
   - name: Get WP theme template root
-    command: wp option get template_root --skip-plugins
+    command: wp option get template_root --skip-plugins --skip-themes
     args:
       chdir: "{{ deploy_helper.current_path }}"
     register: wp_template_root
