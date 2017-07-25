@@ -115,7 +115,7 @@ Vagrant.configure('2') do |config|
 
     if vars = ENV['ANSIBLE_VARS']
       extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
-      ansible.extra_vars.merge(extra_vars)
+      ansible.extra_vars.merge!(extra_vars)
     end
   end
 
