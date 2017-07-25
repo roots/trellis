@@ -1,4 +1,5 @@
 ### HEAD
+* Accommodate child themes: Update WP `stylesheet_root` separately ([#850](https://github.com/roots/trellis/pull/850))
 * Deploys: `--skip-themes` when updating WP `template_root` ([#849](https://github.com/roots/trellis/pull/849))
 * Option to install WP-CLI packages ([#837](https://github.com/roots/trellis/pull/837))
 * Update WP-CLI to 1.2.1 ([#838](https://github.com/roots/trellis/pull/838))
