@@ -22,3 +22,10 @@ nginx_includes_templates_path: nginx-includes
 nginx_includes_deprecated: roles/wordpress-setup/templates/includes.d
 nginx_includes_pattern: "^({{ nginx_includes_templates_path | regex_escape }}|{{ nginx_includes_deprecated | regex_escape }})/(.*)\\.j2$"
 nginx_includes_d_cleanup: true
+
+# PHP FPM
+php_fpm_pm_max_children: 10
+php_fpm_pm_start_servers: 1
+php_fpm_pm_min_spare_servers: 1
+php_fpm_pm_max_spare_servers: 3
+php_fpm_pm_max_requests: 500
