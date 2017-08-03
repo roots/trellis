@@ -12,7 +12,6 @@ wordpress_sites:
     admin_email: admin@example.dev
     multisite:
       enabled: false
-      cron: false
     ssl:
       enabled: false
       provider: self-signed

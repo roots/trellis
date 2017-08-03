@@ -14,7 +14,6 @@ wordpress_sites:
     branch: master
     multisite:
       enabled: false
-      cron: false
     ssl:
       enabled: false
       provider: letsencrypt
