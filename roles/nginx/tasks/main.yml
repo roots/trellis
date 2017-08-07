@@ -6,7 +6,7 @@
 
 - name: Install Nginx
   apt:
-    name: nginx
+    name: "{{ nginx_package }}"
     state: present
     force: yes
 

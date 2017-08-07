@@ -1,4 +1,5 @@
 ---
+nginx_package: nginx
 nginx_conf: nginx.conf.j2
 nginx_path: /etc/nginx
 nginx_logs_root: /var/log/nginx
