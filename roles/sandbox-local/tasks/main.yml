@@ -55,7 +55,7 @@
   with_dict: "{{ sb_wp_sites }}"
 
 - name: WP search-replace for the URLs
-  command: "wp search-replace '{{ src_url }}' 'http://{{ item.key }}' --all-tables --allow-root"
+  command: "wp search-replace '{{ src_domain }}' '{{ item.key }}' --all-tables --allow-root"
   args:
     chdir: "{{ www_root }}/{{ item.key }}"
   with_dict: "{{ sb_wp_sites }}"
