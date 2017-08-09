@@ -1,12 +1,12 @@
 ---
 - name: Add Nginx PPA
   apt_repository:
-    repo: "ppa:nginx/development"
+    repo: "{{ nginx_ppa }}"
     update_cache: yes
 
 - name: Install Nginx
   apt:
-    name: nginx
+    name: "{{ nginx_package }}"
     state: present
     force: yes
 
