@@ -3,7 +3,7 @@ vagrant_ip: '192.168.50.5'
 vagrant_cpus: 1
 vagrant_memory: 1024 # in MB
 vagrant_box: 'bento/ubuntu-16.04'
-vagrant_box_version: '2.2.9'
+vagrant_box_version: '<= 2.3.8'
 vagrant_ansible_version: '2.3.0'
 vagrant_skip_galaxy: false
 
