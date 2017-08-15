@@ -1,14 +1,28 @@
 ---
 - name: Add Nginx PPA
-  apt_repository:
-    repo: "{{ nginx_ppa }}"
-    update_cache: yes
+  shell: "add-apt-repository --enable-source {{ nginx_ppa }}"
 
 - name: Install Nginx
   apt:
     name: "{{ nginx_package }}"
     state: present
     force: yes
+    update_cache: yes
+  register: nginx
+
+- name: Grab dynamic module sources
+  git:
+    repo: "{{ item.value.repo }}"
+    dest: "/opt/{{ item.key }}"
+    depth: 1
+  with_dict: "{{ nginx_dynamic_modules }}"
+  register: nginx_dynamic_module_sources
+  tags: nginx-dynamic-modules
+
+- include: dynamic-modules.yml
+  notify: reload nginx
+  when: nginx_dynamic_modules and (nginx_dynamic_module_sources.changed or nginx.changed)
+  tags: nginx-dynamic-modules
 
 - name: Create SSL directory
   file:

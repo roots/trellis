@@ -16,3 +16,7 @@ nginx_cache_path: /var/cache/nginx
 nginx_cache_key_storage_size: 10m
 nginx_cache_size: 250m
 nginx_cache_inactive: 1h
+
+# Dynamic modules
+nginx_modules_path: /usr/share/nginx/modules
+nginx_dynamic_modules: {}

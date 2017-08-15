@@ -27,6 +27,12 @@ worker_processes auto;
 worker_rlimit_nofile 8192;
 {% endblock %}
 
+{% block load_dynamic_modules -%}
+{% for obj in (nginx_dynamic_modules|json_query('*.objs')|sum(start = [])) %}
+load_module "modules/{{ obj }}";
+{% endfor %}
+{% endblock %}
+
 {% block events %}
 events {
   # When you need > 8000 * cpu_cores connections, you start optimizing your OS,
