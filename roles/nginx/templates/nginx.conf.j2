@@ -179,6 +179,62 @@ http {
   # gzip_static on;
   {% endblock %}
 
+  {% block brotli -%}
+  # Brotli
+
+  # Enables or disables checking of the existence of pre-compressed files with `.br`
+  # extension. With the `always` value, pre-compressed file is used in all cases,
+  # without checking if the client supports it. This should be turned on if you are
+  # going to have pre-compressed copies (.br) of static files available. If not it
+  # should be left off as it will cause extra I/O for the check. It is best if you
+  # enable this in a location{} block for a specific directory, or on an individual
+  # server{} level.
+  brotli_static {{ nginx_brotli_static }};
+
+  # Enables or disables on-the-fly compression of responses.
+  brotli {{ nginx_brotli }};
+
+  # Compression level (0-11).
+  # Compared to Gzip, level 4 is Brotli’s compression rate vs CPU load sweet spot.
+  brotli_comp_level {{ nginx_brotli_comp_level }};
+
+  # Enables on-the-fly compression of responses for the specified MIME types in addition to text/html.
+  brotli_types
+    application/atom+xml
+    application/javascript
+    application/json
+    application/ld+json
+    application/manifest+json
+    application/rss+xml
+    application/vnd.geo+json
+    application/vnd.ms-fontobject
+    application/x-font-ttf
+    application/x-web-app-manifest+json
+    application/xhtml+xml
+    application/xml
+    font/opentype
+    image/bmp
+    image/svg+xml
+    image/x-icon
+    text/cache-manifest
+    text/css
+    text/plain
+    text/vcard
+    text/vnd.rim.location.xloc
+    text/vtt
+    text/x-component
+    text/x-cross-domain-policy;
+  # Responses with the text/html MIME type are always compressed.
+
+  # Sets Brotli window size.
+  # Acceptable values are 1k, 2k, 4k, 8k, 16k, 32k, 64k, 128k, 256k, 512k, 1m, 2m, 4m, 8m and 16m.
+  brotli_window {{ nginx_brotli_window }};
+
+  # Sets the minimum length of a response that will be compressed.
+  # The length is determined only from the Content-Length response header field.
+  brotli_min_length {{ nginx_brotli_min_length }};
+  {% endblock %}
+
   {% block sites_enabled -%}
   include sites-enabled/*.conf;
   {% endblock %}

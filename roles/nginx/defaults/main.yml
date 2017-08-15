@@ -17,6 +17,18 @@ nginx_cache_key_storage_size: 10m
 nginx_cache_size: 250m
 nginx_cache_inactive: 1h
 
+# Brotli
+nginx_brotli_static: 'off'
+nginx_brotli: 'on'
+nginx_brotli_comp_level: 4
+nginx_brotli_window: 512k
+nginx_brotli_min_length: 20
+
 # Dynamic modules
 nginx_modules_path: /usr/share/nginx/modules
-nginx_dynamic_modules: {}
+nginx_dynamic_modules:
+  ngx_brotli:
+    repo: https://github.com/google/ngx_brotli.git
+    objs:
+      - ngx_http_brotli_filter_module.so
+      - ngx_http_brotli_static_module.so
