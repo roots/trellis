@@ -91,11 +91,11 @@ Vagrant.configure('2') do |config|
     end
   end
 
-  provisioner = Vagrant::Util::Platform.windows? ? :ansible_local : :ansible
-  provisioning_path = Vagrant::Util::Platform.windows? ? ANSIBLE_PATH_ON_VM : ANSIBLE_PATH
+  provisioner = local_provisioning? ? :ansible_local : :ansible
+  provisioning_path = local_provisioning? ? ANSIBLE_PATH_ON_VM : ANSIBLE_PATH
 
   config.vm.provision provisioner do |ansible|
-    if Vagrant::Util::Platform.windows?
+    if local_provisioning?
       ansible.install_mode = 'pip'
       ansible.provisioning_path = provisioning_path
       ansible.version = vconfig.fetch('vagrant_ansible_version')

@@ -27,11 +27,14 @@ Trellis will configure a server with the following and more:
 * Fail2ban
 * ferm
 
+## Documentation
+
+Full documentation is available at [https://roots.io/trellis/docs/](https://roots.io/trellis/docs/).
+
 ## Requirements
 
 Make sure all dependencies have been installed before moving on:
 
-* [Ansible](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-pip) >= 2.2
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) >= 4.3.10
 * [Vagrant](https://www.vagrantup.com/downloads.html) >= 1.8.5
 
@@ -56,10 +59,6 @@ See a complete working example in the [roots-example-project.com repo](https://g
 
 Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) for slightly different installation instructions. VirtualBox is known to have poor performance in Windows — use VMware or [see some possible solutions](https://discourse.roots.io/t/virtualbox-performance-in-windows/3932).
 
-## Documentation
-
-Trellis documentation is available at [https://roots.io/trellis/docs/](https://roots.io/trellis/docs/).
-
 ## Local development setup
 
 1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`
@@ -68,6 +67,8 @@ Trellis documentation is available at [https://roots.io/trellis/docs/](https://r
 [Read the local development docs](https://roots.io/trellis/docs/local-development-setup/) for more information.
 
 ## Remote server setup (staging/production)
+
+For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://roots.io/trellis/docs/remote-server-setup/#requirements) for more information.
 
 A base Ubuntu 16.04 server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
 

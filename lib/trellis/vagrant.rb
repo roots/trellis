@@ -62,6 +62,10 @@ def load_wordpress_sites
   wordpress_sites
 end
 
+def local_provisioning?
+  @local_provisioning ||= Vagrant::Util::Platform.windows? || !which('ansible-playbook') || ENV['FORCE_ANSIBLE_LOCAL']
+end
+
 def local_site_path(site)
   File.expand_path(site['local_path'], ANSIBLE_PATH)
 end
@@ -89,4 +93,17 @@ end
 
 def remote_site_path(site_name, site)
   "/srv/www/#{site_name}/#{site['current_path'] || 'current'}"
+end
+
+def which(cmd)
+  exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+
+  paths = ENV['PATH'].split(File::PATH_SEPARATOR).flat_map do |path|
+    exts.map { |ext| File.join(path, "#{cmd}#{ext}") }
+  end
+
+  paths.any? do |path|
+    next unless File.executable?(path) && !File.directory?(path)
+    system("#{path} --help", %i(out err) => File::NULL)
+  end
 end
