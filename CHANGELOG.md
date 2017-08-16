@@ -1,6 +1,11 @@
 ### HEAD
 * Add ansible_local support for non-Windows ([#824](https://github.com/roots/trellis/pull/824))
+* Load `modules-enabled` config files in Nginx ([#859](https://github.com/roots/trellis/pull/859))
+* Only include \*.conf files in Nginx `sites-enabled/` ([#862](https://github.com/roots/trellis/pull/862))
 * Add `fastcgi_read_timeout` to Nginx config ([#860](https://github.com/roots/trellis/pull/860))
+* Allow customization of the Nginx package name and PPA ([#858](https://github.com/roots/trellis/pull/858))
+* Nginx microcaching: skip caching WP API requests ([#855](https://github.com/roots/trellis/pull/855))
+* Allow overriding more php-fpm params ([#856](https://github.com/roots/trellis/pull/856))
 * Accommodate child themes: Update WP `stylesheet_root` separately ([#850](https://github.com/roots/trellis/pull/850))
 * Deploys: `--skip-themes` when updating WP `template_root` ([#849](https://github.com/roots/trellis/pull/849))
 * Option to install WP-CLI packages ([#837](https://github.com/roots/trellis/pull/837))
