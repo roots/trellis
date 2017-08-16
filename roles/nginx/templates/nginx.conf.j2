@@ -3,6 +3,10 @@
 # nginx Configuration File
 # http://wiki.nginx.org/Configuration
 
+{% block modules_enabled -%}
+include modules-enabled/*.conf;
+{% endblock %}
+
 {% block user %}
 # Run as a less privileged user for security reasons.
 user {{ nginx_user }};
