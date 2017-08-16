@@ -120,6 +120,46 @@ server {
   }
   {% endblock %}
 
+  {% block location_compression -%}
+  # Site Compression
+  {% if site_compression_enabled -%}
+
+  {% if site_compression_no_cache_extensions | count -%}
+  location ~* ^/({{ site_compression_paths }})/(.*)\.(?:{{ site_compression_no_cache_extensions }})(?:(\?.*)*)$ {
+    gzip_static on;
+    add_header Cache-Control "max-age=0";
+  }
+  {% endif -%}
+
+  {% if site_compression_normal_extensions | count -%}
+  location ~* ^/({{ site_compression_paths }})/(.*)\.(?:{{ site_compression_normal_extensions }})(?:(\?.*)*)$ {
+    gzip_static on;
+    access_log off;
+    add_header Cache-Control "max-age=2592000";
+  }
+  {% endif -%}
+
+  {% if site_compression_font_extensions | count -%}
+  location ~* ^/({{ site_compression_paths }})/(.*)\.(?:{{ site_compression_font_extensions }})(?:(\?.*)*)$ {
+    gzip_static on;
+
+    {% if h5bp_cross_domain_fonts_enabled -%}
+    include h5bp/directive-only/cross-domain-insecure.conf;
+    {% endif -%}
+
+    # Also, set cache rules for webfonts.
+    #
+    # See http://wiki.nginx.org/HttpCoreModule#location
+    # And https://github.com/h5bp/server-configs/issues/85
+    # And https://github.com/h5bp/server-configs/issues/86
+    access_log off;
+    add_header Cache-Control "max-age=2592000";
+  }
+  {% endif -%}
+
+  {% endif -%}
+  {% endblock %}
+
   {% block h5bp -%}
   {% if h5bp_cache_file_descriptors_enabled -%}
   include h5bp/directive-only/cache-file-descriptors.conf;

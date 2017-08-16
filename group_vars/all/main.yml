@@ -8,6 +8,43 @@ www_root: /srv/www
 ip_whitelist:
   - "{{ (env == 'development') | ternary(ansible_default_ipv4.gateway, ipify_public_ip | default('')) }}"
 
+gzip_assets_on_deploy: true
+# Relative to `web`
+static_asset_paths:
+  - wp
+  - app/plugins
+  - app/themes
+static_asset_extensions:
+  - js
+  - css
+  - svg
+  - txt
+  - md
+  - htm
+  - html
+  - xml
+  - json
+  - ttf
+  - ttc
+  - otf
+  - eot
+  - woff
+  - woff2
+no_cache_extensions:
+  - manifest
+  - appcache
+  - htm
+  - html
+  - xml
+  - json
+cross_domain_font_extensions:
+  - ttf
+  - ttc
+  - otf
+  - eot
+  - woff
+  - woff2
+
 # Values of raw_vars will be wrapped in `{% raw %}` to avoid templating problems if values include `{%` and `{{`.
 # Will recurse dicts/lists. `*` is wildcard for one or more dict keys, list indices, or strings. Example:
 #   - vault_wordpress_sites.*.*_salt    -- matches vault_wordpress_sites.example.com.env.secure_auth_salt etc.

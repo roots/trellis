@@ -21,3 +21,19 @@
   composer:
     no_scripts: yes
     working_dir: "{{ deploy_helper.new_release_path }}"
+
+- name: Find static assets
+  find:
+    paths: "{{ project.static_asset_paths | default(static_asset_paths) | map('regex_replace', '(.*)', deploy_helper.new_release_path + '/web/\\1') | list }}"
+    patterns: "*.{{ project.static_asset_extensions | default(static_asset_extensions) | join(',*.') }}"
+    recurse: yes
+  when: project.gzip_assets_on_deploy | default(gzip_assets_on_deploy)
+  register: static_assets_raw
+
+- name: Set fact -- Static assets
+  set_fact:
+    static_assets: "{{ static_assets_raw.files | default([]) }}"
+
+- name: Gzip static assets
+  shell: "gzip --best --keep --force {{ static_assets | map(attribute='path') | map('quote') | join(' ') }}"
+  when: ( project.gzip_assets_on_deploy | default(gzip_assets_on_deploy) ) and ( static_assets | count )
