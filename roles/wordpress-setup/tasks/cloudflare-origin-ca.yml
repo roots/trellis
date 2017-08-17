@@ -1,0 +1,37 @@
+---
+- name: Add Cloudflare key
+  apt_key:
+    url: 'https://pkg.cloudflare.com/pubkey.gpg'
+
+- name: Add Cloudflare PPA
+  apt_repository:
+    repo: 'deb http://pkg.cloudflare.com/ xenial main'
+    update_cache: yes
+
+- name: Install CFCA
+  apt:
+    name: cfca
+    state: present
+    force: yes
+
+- name: Create directoriy and set permission
+  file:
+    path: "{{ nginx_ssl_path }}/cloudflare-origin-ca"
+    mode: 0700
+    state: directory
+
+- name: Generate Cloudflare Origin CA
+  shell: "cfca getcert \
+    -hostnames {{ site_hosts | union(multisite_subdomains_wildcards) | join(',') }} \
+    -key-out {{ item.key | quote }}.key \
+    -certificate-out {{ item.key | quote }}.pem"
+  args:
+    executable: "/bin/bash"
+    chdir: "{{ nginx_ssl_path }}/cloudflare-origin-ca"
+    creates: "{{ item.key }}.*"
+  environment:
+    CF_API_KEY: "{{ cloudflare_origin_ca_api_key }}"
+  no_log: true
+  with_dict: "{{ wordpress_sites }}"
+  when: ssl_enabled and item.value.ssl.provider | default('manual') == 'cloudflare-origin-ca'
+  notify: reload nginx

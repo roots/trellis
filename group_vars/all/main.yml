@@ -7,6 +7,7 @@ ntp_manage_config: true
 www_root: /srv/www
 ip_whitelist:
   - "{{ (env == 'development') | ternary(ansible_default_ipv4.gateway, ipify_public_ip | default('')) }}"
+cloudflare_origin_ca_api_key: "{{ vault_cloudflare_origin_ca_api_key }}" # Define this variable in group_vars/all/vault.yml
 
 # Values of raw_vars will be wrapped in `{% raw %}` to avoid templating problems if values include `{%` and `{{`.
 # Will recurse dicts/lists. `*` is wildcard for one or more dict keys, list indices, or strings. Example:
@@ -18,3 +19,4 @@ raw_vars:
   - vault_users.*.password
   - vault_users.*.salt
   - vault_wordpress_sites
+  - vault_cloudflare_origin_ca_api_key

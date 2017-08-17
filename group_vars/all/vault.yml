@@ -1,2 +1,3 @@
 # Documentation: https://roots.io/trellis/docs/vault/
 vault_mail_password: smtp_password
+vault_cloudflare_origin_ca_api_key: example_api_key
