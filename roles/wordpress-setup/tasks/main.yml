@@ -3,6 +3,9 @@
   tags: wordpress-setup-database
 - include: self-signed-certificate.yml
   tags: wordpress-setup-self-signed-certificate
+- include: cloudflare-origin-ca.yml
+  when: '"cloudflare-origin-ca" in wordpress_sites|json_query("*.ssl.provider")'
+  tags: wordpress-setup-cloudflare-origin-ca
 
 - name: Create web root
   file:

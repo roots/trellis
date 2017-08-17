@@ -83,6 +83,10 @@ server {
   ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}-bundled.cert;
   ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
 
+  {% elif item.value.ssl.provider | default('manual') == 'cloudflare-origin-ca' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/cloudflare-origin-ca/{{ item.key }}.pem;
+  ssl_certificate_key     {{ nginx_path }}/ssl/cloudflare-origin-ca/{{ item.key }}.key;
+
   {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
   ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
   ssl_trusted_certificate {{ nginx_path }}/ssl/{{ item.key }}.cert;
