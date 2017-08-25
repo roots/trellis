@@ -80,6 +80,11 @@ server {
 
   add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
 
+  {% if item.value.ssl.client_cert_url is defined -%}
+  ssl_verify_client       on;
+  ssl_client_certificate  {{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt;
+  {% endif -%}
+
   {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
   ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
   ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
