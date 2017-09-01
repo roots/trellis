@@ -29,7 +29,7 @@
   git:
     repo: "https://github.com/h5bp/server-configs-nginx.git"
     dest: "{{ nginx_path }}/h5bp-server-configs"
-    version: 82181a672a7c26f9bc8744fead80318d8a2520b1
+    version: c5c6602232e0976d9e69d69874aa84d2a2698265
     force: yes
 
 - name: Move h5bp configs
