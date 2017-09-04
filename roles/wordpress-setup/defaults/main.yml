@@ -23,6 +23,18 @@ nginx_includes_deprecated: roles/wordpress-setup/templates/includes.d
 nginx_includes_pattern: "^({{ nginx_includes_templates_path | regex_escape }}|{{ nginx_includes_deprecated | regex_escape }})/(.*)\\.j2$"
 nginx_includes_d_cleanup: true
 
+# h5bp helpers
+not_dev: "{{ env != 'development' }}"
+h5bp: "{{ item.value.h5bp | default({}) }}"
+h5bp_cache_file_descriptors_enabled: "{{ h5bp.cache_file_descriptors | default(not_dev) }}"
+h5bp_extra_security_enabled: "{{ h5bp.extra_security | default(true) }}"
+h5bp_no_transform_enabled: "{{ h5bp.no_transform | default(false) }}"
+h5bp_x_ua_compatible_enabled: "{{ h5bp.x_ua_compatible | default(true) }}"
+h5bp_cache_busting_enabled: "{{ h5bp.cache_busting | default(not_dev) }}"
+h5bp_cross_domain_fonts_enabled: "{{ h5bp.cross_domain_fonts | default(true) }}"
+h5bp_expires_enabled: "{{ h5bp.expires | default(not_dev) }}"
+h5bp_protect_system_files_enabled: "{{ h5bp.protect_system_files | default(true) }}"
+
 # PHP FPM
 php_fpm_pm_max_children: 10
 php_fpm_pm_start_servers: 1
