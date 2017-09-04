@@ -40,3 +40,12 @@
     - { role: wp-cli, tags: [wp-cli] }
     - { role: letsencrypt, tags: [letsencrypt], when: sites_using_letsencrypt | count }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup, letsencrypt] }
+
+- name: Run Custom Provisioning Tasks
+  hosts: web:&{{ env }}
+  become: yes
+  tasks:
+    - name: Include Custom Provisioning YAML Files
+      include: "{{ item }}"
+      with_fileglob: 
+        - "provision-hooks/*.yml"
