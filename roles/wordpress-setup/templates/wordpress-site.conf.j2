@@ -138,7 +138,7 @@ server {
   {% endif -%}
 
   {% if h5bp_cache_busting_enabled -%}
-  include h5bp/location/cache-busting.conf
+  include h5bp/location/cache-busting.conf;
   {% endif -%}
 
   {% if h5bp_cross_domain_fonts_enabled -%}
