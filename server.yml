@@ -28,7 +28,6 @@
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }
     - { role: ansible, tags: [ansible], when: env == "sandbox" }
-    - { role: newrelic-servers, tags: [newrelic, monitoring] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: letsencrypt, tags: [letsencrypt], when: letsencrypt_enabled }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup, letsencrypt] }
