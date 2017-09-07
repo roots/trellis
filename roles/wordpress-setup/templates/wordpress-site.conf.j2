@@ -195,6 +195,8 @@ server {
 
   {{ self.acme_challenge() -}}
 
+  {{ self.includes_d() -}}
+
   location / {
     return 301 https://$host$request_uri;
   }
@@ -216,6 +218,8 @@ server {
   {{ self.https() -}}
 
   {{ self.acme_challenge() -}}
+
+  {{ self.includes_d() -}}
 
   return 301 $scheme://{{ host.canonical }}$request_uri;
 }
