@@ -199,6 +199,10 @@ http {
   # a specific directory, or on an individual server{} level.
   # gzip_static on;
   {% endblock %}
+  
+  {% block http_includes_d -%}
+  include includes.d/http/*.conf;
+  {% endblock -%}
 
   {% block sites_enabled -%}
   # Include files in the sites-enabled folder. server{} configuration files should be
