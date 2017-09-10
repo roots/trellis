@@ -3,6 +3,8 @@
   tags: wordpress-setup-database
 - include: self-signed-certificate.yml
   tags: wordpress-setup-self-signed-certificate
+- include: nginx-client-cert.yml
+  tags: wordpress-setup-nginx-client-cert
 
 - name: Create web root
   file:
