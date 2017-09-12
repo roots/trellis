@@ -33,9 +33,10 @@
     force: yes
 
 - name: Move h5bp configs
-  command: cp -R {{ nginx_path }}/h5bp-server-configs/h5bp {{ nginx_path }}/h5bp
-  args:
-    creates: "{{ nginx_path }}/h5bp/"
+  command: rsync -ac --delete --info=NAME {{ nginx_path }}/h5bp-server-configs/h5bp/ {{ nginx_path }}/h5bp
+  register: h5bp_nginx_sync
+  changed_when: h5bp_nginx_sync.stdout != ''
+  notify: reload nginx
 
 - name: Create nginx.conf
   template:
