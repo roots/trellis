@@ -1,6 +1,12 @@
 site_uses_local_db: "{{ site_env.db_host == 'localhost' }}"
 nginx_wordpress_site_conf: wordpress-site.conf.j2
 nginx_ssl_path: "{{ nginx_path }}/ssl"
+sites_using_ssl: "[{% for name, site in wordpress_sites.iteritems() if site.ssl.enabled %}'{{ name }}',{% endfor %}]"
+
+nginx_sites_confs:
+  - src: no-default.conf.j2
+  - src: ssl.no-default.conf.j2
+    enabled: "{{ sites_using_ssl != [] }}"
 
 # HSTS defaults
 nginx_hsts_max_age: 31536000

@@ -1,0 +1,38 @@
+# {{ ansible_managed }}
+
+# Drop requests for unknown hosts
+#
+# If no default server is defined, nginx will use the first found server.
+# To prevent host header attacks, or other potential problems when an unknown
+# servername is used in a request, it's recommended to drop the request
+# returning 444 "no response".
+
+{% set _item = {
+    'key': ssl_default_cert_site | default(sites_using_ssl[0]),
+    'value': wordpress_sites[ssl_default_cert_site | default(sites_using_ssl[0])]
+  }
+-%}
+
+server {
+  listen [::]:443 ssl default_server deferred;
+  listen 443 ssl default_server deferred;
+
+  include h5bp/directive-only/ssl.conf;
+  ssl_dhparam /etc/nginx/ssl/dhparams.pem;
+
+  {% if _item.value.ssl.provider | default('manual') == 'manual' and _item.value.ssl.cert is defined and _item.value.ssl.key is defined -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ _item.value.ssl.cert | basename }};
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ _item.value.ssl.key | basename }};
+
+  {% elif _item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ _item.key }}-{{ letsencrypt_cert_ids[_item.key] }}-bundled.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ _item.key }}.key;
+
+  {% elif _item.value.ssl.provider | default('manual') == 'self-signed' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ _item.key }}.cert;
+  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ _item.key }}.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ _item.key }}.key;
+  {% endif -%}
+
+  return 444;
+}

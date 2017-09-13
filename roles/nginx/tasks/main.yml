@@ -50,22 +50,3 @@
     path: "{{ nginx_path }}/sites-enabled/default"
     state: absent
   notify: reload nginx
-
-- name: Create Nginx available sites
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
-  with_items: "{{ nginx_sites_confs }}"
-  when: item.enabled | default(true)
-  notify: reload nginx
-  tags: nginx-sites
-
-- name: Enable or disable Nginx sites
-  file:
-    path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
-    src: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
-    state: "{{ item.enabled | default(true) | ternary('link', 'absent') }}"
-    force: yes
-  with_items: "{{ nginx_sites_confs }}"
-  notify: reload nginx
-  tags: nginx-sites
