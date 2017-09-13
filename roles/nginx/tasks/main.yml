@@ -8,6 +8,8 @@
   apt:
     name: "{{ nginx_package }}"
     state: present
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time }}"
     force: yes
 
 - name: Create SSL directory
