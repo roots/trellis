@@ -2,15 +2,17 @@
 - name: Install MySQL client
   apt:
     name: mariadb-client
-    state: present
-    update_cache: true
+    state: "{{ mariadb_client_package_state | default(apt_package_state) }}"
+    update_cache: yes
     cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - block:
   - name: Install MySQL server
     apt:
       name: mariadb-server
-      state: present
+      state: "{{ mariadb_server_package_state | default(apt_package_state) }}"
+      update_cache: yes
+      cache_valid_time: "{{ apt_cache_valid_time }}"
 
   - name: Disable MariaDB binary logging
     template:
