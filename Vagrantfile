@@ -32,7 +32,23 @@ Vagrant.configure('2') do |config|
   config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
 
   # Required for NFS to work
-  config.vm.network :private_network, ip: vconfig.fetch('vagrant_ip'), hostsupdater: 'skip'
+  if vconfig.fetch('vagrant_ip') == 'dhcp'
+    config.vm.network :private_network, type: 'dhcp', hostsupdater: 'skip'
+
+    cached_addresses = {}
+    config.hostmanager.ip_resolver = proc do |vm, _resolving_vm|
+      if cached_addresses[vm.name].nil?
+        if vm.communicate.ready?
+          vm.communicate.execute("hostname -I | cut -d ' ' -f 2") do |type, contents|
+            cached_addresses[vm.name] = contents.split("\n").first[/(\d+\.\d+\.\d+\.\d+)/, 1]
+          end
+        end
+      end
+      cached_addresses[vm.name]
+    end
+  else
+    config.vm.network :private_network, ip: vconfig.fetch('vagrant_ip'), hostsupdater: 'skip'
+  end
 
   main_hostname, *hostnames = site_hosts.map { |host| host['canonical'] }
   config.vm.hostname = main_hostname
