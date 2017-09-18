@@ -38,7 +38,7 @@ Vagrant.configure('2') do |config|
   config.vm.hostname = main_hostname
 
   if Vagrant.has_plugin?('vagrant-hostmanager') && !trellis_config.multisite_subdomains?
-    redirects = trellis_config.redirects
+    redirects = trellis_config.site_hosts_redirects
 
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
