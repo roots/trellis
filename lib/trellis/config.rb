@@ -17,8 +17,8 @@ module Trellis
       end
     end
 
-    def canonicals
-      @canonicals ||= site_hosts.map { |host| host['canonical'] }
+    def site_hosts_canonical
+      @site_hosts_canonical ||= site_hosts.map { |host| host['canonical'] }
     end
 
     def site_hosts_redirects

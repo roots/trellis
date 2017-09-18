@@ -34,7 +34,7 @@ Vagrant.configure('2') do |config|
   # Required for NFS to work
   config.vm.network :private_network, ip: vconfig.fetch('vagrant_ip'), hostsupdater: 'skip'
 
-  main_hostname, *hostnames = trellis_config.canonicals
+  main_hostname, *hostnames = trellis_config.site_hosts_canonical
   config.vm.hostname = main_hostname
 
   if Vagrant.has_plugin?('vagrant-hostmanager') && !trellis_config.multisite_subdomains?
