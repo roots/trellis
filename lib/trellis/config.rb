@@ -12,7 +12,7 @@ module Trellis
     def multisite_subdomains?
       @using_multisite_subdomains ||= begin
         wordpress_sites.any? do |(_name, site)|
-          site.dig('multisite', 'enabled') && site.dig('multisite', 'subdomains')
+          site['multisite']&.fetch('enabled', false) && site['multisite']&.fetch('subdomains', false)
         end
       end
     end
