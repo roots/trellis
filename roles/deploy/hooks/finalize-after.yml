@@ -1,5 +1,13 @@
 ---
 - block:
+  - name: Remove WordPress transient containing old release path
+    shell: "{{ project.multisite.enabled | default(false) | ternary('wp network meta delete 1', 'wp option delete') }} _site_transient_theme_roots ||:"
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
+    register: site_transient_theme_roots
+    changed_when: site_transient_theme_roots.stdout != ''
+    when: update_wp_theme_paths | default(true) | bool
+
   - name: Update WP theme paths
     command: >
       wp option set {{ item[0].option }}
