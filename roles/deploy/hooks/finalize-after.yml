@@ -17,7 +17,7 @@
       chdir: "{{ deploy_helper.current_path }}"
     when: update_wp_theme_paths | default(true) | bool
     with_subelements:
-      - "[{% for result in wp_template_root.results %}{'option': '{{ result.item }}', 'stdout_lines': {{ result.stdout_lines | select('search', deploy_helper.releases_path) | list }}},{% endfor %}]"
+      - "[{% for result in wp_template_root.results %}{'option': '{{ result.item }}', 'stdout_lines': {{ result.stdout_lines | default ([]) | select('search', deploy_helper.releases_path) | list }}},{% endfor %}]"
       - stdout_lines
 
   - name: Warn about updating network database.
@@ -31,7 +31,7 @@
       chdir: "{{ deploy_helper.current_path }}"
     when: project.update_db_on_deploy | default(update_db_on_deploy)
 
-  when: wp_installed | success
+  when: wp_installed.rc == 0
 
 - name: Reload php-fpm
   shell: sudo service php7.1-fpm reload

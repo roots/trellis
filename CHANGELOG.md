@@ -1,4 +1,5 @@
 ### HEAD
+* Ansible 2.4 compatibility ([#895](https://github.com/roots/trellis/pull/895))
 * Default h5bp expires and cache busting to false ([#894](https://github.com/roots/trellis/pull/894))
 * Deploys: Update WP theme paths for multisite subsites ([#854](https://github.com/roots/trellis/pull/854))
 * Vagrant: Support DHCP ([#892](https://github.com/roots/trellis/pull/892))

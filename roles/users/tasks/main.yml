@@ -66,6 +66,6 @@
   when: (ansible_user != admin_user and not sshd_permit_root_login) or (cli_ask_pass and not sshd_password_authentication)
   tags: [connection-tests, sshd]
 
-- include: connection-warnings.yml
-  when: admin_user_status | failed
+- import_tasks: connection-warnings.yml
+  when: not admin_user_status | skipped and admin_user_status.rc != 0
   tags: [connection-tests, sshd]

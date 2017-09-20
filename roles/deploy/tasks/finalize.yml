@@ -1,5 +1,5 @@
 ---
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_finalize_before | default([]) }}"
   loop_control:
     loop_var: include_path
@@ -12,7 +12,7 @@
     release: "{{ deploy_helper.new_release }}"
     state: finalize
 
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_finalize_after | default([]) }}"
   loop_control:
     loop_var: include_path

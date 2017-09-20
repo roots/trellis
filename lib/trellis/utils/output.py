@@ -67,7 +67,7 @@ def display(obj, result):
     display = obj._display.display
     wrap_width = 77
     first = obj.first_host and obj.first_item
-    failed = 'failed' in result or 'unreachable' in result
+    failed = result.get('failed', False) or result.get('unreachable', False)
 
     # Only display msg if debug module or if failed (some modules have undesired 'msg' on 'ok')
     if 'msg' in result and (failed or obj.action == 'debug'):

@@ -1,5 +1,5 @@
 ---
-- include: variable-check.yml
+- import_playbook: variable-check.yml
   vars:
     playbook: rollback.yml
 

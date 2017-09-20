@@ -1,9 +1,9 @@
 ---
-- include: database.yml
+- import_tasks: database.yml
   tags: wordpress-setup-database
-- include: self-signed-certificate.yml
+- import_tasks: self-signed-certificate.yml
   tags: wordpress-setup-self-signed-certificate
-- include: nginx-client-cert.yml
+- import_tasks: nginx-client-cert.yml
   tags: wordpress-setup-nginx-client-cert
 
 - name: Create web root
@@ -36,10 +36,10 @@
   when: disable_default_pool | default(true)
   notify: reload php-fpm
 
-- include: nginx-includes.yml
+- import_tasks: nginx-includes.yml
   tags: [nginx-includes, wordpress-setup-nginx]
 
-- include: nginx.yml
+- import_tasks: nginx.yml
   tags: wordpress-setup-nginx
 
 - name: Setup WP system cron
