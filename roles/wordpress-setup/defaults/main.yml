@@ -38,8 +38,7 @@ h5bp_protect_system_files_enabled: "{{ h5bp.protect_system_files | default(true)
 # Site compression
 site_compression_enabled: "{{ item.value.gzip_assets_on_deploy | default(gzip_assets_on_deploy) }}"
 site_compression_paths: "{{ item.value.static_asset_paths | default(static_asset_paths) | join('|') }}"
-site_compression_no_cache_extensions: "{{ item.value.static_asset_extensions | default(static_asset_extensions) | intersect(no_cache_extensions) | join('|') }}"
-site_compression_normal_extensions: "{{ item.value.static_asset_extensions | default(static_asset_extensions) | difference(cross_domain_font_extensions) | difference(no_cache_extensions) | join('|') }}"
+site_compression_normal_extensions: "{{ item.value.static_asset_extensions | default(static_asset_extensions) | difference(cross_domain_font_extensions) | join('|') }}"
 site_compression_font_extensions: "{{ item.value.static_asset_extensions | default(static_asset_extensions) | intersect(cross_domain_font_extensions) | join('|') }}"
 
 # PHP FPM

@@ -30,13 +30,6 @@ static_asset_extensions:
   - eot
   - woff
   - woff2
-no_cache_extensions:
-  - manifest
-  - appcache
-  - htm
-  - html
-  - xml
-  - json
 cross_domain_font_extensions:
   - ttf
   - ttc

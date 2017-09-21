@@ -124,18 +124,10 @@ server {
   # Site Compression
   {% if site_compression_enabled -%}
 
-  {% if site_compression_no_cache_extensions | count -%}
-  location ~* ^/({{ site_compression_paths }})/(.*)\.(?:{{ site_compression_no_cache_extensions }})(?:(\?.*)*)$ {
-    gzip_static on;
-    add_header Cache-Control "max-age=0";
-  }
-  {% endif -%}
-
   {% if site_compression_normal_extensions | count -%}
   location ~* ^/({{ site_compression_paths }})/(.*)\.(?:{{ site_compression_normal_extensions }})(?:(\?.*)*)$ {
     gzip_static on;
     access_log off;
-    add_header Cache-Control "max-age=2592000";
   }
   {% endif -%}
 
