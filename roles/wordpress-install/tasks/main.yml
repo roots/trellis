@@ -1,5 +1,5 @@
 ---
-- include: directories.yml
+- import_tasks: directories.yml
   tags: wordpress-install-directories
 
 - name: Create .env file

@@ -35,7 +35,7 @@
   with_dict: "{{ wordpress_sites }}"
   notify: disable temporary challenge sites
 
-- include: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
+- import_tasks: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
   when: challenge_site_confs | changed or challenge_sites_enabled | changed
 
 - name: Create test Acme Challenge file

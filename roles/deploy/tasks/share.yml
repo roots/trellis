@@ -1,5 +1,5 @@
 ---
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_share_before | default([]) }}"
   loop_control:
     loop_var: include_path
@@ -48,7 +48,7 @@
     state: link
   with_items: "{{ project_shared_children }}"
 
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_share_after | default([]) }}"
   loop_control:
     loop_var: include_path

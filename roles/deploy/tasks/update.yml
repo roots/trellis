@@ -1,5 +1,5 @@
 ---
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_update_before | default([]) }}"
   loop_control:
     loop_var: include_path
@@ -51,7 +51,7 @@
       > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
   when: git_clone | failed
 
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_update_after | default([]) }}"
   loop_control:
     loop_var: include_path

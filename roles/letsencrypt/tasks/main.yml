@@ -1,7 +1,7 @@
 ---
-- include: setup.yml
-- include: nginx.yml
-- include: certificates.yml
+- import_tasks: setup.yml
+- import_tasks: nginx.yml
+- import_tasks: certificates.yml
 
 - name: Install cronjob for key generation
   cron:

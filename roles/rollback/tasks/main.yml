@@ -1,8 +1,8 @@
 ---
-- include: user-release.yml
+- import_tasks: user-release.yml
   when: release is defined
 
-- include: prior-release.yml
+- import_tasks: prior-release.yml
   when: release is not defined
 
 - name: Check whether target release was from a successful deploy

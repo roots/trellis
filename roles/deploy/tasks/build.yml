@@ -1,5 +1,5 @@
 ---
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_build_before | default([]) }}"
   loop_control:
     loop_var: include_path
@@ -23,7 +23,7 @@
   with_items: "{{ project_folder_paths.results }}"
   when: item.stat.exists
 
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_build_after | default([]) }}"
   loop_control:
     loop_var: include_path

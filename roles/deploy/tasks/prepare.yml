@@ -1,5 +1,5 @@
 ---
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_prepare_before | default([]) }}"
   loop_control:
     loop_var: include_path
@@ -38,7 +38,7 @@
     chdir: "{{ project_source_path }}"
   when: project.repo_subtree_path is defined
 
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_prepare_after | default([]) }}"
   loop_control:
     loop_var: include_path
