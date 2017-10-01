@@ -1,9 +1,8 @@
 ---
 - name: ensure fail2ban is installed
   apt:
-    pkg: fail2ban
-    state: latest
-    update_cache: true
+    name: "{{ fail2ban_package }}"
+    state: "{{ fail2ban_package_state | default(apt_security_package_state) }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
   notify:
     - restart fail2ban

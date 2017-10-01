@@ -1,3 +1,4 @@
+ssmtp_package: ssmtp
 ssmtp_auth_method: LOGIN
 ssmtp_from_override: 'Yes'
 ssmtp_start_tls: 'Yes'
