@@ -1,4 +1,6 @@
 ---
+ferm_package: ferm
+
 ferm_enabled: true
 ferm_limit_portscans: false
 
