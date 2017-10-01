@@ -15,7 +15,7 @@
     - { role: php, tags: [php] }
     - { role: xdebug, tags: [php, xdebug] }
     - { role: memcached, tags: [memcached] }
-    - { role: nginx, tags: [nginx] }
+    - { role: nginx, tags: [nginx, wordpress, wordpress-setup] }
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
