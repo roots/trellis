@@ -93,6 +93,7 @@ sites_to_export:
   - buildpress-rtl
   - medicpress
   - gympress
+  - growthpress
 
 xmls_to_rename:
   hairpress: "hairpresswptheme"
