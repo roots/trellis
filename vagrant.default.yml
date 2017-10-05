@@ -5,6 +5,7 @@ vagrant_memory: 1024 # in MB
 vagrant_box: 'bento/ubuntu-16.04'
 vagrant_box_version: '<= 2.3.8'
 vagrant_ansible_version: '2.4.0'
+vagrant_prefer_nfs: true
 vagrant_skip_galaxy: false
 
 vagrant_install_plugins: true
