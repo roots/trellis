@@ -1,5 +1,4 @@
 ### HEAD
-* Vagrant: Use DHCP by default ([#898](https://github.com/roots/trellis/pull/898))
 * [BREAKING] Normalize `apt` tasks ([#881](https://github.com/roots/trellis/pull/881))
 * Ansible 2.4 compatibility ([#895](https://github.com/roots/trellis/pull/895))
 * Default h5bp expires and cache busting to false ([#894](https://github.com/roots/trellis/pull/894))
