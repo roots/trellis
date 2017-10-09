@@ -25,6 +25,7 @@ users:
   - name: marko
     groups:
       - "{{ web_group }}"
+      - sudo
     keys:
       - https://github.com/Prelc.keys
   - name: gregor
