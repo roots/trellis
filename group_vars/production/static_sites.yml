@@ -29,6 +29,7 @@ static_sites:
   www.proteusnet.com:
     site_hosts:
       - www.proteusnet.com
+      - mg.proteusnet.com
     ssl:
       enabled: false
     cache:
