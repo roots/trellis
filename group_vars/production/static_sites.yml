@@ -18,14 +18,6 @@ static_sites:
       enabled: false
     php: false
     env: production
-  internal.proteusnet.com:
-    site_hosts:
-      - internal.proteusnet.com
-    ssl:
-      enabled: false
-    cache:
-      enabled: false
-    env: production
   html-demo.proteusthemes.com:
     site_hosts:
       - html-demo.proteusthemes.com
