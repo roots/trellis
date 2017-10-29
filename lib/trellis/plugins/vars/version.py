@@ -14,7 +14,7 @@ except ImportError:
     display = Display()
 
 version_requirement = '2.4.0.0'
-version_tested_max = '2.4.0.0'
+version_tested_max = '2.4.1.0'
 
 if not ge(LooseVersion(__version__), LooseVersion(version_requirement)):
     raise AnsibleError(('Trellis no longer supports Ansible {}.\n'
