@@ -1,5 +1,25 @@
 ntp_timezone: Etc/UTC
 
+env_groups: "{{ ['development', 'staging', 'production'] | intersect(group_names) }}"
+
+envs_with_wp_sites: "{{
+  lookup('filetree', playbook_dir + '/group_vars') |
+  selectattr('path', 'match', '(' + env_groups | join('|') + ')/wordpress_sites\\.yml$') |
+  map(attribute='path') | map('regex_replace', '([^/]*)/.*', '\\1') | list
+}}"
+
+site_keys_by_env_pair: "[
+  {% for env_pair in envs_with_wp_sites | combinations(2) | list %}
+    {
+      'env_pair': {{ env_pair }},
+      'site_keys': {{
+                     (vars[env_pair[0] + '_sites'].wordpress_sites | default({})).keys() | intersect(
+                     (vars[env_pair[1] + '_sites'].wordpress_sites | default({})).keys())
+                   }}
+    },
+  {% endfor %}
+]"
+
 apt_packages_default:
   python-software-properties: "{{ apt_package_state }}"
   python-pycurl: "{{ apt_package_state }}"
