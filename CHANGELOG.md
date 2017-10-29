@@ -1,4 +1,5 @@
 ### HEAD
+* Dynamically increase `ansible_group_priority` for selected env ([#909](https://github.com/roots/trellis/pull/909))
 * Bump Ansible `version_tested_max` to 2.4.1.0 ([#911](https://github.com/roots/trellis/pull/911))
 * Update wp-cli to 1.4.0 ([#906](https://github.com/roots/trellis/pull/906))
 * [BREAKING] Normalize `apt` tasks ([#881](https://github.com/roots/trellis/pull/881))
