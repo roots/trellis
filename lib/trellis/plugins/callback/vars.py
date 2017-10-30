@@ -89,6 +89,11 @@ class CallbackModule(CallbackBase):
             return True
 
     def v2_playbook_on_play_start(self, play):
+        env = play.get_variable_manager().get_vars(play=play).get('env', '')
+        env_group = next((group for key,group in play.get_variable_manager()._inventory.groups.iteritems() if key == env), False)
+        if env_group:
+            env_group.set_priority(20)
+
         for host in play.get_variable_manager()._inventory.list_hosts(play.hosts[0]):
             hostvars = play.get_variable_manager().get_vars(play=play, host=host)
             self.raw_vars(play, host, hostvars)
