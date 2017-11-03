@@ -140,6 +140,7 @@ Vagrant.configure('2') do |config|
     vb.name = config.vm.hostname
     vb.customize ['modifyvm', :id, '--cpus', vconfig.fetch('vagrant_cpus')]
     vb.customize ['modifyvm', :id, '--memory', vconfig.fetch('vagrant_memory')]
+    vb.customize ['modifyvm', :id, '--ioapic', 'on']
 
     # Fix for slow external network connections
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
