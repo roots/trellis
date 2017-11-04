@@ -140,10 +140,11 @@ Vagrant.configure('2') do |config|
     vb.name = config.vm.hostname
     vb.customize ['modifyvm', :id, '--cpus', vconfig.fetch('vagrant_cpus')]
     vb.customize ['modifyvm', :id, '--memory', vconfig.fetch('vagrant_memory')]
+    vb.customize ['modifyvm', :id, '--ioapic', vconfig.fetch('vagrant_ioapic', 'on')]
 
     # Fix for slow external network connections
-    vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
-    vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
+    vb.customize ['modifyvm', :id, '--natdnshostresolver1', vconfig.fetch('vagrant_natdnshostresolver', 'on')]
+    vb.customize ['modifyvm', :id, '--natdnsproxy1', vconfig.fetch('vagrant_natdnsproxy', 'on')]
   end
 
   # VMware Workstation/Fusion settings
