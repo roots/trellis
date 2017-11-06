@@ -10,6 +10,7 @@ from ansible.errors import AnsibleError
 from ansible.parsing.dataloader import DataLoader
 from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
 from ansible.playbook.play_context import PlayContext
+from ansible.playbook.task import Task
 from ansible.plugins.callback import CallbackBase
 from ansible.template import Templar
 
@@ -95,7 +96,8 @@ class CallbackModule(CallbackBase):
             env_group.set_priority(20)
 
         for host in play.get_variable_manager()._inventory.list_hosts(play.hosts[0]):
-            hostvars = play.get_variable_manager().get_vars(play=play, host=host)
+            # it should be ok to remove dummy Task() once minimum required Ansible >= 2.4.2
+            hostvars = play.get_variable_manager().get_vars(play=play, host=host, task=Task())
             self.raw_vars(play, host, hostvars)
             host.vars['ssh_args_default'] = PlayContext(play=play, options=self._options)._ssh_args.default
             host.vars['cli_options'] = self.cli_options()
