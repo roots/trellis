@@ -7,7 +7,6 @@ import sys
 from __main__ import cli
 from ansible.module_utils.six import iteritems
 from ansible.errors import AnsibleError
-from ansible.parsing.dataloader import DataLoader
 from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
 from ansible.playbook.play_context import PlayContext
 from ansible.playbook.task import Task
@@ -22,7 +21,6 @@ class CallbackModule(CallbackBase):
     CALLBACK_NAME = 'vars'
 
     def __init__(self):
-        self.loader = DataLoader()
         self._options = cli.options if cli else None
 
     def raw_triage(self, key_string, item, patterns):
@@ -43,7 +41,7 @@ class CallbackModule(CallbackBase):
         if 'raw_vars' not in hostvars:
             return
 
-        raw_vars = Templar(variables=hostvars, loader=self.loader).template(hostvars['raw_vars'])
+        raw_vars = Templar(variables=hostvars, loader=play._loader).template(hostvars['raw_vars'])
         if not isinstance(raw_vars, list):
             raise AnsibleError('The `raw_vars` variable must be defined as a list.')
 
