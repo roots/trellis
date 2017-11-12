@@ -1,4 +1,26 @@
 ---
+- block:
+  - name: Load wordpress_sites.yml vars into <env>_sites vars
+    include_vars:
+      file: group_vars/{{ item }}/wordpress_sites.yml
+      name: "{{ item }}_sites"
+    with_items: "{{ envs_with_wp_sites }}"
+    when: envs_with_wp_sites | count > 1
+
+  - name: Fail if there are duplicate site keys within host's wordpress_sites
+    fail:
+      msg: >
+        If you put multiple environments on `{{ inventory_hostname }}`, `wordpress_sites`
+        must use different site keys per environment. Adjust the following site keys that
+        are duplicated between the `{{ item.env_pair | join('` and `') }}` groups:
+          {{ item.site_keys | to_nice_yaml | indent(2) }}
+    when: item.site_keys | count
+    with_items: "{{ site_keys_by_env_pair }}"
+
+  when:
+    - env_groups | count > 1
+    - validate_site_keys | default(true) | bool
+
 - name: Validate wordpress_sites
   fail:
     msg: "{{ lookup('template', 'wordpress_sites.j2') }}"
