@@ -8,12 +8,7 @@ import re
 import textwrap
 
 from ansible import __version__
-
-# to_unicode will no longer be needed once Trellis requires Ansible >= 2.2
-try:
-    from ansible.module_utils._text import to_text
-except ImportError:
-    from ansible.utils.unicode import to_unicode as to_text
+from ansible.module_utils._text import to_text
 
 def system(vagrant_version=None):
     # Get most recent Trellis CHANGELOG entry
