@@ -1,4 +1,5 @@
 ### HEAD
+* Update wp-cli to 1.4.1 ([#918](https://github.com/roots/trellis/pull/918))
 * Disallow duplicate site keys within a host's `wordpress_sites` ([#910](https://github.com/roots/trellis/pull/910))
 * Fix `raw_vars` functionality for Ansible 2.4.1 ([#915](https://github.com/roots/trellis/pull/915))
 * Enable Virtualbox ioapic option ([#913](https://github.com/roots/trellis/pull/913))
