@@ -26,7 +26,7 @@
   failed_when: wp_template_root.stderr  | default('') != ''
   when:
     - wp_installed.rc == 0
-    - update_wp_theme_paths | default(true) | bool
+    - project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool
   with_items:
     - template_root
     - stylesheet_root

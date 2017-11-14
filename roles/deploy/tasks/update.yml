@@ -37,7 +37,7 @@
     repo: "{{ project_git_repo }}"
     dest: "{{ project_source_path }}"
     version: "{{ project_version }}"
-    accept_hostkey: "{{ repo_accept_hostkey | default(true) }}"
+    accept_hostkey: "{{ project.repo_accept_hostkey | default(repo_accept_hostkey | default(true)) }}"
   ignore_errors: true
   no_log: true
   register: git_clone

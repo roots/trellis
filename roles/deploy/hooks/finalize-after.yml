@@ -6,7 +6,7 @@
       chdir: "{{ deploy_helper.current_path }}"
     register: site_transient_theme_roots
     changed_when: site_transient_theme_roots.stdout != ''
-    when: update_wp_theme_paths | default(true) | bool
+    when: project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool
 
   - name: Update WP theme paths
     command: >
@@ -15,7 +15,7 @@
       {% if project.multisite.enabled | default(false) %} --url={{ item[1].split(' ')[0] }}{% endif %}
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: update_wp_theme_paths | default(true) | bool
+    when: project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool
     with_subelements:
       - "[{% for result in wp_template_root.results %}{'option': '{{ result.item }}', 'stdout_lines': {{ result.stdout_lines | default ([]) | select('search', deploy_helper.releases_path) | list }}},{% endfor %}]"
       - stdout_lines
