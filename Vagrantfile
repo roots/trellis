@@ -83,6 +83,7 @@ Vagrant.configure('2') do |config|
       trellis_config.wordpress_sites.each_pair do |name, site|
         config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
         config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'vagrant', g: 'www-data', o: 'nonempty'
+        config.vm.synced_folder '../database/', '/srv/database'
       end
 
       config.vm.synced_folder ANSIBLE_PATH, '/ansible-nfs', type: 'nfs'
@@ -162,5 +163,35 @@ Vagrant.configure('2') do |config|
     prl.cpus = vconfig.fetch('vagrant_cpus')
     prl.memory = vconfig.fetch('vagrant_memory')
     prl.update_guest_tools = true
+  end
+
+  # Vagrant Triggers
+  trellis_config.wordpress_sites.each do |(name, site)|
+    #
+    # Get database credentials
+    #
+    site['env'].merge!(trellis_config.vault_sites[name]['env'])
+    db_name  = site['env']['db_name']
+    db_user  = site['env']['db_user']
+    db_pass  = site['env']['db_password']
+    #
+    # Importing database
+    #
+    config.trigger.after [:up, :resume], :force => true do
+      database_file = "../database/current/#{db_name}.sql"
+      if File.exists?(database_file)
+        info "Importing database #{db_name}"
+        run_remote "mysql -u #{db_user} -p#{db_pass} #{db_name} < /srv/database/current/#{db_name}.sql"
+      else
+        fail_with_message "#{database_file} was not found."
+      end
+    end
+    #
+    # Exporting database
+    #
+    config.trigger.before [:halt, :suspend], :force => true do
+      info "Dumping database #{db_name}"
+      run_remote "mysqldump -u #{db_user} -p#{db_pass} #{db_name} > /srv/database/current/#{db_name}.sql"
+    end
   end
 end
