@@ -4,12 +4,12 @@
 wordpress_sites:
   demo.proteusthemes.com:
     site_hosts:
-      - demo.proteusthemes.dev
+      - demo.proteusthemes.test
     local_path: ../www/demo.proteusthemes.com # path targeting local Bedrock site directory (relative to Ansible root)
     site_title: ProteusThemes
     admin_user: proteusnet
     admin_password: admin
-    admin_email: proteusnet@proteusthemes.dev
+    admin_email: proteusnet@proteusthemes.test
     multisite:
       enabled: true
       subdomains: false
@@ -19,20 +19,20 @@ wordpress_sites:
     cache:
       enabled: false
     env:
-      wp_home: "http://demo.proteusthemes.dev"
-      wp_siteurl: "http://demo.proteusthemes.dev"
+      wp_home: "http://demo.proteusthemes.test"
+      wp_siteurl: "http://demo.proteusthemes.test"
       db_name: demo_network
       db_user: proteusnet
       db_password: devpw
       db_prefix: wpsites_
   www.proteusthemes.com:
     site_hosts:
-      - www.proteusthemes.dev
+      - www.proteusthemes.test
     local_path: ../www/www.proteusthemes.com
     site_title: ProteusThemes
     admin_user: proteusnet
     admin_password: admin
-    admin_email: admin@proteusthemes.dev
+    admin_email: admin@proteusthemes.test
     multisite:
       enabled: false
       # subdomains: false
@@ -42,8 +42,8 @@ wordpress_sites:
     cache:
       enabled: false
     env:
-      wp_home: "http://www.proteusthemes.dev"
-      wp_siteurl: "http://www.proteusthemes.dev"
+      wp_home: "http://www.proteusthemes.test"
+      wp_siteurl: "http://www.proteusthemes.test"
       db_name: pt_core
       db_user: proteusnet
       db_password: devpw
