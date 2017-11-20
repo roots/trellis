@@ -11,6 +11,7 @@
     path: "{{ project_root }}"
     release: "{{ deploy_helper.new_release }}"
     state: finalize
+    keep_releases: "{{ project.deploy_keep_releases | default(deploy_keep_releases | default(omit)) }}"
 
 - include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_finalize_after | default([]) }}"
