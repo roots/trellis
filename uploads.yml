@@ -1,0 +1,59 @@
+---
+- name: Sync uploads between environments
+  hosts: web:&{{ env }}
+  remote_user: "{{ web_user }}"
+
+  vars:
+    project: "{{ wordpress_sites[site] }}"
+    project_root: "{{ www_root }}/{{ site }}"
+
+  tasks:
+  - name: Abort if environment variable is equal to development
+    fail:
+      msg: "ERROR: development is not a valid environment for this mode (you can't push/pull from development to development)."
+    when: env == "development"
+
+  - name: Check if {{ site }} folder exists
+    delegate_to: development_host
+    stat:
+      path: "{{ project_root }}"
+    register: result
+
+  - name: Abort if {{ site }} folder doesn't exists
+    fail:
+      msg: "ERROR: {{ site }} is not a valid site name ({{ site }} folder does not exist)."
+    when: result.stat.exists is defined and result.stat.exists == false or result.stat.isdir is defined and result.stat.isdir == false
+
+  - block:
+    - name: Push uploads
+      synchronize:
+        src: "{{ project.local_path }}/web/app/uploads/"
+        dest: "{{ project_root }}/current/web/app/uploads/"
+        mode: push
+        delete: yes
+        recursive: yes
+        rsync_opts: --exclude=.DS_Store --stats
+      when: mode is defined and mode == "push"
+      register: output_push
+
+    - name: Push uploads output
+      debug:
+        var: output_push.stdout_lines
+      when: output_push.skipped is not defined
+
+    - name: Pull uploads
+      synchronize:
+        src: "{{ project_root }}/current/web/app/uploads/"
+        dest: "{{ project.local_path }}/web/app/uploads/"
+        mode: pull
+        delete: yes
+        recursive: yes
+        rsync_opts: --exclude=.DS_Store --stats
+      when: mode is defined and mode == "pull"
+      register: output_pull
+
+    - name: Pull uploads output
+      debug:
+        var: output_pull.stdout_lines
+      when: output_pull.skipped is not defined
+    when: result.stat.exists is defined and result.stat.exists and result.stat.isdir is defined and result.stat.isdir

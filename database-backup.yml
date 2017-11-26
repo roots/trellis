@@ -1,0 +1,62 @@
+---
+- name: Backup {{ site }} {{ env }} database
+  hosts: web:&{{ env }}
+  remote_user: "{{ web_user }}"
+
+  vars:
+    project_root: "{{ www_root }}/{{ site }}"
+    project_web_dir: "{{ project_root }}/current"
+    host: "{{ env }}_host"
+    from_host: "{{ hostvars[host] }}"
+    local_bedrock_dir: "{{ from_host.wordpress_sites[site].local_path }}"
+    current_date_and_time: "{{ ansible_date_time.date | regex_replace('\\-+', '_') }}_{{ ansible_date_time.hour }}_{{ ansible_date_time.minute }}_{{ ansible_date_time.second }}"
+    backup_file: "{{ site | regex_replace('\\.+', '_') }}_{{ env }}_{{ current_date_and_time }}.sql.gz"
+
+  tasks:
+  - name: Check if {{ site }} folder exists
+    delegate_to: development_host
+    stat:
+      path: "{{ project_root }}"
+    register: result
+
+  - name: Abort if {{ site }} folder doesn't exists
+    fail:
+      msg: "ERROR: {{ site }} is not a valid site name ({{ site }} folder does not exist)."
+    when: result.stat.exists is defined and result.stat.exists == false or result.stat.isdir is defined and result.stat.isdir == false
+
+  - block:
+    - name: Create database_backup directory if it doesn't exist
+      delegate_to: development_host
+      file:
+        path: "{{ project_web_dir }}/database_backup"
+        state: directory
+        mode: 0755
+
+    - name: Export development database
+      delegate_to: development_host
+      shell: wp db export - | gzip > database_backup/{{ backup_file }}
+      args:
+        chdir: "{{ project_web_dir }}"
+      when: env is defined and env == "development"
+
+    - name: Export staging/production database
+      shell: wp db export - | gzip > {{ backup_file }}
+      args:
+        chdir: "{{ project_web_dir }}"
+      when: env is defined and env != "development"
+
+    - name: Pull exported database from staging/production to development
+      fetch:
+        src: "{{project_web_dir}}/{{ backup_file }}"
+        dest: "{{ local_bedrock_dir }}/database_backup/"
+        flat: yes
+      when: env is defined and env != "development"
+
+    - name: Delete exported database from staging/production
+      delegate_to: development_host
+      shell: rm -f {{ backup_file }}
+      args:
+        chdir: "{{ project_web_dir }}"
+        warn: false
+      when: env is defined and env != "development"
+    when: result.stat.exists is defined and result.stat.exists and result.stat.isdir is defined and result.stat.isdir

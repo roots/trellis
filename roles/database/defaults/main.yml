@@ -1,0 +1,17 @@
+# Project helpers
+project: "{{ wordpress_sites[site] }}"
+project_local_path: "{{ (lookup('env', 'USER') == 'vagrant') | ternary(project_root + '/' + project_current_path, project.local_path) }}"
+project_root: "{{ www_root }}/{{ site }}"
+project_web_dir: "{{ project_root }}/current"
+
+# Host helpers
+host: "{{ env }}_host"
+to_host: "{{ hostvars[host] }}"
+url_from: "{{ hostvars.development_host.wordpress_sites[site].site_hosts.0.canonical }}"
+url_to: "{{ to_host.wordpress_sites[site].site_hosts.0.canonical }}"
+local_bedrock_dir: "{{ to_host.wordpress_sites[site].local_path }}"
+
+# Misc helpers
+backup_file: "{{ site | regex_replace('\\.+', '_') }}_{{ env }}_{{ current_date_and_time }}.sql.gz"
+current_date_and_time: "{{ ansible_date_time.date | regex_replace('\\-+', '_') }}_{{ ansible_date_time.hour }}_{{ ansible_date_time.minute }}_{{ ansible_date_time.second }}"
+dump_file: "{{ site | regex_replace('\\.+', '_') }}_db_dump.sql.gz"

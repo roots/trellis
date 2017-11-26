@@ -1,0 +1,81 @@
+---
+- name: Push {{ site }} database from development to {{ env }}
+  hosts: web:&{{ env }}
+  remote_user: "{{ web_user }}"
+
+- name: Abort if environment variable is equal to development
+  fail:
+    msg: "ERROR: development is not a valid environment for this mode (you can't push from development to development)."
+    when: env == "development"
+
+- name: Check if {{ site }} folder exists
+  delegate_to: development_host
+  stat:
+    path: "{{ project_root }}"
+    register: result
+
+- name: Abort if {{ site }} folder doesn't exists
+  fail:
+    msg: "ERROR: {{ site }} is not a valid site name ({{ site }} folder does not exist)."
+    when: result.stat.exists is defined and result.stat.exists == false or result.stat.isdir is defined and result.stat.isdir == false
+
+- block:
+  - name: Create database_backup directory if it doesn't exist
+    delegate_to: development_host
+    file:
+      path: "{{ project_web_dir }}/database_backup"
+      state: directory
+      mode: 0755
+
+  - name: Create database dump on development
+    delegate_to: development_host
+    shell: wp db export --allow-root - | gzip > {{ dump_file }}
+    args:
+      chdir: "{{ project_web_dir }}"
+
+  - name: Push database dump from development to {{ env }}
+    copy:
+      src: "{{ local_bedrock_dir }}/{{ dump_file }}"
+      dest: "{{ project_web_dir }}/{{ dump_file }}"
+
+  - name: Delete database dump from development
+    delegate_to: development_host
+    shell: rm -f {{ dump_file }}
+    args:
+      chdir: "{{ project_web_dir }}"
+      warn: false
+
+  - name: Export {{ env }} database before importing dump (backup)
+    shell: wp db export - | gzip > {{ backup_file }}
+    args:
+      chdir: "{{ project_web_dir }}"
+
+  - name: Pull exported database from {{ env }} to development (backup)
+    fetch:
+      src: "{{project_web_dir}}/{{ backup_file }}"
+      dest: "{{ local_bedrock_dir }}/database_backup/"
+      flat: yes
+
+  - name: Delete exported database from {{ env }} (backup)
+    shell: rm -f {{ backup_file }}
+    args:
+      chdir: "{{ project_web_dir }}"
+      warn: false
+
+  - name: Import database dump on {{ env }}
+    shell: gzip -c -d {{ dump_file }} | wp db import -
+    args:
+      chdir: "{{ project_web_dir }}"
+
+  - name: Delete database dump from {{ env }}
+    shell: rm -f {{ dump_file }}
+    args:
+      chdir: "{{ project_web_dir }}"
+      warn: false
+
+  - name: Search for {{ url_from }} and replace with {{ url_to }} on development
+    command: wp search-replace '//{{ url_from }}' '//{{ url_to }}' --allow-root --all-tables
+    args:
+      chdir: "{{ project_web_dir }}"
+      tags: ['search-replace']
+      when: result.stat.exists is defined and result.stat.exists and result.stat.isdir is defined and result.stat.isdir
