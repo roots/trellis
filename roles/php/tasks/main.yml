@@ -6,23 +6,10 @@
 
 - name: Install PHP 7.1
   apt:
-    name: "{{ item }}"
-    state: present
-    force: yes
-  with_items:
-  - php7.1-cli
-  - php7.1-common
-  - php7.1-curl
-  - php7.1-dev
-  - php7.1-fpm
-  - php7.1-gd
-  - php7.1-mbstring
-  - php7.1-mcrypt
-  - php7.1-mysql
-  - php7.1-opcache
-  - php7.1-xml
-  - php7.1-xmlrpc
-  - php7.1-zip
+    name: "{{ item.key }}"
+    state: "{{ item.value }}"
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  with_dict: "{{ php_extensions }}"
 
 - name: Start php7.1-fpm service
   service:

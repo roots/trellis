@@ -1,11 +1,10 @@
 sites_using_letsencrypt: "[{% for name, site in wordpress_sites.iteritems() if site.ssl.enabled and site.ssl.provider | default('manual') == 'letsencrypt' %}'{{ name }}',{% endfor %}]"
-letsencrypt_enabled: "{{ sites_using_letsencrypt | count }}"
-site_uses_letsencrypt: "{{ ssl_enabled and item.value.ssl.provider | default('manual') == 'letsencrypt' }}"
-missing_hosts: "{{ site_uses_letsencrypt | ternary(site_hosts, []) | difference((current_hosts.results | selectattr('item.key', 'equalto', item.key) | selectattr('stdout_lines', 'defined') | sum(attribute='stdout_lines', start=[]) | map('trim') | list | join(' ')).split(' ')) }}"
+site_uses_letsencrypt: ssl_enabled and item.value.ssl.provider | default('manual') == 'letsencrypt'
+missing_hosts: "{{ site_hosts | difference((current_hosts.results | selectattr('item.key', 'equalto', item.key) | selectattr('stdout_lines', 'defined') | sum(attribute='stdout_lines', start=[]) | map('trim') | list | join(' ')).split(' ')) }}"
 letsencrypt_cert_ids: "{ {% for item in (generate_cert_ids | default({'results':[{'skipped':True}]})).results if not item | skipped %}'{{ item.item.key }}':'{{ item.stdout }}', {% endfor %} }"
 
 acme_tiny_repo: 'https://github.com/diafygi/acme-tiny.git'
-acme_tiny_commit: '5a7b4e79bc9bd5b51739c0d8aaf644f62cc440e6'
+acme_tiny_commit: '4ed13950c0a9cf61f1ca81ff1874cde1cf48ab32'
 
 acme_tiny_software_directory: /usr/local/letsencrypt
 acme_tiny_data_directory: /var/lib/letsencrypt

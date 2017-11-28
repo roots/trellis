@@ -1,5 +1,8 @@
 ---
-- include: "{{ deploy_prepare_before | default('../hooks/example.yml') }}"
+- include_tasks: "{{ include_path }}"
+  with_items: "{{ deploy_prepare_before | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-prepare-before
 
 - name: write unfinished file
@@ -16,7 +19,7 @@
 - name: Fail if repo_subtree_path is set incorrectly
   fail:
     msg: "repo subtree is set to '{{ project.repo_subtree_path }}' but that path does not exist in the repo. Edit `repo_subtree_path` for '{{ site }}' in `wordpress_sites.yml`."
-  when: project_subtree_full_path is defined and not project_subtree_full_path.stat.exists
+  when: project.repo_subtree_path is defined and not project_subtree_full_path.stat.exists
 
 - name: Create new release dir
   file:
@@ -35,5 +38,8 @@
     chdir: "{{ project_source_path }}"
   when: project.repo_subtree_path is defined
 
-- include: "{{ deploy_prepare_after | default('../hooks/example.yml') }}"
+- include_tasks: "{{ include_path }}"
+  with_items: "{{ deploy_prepare_after | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-prepare-after

@@ -5,6 +5,8 @@
 Port {{ port }}
 {% endfor -%}
 
+AddressFamily {{ sshd_address_family }}
+
 {% for address in sshd_listen_addresses %}
 ListenAddress {{ address }}
 {% endfor -%}
@@ -12,7 +14,6 @@ ListenAddress {{ address }}
 Protocol {{ sshd_protocol }}
 
 AcceptEnv {{ sshd_accept_env | join(' ') }}
-AddressFamily {{ sshd_address_family }}
 AllowAgentForwarding {{ sshd_allow_agent_forwarding | ternary('yes', 'no') }}
 AllowTcpForwarding {{ sshd_allow_tcp_forwarding is string | ternary(sshd_allow_tcp_forwarding, sshd_allow_tcp_forwarding | ternary('yes', 'no')) }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}

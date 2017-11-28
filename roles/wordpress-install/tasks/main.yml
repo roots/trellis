@@ -1,5 +1,5 @@
 ---
-- include: directories.yml
+- import_tasks: directories.yml
   tags: wordpress-install-directories
 
 - name: Create .env file
@@ -14,7 +14,25 @@
   command: rsync -ac --info=NAME /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/.env
   with_dict: "{{ wordpress_sites }}"
   register: env_file
-  changed_when: env_file.stdout == "{{ item.key }}.env"
+  changed_when: env_file.stdout == item.key + '.env'
+
+- name: Add known_hosts
+  known_hosts:
+    name: "{{ item.name }}"
+    key: "{{ item.key | default(omit) }}"
+    path: "{{ item.path | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  become: no
+  with_items: "{{ known_hosts | default([]) }}"
+
+- name: Setup packagist.com authentication
+  composer:
+    command: config
+    arguments: --auth http-basic.repo.packagist.com token {{ item.value.packagist_token }}
+    working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  no_log: true
+  when: item.value.packagist_token is defined
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Add known_hosts
   known_hosts:

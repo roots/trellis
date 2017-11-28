@@ -2,16 +2,19 @@ composer_keep_updated: true
 composer_global_packages:
  - { name: hirak/prestissimo }
 apt_cache_valid_time: 3600
+apt_package_state: present
+apt_security_package_state: latest
+apt_dev_package_state: latest
 apt_packages_custom:
-  - epubcheck
-  - libxml2-utils
-  - default-jdk
-  - ghostscript
-  - imagemagick
-  - poppler-utils
-  - python-lxml
-  - nano
-  - ccze
+  epubcheck: "{{ apt_package_state }}"
+  libxml2-utils: "{{ apt_package_state }}"
+  default-jdk: "{{ apt_package_state }}"
+  ghostscript: "{{ apt_package_state }}"
+  imagemagick: "{{ apt_package_state }}"
+  poppler-utils: "{{ apt_package_state }}"
+  python-lxml: "{{ apt_package_state }}"
+  nano: "{{ apt_package_state }}"
+  ccze: "{{ apt_package_state }}"
 ntp_timezone: Etc/UTC
 ntp_manage_config: true
 www_root: /srv/www

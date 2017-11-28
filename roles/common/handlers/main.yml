@@ -1,6 +1,6 @@
 ---
 - name: disable temporary challenge sites
-  include: disable_challenge_sites.yml
+  import_tasks: disable_challenge_sites.yml
 
 - name: restart memcached
   service:
@@ -12,4 +12,4 @@
     name: php7.1-fpm
     state: reloaded
 
-- include: reload_nginx.yml
+- import_tasks: reload_nginx.yml
