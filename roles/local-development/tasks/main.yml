@@ -13,7 +13,7 @@
   become: true
   become_user: "{{ web_user }}"
 - name: Enable default themes
-  include: enable-theme.yml
+  import_tasks: enable-theme.yml
   with_items:
     - pressbooks-book
     - pressbooks-publisher
