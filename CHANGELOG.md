@@ -1,4 +1,5 @@
 ### HEAD
+* Update to PHP 7.2 ([#929](https://github.com/roots/trellis/pull/929))
 * Fix `failed_when` in `template_root` check with wp-cli 1.5.0 ([#948](https://github.com/roots/trellis/pull/948))
 * Bump Ansible `version_tested_max` to 2.4.3.0 ([#945](https://github.com/roots/trellis/pull/945))
 * Update wp-cli to 1.5.0 ([#944](https://github.com/roots/trellis/pull/944))
