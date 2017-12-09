@@ -1,4 +1,5 @@
 ### HEAD
+* Add MariaDB 10.2 PPA ([#926](https://github.com/roots/trellis/pull/926))
 * Switch from `.dev` to `.test` ([#923](https://github.com/roots/trellis/pull/923))
 
 ### 1.0.0-rc.2: November 13th, 2017
