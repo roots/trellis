@@ -1,8 +1,9 @@
 # Add each host to the [production] group and to a "type" group such as [web] or [db].
 # List each machine only once per [group], even if it will host multiple sites.
+production_host ansible_host=your_server_hostname
 
 [production]
-your_server_hostname
+production_host
 
 [web]
-your_server_hostname
+production_host
