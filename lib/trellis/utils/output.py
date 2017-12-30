@@ -62,10 +62,9 @@ def display(obj, result):
     display = obj._display.display
     wrap_width = 77
     first = obj.first_host and obj.first_item
-    failed = result.get('failed', False) or result.get('unreachable', False)
 
     # Only display msg if debug module or if failed (some modules have undesired 'msg' on 'ok')
-    if 'msg' in result and (failed or obj.action == 'debug'):
+    if 'msg' in result and (obj.task_failed or obj.action == 'debug'):
         msg = result.pop('msg', '')
 
         # Disable Ansible's verbose setting for debug module to avoid the CallbackBase._dump_results()
@@ -73,7 +72,7 @@ def display(obj, result):
             del result['_ansible_verbose_always']
 
     # Display additional info when failed
-    if failed:
+    if obj.task_failed:
         items = (item for item in ['reason', 'module_stderr', 'module_stdout', 'stderr'] if item in result and to_text(result[item]) != '')
         for item in items:
             msg = result[item] if msg == '' else '\n'.join([msg, result.pop(item, '')])
@@ -106,7 +105,7 @@ def display(obj, result):
     else:
         if not first:
             display(hr, 'bright gray')
-        display(msg, 'red' if failed else 'bright purple')
+        display(msg, 'red' if obj.task_failed else 'bright purple')
 
 def display_host(obj, result):
     if 'results' not in result._result:

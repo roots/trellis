@@ -1,4 +1,5 @@
 ### HEAD
+* Bump Ansible `version_tested_max` to 2.4.2.0 ([#932](https://github.com/roots/trellis/pull/932))
 * Add MariaDB 10.2 PPA ([#926](https://github.com/roots/trellis/pull/926))
 * Switch from `.dev` to `.test` ([#923](https://github.com/roots/trellis/pull/923))
 
