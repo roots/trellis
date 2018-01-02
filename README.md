@@ -1,10 +1,12 @@
-# Trellis
+# Trellis Database Syncing
 [![Release](https://img.shields.io/github/release/roots/trellis.svg?style=flat-square)](https://github.com/roots/trellis/releases)
 [![Build Status](https://img.shields.io/travis/roots/trellis.svg?style=flat-square)](https://travis-ci.org/roots/trellis)
 
-Ansible playbooks for setting up a LEMP stack for WordPress.
+Ansible playbooks for setting up a LEMP stack for WordPress with local database syncing.
+This enables you to sync your entire Trellis folder with for example Dropbox to multiple locations and keep your database in sync.
 
 - Local development environment with Vagrant
+- Import existing databases on `vagrant up` and export databases on `vagrant halt`
 - High-performance production servers
 - One-command deploys for your [Bedrock](https://roots.io/bedrock/)-based WordPress sites
 
@@ -40,10 +42,12 @@ Make sure all dependencies have been installed before moving on:
 
 ## Installation
 
-The recommended directory structure for a Trellis project looks like:
+The recommended directory structure for a Trellis project with local database syncing looks like:
 
 ```shell
 example.com/      # → Root folder for the project
+├── database/
+|   └── backups/  # → Your local database syncing folder
 ├── trellis/      # → Your clone of this repository
 └── site/         # → A Bedrock-based WordPress site
     └── web/
@@ -61,8 +65,50 @@ Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) fo
 
 ## Local development setup
 
-1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`
+In order to get the local database syncing working, you HAVE to manually set the database name, user and password (I also recommend setting a database prefix) in the development environment.
+
+1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`:
+
+  ```shell
+  # group_vars/development/wordpress_sites.yml
+  wordpress_sites:
+    example.com:
+      site_hosts:
+        - canonical: example.dev
+      local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
+      admin_email: admin@example.dev
+      multisite:
+        enabled: false
+      ssl:
+        enabled: false
+      cache:
+        enabled: false
+      env:
+        db_name: example_development
+        db_user: example
+        db_prefix: xmpl_
+  ```
+  ```shell
+  #  group_vars/development/vault.yml
+  vault_wordpress_sites:
+    example.com:
+      admin_password: admin
+      env:
+        db_password: example_dbpassword
+  ```
+
+  NOTE: Unfortunately it is not possible to encrypt the vault.yml file with Ansible Vault in combination with database syncing, since it won't be possible to read the database password.
+
 2. Run `vagrant up`
+3. If you use **Dropbox** for syncing your Trellis project, exclude the following folder on every computer in the Dropbox Selective Sync setting to prevent any MacOs User ID errors:
+
+  ```shell
+  trellis           # → Your clone of this repository
+  └──.vagrant/
+       └── machines/
+            └── default/
+                 └── virtualbox/
+  ```
 
 [Read the local development docs](https://roots.io/trellis/docs/local-development-setup/) for more information.
 

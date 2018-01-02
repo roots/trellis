@@ -42,10 +42,25 @@ module Trellis
       end
     end
 
+    def vault_sites
+      @vault_sites ||= begin
+        vault_content['vault_wordpress_sites'].tap do |sites|
+          fail_with message: "No sites found in #{vault_path}." if sites.to_h.empty?
+        end
+      end
+    end
+
     def content
       @content ||= begin
         fail_with message: "#{path} was not found. Please check `root_path`." unless exist?
         YAML.load_file(path)
+      end
+    end
+
+    def vault_content
+      @vault_content ||= begin
+        fail_with message: "#{vault_path} was not found. Please check `root_path`." unless exist?
+        YAML.load_file(vault_path)
       end
     end
 
@@ -63,6 +78,10 @@ module Trellis
 
     def path
       File.join(@root_path, 'group_vars', 'development', 'wordpress_sites.yml')
+    end
+
+    def vault_path
+      File.join(@root_path, 'group_vars', 'development', 'vault.yml')
     end
 
     def template_content
