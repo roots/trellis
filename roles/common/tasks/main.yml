@@ -151,4 +151,4 @@
   when: env != 'development' and ssh_client_ip_lookup | default(true)
   tags: [fail2ban, ferm]
 
-- include: symlinks.yml
+# - include: symlinks.yml

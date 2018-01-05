@@ -61,7 +61,7 @@ def post_up_message
 end
 
 def remote_site_path(site_name, site)
-  "/srv/www/#{site_name}/#{site['current_path'] || 'current'}"
+  "/srv/www/#{site_name}"
 end
 
 def which(cmd)
