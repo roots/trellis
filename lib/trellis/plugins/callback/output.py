@@ -5,7 +5,6 @@ __metaclass__ = type
 import os.path
 import sys
 
-from ansible.parsing.dataloader import DataLoader
 from ansible.plugins.callback.default import CallbackModule as CallbackModule_default
 
 try:
@@ -27,6 +26,7 @@ class CallbackModule(CallbackModule_default):
     def __init__(self):
         super(CallbackModule, self).__init__()
         output.reset_task_info(self)
+        self.vagrant_version = None
 
     def v2_runner_on_failed(self, result, ignore_errors=False):
         self.task_failed = True
@@ -58,23 +58,22 @@ class CallbackModule(CallbackModule_default):
         super(CallbackModule, self).v2_playbook_on_play_start(play)
 
         # Check for relevant settings or overrides passed via cli --extra-vars
-        loader = DataLoader()
-        play_vars = play.get_variable_manager().get_vars(loader=loader, play=play)
-        if 'vagrant_version' in play_vars:
-            self.vagrant_version = play_vars['vagrant_version']
+        extra_vars = play.get_variable_manager().extra_vars
+        if 'vagrant_version' in extra_vars:
+            self.vagrant_version = extra_vars['vagrant_version']
 
-    def v2_playbook_item_on_ok(self, result):
+    def v2_runner_item_on_ok(self, result):
         output.display_item(self, result)
         output.replace_item_with_key(self, result)
-        super(CallbackModule, self).v2_playbook_item_on_ok(result)
+        super(CallbackModule, self).v2_runner_item_on_ok(result)
 
-    def v2_playbook_item_on_failed(self, result):
+    def v2_runner_item_on_failed(self, result):
         self.task_failed = True
         output.display_item(self, result)
         output.replace_item_with_key(self, result)
-        super(CallbackModule, self).v2_playbook_item_on_failed(result)
+        super(CallbackModule, self).v2_runner_item_on_failed(result)
 
-    def v2_playbook_item_on_skipped(self, result):
+    def v2_runner_item_on_skipped(self, result):
         output.display_item(self, result)
         output.replace_item_with_key(self, result)
-        super(CallbackModule, self).v2_playbook_item_on_skipped(result)
+        super(CallbackModule, self).v2_runner_item_on_skipped(result)

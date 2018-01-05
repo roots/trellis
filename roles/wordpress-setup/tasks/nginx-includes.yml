@@ -1,0 +1,54 @@
+---
+- name: Build list of Nginx includes templates
+  find:
+    paths:
+      - "{{ nginx_includes_templates_path }}"
+      - "{{ nginx_includes_deprecated }}"
+    pattern: "*.conf.j2"
+    recurse: yes
+  become: no
+  connection: local
+  register: nginx_includes_templates
+
+- name: Warn about deprecated Nginx includes directory
+  debug:
+    msg: "[DEPRECATION WARNING]: The `{{ nginx_includes_deprecated }}` directory for Trellis Nginx includes templates is deprecated and will no longer function beginning with Trellis 1.0. Please move these templates to a directory named `{{ nginx_includes_templates_path }}` in the root of this project. For more information, see https://roots.io/trellis/docs/nginx-includes/"
+  when: True in nginx_includes_templates.files | map(attribute='path') | map('search', nginx_includes_deprecated | regex_escape) | list
+
+- name: Create includes.d directories
+  file:
+    path: "{{ nginx_path }}/includes.d/{{ item }}"
+    state: directory
+    mode: 0755
+  with_items: "{{ nginx_includes_templates.files | map(attribute='path') |
+                  map('regex_replace', nginx_includes_pattern, '\\2') |
+                  map('dirname') | unique | list | sort
+               }}"
+  when: nginx_includes_templates.files | count
+
+- name: Template files out to includes.d
+  template:
+    src: "{{ item }}"
+    dest: "{{ nginx_path }}/includes.d/{{ item | regex_replace(nginx_includes_pattern, '\\2') }}"
+  with_items: "{{ nginx_includes_templates.files | map(attribute='path') | list | sort(True) }}"
+  notify: reload nginx
+
+- name: Retrieve list of existing files in includes.d
+  find:
+    paths: "{{ nginx_path }}/includes.d"
+    pattern: "*.conf"
+    recurse: yes
+  register: nginx_includes_existing
+  when: nginx_includes_d_cleanup
+
+- name: Remove unmanaged files from includes.d
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ nginx_includes_existing.files | default({}) | map(attribute='path') |
+                  difference(nginx_includes_templates.files | map(attribute='path') |
+                    map('regex_replace', nginx_includes_pattern, nginx_path + '/includes.d/\\2') | unique
+                  ) | list
+               }}"
+  when: nginx_includes_d_cleanup
+  notify: reload nginx

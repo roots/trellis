@@ -1,38 +1,37 @@
 # {{ ansible_managed }}
 
-Port {{ sshd_port }}
-ListenAddress {{ sshd_listen_address }}
+{% block main %}
+{% for port in sshd_ports %}
+Port {{ port }}
+{% endfor -%}
+
+AddressFamily {{ sshd_address_family }}
+
+{% for address in sshd_listen_addresses %}
+ListenAddress {{ address }}
+{% endfor -%}
+
 Protocol {{ sshd_protocol }}
-HostKey {{ sshd_host_rsa_key }}
-HostKey {{ sshd_host_dsa_key }}
-HostKey {{ sshd_host_ecdsa_key }}
-UsePrivilegeSeparation {{ sshd_use_privilege_separation | ternary('yes', 'no') }}
-KeyRegenerationInterval {{ sshd_key_regeneration_interval }}
-ServerKeyBits {{ sshd_server_key_bits }}
-SyslogFacility {{ sshd_syslog_facility }}
-LogLevel {{ sshd_log_level }}
-LoginGraceTime {{ sshd_login_grace_time }}
-PermitRootLogin {{ sshd_permit_root_login | ternary('yes', 'no') }}
-StrictModes {{ sshd_strict_modes | ternary('yes', 'no') }}
-RSAAuthentication {{ sshd_rsa_authentication | ternary('yes', 'no') }}
-PubkeyAuthentication {{ sshd_pubkey_authentication | ternary('yes', 'no') }}
-AuthorizedKeysFile {{ sshd_authorized_keys_file }}
-IgnoreRhosts {{ sshd_ignore_rhosts | ternary('yes', 'no') }}
-RhostsRSAAuthentication {{ sshd_rhosts_rsa_authentication  | ternary('yes', 'no') }}
-HostbasedAuthentication {{ sshd_host_based_authentication | ternary('yes', 'no') }}
-IgnoreUserKnownHosts {{ sshd_ignore_user_known_hosts | ternary('yes', 'no') }}
-PermitEmptyPasswords {{ sshd_permit_empty_passwords | ternary('yes', 'no') }}
+
+AcceptEnv {{ sshd_accept_env | join(' ') }}
+AllowAgentForwarding {{ sshd_allow_agent_forwarding | ternary('yes', 'no') }}
+AllowTcpForwarding {{ sshd_allow_tcp_forwarding is string | ternary(sshd_allow_tcp_forwarding, sshd_allow_tcp_forwarding | ternary('yes', 'no')) }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}
+Ciphers {{ (sshd_ciphers_default + sshd_ciphers_extra) | join(',') }}
+ClientAliveInterval {{ sshd_client_alive_interval }}
+DebianBanner {{ sshd_debian_banner | ternary('yes', 'no') }}
+{% for key in sshd_host_keys %}
+HostKey {{ key }}
+{% endfor %}
+KexAlgorithms {{ (sshd_kex_algorithms_default + sshd_kex_algorithms_extra) | join(',') }}
+LoginGraceTime {{ sshd_login_grace_time }}
+MACs {{ (sshd_macs_default + sshd_macs_extra) | join(',') }}
 PasswordAuthentication {{ sshd_password_authentication | ternary('yes', 'no') }}
-GSSAPIAuthentication {{ sshd_gss_api_authentication | ternary('yes', 'no') }}
-GSSAPICleanupCredentials {{ sshd_gss_api_cleanup_credentials | ternary('yes', 'no') }}
-X11Forwarding {{ sshd_x11_forwarding | ternary('yes', 'no') }}
-X11DisplayOffset {{ sshd_x11_display_offset }}
-PrintMotd {{ sshd_print_motd | ternary('yes', 'no') }}
+PermitRootLogin {{ sshd_permit_root_login | ternary('yes', 'no') }}
 PrintLastLog {{ sshd_print_last_log | ternary('yes', 'no') }}
-TCPKeepAlive {{ sshd_tcp_keep_alive | ternary('yes', 'no') }}
-MaxStartups {{ sshd_max_startups }}
-Banner {{ sshd_banner }}
-AcceptEnv {{ sshd_accept_env }}
+PrintMotd {{ sshd_print_motd | ternary('yes', 'no') }}
 Subsystem {{ sshd_subsystem }}
+TCPKeepAlive {{ sshd_tcp_keep_alive | ternary('yes', 'no') }}
 UsePAM {{ sshd_use_pam | ternary('yes', 'no') }}
+X11Forwarding {{ sshd_x11_forwarding | ternary('yes', 'no') }}
+{% endblock %}

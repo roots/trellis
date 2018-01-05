@@ -1,6 +1,24 @@
 disable_default_pool: true
 memcached_sessions: false
 
+php_extensions_default:
+  php7.1-cli: "{{ apt_package_state }}"
+  php7.1-common: "{{ apt_package_state }}"
+  php7.1-curl: "{{ apt_package_state }}"
+  php7.1-dev: "{{ apt_package_state }}"
+  php7.1-fpm: "{{ apt_package_state }}"
+  php7.1-gd: "{{ apt_package_state }}"
+  php7.1-mbstring: "{{ apt_package_state }}"
+  php7.1-mcrypt: "{{ apt_package_state }}"
+  php7.1-mysql: "{{ apt_package_state }}"
+  php7.1-opcache: "{{ apt_package_state }}"
+  php7.1-xml: "{{ apt_package_state }}"
+  php7.1-xmlrpc: "{{ apt_package_state }}"
+  php7.1-zip: "{{ apt_package_state }}"
+
+php_extensions_custom: {}
+php_extensions: "{{ php_extensions_default | combine(php_extensions_custom) }}"
+
 php_error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
 php_display_errors: 'Off'
 php_display_startup_errors: 'Off'
@@ -12,9 +30,11 @@ php_mysqlnd_collect_memory_statistics: 'Off'
 php_post_max_size: 50M
 php_sendmail_path: /usr/sbin/ssmtp -t
 php_session_save_path: /tmp
+php_session_cookie_httponly: 'On'
+php_session_cookie_secure: 'Off'
 php_upload_max_filesize: 25M
 php_track_errors: 'Off'
-php_default_timezone: '{{ default_timezone }}'
+php_timezone: '{{ ntp_timezone }}'
 
 php_opcache_enable: 1
 php_opcache_enable_cli: 1
@@ -23,11 +43,3 @@ php_opcache_interned_strings_buffer: 8
 php_opcache_max_accelerated_files: 4000
 php_opcache_memory_consumption: 128
 php_opcache_revalidate_freq: 60
-
-php_xdebug_remote_enable: "false"
-php_xdebug_remote_connect_back: "false"
-php_xdebug_remote_host: localhost
-php_xdebug_remote_port: "9000"
-php_xdebug_remote_log: /tmp/xdebug.log
-php_xdebug_idekey: XDEBUG
-php_max_nesting_level: 200

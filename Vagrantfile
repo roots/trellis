@@ -1,204 +1,166 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+ANSIBLE_PATH = __dir__ # absolute path to Ansible directory on host machine
+ANSIBLE_PATH_ON_VM = '/home/vagrant/trellis' # absolute path to Ansible directory on virtual machine
+
+require File.join(ANSIBLE_PATH, 'lib', 'trellis', 'vagrant')
+require File.join(ANSIBLE_PATH, 'lib', 'trellis', 'config')
 require 'yaml'
 
-ip = '192.168.51.62' # pick any local IP
-cpus = 1
-memory = 1024 # in MB
+vconfig = YAML.load_file("#{ANSIBLE_PATH}/vagrant.default.yml")
 
-ANSIBLE_PATH = __dir__ # absolute path to Ansible directory
-
-# Set Ansible paths relative to Ansible directory
-ENV['ANSIBLE_CONFIG'] = ANSIBLE_PATH
-ENV['ANSIBLE_CALLBACK_PLUGINS'] = "~/.ansible/plugins/callback_plugins/:/usr/share/ansible_plugins/callback_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/callback')}"
-ENV['ANSIBLE_FILTER_PLUGINS'] = "~/.ansible/plugins/filter_plugins/:/usr/share/ansible_plugins/filter_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/filter')}"
-ENV['ANSIBLE_LIBRARY'] = "/usr/share/ansible:#{File.join(ANSIBLE_PATH, 'lib/trellis/modules')}"
-ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
-ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars_plugins/:/usr/share/ansible_plugins/vars_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/vars')}"
-
-wp_config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'wordpress_sites.yml')
-static_config_file = File.join(ANSIBLE_PATH, 'group_vars', 'development', 'static_sites.yml')
-main_config_file = File.join(ANSIBLE_PATH, 'group_vars', 'all', 'main.yml')
-
-def fail_with_message(msg)
-  fail Vagrant::Errors::VagrantError.new, msg
+if File.exist?("#{ANSIBLE_PATH}/vagrant.local.yml")
+  local_config = YAML.load_file("#{ANSIBLE_PATH}/vagrant.local.yml")
+  vconfig.merge!(local_config) if local_config
 end
 
-if File.exists?(wp_config_file)
-  wordpress_sites = YAML.load_file(wp_config_file)['wordpress_sites']
-  static_sites = YAML.load_file(static_config_file)['static_sites']
-  www_root = YAML.load_file(main_config_file)['www_root']
-  fail_with_message "No sites found in #{wp_config_file}." if wordpress_sites.to_h.empty?
-else
-  fail_with_message "#{wp_config_file} was not found. Please set `ANSIBLE_PATH` in your Vagrantfile."
-end
+ensure_plugins(vconfig.fetch('vagrant_plugins')) if vconfig.fetch('vagrant_install_plugins')
 
-if !Dir.exists?(ENV['ANSIBLE_ROLES_PATH']) && !Vagrant::Util::Platform.windows?
-  fail_with_message "You are missing the required Ansible Galaxy roles, please install them with this command:\nansible-galaxy install -r requirements.yml"
-end
+trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH)
 
-Vagrant.require_version '>= 1.5.1'
+Vagrant.require_version '>= 1.8.5'
 
 Vagrant.configure('2') do |config|
-  config.vm.box = 'ubuntu/trusty64'
+  config.vm.box = vconfig.fetch('vagrant_box')
+  config.vm.box_version = vconfig.fetch('vagrant_box_version')
   config.ssh.forward_agent = true
+  config.vm.post_up_message = post_up_message
 
   # Fix for: "stdin: is not a tty"
   # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
   config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
 
-  if Vagrant.has_plugin? 'vagrant-hostmanager'
+  # Required for NFS to work
+  if vconfig.fetch('vagrant_ip') == 'dhcp'
+    config.vm.network :private_network, type: 'dhcp', hostsupdater: 'skip'
+
+    cached_addresses = {}
+    config.hostmanager.ip_resolver = proc do |vm, _resolving_vm|
+      if cached_addresses[vm.name].nil?
+        if vm.communicate.ready?
+          vm.communicate.execute("hostname -I | cut -d ' ' -f 2") do |type, contents|
+            cached_addresses[vm.name] = contents.split("\n").first[/(\d+\.\d+\.\d+\.\d+)/, 1]
+          end
+        end
+      end
+      cached_addresses[vm.name]
+    end
+  else
+    config.vm.network :private_network, ip: vconfig.fetch('vagrant_ip'), hostsupdater: 'skip'
+  end
+
+  main_hostname, *hostnames = trellis_config.site_hosts_canonical
+  config.vm.hostname = main_hostname
+
+  if Vagrant.has_plugin?('vagrant-hostmanager') && !trellis_config.multisite_subdomains?
+    redirects = trellis_config.site_hosts_redirects
+
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
+    config.hostmanager.aliases = hostnames + redirects
+  elsif Vagrant.has_plugin?('landrush') && trellis_config.multisite_subdomains?
+    config.landrush.enabled = true
+    config.landrush.tld = config.vm.hostname
+    hostnames.each { |host| config.landrush.host host, vconfig.fetch('vagrant_ip') }
   else
-    fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager"
+    fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager\n\nOr install landrush for multisite subdomains:\nvagrant plugin install landrush"
   end
 
-  ############################################################################
-  # local_as devbox definition
-  ############################################################################
-  config.vm.define "local_as", primary: true do |local_as|
+  bin_path = File.join(ANSIBLE_PATH_ON_VM, 'bin')
 
-    # Required for NFS to work
-    local_as.vm.network :private_network, ip: ip, hostsupdater: 'skip'
-
-    # disable default mount
-    local_as.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
-
-    hostname, *aliases = wordpress_sites.flat_map { |(_name, site)| site['site_hosts'] }
-    local_as.vm.hostname = hostname
-    aliases.concat static_sites.flat_map { |(_name, site)| site['site_hosts'] } # add aliases from the static sites
-    www_aliases = ["www.#{hostname}"] + aliases.map { |host| "www.#{host}" }
-
-    local_as.hostmanager.aliases = (aliases + www_aliases).uniq
-
-
-    if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
-      wordpress_sites.each_pair do |name, site|
-        local_as.vm.synced_folder local_site_path(site), remote_site_path(name), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
-      end
-      local_as.vm.synced_folder File.join(ANSIBLE_PATH, 'hosts'), File.join(ANSIBLE_PATH.sub(__dir__, '/vagrant'), 'hosts'), mount_options: ['dmode=755', 'fmode=644']
-    else
-      if !Vagrant.has_plugin? 'vagrant-bindfs'
-        fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
-      else
-        wordpress_sites.merge(static_sites).each_pair do |name, site|
-          local_as.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
-          local_as.bindfs.bind_folder nfs_path(name), remote_site_path(name), u: 'vagrant', g: 'www-data', o: 'nonempty'
-        end
-      end
+  if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
+    trellis_config.wordpress_sites.each_pair do |name, site|
+      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
 
-    if Vagrant::Util::Platform.windows?
-      local_as.vm.provision :shell do |sh|
-        sh.path = File.join(ANSIBLE_PATH, 'windows.sh')
-        sh.args = [Vagrant::VERSION]
-      end
+    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: ['dmode=755', 'fmode=644']
+    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: ['dmode=755', 'fmode=755']
+  else
+    if !Vagrant.has_plugin? 'vagrant-bindfs'
+      fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
     else
-      local_as.vm.provision :ansible do |ansible|
-        ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
-        ansible.vault_password_file = "../vault-key"
-        ansible.groups = {
-          'web' => ['local_as'],
-          'development' => ['local_as']
-        }
-
-        ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
-        if vars = ENV['ANSIBLE_VARS']
-          extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
-          ansible.extra_vars.merge(extra_vars)
-        end
+      trellis_config.wordpress_sites.each_pair do |name, site|
+        config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
+        config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'vagrant', g: 'www-data', o: 'nonempty'
       end
-    end
 
-    # Vagrant Triggers
-    # https://github.com/emyl/vagrant-triggers
-    #
-    # If the vagrant-triggers plugin is installed, we can run various scripts on Vagrant
-    # state changes like `vagrant up`, `vagrant halt`, `vagrant suspend`, and `vagrant destroy`
-    #
-    # These scripts are run on the host machine, so we use `vagrant ssh` to tunnel back
-    # into the VM and execute things.
-    if Vagrant.has_plugin? 'vagrant-triggers'
-      local_as.trigger.before [:halt, :destroy], :stdout => true do
-        wordpress_sites.each_key do |wp_site_folder|
-          info "Exporting db for #{wp_site_folder}"
-          run_remote "cd #{www_root}/#{wp_site_folder}/ && wp db export --allow-root"
-        end
-      end
-    else
-      fail_with_message "vagrant-triggers missing, please install the plugin with this command:\nvagrant plugin install vagrant-triggers"
+      config.vm.synced_folder ANSIBLE_PATH, '/ansible-nfs', type: 'nfs'
+      config.bindfs.bind_folder '/ansible-nfs', ANSIBLE_PATH_ON_VM, o: 'nonempty', p: '0644,a+D'
+      config.bindfs.bind_folder bin_path, bin_path, perms: '0755'
     end
   end
 
-  ############################################################################
-  # sandbox definition
-  ############################################################################
-  config.vm.define "sandbox", autostart: false do |sandbox|
-    sandbox.vm.network :private_network, ip: '192.168.51.63'
-    sandbox.vm.hostname = "sandbox.proteusthemes.test"
+  vconfig.fetch('vagrant_synced_folders', []).each do |folder|
+    options = {
+      type: folder.fetch('type', 'nfs'),
+      create: folder.fetch('create', false),
+      mount_options: folder.fetch('mount_options', [])
+    }
 
-    if Vagrant.has_plugin? 'vagrant-hostmanager'
-      sandbox.hostmanager.enabled = true
-      sandbox.hostmanager.manage_host = true
-      sandbox.hostmanager.aliases = ['xml-io.proteusthemes.test']
+    destination_folder = folder.fetch('bindfs', true) ? nfs_path(folder['destination']) : folder['destination']
+
+    config.vm.synced_folder folder['local_path'], destination_folder, options
+
+    if folder.fetch('bindfs', true)
+      config.bindfs.bind_folder destination_folder, folder['destination'], folder.fetch('bindfs_options', {})
+    end
+  end
+
+  provisioner = local_provisioning? ? :ansible_local : :ansible
+  provisioning_path = local_provisioning? ? ANSIBLE_PATH_ON_VM : ANSIBLE_PATH
+
+  config.vm.provision provisioner do |ansible|
+    if local_provisioning?
+      ansible.install_mode = 'pip'
+      ansible.provisioning_path = provisioning_path
+      ansible.version = vconfig.fetch('vagrant_ansible_version')
     end
 
-    sandbox.vm.provision :ansible do |ansible|
-      ansible.playbook = File.join(ANSIBLE_PATH, 'dev.yml')
-      ansible.groups = {
-        'web' => ['sandbox'],
-        'sandbox' => ['sandbox']
-      }
+    ansible.playbook = File.join(provisioning_path, 'dev.yml')
+    ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
+    ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
 
-      ansible.extra_vars = {'vagrant_version' => Vagrant::VERSION}
-      if vars = ENV['ANSIBLE_VARS']
-        extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
-        ansible.extra_vars.merge(extra_vars)
-      end
+    ansible.groups = {
+      'web' => ['default'],
+      'development' => ['default']
+    }
+
+    ansible.tags = ENV['ANSIBLE_TAGS']
+    ansible.extra_vars = { 'vagrant_version' => Vagrant::VERSION }
+
+    if vars = ENV['ANSIBLE_VARS']
+      extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
+      ansible.extra_vars.merge!(extra_vars)
     end
   end
 
   # Virtualbox settings
   config.vm.provider 'virtualbox' do |vb|
     vb.name = config.vm.hostname
-    vb.customize ['modifyvm', :id, '--cpus', cpus]
-    vb.customize ['modifyvm', :id, '--memory', memory]
+    vb.customize ['modifyvm', :id, '--cpus', vconfig.fetch('vagrant_cpus')]
+    vb.customize ['modifyvm', :id, '--memory', vconfig.fetch('vagrant_memory')]
+    vb.customize ['modifyvm', :id, '--ioapic', vconfig.fetch('vagrant_ioapic', 'on')]
 
     # Fix for slow external network connections
-    vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
-    vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
+    vb.customize ['modifyvm', :id, '--natdnshostresolver1', vconfig.fetch('vagrant_natdnshostresolver', 'on')]
+    vb.customize ['modifyvm', :id, '--natdnsproxy1', vconfig.fetch('vagrant_natdnsproxy', 'on')]
   end
 
   # VMware Workstation/Fusion settings
   ['vmware_fusion', 'vmware_workstation'].each do |provider|
     config.vm.provider provider do |vmw, override|
-      override.vm.box = 'puppetlabs/ubuntu-14.04-64-nocm'
       vmw.name = config.vm.hostname
-      vmw.vmx['numvcpus'] = cpus
-      vmw.vmx['memsize'] = memory
+      vmw.vmx['numvcpus'] = vconfig.fetch('vagrant_cpus')
+      vmw.vmx['memsize'] = vconfig.fetch('vagrant_memory')
     end
   end
 
   # Parallels settings
   config.vm.provider 'parallels' do |prl, override|
-    override.vm.box = 'parallels/ubuntu-14.04'
     prl.name = config.vm.hostname
-    prl.cpus = cpus
-    prl.memory = memory
+    prl.cpus = vconfig.fetch('vagrant_cpus')
+    prl.memory = vconfig.fetch('vagrant_memory')
+    prl.update_guest_tools = true
   end
-
-end
-
-def local_site_path(site)
-  File.expand_path(site['local_path'], ANSIBLE_PATH)
-end
-
-def nfs_path(site_name)
-  "/vagrant-nfs-#{site_name}"
-end
-
-def remote_site_path(site_name)
-  "/opt/proteusnet/www/#{site_name}"
 end

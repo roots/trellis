@@ -1,0 +1,5 @@
+ansible_host_known: "{{ lookup('pipe', 'ssh-keygen -F ' + ansible_host + ' > /dev/null 2>&1 && echo True || echo False') }}"
+ssh_config_host: "{{ lookup('pipe', 'ssh -G ' + ansible_host + ' 2>/dev/null | grep \"^hostname\" ||:') | regex_replace('^hostname ([^\\s]+)', '\\1') }}"
+ssh_config_host_known: "{{ lookup('pipe', 'ssh-keygen -F ' + ssh_config_host + ' > /dev/null 2>&1 && echo True || echo False') }}"
+openssh_6_5_plus: "{{ (lookup('pipe', 'ssh -V 2>&1')) | regex_replace('(.*OpenSSH_([\\d\\.]*).*)', '\\2') | version_compare('6.5', '>=') }}"
+host_key_algorithms: "{{ openssh_6_5_plus | ternary('ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa', 'ssh-rsa-cert-v01@openssh.com,ssh-rsa') }}"

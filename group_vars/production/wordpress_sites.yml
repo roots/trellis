@@ -5,7 +5,7 @@
 wordpress_sites:
   demo.proteusthemes.com:
     site_hosts:
-      - demo.proteusthemes.com
+      - canonical: demo.proteusthemes.com
     site_title: ProteusThemes Demos
     admin_user: "{{ vault_wordpress_sites['demo.proteusthemes.com'].admin_user }}"
     admin_password: "{{ vault_wordpress_sites['demo.proteusthemes.com'].admin_password }}"
@@ -26,7 +26,7 @@ wordpress_sites:
       db_prefix: "{{ vault_wordpress_sites['demo.proteusthemes.com'].env.db_prefix }}"
   www.proteusthemes.com:
     site_hosts:
-      - www.proteusthemes.com
+      - canonical: www.proteusthemes.com
     site_title: ProteusThemes
     admin_user: "{{ vault_wordpress_sites['www.proteusthemes.com'].admin_user }}"
     admin_password: "{{ vault_wordpress_sites['www.proteusthemes.com'].admin_password }}"
@@ -46,7 +46,7 @@ wordpress_sites:
       db_prefix: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_prefix }}"
   olm.proteusthemes.com:
     site_hosts:
-      - olm.proteusthemes.com
+      - canonical: olm.proteusthemes.com
     site_title: ProteusThemes
     admin_user: "{{ vault_wordpress_sites['olm.proteusthemes.com'].admin_user }}"
     admin_password: "{{ vault_wordpress_sites['olm.proteusthemes.com'].admin_password }}"

@@ -1,0 +1,28 @@
+---
+- name: Create or close Xdebug SSH tunnel
+  command: |
+    {% if xdebug_remote_enable | bool %}
+      ssh -M -S '{{ xdebug_tunnel_control_socket }}' -fnNT -R {{ xdebug_tunnel_port_mapping }} {{ xdebug_tunnel_user_at_host}} '{{ xdebug_tunnel_control_identity }}'
+    {% else %}
+      ssh -S '{{ xdebug_tunnel_control_socket }}' -O exit '{{ xdebug_tunnel_control_identity }}'
+    {% endif %}
+  connection: local
+  become: no
+  register: xdebug_tunnel
+  ignore_errors: true
+
+- name: Interpret and present Xdebug SSH tunnel errors
+  fail:
+    msg: |
+      {% if 'already' in xdebug_tunnel.stderr | default('') %}
+        SSH tunnel already exists! Refer to TODO for help.
+      {% elif 'No such file or directory' in xdebug_tunnel.stderr | default('') %}
+        SSH tunnel already closed!
+      {% endif %}
+      {{ xdebug_tunnel.stderr | default('Unknown error in handling Xdebug SSH tunnel') }}
+  when: xdebug_tunnel | failed or 'already' in xdebug_tunnel.stderr | default('')
+
+- name: Announce Xdebug SSH tunnel status
+  debug:
+    msg: SSH Tunnel was {{ xdebug_remote_enable | bool | ternary('created', 'closed') }}!
+  when: xdebug_tunnel | changed
