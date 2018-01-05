@@ -1,7 +1,7 @@
 # Documentation: https://roots.io/trellis/docs/mail/
 mailhog_install_ssmtp: no
-mail_admin: admin@proteusthemes.dev
-mail_hostname: proteusthemes.dev
+mail_admin: admin@proteusthemes.test
+mail_hostname: proteusthemes.test
 mail_smtp_server: localhost:1025
 ssmtp_auth_method: ""
 ssmtp_start_tls: 'no'

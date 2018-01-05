@@ -1,7 +1,7 @@
 static_sites:
   apps.proteusthemes.com:
     site_hosts:
-      - apps.proteusthemes.dev
+      - apps.proteusthemes.test
     local_path: ../www/apps.proteusthemes.com
     ssl:
       enabled: false

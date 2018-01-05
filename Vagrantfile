@@ -137,12 +137,12 @@ Vagrant.configure('2') do |config|
   ############################################################################
   config.vm.define "sandbox", autostart: false do |sandbox|
     sandbox.vm.network :private_network, ip: '192.168.51.63'
-    sandbox.vm.hostname = "sandbox.proteusthemes.dev"
+    sandbox.vm.hostname = "sandbox.proteusthemes.test"
 
     if Vagrant.has_plugin? 'vagrant-hostmanager'
       sandbox.hostmanager.enabled = true
       sandbox.hostmanager.manage_host = true
-      sandbox.hostmanager.aliases = ['xml-io.proteusthemes.dev']
+      sandbox.hostmanager.aliases = ['xml-io.proteusthemes.test']
     end
 
     sandbox.vm.provision :ansible do |ansible|
