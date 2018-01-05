@@ -42,8 +42,8 @@
     package_vars:
       apt_packages_default: "{{ apt_packages_default }}"
       apt_packages_custom: "{{ apt_packages_custom }}"
-      memcached_packages_default: "{{ memcached_packages_default }}"
-      memcached_packages_custom: "{{ memcached_packages_custom }}"
+      # memcached_packages_default: "{{ memcached_packages_default }}"
+      # memcached_packages_custom: "{{ memcached_packages_custom }}"
       php_extensions_default: "{{ php_extensions_default }}"
       php_extensions_custom: "{{ php_extensions_custom }}"
       sshd_packages_default: "{{ sshd_packages_default }}"
@@ -58,7 +58,7 @@
   vars:
     package_vars:
       apt_packages: "{{ apt_packages }}"
-      memcached_packages: "{{ memcached_packages }}"
+      # memcached_packages: "{{ memcached_packages }}"
       php_extensions: "{{ php_extensions }}"
       sshd_packages: "{{ sshd_packages }}"
     package_vars_wrong_format: "[{% for k,v in package_vars.iteritems() if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"

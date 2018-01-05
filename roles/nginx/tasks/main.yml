@@ -63,7 +63,6 @@
   notify: reload nginx
   tags: nginx-sites
 
-<<<<<<< HEAD
 - name: Create base WordPress subdirectory Multisite config
   template:
     src: wordpress_multisite_subdirectories.conf.j2
