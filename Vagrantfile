@@ -69,7 +69,7 @@ Vagrant.configure('2') do |config|
 
   bin_path = File.join(ANSIBLE_PATH_ON_VM, 'bin')
 
-  if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
+  if Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd')
     trellis_config.wordpress_sites.each_pair do |name, site|
       config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
