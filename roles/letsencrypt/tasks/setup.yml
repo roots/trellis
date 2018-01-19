@@ -43,3 +43,17 @@
     url: "{{ letsencrypt_intermediate_cert_url }}"
     dest: "{{ letsencrypt_intermediate_cert_path }}"
     sha256sum: "{{ letsencrypt_intermediate_cert_sha256sum }}"
+
+- name: Install pip, request
+  pip:
+    name: "{{ item.name }}"
+    state: "{{ 'latest' if item.version=='latest' else 'present' }}"
+    version: "{{ item.version if item.version!='latest' else omit }}"
+  with_items:
+    - name: pip
+      version: "{{ pip_version_pip }}"
+      install: "{{ pip_install_pip }}"
+    - name: requests
+      version: "{{ pip_version_requests }}"
+      install: "{{ pip_install_requests }}"
+  when: item.install|bool

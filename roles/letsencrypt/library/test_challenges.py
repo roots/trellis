@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import socket
-from httplib import HTTPConnection, HTTPException
+import requests
 
 DOCUMENTATION = '''
 ---
@@ -42,13 +41,11 @@ EXAMPLES = '''
 
 def get_status(host, path, file):
     try:
-        conn = HTTPConnection(host)
-        conn.request('HEAD', '/{0}/{1}'.format(path, file))
-        res = conn.getresponse()
-    except (HTTPException, socket.timeout, socket.error):
+        res = requests.head('http://{0}/{1}/{2}'.format(host, path, file))
+    except requests.RequestException:
         return 0
     else:
-        return res.status
+        return res.status_code
 
 def main():
     module = AnsibleModule(
