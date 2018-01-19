@@ -36,7 +36,7 @@ Full documentation is available at [https://roots.io/trellis/docs/](https://root
 Make sure all dependencies have been installed before moving on:
 
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) >= 4.3.10
-* [Vagrant](https://www.vagrantup.com/downloads.html) >= 1.8.5
+* [Vagrant](https://www.vagrantup.com/downloads.html) >= 2.0.1
 
 ## Installation
 
