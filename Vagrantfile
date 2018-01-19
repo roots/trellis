@@ -19,7 +19,7 @@ ensure_plugins(vconfig.fetch('vagrant_plugins')) if vconfig.fetch('vagrant_insta
 
 trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH)
 
-Vagrant.require_version '>= 1.8.5'
+Vagrant.require_version '>= 2.0.1'
 
 Vagrant.configure('2') do |config|
   config.vm.box = vconfig.fetch('vagrant_box')
