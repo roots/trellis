@@ -42,3 +42,10 @@ letsencrypt_min_renewal_age: 60
 # good value. It does not harm to run it often, as it will only regenerate certificates that have passed a certain age
 # (60 days by default).
 letsencrypt_cronjob_daysofmonth: 1,11,21
+
+
+pip_install_pip: true
+pip_version_pip: latest
+
+pip_install_requests: true
+pip_version_requests: latest
