@@ -1,17 +1,37 @@
 ntp_timezone: Etc/UTC
 
-apt_packages_default:
-  - python-software-properties
-  - python-pycurl
-  - build-essential
-  - python-mysqldb
-  - curl
-  - git-core
-  - dbus
-  - libnss-myhostname
+env_groups: "{{ ['development', 'staging', 'production'] | intersect(group_names) }}"
 
-apt_packages_custom: []
-apt_packages: "{{ apt_packages_default + apt_packages_custom }}"
+envs_with_wp_sites: "{{
+  lookup('filetree', playbook_dir + '/group_vars') |
+  selectattr('path', 'match', '(' + env_groups | join('|') + ')/wordpress_sites\\.yml$') |
+  map(attribute='path') | map('regex_replace', '([^/]*)/.*', '\\1') | list
+}}"
+
+site_keys_by_env_pair: "[
+  {% for env_pair in envs_with_wp_sites | combinations(2) | list %}
+    {
+      'env_pair': {{ env_pair }},
+      'site_keys': {{
+                     (vars[env_pair[0] + '_sites'].wordpress_sites | default({})).keys() | intersect(
+                     (vars[env_pair[1] + '_sites'].wordpress_sites | default({})).keys())
+                   }}
+    },
+  {% endfor %}
+]"
+
+apt_packages_default:
+  python-software-properties: "{{ apt_package_state }}"
+  python-pycurl: "{{ apt_package_state }}"
+  build-essential: "{{ apt_package_state }}"
+  python-mysqldb: "{{ apt_package_state }}"
+  curl: "{{ apt_package_state }}"
+  git-core: "{{ apt_package_state }}"
+  dbus: "{{ apt_package_state }}"
+  libnss-myhostname: "{{ apt_package_state }}"
+
+apt_packages_custom: {}
+apt_packages: "{{ apt_packages_default | combine(apt_packages_custom) }}"
 
 openssh_6_8_plus: "{{ (lookup('pipe', 'ssh -V 2>&1')) | regex_replace('(.*OpenSSH_([\\d\\.]*).*)', '\\2') | version_compare('6.8', '>=') }}"
 overlapping_ciphers: "[{% for cipher in (sshd_ciphers_default + sshd_ciphers_extra) if cipher in ssh_client_ciphers %}'{{ cipher }}',{% endfor %}]"

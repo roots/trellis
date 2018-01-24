@@ -4,6 +4,7 @@
 
 server {
   {% block server_id -%}
+  listen {{ ssl_enabled | ternary('[::]:443 ssl http2', '[::]:80') }};
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
   server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
   {% endblock %}
@@ -17,6 +18,8 @@ server {
   root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;
   index index.php index.htm index.html;
   add_header Fastcgi-Cache $upstream_cache_status;
+
+  # Specify a charset
   charset utf-8;
 
   # Set the max body size equal to PHP's max POST size.
@@ -68,12 +71,19 @@ server {
   {% if ssl_enabled -%}
   # SSL configuration
   include h5bp/directive-only/ssl.conf;
+  {% if ssl_stapling_enabled -%}
   include h5bp/directive-only/ssl-stapling.conf;
+  {% endif -%}
 
   ssl_dhparam /etc/nginx/ssl/dhparams.pem;
   ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
 
   add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
+
+  {% if item.value.ssl.client_cert_url is defined -%}
+  ssl_verify_client       on;
+  ssl_client_certificate  {{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt;
+  {% endif -%}
 
   {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
   ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
@@ -116,10 +126,38 @@ server {
   {% endblock %}
 
   {% block h5bp -%}
-  include h5bp/directive-only/x-ua-compatible.conf;
+  {% if h5bp_cache_file_descriptors_enabled -%}
+  include h5bp/directive-only/cache-file-descriptors.conf;
+  {% endif -%}
+
+  {% if h5bp_extra_security_enabled -%}
   include h5bp/directive-only/extra-security.conf;
+  {% endif -%}
+
+  {% if h5bp_no_transform_enabled -%}
+  include h5bp/directive-only/no-transform.conf;
+  {% endif -%}
+
+  {% if h5bp_x_ua_compatible_enabled -%}
+  include h5bp/directive-only/x-ua-compatible.conf;
+  {% endif -%}
+
+  {% if h5bp_cache_busting_enabled -%}
+  include h5bp/location/cache-busting.conf;
+  {% endif -%}
+
+  {% if h5bp_cross_domain_fonts_enabled -%}
   include h5bp/location/cross-domain-fonts.conf;
+  {% endif -%}
+
+  {% if h5bp_expires_enabled -%}
+  include h5bp/location/expires.conf;
+  {% endif -%}
+
+  {% if h5bp_protect_system_files_enabled -%}
   include h5bp/location/protect-system-files.conf;
+  {% endif -%}
+
   {% endblock %}
 
   {% block location_php -%}
@@ -156,10 +194,13 @@ server {
 {% if ssl_enabled %}
 # Redirect to https
 server {
+  listen [::]:80;
   listen 80;
-  server_name {{ site_hosts | union(multisite_subdomains_wildcards) | join(' ') }};
+  server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
 
   {{ self.acme_challenge() -}}
+
+  {{ self.includes_d() -}}
 
   location / {
     return 301 https://$host$request_uri;
@@ -175,15 +216,22 @@ server {
 {% endif %}
 {% for host in item.value.site_hosts if host.redirects | default([]) %}
 server {
-  listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
+  {% if ssl_enabled -%}
+  listen [::]:443 ssl http2;
+  listen 443 ssl http2;
+  {% endif -%}
+  listen [::]:80;
+  listen 80;
   server_name {{ host.redirects | join(' ') }};
 
   {{ self.https() -}}
 
   {{ self.acme_challenge() -}}
 
+  {{ self.includes_d() -}}
+
   location / {
-    return 301 $scheme://{{ host.canonical }}$request_uri;
+    return 301 {{ ssl_enabled | ternary('https', 'http') }}://{{ host.canonical }}$request_uri;
   }
 }
 {% endfor %}

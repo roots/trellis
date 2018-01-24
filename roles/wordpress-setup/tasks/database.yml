@@ -1,6 +1,6 @@
 ---
 - block:
-  - name: Create database of sites
+  - name: Create databases for sites
     mysql_db:
       name: "{{ site_env.db_name }}"
       state: present

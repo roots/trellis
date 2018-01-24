@@ -1,14 +1,14 @@
 ---
 - name: Add Nginx PPA
   apt_repository:
-    repo: "ppa:nginx/development"
+    repo: "{{ nginx_ppa }}"
     update_cache: yes
 
 - name: Install Nginx
   apt:
-    name: nginx
-    state: present
-    force: yes
+    name: "{{ nginx_package }}"
+    state: "{{ nginx_package_state | default(apt_package_state) }}"
+    cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - name: Create SSL directory
   file:
@@ -29,13 +29,14 @@
   git:
     repo: "https://github.com/h5bp/server-configs-nginx.git"
     dest: "{{ nginx_path }}/h5bp-server-configs"
-    version: 82181a672a7c26f9bc8744fead80318d8a2520b1
+    version: c5c6602232e0976d9e69d69874aa84d2a2698265
     force: yes
 
 - name: Move h5bp configs
-  command: cp -R {{ nginx_path }}/h5bp-server-configs/h5bp {{ nginx_path }}/h5bp
-  args:
-    creates: "{{ nginx_path }}/h5bp/"
+  command: rsync -ac --delete --info=NAME {{ nginx_path }}/h5bp-server-configs/h5bp/ {{ nginx_path }}/h5bp
+  register: h5bp_nginx_sync
+  changed_when: h5bp_nginx_sync.stdout != ''
+  notify: reload nginx
 
 - name: Create nginx.conf
   template:
@@ -56,6 +57,7 @@
     dest: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
   with_items: "{{ nginx_sites_confs }}"
   when: item.enabled | default(true)
+  notify: reload nginx
   tags: nginx-sites
 
 - name: Enable or disable Nginx sites

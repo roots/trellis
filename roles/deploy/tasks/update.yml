@@ -1,5 +1,5 @@
 ---
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_update_before | default([]) }}"
   loop_control:
     loop_var: include_path
@@ -37,7 +37,7 @@
     repo: "{{ project_git_repo }}"
     dest: "{{ project_source_path }}"
     version: "{{ project_version }}"
-    accept_hostkey: "{{ repo_accept_hostkey | default(true) }}"
+    accept_hostkey: "{{ project.repo_accept_hostkey | default(repo_accept_hostkey | default(true)) }}"
   ignore_errors: true
   no_log: true
   register: git_clone
@@ -51,7 +51,7 @@
       > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
   when: git_clone | failed
 
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_update_after | default([]) }}"
   loop_control:
     loop_var: include_path

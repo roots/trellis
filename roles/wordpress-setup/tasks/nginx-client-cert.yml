@@ -1,0 +1,8 @@
+---
+- name: Download client cert
+  get_url:
+    url: "{{ item.value.ssl.client_cert_url }}"
+    dest: "{{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt"
+    mode: 0640
+  with_dict: "{{ wordpress_sites }}"
+  when: ssl_enabled and item.value.ssl.client_cert_url is defined

@@ -1,5 +1,5 @@
 ---
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_build_before | default([]) }}"
   loop_control:
     loop_var: include_path
@@ -10,20 +10,20 @@
     src: "{{ item.src }}"
     dest: "{{ deploy_helper.new_release_path }}/{{ item.dest }}"
     mode: "{{ item.mode | default('0644') }}"
-  with_items: "{{ project_templates }}"
+  with_items: "{{ project.project_templates | default(project_templates) }}"
 
 - name: Check if project folders exist
   stat:
     path: "{{ deploy_helper.current_path }}/{{ item }}"
   register: project_folder_paths
-  with_items: "{{ project_copy_folders }}"
+  with_items: "{{ project.project_copy_folders | default(project_copy_folders) }}"
 
 - name: Copy project folders
   command: cp -rp {{ deploy_helper.current_path }}/{{ item.item }} {{ deploy_helper.new_release_path }}
   with_items: "{{ project_folder_paths.results }}"
   when: item.stat.exists
 
-- include: "{{ include_path }}"
+- include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_build_after | default([]) }}"
   loop_control:
     loop_var: include_path

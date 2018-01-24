@@ -17,7 +17,7 @@
   when: ssl_enabled and item.value.ssl.key is defined
   notify: reload nginx
 
-- include: "{{ playbook_dir }}/roles/common/tasks/disable_challenge_sites.yml"
+- import_tasks: "{{ playbook_dir }}/roles/common/tasks/disable_challenge_sites.yml"
 
 - name: Create Nginx conf for challenges location
   template:

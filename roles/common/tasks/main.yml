@@ -1,4 +1,26 @@
 ---
+- block:
+  - name: Load wordpress_sites.yml vars into <env>_sites vars
+    include_vars:
+      file: group_vars/{{ item }}/wordpress_sites.yml
+      name: "{{ item }}_sites"
+    with_items: "{{ envs_with_wp_sites }}"
+    when: envs_with_wp_sites | count > 1
+
+  - name: Fail if there are duplicate site keys within host's wordpress_sites
+    fail:
+      msg: >
+        If you put multiple environments on `{{ inventory_hostname }}`, `wordpress_sites`
+        must use different site keys per environment. Adjust the following site keys that
+        are duplicated between the `{{ item.env_pair | join('` and `') }}` groups:
+          {{ item.site_keys | to_nice_yaml | indent(2) }}
+    when: item.site_keys | count
+    with_items: "{{ site_keys_by_env_pair }}"
+
+  when:
+    - env_groups | count > 1
+    - validate_site_keys | default(true) | bool
+
 - name: Validate wordpress_sites
   fail:
     msg: "{{ lookup('template', 'wordpress_sites.j2') }}"
@@ -11,6 +33,36 @@
   with_dict: "{{ wordpress_sites }}"
   when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count
   tags: [letsencrypt, wordpress]
+
+- name: Verify dict format for apt package component variables
+  fail:
+    msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
+  when: package_vars_wrong_format | count
+  vars:
+    package_vars:
+      apt_packages_default: "{{ apt_packages_default }}"
+      apt_packages_custom: "{{ apt_packages_custom }}"
+      memcached_packages_default: "{{ memcached_packages_default }}"
+      memcached_packages_custom: "{{ memcached_packages_custom }}"
+      php_extensions_default: "{{ php_extensions_default }}"
+      php_extensions_custom: "{{ php_extensions_custom }}"
+      sshd_packages_default: "{{ sshd_packages_default }}"
+      sshd_packages_custom: "{{ sshd_packages_custom }}"
+    package_vars_wrong_format: "[{% for k,v in package_vars.iteritems() if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
+  tags: [sshd, memcached, php]
+
+- name: Verify dict format for apt package combined variables
+  fail:
+    msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
+  when: package_vars_wrong_format | count
+  vars:
+    package_vars:
+      apt_packages: "{{ apt_packages }}"
+      memcached_packages: "{{ memcached_packages }}"
+      php_extensions: "{{ php_extensions }}"
+      sshd_packages: "{{ sshd_packages }}"
+    package_vars_wrong_format: "[{% for k,v in package_vars.iteritems() if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
+  tags: [sshd, memcached, php]
 
 - name: Validate Ubuntu version
   debug:
@@ -61,11 +113,10 @@
 
 - name: Checking essentials
   apt:
-    name: "{{ item }}"
-    state: present
-    update_cache: true
+    name: "{{ item.key }}"
+    state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_items: "{{ apt_packages }}"
+  with_dict: "{{ apt_packages }}"
 
 - name: Validate timezone variable
   stat:
