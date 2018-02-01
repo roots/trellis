@@ -1,4 +1,5 @@
 ### HEAD
+* Update wp-cli to 1.5.0 ([#944](https://github.com/roots/trellis/pull/944))
 * Update `vagrant_box_version` to `>= 201801.02.0` ([#939](https://github.com/roots/trellis/pull/939))
 * Bump Ansible `version_tested_max` to 2.4.2.0 ([#932](https://github.com/roots/trellis/pull/932))
 * Add MariaDB 10.2 PPA ([#926](https://github.com/roots/trellis/pull/926))
