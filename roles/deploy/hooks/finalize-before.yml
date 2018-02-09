@@ -23,7 +23,7 @@
     chdir: "{{ deploy_helper.current_path }}"
   register: wp_template_root
   changed_when: false
-  failed_when: wp_template_root.stderr  | default('') != ''
+  failed_when: not wp_template_root.stderr | default('') | match("(|.*Could not get '" + item + "' option\. Does it exist\?)")
   when:
     - wp_installed.rc == 0
     - project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool
