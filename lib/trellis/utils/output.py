@@ -45,8 +45,14 @@ def reset_task_info(obj, task=None):
 
 # Display dict key only, instead of full json dump
 def replace_item_with_key(obj, result):
-    if not obj._display.verbosity and 'label' not in result._task._ds.get('loop_control', {}):
-        item = '_ansible_item_label' if '_ansible_item_label' in result._result else 'item'
+    item = '_ansible_item_label' if '_ansible_item_label' in result._result else 'item'
+    should_replace = (
+        not obj._display.verbosity
+        and 'label' not in result._task._ds.get('loop_control', {})
+        and item in result._result
+    )
+
+    if should_replace:
         if 'key' in result._result[item]:
             result._result[item] = result._result[item]['key']
         elif type(result._result[item]) is dict:
