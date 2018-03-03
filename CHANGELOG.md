@@ -1,4 +1,5 @@
 ### HEAD
+* [BREAKING] Disable memcached UDP support by default ([#955](https://github.com/roots/trellis/pull/955))
 * Git: Ignore `vagrant.local.yml`([#953](https://github.com/roots/trellis/pull/953))
 * Update to PHP 7.2 ([#929](https://github.com/roots/trellis/pull/929))
 * Fix `failed_when` in `template_root` check with wp-cli 1.5.0 ([#948](https://github.com/roots/trellis/pull/948))
