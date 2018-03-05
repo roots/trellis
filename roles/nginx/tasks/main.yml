@@ -21,9 +21,9 @@
   args:
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
-  when: wordpress_sites.values() | map(attribute='ssl') | selectattr('enabled') | list | count
+  when: sites_use_ssl
   notify: reload nginx
-  tags: [diffie-hellman, wordpress, wordpress-setup, nginx-includes, nginx-sites]
+  tags: [diffie-hellman, always]
 
 - name: Grab h5bp/server-configs-nginx
   git:

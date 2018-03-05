@@ -14,10 +14,9 @@ server {
   include h5bp/directive-only/ssl.conf;
   ssl_dhparam /etc/nginx/ssl/dhparams.pem;
 
-  {% set site_key = (sites_using_self_signed + ssl_default_site.keys()) | first -%}
-  ssl_certificate         {{ nginx_path }}/ssl/{{ site_key }}.cert;
-  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ site_key }}.cert;
-  ssl_certificate_key     {{ nginx_path }}/ssl/{{ site_key }}.key;
+  ssl_certificate         {{ nginx_path }}/ssl/no_default.cert;
+  ssl_trusted_certificate {{ nginx_path }}/ssl/no_default.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/no_default.key;
 
   return 444;
 }
