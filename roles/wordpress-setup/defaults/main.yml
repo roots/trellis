@@ -2,6 +2,16 @@ site_uses_local_db: "{{ site_env.db_host == 'localhost' }}"
 nginx_wordpress_site_conf: wordpress-site.conf.j2
 nginx_ssl_path: "{{ nginx_path }}/ssl"
 sites_using_ssl: "[{% for name, site in wordpress_sites.iteritems() if site.ssl.enabled %}'{{ name }}',{% endfor %}]"
+sites_using_self_signed: "[{% for name, site in wordpress_sites.iteritems() if site.ssl.enabled and site.ssl.provider == 'self-signed' %}'{{ name }}',{% endfor %}]"
+
+ssl_default_site:
+  example.com:
+    site_hosts:
+      - canonical: example.com
+    ssl:
+      enabled: true
+      provider: self-signed
+    multisite: {}
 
 nginx_sites_confs:
   - src: no-default.conf.j2
