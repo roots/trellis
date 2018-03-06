@@ -1,6 +1,9 @@
 # Trellis
 [![Release](https://img.shields.io/github/release/roots/trellis.svg?style=flat-square)](https://github.com/roots/trellis/releases)
 [![Build Status](https://img.shields.io/travis/roots/trellis.svg?style=flat-square)](https://travis-ci.org/roots/trellis)
+[![Backers on Open Collective](https://opencollective.com/trellis/backers/badge.svg)](#backers) 
+[![Sponsors on Open Collective](https://opencollective.com/trellis/sponsors/badge.svg)](#sponsors)
+ 
 
 Ansible playbooks for setting up a LEMP stack for WordPress.
 
@@ -107,3 +110,33 @@ Keep track of development and community news.
 * Read and subscribe to the [Roots Blog](https://roots.io/blog/)
 * Subscribe to the [Roots Newsletter](https://roots.io/subscribe/)
 * Listen to the [Roots Radio podcast](https://roots.io/podcast/)
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md)].
+<a href="graphs/contributors"><img src="https://opencollective.com/trellis/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/trellis#backer)]
+
+<a href="https://opencollective.com/trellis#backers" target="_blank"><img src="https://opencollective.com/trellis/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/trellis#sponsor)]
+
+<a href="https://opencollective.com/trellis/sponsor/0/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/1/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/2/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/3/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/4/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/5/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/6/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/7/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/8/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/trellis/sponsor/9/website" target="_blank"><img src="https://opencollective.com/trellis/sponsor/9/avatar.svg"></a>
+
+
