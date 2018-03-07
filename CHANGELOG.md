@@ -1,4 +1,5 @@
 ### HEAD
+* Add Nginx `ssl.no-default.conf` to drop requests for unknown hosts ([#888](https://github.com/roots/trellis/pull/888))
 * [BREAKING] Disable memcached UDP support by default ([#955](https://github.com/roots/trellis/pull/955))
 * Git: Ignore `vagrant.local.yml`([#953](https://github.com/roots/trellis/pull/953))
 * Update to PHP 7.2 ([#929](https://github.com/roots/trellis/pull/929))
