@@ -1,4 +1,5 @@
 ### HEAD
+* Fix `raw_vars` feature to properly handle int values ([#959](https://github.com/roots/trellis/pull/959))
 * [BREAKING] Update Ansible default plugin paths in config files ([#958](https://github.com/roots/trellis/pull/958))
 * Add Nginx `ssl.no-default.conf` to drop requests for unknown hosts ([#888](https://github.com/roots/trellis/pull/888))
 * [BREAKING] Disable memcached UDP support by default ([#955](https://github.com/roots/trellis/pull/955))
