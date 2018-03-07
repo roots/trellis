@@ -1,4 +1,5 @@
 ### HEAD
+* [BREAKING] Update Ansible default plugin paths in config files ([#958](https://github.com/roots/trellis/pull/958))
 * Add Nginx `ssl.no-default.conf` to drop requests for unknown hosts ([#888](https://github.com/roots/trellis/pull/888))
 * [BREAKING] Disable memcached UDP support by default ([#955](https://github.com/roots/trellis/pull/955))
 * Git: Ignore `vagrant.local.yml`([#953](https://github.com/roots/trellis/pull/953))
