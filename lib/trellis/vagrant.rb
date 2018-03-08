@@ -1,10 +1,10 @@
 # Set Ansible paths relative to Ansible directory
 ENV['ANSIBLE_CONFIG'] = ANSIBLE_PATH
-ENV['ANSIBLE_CALLBACK_PLUGINS'] = "~/.ansible/plugins/callback_plugins/:/usr/share/ansible_plugins/callback_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/callback')}"
-ENV['ANSIBLE_FILTER_PLUGINS'] = "~/.ansible/plugins/filter_plugins/:/usr/share/ansible_plugins/filter_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/filter')}"
-ENV['ANSIBLE_LIBRARY'] = "/usr/share/ansible:#{File.join(ANSIBLE_PATH, 'lib/trellis/modules')}"
+ENV['ANSIBLE_CALLBACK_PLUGINS'] = "~/.ansible/plugins/callback:/usr/share/ansible/plugins/callback:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/callback')}"
+ENV['ANSIBLE_FILTER_PLUGINS'] = "~/.ansible/plugins/filter:/usr/share/ansible/plugins/filter:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/filter')}"
+ENV['ANSIBLE_LIBRARY'] = "~/.ansible/plugins/modules:/usr/share/ansible/plugins/modules:#{File.join(ANSIBLE_PATH, 'lib/trellis/modules')}"
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
-ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars_plugins/:/usr/share/ansible_plugins/vars_plugins:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/vars')}"
+ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars:/usr/share/ansible/plugins/vars:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/vars')}"
 
 def ensure_plugins(plugins)
   logger = Vagrant::UI::Colored.new
