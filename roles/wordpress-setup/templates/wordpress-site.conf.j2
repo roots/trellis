@@ -34,6 +34,7 @@ server {
 
   {% block cache_conditions -%}
   {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+
   # Fastcgi cache conditions
   set $skip_cache 0;
   if ($query_string != "") {
@@ -45,6 +46,11 @@ server {
   if ($http_cookie ~* "{{ item.value.cache.skip_cache_cookie | default(nginx_skip_cache_cookie) }}") {
     set $skip_cache 1;
   }
+
+  # Update an expired cache item in the background, serve stale cache to client.
+  {% if item.value.cache.enabled and item.value.cache.background_update %}
+    fastcgi_cache_background_update on
+  {% endif %}
 
   {% endif -%}
   {% endblock -%}
