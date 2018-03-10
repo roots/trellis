@@ -1,0 +1,8 @@
+TODO
+
+* move roles/wordpress-setup/templates/set-cache-uri.conf to nginx-includes/(demo|www).pt.com/
+* remove /roles/nginx/templates/wordpress_multisite_subdirectories.conf.j2
+* update all sandbox related roles/playbooks
+* remove custom static sites role and implement it using trellis nginx-inludes and child templates
+* refactor vault from /vault/ subdirectory to a trellis-created vault.yml
+* on production move everything from /opt/proteusnet/www to /srv/www
