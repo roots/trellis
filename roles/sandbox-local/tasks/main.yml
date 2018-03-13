@@ -11,12 +11,9 @@
     chdir: /tmp/
   with_items: "{{ shared_dbs_names }}"
 
-- name: Replace emails
-  replace:
-    dest: "/tmp/{{ item }}.sql"
-    regexp: "({{ wp_emails.from | join( '|' ) }})"
-    replace: "{{ wp_emails.to }}"
-    backup: yes
+- name: Replace emails using sed
+  command: >
+    sed -i.orig -r -e "s/({{ wp_emails.from | join( '|' ) }})/{{ wp_emails.to }}/g" /tmp/{{ item }}.sql
   with_items: "{{ shared_dbs_names }}"
 
 - name: Drop old DBs
