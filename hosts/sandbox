@@ -2,7 +2,7 @@
 # List each machine only once per [group], even if it will host multiple sites.
 
 [sandbox]
-178.62.227.227
+188.166.41.120
 
 [web]
-178.62.227.227
+188.166.41.120
