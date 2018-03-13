@@ -1,8 +1,4 @@
 # Documentation: https://docs.google.com/a/proteusnet.com/document/d/1B6GEpHSMAsxnn4hfh_t-1NvKqh7vHWKNyun3TOaKWM0/edit?usp=sharing
-src_domain: "demo.proteusthemes.com" # inside {{ www_root }}
-export_domain: "xml-io.proteusthemes.com"
-src_url: "https://{{ src_domain }}"
-
 wp_rsync_opts:
   root:
     - "--delete"
@@ -50,36 +46,6 @@ strings_to_replace:
   - from: "{{ vault_mc_api_key }}"
     to: ""
 
-sites_to_export:
-  - hairpress
-  - webmarket
-  - carpress
-  - organique
-  - readable
-  - buildpress
-  - mentalpress
-  - cargopress
-  - legalpress
-  - repairpress
-  - structurepress
-  - beauty
-  - auto
-  - hammer
-  - bolts
-  - bolts-transport
-  - bolts-factory
-  - bolts-industry
-  - shaka
-  - buildpress-light
-  - adrenaline
-  - consultpress
-  - buildpress-landscape
-  - buildpress-rtl
-  - medicpress
-  - gympress
-  - growthpress
-  - woondershop
-
 xmls_to_rename:
   hairpress: "hairpresswptheme"
   bolts-factory: "boltsfactory"
@@ -88,7 +54,3 @@ xmls_to_rename:
   buildpress-light: "buildpresslight"
   buildpress-landscape: "buildpresslandscape"
   buildpress-rtl: "buildpressrtl"
-
-xml_paths:
-  local:  "/tmp/xml-exports"
-  remote: "{{ www_root }}/artifacts.proteusthemes.com/xml-exports"

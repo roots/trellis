@@ -1,12 +1,13 @@
 ---
 - name: Fetch data from prod server and overwrite local WP installations
-  hosts: private:&production # intersection of groups private and production
+  hosts: private:&production # intersection of groups private and production - connect to production server via private network
   become: yes
+  remote_user: "{{ admin_user }}"
   roles:
     - { role: sandbox-remote, tags: [sandbox-remote] }
 
 - name: Perform local actions on sandbox server
-  hosts: local:&sandbox  # intersection of groups local and sandbox
+  hosts: local:&sandbox  # intersection of groups local and sandbox - perform local actions
   connection: local
   become: yes
   roles:

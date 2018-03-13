@@ -3,7 +3,7 @@
 
 [production]
 188.166.202.49
-10.133.22.156 ansible_ssh_user=admin # http://docs.ansible.com/ansible/latest/intro_inventory.html#host-variables
+10.133.22.156
 
 [web]
 188.166.202.49

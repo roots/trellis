@@ -43,16 +43,16 @@
 
 - name: Search/replace domain - table wp_blogs
   command: >
-    mysql -u {{ site_env.db_user }} -p{{ site_env.db_password }} -e "use {{ site_env.db_name }}; update {{ site_env.db_prefix }}blogs set domain='{{ item.key }}' where domain='{{ src_domain }}';"
+    mysql -u {{ site_env.db_user }} -p{{ site_env.db_password }} -e "use {{ site_env.db_name }}; update {{ site_env.db_prefix }}blogs set domain='{{ item.key }}' where domain='{{ sandbox_config.source_site_key }}';"
   with_dict: "{{ wordpress_sites }}"
 
 - name: Search/replace domain - table wp_site
   command: >
-    mysql -u {{ site_env.db_user }} -p{{ site_env.db_password }} -e "use {{ site_env.db_name }}; update {{ site_env.db_prefix }}site set domain='{{ item.key }}' where domain='{{ src_domain }}';"
+    mysql -u {{ site_env.db_user }} -p{{ site_env.db_password }} -e "use {{ site_env.db_name }}; update {{ site_env.db_prefix }}site set domain='{{ item.key }}' where domain='{{ sandbox_config.source_site_key }}';"
   with_dict: "{{ wordpress_sites }}"
 
 - name: WP search-replace for the URLs
-  command: "wp search-replace '{{ src_domain }}' '{{ item.key }}' --all-tables --allow-root"
+  command: "wp search-replace '{{ sandbox_config.source_site_key }}' '{{ item.key }}' --all-tables --allow-root"
   args:
     chdir: "{{ www_root }}/{{ item.key }}"
   with_dict: "{{ wordpress_sites }}"
@@ -68,7 +68,7 @@
 - name: Get list of all user IDs
   command: wp user list --network --format=csv --field=ID --allow-root
   args:
-    chdir: "{{ www_root }}/{{ export_domain }}"
+    chdir: "{{ www_root }}/{{ sandbox_config.export_site_key }}"
   register: wp_user_ids
 
 - name: Change all user passwords on xml-io
@@ -94,9 +94,9 @@
     state: directory
 
 - name: Export XML files
-  command: "wp export --dir={{ xml_paths.local }}/ --url='{{ export_domain }}/{{ item }}' --allow-root"
+  command: "wp export --dir={{ xml_paths.local }}/ --url='{{ sandbox_config.export_site_key }}/{{ item }}' --allow-root"
   args:
-    chdir: "{{ www_root }}/{{ export_domain }}"
+    chdir: "{{ www_root }}/{{ sandbox_config.export_site_key }}"
   with_items: "{{ sites_to_export }}"
 
 - name: Rename XMLs that are not properly named when exported

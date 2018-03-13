@@ -12,7 +12,7 @@
 
 - name: Rsync WP (without uploads)
   synchronize:
-    src:  "{{ www_root }}/{{ src_domain }}/"
+    src:  "{{ www_root }}/{{ sandbox_config.source_site_key }}/"
     dest: "{{ www_root }}/{{ item.key }}/"
     mode: pull
     group: no
@@ -22,7 +22,7 @@
 
 - name: Rsync WP uploads
   synchronize:
-    src:  "{{ www_root }}/{{ src_domain }}/wp-content/uploads/"
+    src:  "{{ www_root }}/{{ sandbox_config.source_site_key }}/wp-content/uploads/"
     dest: "{{ www_root }}/{{ item.key }}/wp-content/uploads/"
     mode: pull
     group: no
