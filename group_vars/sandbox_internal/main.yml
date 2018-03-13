@@ -94,6 +94,7 @@ sites_to_export:
   - medicpress
   - gympress
   - growthpress
+  - woondershop
 
 xmls_to_rename:
   hairpress: "hairpresswptheme"
