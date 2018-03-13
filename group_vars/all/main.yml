@@ -11,7 +11,7 @@ www_root: /srv/www
 ip_whitelist:
   - "{{ (env == 'development') | ternary(ansible_default_ipv4.gateway, ipify_public_ip | default('')) }}"
 
-scripts_root: /opt/proteusnet/scripts
+scripts_root: "{{ www_root }}/scripts"
 
 mariadb_mirror: ams2.mirrors.digitalocean.com
 mariadb_version: "10.1"

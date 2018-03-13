@@ -10,7 +10,7 @@ mysql_root_user: root
 
 sites_using_remote_db: "[{% for name, site in wordpress_sites.iteritems() if site.env is defined and site.env.db_host | default('localhost') != 'localhost' %}'{{ name }}',{% endfor %}]"
 
-mariadb_backup_dir: /opt/proteusnet/backup/mysql
+mariadb_backup_dir: "{{ www_root }}/backup/mysql"
 mariadb_backup_days_retention: 6
 mariadb_mysqldump_command: /usr/bin/mysqldump -qfeR
 mariadb_mysql_command: /usr/bin/mysql
