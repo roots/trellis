@@ -2,6 +2,7 @@
 sandbox_config:
   source_site_key: demo.proteusthemes.com # key from production wordpress_sites dict
   export_site_key: xml-io.proteusthemes.com # key from sandbox wordpress_sites dict
+  shared_db_name: demo_proteusthemes_com_production # this database is daily synced from production to sandbox
 
 xml_paths:
   local: /tmp/xml-exports

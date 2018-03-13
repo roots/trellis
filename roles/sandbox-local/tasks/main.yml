@@ -1,20 +1,17 @@
 ---
 - name: Remove old DB file
   file:
-    path: "/tmp/{{ item }}.sql"
+    path: "/tmp/{{ sandbox_config.shared_db_name }}.sql"
     state: absent
-  with_items: "{{ shared_dbs_names }}"
 
 - name: Unzip DB
-  command: "gunzip {{ item }}.sql.gz"
+  command: "gunzip {{ sandbox_config.shared_db_name }}.sql.gz"
   args:
     chdir: /tmp/
-  with_items: "{{ shared_dbs_names }}"
 
 - name: Replace emails using sed
   command: >
-    sed -i.orig -r -e "s/({{ wp_emails.from | join( '|' ) }})/{{ wp_emails.to }}/g" /tmp/{{ item }}.sql
-  with_items: "{{ shared_dbs_names }}"
+    sed -i.orig -r -e "s/({{ wp_emails.from | join( '|' ) }})/{{ wp_emails.to }}/g" /tmp/{{ sandbox_config.shared_db_name }}.sql
 
 - name: Drop old DBs
   mysql_db:
@@ -38,7 +35,7 @@
   mysql_db:
     name: "{{ site_env.db_name }}"
     state: import
-    target: /tmp/{{ shared_dbs_names[0] }}.sql
+    target: /tmp/{{ sandbox_config.shared_db_name }}.sql
   with_dict: "{{ wordpress_sites }}"
 
 - name: Search/replace domain - table wp_blogs

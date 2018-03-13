@@ -4,11 +4,10 @@
 
 - name: Fetch DB files
   fetch:
-    src: "{{ mariadb_backup_dir }}/{{ item }}-latest.sql.gz"
-    dest: "/tmp/{{ item }}.sql.gz"
+    src: "{{ mariadb_backup_dir }}/{{ sandbox_config.shared_db_name }}-latest.sql.gz"
+    dest: "/tmp/{{ shared_db_name }}.sql.gz"
     fail_on_missing: yes
     flat: yes
-  with_items: "{{ shared_dbs_names }}"
 
 - name: Rsync WP (without uploads)
   synchronize:

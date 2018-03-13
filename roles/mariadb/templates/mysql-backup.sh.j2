@@ -20,16 +20,11 @@ done
 # clean old exports
 find {{ mariadb_backup_dir }}/* -mtime +{{ mariadb_backup_days_retention }} -exec rm {} \;
 
-# prepare db dumps for as <> sandbox connection
-shared_dbs_names=({% for db_name in shared_dbs_names %}'{{ db_name }}' {% endfor %})
+link_name="{{ mariadb_backup_dir }}/{{ sandbox_config.shared_db_name }}-latest.sql.gz"
+actual_export_file="{{ mariadb_backup_dir }}/{{ sandbox_config.shared_db_name }}-${today}.sql.gz"
+if [[ -f ${actual_export_file} ]]; then
+  echo "Symlinking:"
+  echo "  ${link_name} >>> ${actual_export_file}"
 
-for db in ${shared_dbs_names[@]}; do
-  link_name="{{ mariadb_backup_dir }}/${db}-latest.sql.gz"
-  actual_export_file="{{ mariadb_backup_dir }}/${db}-${today}.sql.gz"
-  if [[ -f ${actual_export_file} ]]; then
-    echo "Symlinking:"
-    echo "  ${link_name} >>> ${actual_export_file}"
-
-    ln -f -s ${actual_export_file} ${link_name}
-  fi
-done
+  ln -f -s ${actual_export_file} ${link_name}
+fi
