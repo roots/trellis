@@ -19,6 +19,7 @@
   hosts: sandbox:&production_over_private
   become: yes
   become_user: "{{ web_user }}"
+  when: false # TODO remove
   tasks:
     - name: Ensure target dir exists
       file:
