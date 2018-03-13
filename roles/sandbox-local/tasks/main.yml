@@ -82,16 +82,16 @@
 
 - name: Clean all old XML files within exports directory
   file:
-    path: "{{ xml_paths.local }}"
+    path: "{{ sandbox_config.xml_paths.local }}"
     state: absent
 
-- name: "Ensure {{ xml_paths.local }}/ is a directory"
+- name: "Ensure {{ sandbox_config.xml_paths.local }}/ is a directory"
   file:
-    path: "{{ xml_paths.local }}/"
+    path: "{{ sandbox_config.xml_paths.local }}/"
     state: directory
 
 - name: Export XML files
-  command: "wp export --dir={{ xml_paths.local }}/ --url='{{ sandbox_config.export_site_key }}/{{ item }}' --allow-root"
+  command: "wp export --dir={{ sandbox_config.xml_paths.local }}/ --url='{{ sandbox_config.export_site_key }}/{{ item }}' --allow-root"
   args:
     chdir: "{{ www_root }}/{{ sandbox_config.export_site_key }}"
   with_items: "{{ sites_to_export }}"
@@ -99,5 +99,5 @@
 - name: Rename XMLs that are not properly named when exported
   command: "mv {{ item.value }}.wordpress.{{ ansible_date_time.date }}.000.xml {{ item.key }}.wordpress.{{ ansible_date_time.date }}.000.xml"
   args:
-    chdir: "{{ xml_paths.local }}/"
+    chdir: "{{ sandbox_config.xml_paths.local }}/"
   with_dict: "{{ xmls_to_rename }}"
