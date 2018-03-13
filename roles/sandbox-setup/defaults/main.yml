@@ -1,6 +1,5 @@
 sb_provision_repo_url: https://github.com/proteusthemes/pt-ops.git
 sb_provision_repo_dest: "{{ scripts_root }}/ops/"
-sb_provision_repo_version: master
 
 sb_reset_cron:
   hour: 5

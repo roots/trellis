@@ -3,7 +3,7 @@
   git:
     repo: "{{ sb_provision_repo_url }}"
     dest: "{{ sb_provision_repo_dest }}"
-    version: "{{ sb_provision_repo_version }}"
+    version: "{{ sb_provision_repo_version | default('master') }}"
 
 - name: Add cron to reset every day
   become: yes
