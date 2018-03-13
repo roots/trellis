@@ -5,43 +5,31 @@
 wordpress_sites:
   sandbox.proteusthemes.com:
     site_hosts:
-      - sandbox.proteusthemes.com
-    site_title: ProteusThemes
-    admin_user: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].admin_user }}"
-    admin_password: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].admin_password }}"
-    admin_email: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].admin_email }}"
+      - canonical: sandbox.proteusthemes.com
+    admin_user: proteusnet
+    admin_email: noreply@proteusthemes.com
     multisite:
       enabled: true
       subdomains: false
     ssl:
-      enabled: false
+      enabled: true
+      provider: manual
+      cert: ../certs/proteusthemes.com.pem
+      key: ../certs/proteusthemes.com.key
     cache:
       enabled: false
-    env:
-      wp_home: https://sandbox.proteusthemes.com
-      wp_siteurl: https://sandbox.proteusthemes.com
-      db_name: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].env.db_name }}"
-      db_user: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].env.db_user }}"
-      db_password: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].env.db_password }}"
-      db_prefix: "{{ vault_wordpress_sites['sandbox.proteusthemes.com'].env.db_prefix }}"
   xml-io.proteusthemes.com:
     site_hosts:
-      - xml-io.proteusthemes.com
-    site_title: ProteusThemes
-    admin_user: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].admin_user }}"
-    admin_password: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].admin_password }}"
-    admin_email: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].admin_email }}"
+      - canonical: xml-io.proteusthemes.com
+    admin_user: proteusnet
+    admin_email: noreply@proteusthemes.com
     multisite:
       enabled: true
       subdomains: false
     ssl:
-      enabled: false
+      enabled: true
+      provider: manual
+      cert: ../certs/proteusthemes.com.pem
+      key: ../certs/proteusthemes.com.key
     cache:
       enabled: false
-    env:
-      wp_home: https://xml-io.proteusthemes.com
-      wp_siteurl: https://xml-io.proteusthemes.com
-      db_name: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].env.db_name }}"
-      db_user: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].env.db_user }}"
-      db_password: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].env.db_password }}"
-      db_prefix: "{{ vault_wordpress_sites['xml-io.proteusthemes.com'].env.db_prefix }}"
