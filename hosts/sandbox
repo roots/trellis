@@ -3,6 +3,14 @@
 
 [sandbox]
 188.166.41.120
+10.133.41.208
+localhost
 
 [web]
 188.166.41.120
+
+[private]
+10.133.41.208
+
+[local]
+localhost

@@ -18,44 +18,44 @@
 
 - name: Drop old DBs
   mysql_db:
-    name: "{{ item.value.env.db_name }}"
+    name: "{{ site_env.db_name }}"
     state: absent
-    login_host: "{{ item.value.env.db_host | default('localhost') }}"
-    login_user: "{{ item.value.env.db_user }}"
-    login_password: "{{ item.value.env.db_password }}"
-  with_dict: "{{ sb_wp_sites }}"
+    login_host: "{{ site_env.db_host | default('localhost') }}"
+    login_user: "{{ site_env.db_user }}"
+    login_password: "{{ vault_wordpress_sites[item.key].admin_password }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Create new DBs
   mysql_db:
-    name: "{{ item.value.env.db_name }}"
+    name: "{{ site_env.db_name }}"
     state: present
-    login_host: "{{ item.value.env.db_host | default('localhost') }}"
-    login_user: "{{ item.value.env.db_user }}"
-    login_password: "{{ item.value.env.db_password }}"
-  with_dict: "{{ sb_wp_sites }}"
+    login_host: "{{ site_env.db_host | default('localhost') }}"
+    login_user: "{{ site_env.db_user }}"
+    login_password: "{{ site_env.db_password }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Import SQL to fresh DBs
   mysql_db:
-    name: "{{ item.value.env.db_name }}"
+    name: "{{ site_env.db_name }}"
     state: import
     target: /tmp/{{ shared_dbs_names[0] }}.sql
-  with_dict: "{{ sb_wp_sites }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Search/replace domain - table wp_blogs
   command: >
-    mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}blogs set domain='{{ item.key }}' where domain='{{ src_domain }}';"
-  with_dict: "{{ sb_wp_sites }}"
+    mysql -u {{ site_env.db_user }} -p{{ site_env.db_password }} -e "use {{ site_env.db_name }}; update {{ site_env.db_prefix }}blogs set domain='{{ item.key }}' where domain='{{ src_domain }}';"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Search/replace domain - table wp_site
   command: >
-    mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}site set domain='{{ item.key }}' where domain='{{ src_domain }}';"
-  with_dict: "{{ sb_wp_sites }}"
+    mysql -u {{ site_env.db_user }} -p{{ site_env.db_password }} -e "use {{ site_env.db_name }}; update {{ site_env.db_prefix }}site set domain='{{ item.key }}' where domain='{{ src_domain }}';"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: WP search-replace for the URLs
   command: "wp search-replace '{{ src_domain }}' '{{ item.key }}' --all-tables --allow-root"
   args:
     chdir: "{{ www_root }}/{{ item.key }}"
-  with_dict: "{{ sb_wp_sites }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: WP search-replace for the other strings only in xml-io
   become: yes
@@ -66,24 +66,18 @@
   with_items: "{{ strings_to_replace }}"
 
 - name: Get list of all user IDs
-  command: wp user list --network --format=csv --fields=ID --allow-root
+  command: wp user list --network --format=csv --field=ID --allow-root
   args:
     chdir: "{{ www_root }}/{{ export_domain }}"
   register: wp_user_ids
 
 - name: Change all user passwords on xml-io
-  command: "wp user update {{ item }} --user_pass='{{ dummy_pass }}' --allow-root"
+  command: "wp user update {{ item[0] }} --user_pass='{{ vault_wordpress_sites[item[1]].admin_password }}' --allow-root"
   args:
-    chdir: "{{ www_root }}/{{ export_domain }}"
-  with_items: "{{ wp_user_ids.stdout_lines }}"
-  when: item != 'ID'
-
-- name: Change all user passwords on sandbox
-  command: "wp user update {{ item }} --user_pass='{{ dummy_pass }}' --allow-root"
-  args:
-    chdir: "{{ www_root }}/sandbox.proteusthemes.com"
-  with_items: "{{ wp_user_ids.stdout_lines }}"
-  when: item != 'ID'
+    chdir: "{{ www_root }}/{{ item[1] }}"
+  with_nested:
+    - "{{ wp_user_ids.stdout_lines }}"
+    - [ 'xml-io.proteusthemes.com', 'sandbox.proteusthemes.com' ]
 
 - include: clean-db.yml
   vars:
