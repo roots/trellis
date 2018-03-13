@@ -5,7 +5,7 @@
 - name: Fetch DB files
   fetch:
     src: "{{ mariadb_backup_dir }}/{{ sandbox_config.shared_db_name }}-latest.sql.gz"
-    dest: "/tmp/{{ shared_db_name }}.sql.gz"
+    dest: "/tmp/{{ sandbox_config.shared_db_name }}.sql.gz"
     fail_on_missing: yes
     flat: yes
 
