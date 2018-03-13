@@ -8,8 +8,6 @@ nginx_user: www-data www-data
 nginx_fastcgi_buffers: 8 8k
 nginx_fastcgi_buffer_size: 8k
 nginx_fastcgi_read_timeout: 120s
-nginx_sites_confs:
-  - src: no-default.conf.j2
 
 # Fastcgi cache params
 nginx_cache_path: /var/cache/nginx

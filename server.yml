@@ -19,7 +19,7 @@
       register: python_check
       changed_when: not python_check.stdout | search('/usr/bin/python')
 
-- name: WordPress Server - Install LEMP Stack with PHP 7.1 and MariaDB MySQL
+- name: WordPress Server - Install LEMP Stack with PHP 7.2 and MariaDB MySQL
   hosts: web:&{{ env }}
   become: yes
   roles:

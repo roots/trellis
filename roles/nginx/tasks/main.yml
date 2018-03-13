@@ -21,9 +21,9 @@
   args:
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
-  when: wordpress_sites.values() | map(attribute='ssl') | selectattr('enabled') | list | count
+  when: sites_use_ssl
   notify: reload nginx
-  tags: [diffie-hellman]
+  tags: [diffie-hellman, letsencrypt, wordpress, wordpress-setup, nginx-includes, nginx-sites]
 
 - name: Grab h5bp/server-configs-nginx
   git:
@@ -54,25 +54,6 @@
     state: absent
   notify: reload nginx
 
-- name: Create Nginx available sites
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
-  with_items: "{{ nginx_sites_confs }}"
-  when: item.enabled | default(true)
-  notify: reload nginx
-  tags: nginx-sites
-
-- name: Create base WordPress subdirectory Multisite config
-  template:
-    src: wordpress_multisite_subdirectories.conf.j2
-    dest: "{{ nginx_path }}/wordpress_multisite_subdirectories.conf"
-
-- name: Create WordPress config for variable $cache_uri
-  template:
-    src: set-cache-uri.conf.j2
-    dest: "{{ nginx_path }}/set-cache-uri.conf"
-
 - name: Create base static site config
   template:
     src: static-site.conf.j2
@@ -85,13 +66,3 @@
     group: "{{ web_group }}"
     mode: "u+rwx,g+rwxs,o-w" # http://brunogirin.blogspot.si/2010/03/shared-folders-in-ubuntu-with-setgid.html
     state: directory
-
-- name: Enable or disable Nginx sites
-  file:
-    path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
-    src: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
-    state: "{{ item.enabled | default(true) | ternary('link', 'absent') }}"
-    force: yes
-  with_items: "{{ nginx_sites_confs }}"
-  notify: reload nginx
-  tags: nginx-sites

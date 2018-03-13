@@ -19,7 +19,7 @@ ensure_plugins(vconfig.fetch('vagrant_plugins')) if vconfig.fetch('vagrant_insta
 
 trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH)
 
-Vagrant.require_version '>= 1.8.5'
+Vagrant.require_version '>= 2.0.1'
 
 Vagrant.configure('2') do |config|
   config.vm.box = vconfig.fetch('vagrant_box')
@@ -69,7 +69,7 @@ Vagrant.configure('2') do |config|
 
   bin_path = File.join(ANSIBLE_PATH_ON_VM, 'bin')
 
-  if Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd'
+  if Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd')
     trellis_config.wordpress_sites.each_pair do |name, site|
       config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
     end
@@ -117,6 +117,7 @@ Vagrant.configure('2') do |config|
       ansible.version = vconfig.fetch('vagrant_ansible_version')
     end
 
+    ansible.compatibility_mode = '2.0'
     ansible.playbook = File.join(provisioning_path, 'dev.yml')
     ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
     ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')

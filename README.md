@@ -14,7 +14,7 @@ Trellis will configure a server with the following and more:
 
 * Ubuntu 16.04 Xenial LTS
 * Nginx (with optional FastCGI micro-caching)
-* PHP 7.1
+* PHP 7.2
 * MariaDB (a drop-in MySQL replacement)
 * SSL support (scores an A+ on the [Qualys SSL Labs Test](https://www.ssllabs.com/ssltest/))
 * Let's Encrypt integration for free SSL certificates
@@ -35,7 +35,7 @@ Full documentation is available at [https://roots.io/trellis/docs/](https://root
 Make sure all dependencies have been installed before moving on:
 
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) >= 4.3.10
-* [Vagrant](https://www.vagrantup.com/downloads.html) >= 1.8.5
+* [Vagrant](https://www.vagrantup.com/downloads.html) >= 2.0.1
 
 ## Installation
 
@@ -92,6 +92,16 @@ A base Ubuntu 16.04 server is required for setting up remote servers. OS X users
 4. To rollback a deploy, run `ansible-playbook rollback.yml -e "site=<site name> env=<environment>"`
 
 [Read the deploys docs](https://roots.io/trellis/docs/deploys/) for more information.
+
+## Contributing
+
+Contributions are welcome from everyone. We have [contributing guidelines](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md) to help you get started.
+
+## Gold sponsors
+
+Help support our open-source development efforts by [contributing to Trellis on OpenCollective](https://opencollective.com/trellis).
+
+<a href="https://kinsta.com/?kaid=OFDHAJIXUDIV"><img src="https://roots.io/app/uploads/kinsta.svg" alt="Kinsta" width="200" height="150"></a> <a href="https://www.harnessup.com/"><img src="https://roots.io/app/uploads/harness-software.svg" alt="Harness Software" width="200" height="150"></a>
 
 ## Community
 
