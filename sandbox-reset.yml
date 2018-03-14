@@ -10,6 +10,8 @@
   hosts: local:&sandbox  # intersection of groups local and sandbox - perform local actions
   connection: local
   become: yes
+  vars:
+    env: sandbox
   roles:
     - { role: wordpress-mail-toggle, wordpress_disable_emails: true, tags: [wordpress-mail-toggle] }
     - { role: sandbox-local, tags: [sandbox-local] }
