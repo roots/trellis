@@ -11,9 +11,11 @@
 
 - name: Rsync WP (without uploads)
   synchronize:
-    src:  "{{ www_root }}/{{ sandbox_config.source_site_key }}/"
+    archive: yes
+    src: "{{ www_root }}/{{ sandbox_config.source_site_key }}/"
     dest: "{{ www_root }}/{{ item.key }}/"
     mode: pull
+    delete: yes
     group: no
     owner: no
     rsync_opts: "{{ sandbox_config.wp_rsync_opts.root }}"
@@ -21,9 +23,11 @@
 
 - name: Rsync WP uploads
   synchronize:
-    src:  "{{ www_root }}/{{ sandbox_config.source_site_key }}/wp-content/uploads/"
+    archive: yes
+    src: "{{ www_root }}/{{ sandbox_config.source_site_key }}/wp-content/uploads/"
     dest: "{{ www_root }}/{{ item.key }}/wp-content/uploads/"
     mode: pull
+    delete: yes
     group: no
     owner: no
     rsync_opts: "{{ sandbox_config.wp_rsync_opts.uploads }}"
