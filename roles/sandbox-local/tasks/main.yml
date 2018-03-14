@@ -17,16 +17,16 @@
   mysql_db:
     name: "{{ site_env.db_name }}"
     state: absent
-    login_host: "{{ site_env.db_host | default('localhost') }}"
+    login_host: "{{ site_env.db_host }}"
     login_user: "{{ site_env.db_user }}"
-    login_password: "{{ vault_wordpress_sites[item.key].admin_password }}"
+    login_password: "{{ site_env.db_password }}"
   with_dict: "{{ wordpress_sites }}"
 
 - name: Create new DBs
   mysql_db:
     name: "{{ site_env.db_name }}"
     state: present
-    login_host: "{{ site_env.db_host | default('localhost') }}"
+    login_host: "{{ site_env.db_host }}"
     login_user: "{{ site_env.db_user }}"
     login_password: "{{ site_env.db_password }}"
   with_dict: "{{ wordpress_sites }}"
