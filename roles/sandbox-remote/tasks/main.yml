@@ -1,6 +1,6 @@
 ---
 - include_vars: "{{ playbook_dir }}/roles/mariadb/defaults/main.yml"
-  when: "{{ mariadb_backup_dir is not defined }}"
+  when: mariadb_backup_dir is not defined
 
 - name: Fetch DB files
   fetch:
