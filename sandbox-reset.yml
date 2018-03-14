@@ -21,6 +21,7 @@
   hosts: sandbox:&production_over_private
   become: yes
   become_user: "{{ web_user }}"
+  remote_user: "{{ admin_user }}"
   tasks:
     - name: Ensure target dir exists
       file:
