@@ -47,12 +47,11 @@
 - name: Create wp-config.php
   become: yes
   become_user: "{{ web_user }}"
-  command: |
-            wp core config
-            --dbname="{{ site_env.db_name }}"
-            --dbuser="{{ site_env.db_user }}"
-            --dbpass="{{ site_env.db_password }}"
-            --dbprefix="{{ site_env.db_prefix }}"
+  command: wp config create
+           --dbname="{{ site_env.db_name }}"
+           --dbuser="{{ site_env.db_user }}"
+           --dbpass="{{ site_env.db_password }}"
+           --dbprefix="{{ site_env.db_prefix }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/wp-config.php"
