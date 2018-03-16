@@ -5,6 +5,11 @@
     dest: "{{ sb_provision_repo_dest }}"
     version: "{{ sb_provision_repo_version | default('master') }}"
 
+- name: Create .vault_pass
+  template:
+    src: vault_pass.j2
+    dest: "{{ sb_provision_repo_dest }}/.vault_pass"
+
 - name: Add cron to reset every day
   become: yes
   become_user: root
