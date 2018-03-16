@@ -42,7 +42,7 @@
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/index.php"
   with_dict: "{{ wordpress_sites }}"
-  when: "{{ item.value.site_install | default(true) }} == True"
+  when: item.value.site_install | default(true)
 
 - name: Create wp-config.php
   become: yes
@@ -56,7 +56,7 @@
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/wp-config.php"
   with_dict: "{{ wordpress_sites }}"
-  when: "{{ item.value.site_install | default(true) }} == True"
+  when: item.value.site_install | default(true)
 
 - name: Install WP
   command: wp core {{ item.value.multisite.enabled | default(false) | ternary('multisite-install', 'install') }}
