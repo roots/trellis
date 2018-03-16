@@ -29,14 +29,12 @@
         path: "{{ sandbox_config.xml_paths.remote }}/"
 
     - name: "Deploy latest XML files to {{ ansible_hostname }}"
-      when: false # TODO temporary disable this task
       copy:
         src: "{{ sandbox_config.xml_paths.local }}/{{ item }}.wordpress.{{ ansible_date_time.date }}.000.xml"
         dest: "{{ sandbox_config.xml_paths.remote }}/"
       with_items: "{{ sites_to_export }}"
 
     - name: Symlink to these latest files
-      when: false # TODO temporary disable this task
       file:
         state: link
         src: "{{ sandbox_config.xml_paths.remote }}/{{ item }}.wordpress.{{ ansible_date_time.date }}.000.xml"
@@ -44,7 +42,6 @@
       with_items: "{{ sites_to_export }}"
 
     - name: Clean old XMLs # backslashes should be double escaped
-      when: false # TODO temporary disable this task
       command: "find . -regextype posix-egrep -regex '^\\./({{ sites_to_export | join( '|' ) }})\\..+\\.xml$' -mtime +5 -exec rm -f {} +"
       args:
         chdir: "{{ sandbox_config.xml_paths.remote }}/"
