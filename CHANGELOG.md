@@ -1,4 +1,6 @@
 ### HEAD
+* Add support for includes.d on all sites ([#966](https://github.com/roots/trellis/pull/966))
+* Fix `--subdomains` flag in the Install WP task ([#968](https://github.com/roots/trellis/pull/968))
 * Ensure Diffie-Hellman group is generated for Let's Encrypt ([#964](https://github.com/roots/trellis/pull/964))
 * Fix `raw_vars` feature to properly handle int values ([#959](https://github.com/roots/trellis/pull/959))
 * [BREAKING] Update Ansible default plugin paths in config files ([#958](https://github.com/roots/trellis/pull/958))
