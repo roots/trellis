@@ -20,7 +20,7 @@
 
 - name: princexml
   src: pressbooks.princexml
-  version: 1.1
+  version: 11.3
 
 - name: kindlegen
   src: softasap.sa-publishing-kindlegen
