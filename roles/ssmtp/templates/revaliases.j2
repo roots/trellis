@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+
+{% if ssmtp_revaliases is defined and ssmtp_revaliases is not none %}
+{% for item in ssmtp_revaliases %}
+{% if item.user is defined and item.user is not none and item.from is defined and item.from is not none and item.smtp_server is defined and item.smtp_server is not none %}
+{{ item.user }}:{{ item.from }}:{{ item.smtp_server }}
+{% endif %}
+{% endfor %}
+{% endif %}

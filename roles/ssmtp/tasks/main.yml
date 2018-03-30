@@ -9,3 +9,8 @@
   template:
     src: ssmtp.conf.j2
     dest: /etc/ssmtp/ssmtp.conf
+
+- name: ssmtp revaliases configuration
+  template:
+    src: revaliases.j2
+    dest: /etc/ssmtp/revaliases

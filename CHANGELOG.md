@@ -1,5 +1,6 @@
 ### HEAD
 * Vendor h5bp Nginx configs ([#973](https://github.com/roots/trellis/pull/973))
+* Add support for sSMTP revaliases configuration ([#956](https://github.com/roots/trellis/pull/956))
 * Add support for includes.d on all sites ([#966](https://github.com/roots/trellis/pull/966))
 * Fix `--subdomains` flag in the Install WP task ([#968](https://github.com/roots/trellis/pull/968))
 * Ensure Diffie-Hellman group is generated for Let's Encrypt ([#964](https://github.com/roots/trellis/pull/964))
