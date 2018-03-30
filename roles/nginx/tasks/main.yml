@@ -25,17 +25,10 @@
   notify: reload nginx
   tags: [diffie-hellman, letsencrypt, wordpress, wordpress-setup, nginx-includes, nginx-sites]
 
-- name: Grab h5bp/server-configs-nginx
-  git:
-    repo: "https://github.com/h5bp/server-configs-nginx.git"
-    dest: "{{ nginx_path }}/h5bp-server-configs"
-    version: c5c6602232e0976d9e69d69874aa84d2a2698265
-    force: yes
-
-- name: Move h5bp configs
-  command: rsync -ac --delete --info=NAME {{ nginx_path }}/h5bp-server-configs/h5bp/ {{ nginx_path }}/h5bp
-  register: h5bp_nginx_sync
-  changed_when: h5bp_nginx_sync.stdout != ''
+- name: Copy h5bp configs
+  copy:
+    src: templates/h5bp
+    dest: "{{ nginx_path }}"
   notify: reload nginx
 
 - name: Create nginx.conf
