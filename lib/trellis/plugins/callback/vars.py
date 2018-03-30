@@ -37,6 +37,9 @@ class CallbackModule(CallbackBase):
             match = next((pattern for pattern in patterns if re.match(pattern, key_string)), None)
             return AnsibleUnicode(''.join(['{% raw %}', item, '{% endraw %}'])) if not item.startswith(('{% raw', '{%raw')) and match else item
 
+        else:
+            return item
+
     def raw_vars(self, play, host, hostvars):
         if 'raw_vars' not in hostvars:
             return
