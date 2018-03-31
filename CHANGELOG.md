@@ -1,4 +1,5 @@
 ### HEAD
+* Fix path to h5bp/mime.types ([#974](https://github.com/roots/trellis/pull/974))
 * Vendor h5bp Nginx configs ([#973](https://github.com/roots/trellis/pull/973))
 * Add support for sSMTP revaliases configuration ([#956](https://github.com/roots/trellis/pull/956))
 * Add support for includes.d on all sites ([#966](https://github.com/roots/trellis/pull/966))
