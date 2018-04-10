@@ -1,0 +1,13 @@
+---
+- name: Download epubcheck
+  unarchive:
+    src: "{{ epubcheck_release_url }}"
+    dest: /tmp
+    remote_src: yes
+
+- name: Sync epubcheck into place
+  synchronize:
+    src: /tmp/{{ epubcheck_release_url[:-4] | basename }}/
+    dest: /opt/epubcheck
+    delete: yes
+  delegate_to: "{{ inventory_hostname }}"

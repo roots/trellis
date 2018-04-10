@@ -6,7 +6,6 @@ apt_package_state: present
 apt_security_package_state: latest
 apt_dev_package_state: latest
 apt_packages_custom:
-  epubcheck: "{{ apt_package_state }}"
   libxml2-utils: "{{ apt_package_state }}"
   default-jdk: "{{ apt_package_state }}"
   ghostscript: "{{ apt_package_state }}"
