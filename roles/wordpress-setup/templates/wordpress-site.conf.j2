@@ -48,7 +48,6 @@ server {
 
   {% endif -%}
   {% endblock -%}
-
   {% block multisite_rewrites -%}
   {% if item.value.multisite.enabled | default(false) -%}
   # Multisite rewrites

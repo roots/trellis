@@ -1,0 +1,5 @@
+{% extends 'roles/nginx/templates/nginx.conf.j2' %}
+
+{% block http_begin -%}
+  server_names_hash_bucket_size 128;
+{% endblock %}

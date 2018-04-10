@@ -1,0 +1,2 @@
+nginx_conf: nginx-includes/nginx.conf.child
+nginx_wordpress_site_conf: nginx-includes/wordpress-site.conf.child

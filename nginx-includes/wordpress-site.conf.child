@@ -1,0 +1,6 @@
+{% extends 'roles/wordpress-setup/templates/wordpress-site.conf.j2' %}
+
+{% block fastcgi_basic -%}
+{{ super() }}
+fastcgi_read_timeout 180s;
+{%- endblock %}

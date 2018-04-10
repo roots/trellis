@@ -1,0 +1,63 @@
+- name: Network activate Pressbooks
+  command: wp plugin activate pressbooks --network
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+  become: true
+  become_user: "{{ web_user }}"
+- name: List themes
+  command: wp theme list
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+  become: true
+  become_user: "{{ web_user }}"
+- name: Enable default themes
+  include_tasks: enable-theme.yml
+  with_items:
+    - pressbooks-book
+    - pressbooks-publisher
+    - pressbooks-clarke
+    - pressbooks-donham
+  loop_control:
+    loop_var: theme
+- name: Allow new book registration
+  command: wp network meta update 1 registration blog
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+  become: true
+  become_user: "{{ web_user }}"
+- name: Allow book-level plugin administration
+  command: wp network meta update 1 menu_items '{"plugins":"1"}' --format=json
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+  become: true
+  become_user: "{{ web_user }}"
+- name: Update network title
+  command: wp network meta update 1 site_name Pressbooks
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  with_dict: "{{ wordpress_sites }}"
+  become: true
+  become_user: "{{ web_user }}"
+- name: Install Subversion
+  apt:
+    name: subversion
+    state: present
+- name: Create unit testing database
+  mysql_db:
+    name: pressbooks_tests
+    state: present
+- name: Create/assign unit testing database user to db and grant permissions
+  mysql_user:
+    name: pressbooks_test
+    password: ''
+    append_privs: yes
+    priv: "pressbooks_tests.*:ALL"
+    state: present
+    login_host: "{{ site_env.db_host }}"
+    login_user: "{{ mysql_root_user }}"
+    login_password: "{{ mysql_root_password }}"
+  with_dict: "{{ wordpress_sites }}"

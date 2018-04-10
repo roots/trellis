@@ -17,3 +17,11 @@
 - name: mailhog
   src: geerlingguy.mailhog
   version: 2.1.3
+
+- name: princexml
+  src: pressbooks.princexml
+  version: 11.3
+
+- name: kindlegen
+  src: softasap.sa-publishing-kindlegen
+  version: 0f31e09

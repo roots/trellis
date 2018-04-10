@@ -36,6 +36,9 @@
     - { role: memcached, tags: [memcached] }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
+    - { role: princexml, tags: [princexml] }
+    - { role: kindlegen, kindlegen_version: "2.9", tags: [kindlegen] }
+    - { role: saxon-he, tags: [saxon-he] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: letsencrypt, tags: [letsencrypt], when: sites_using_letsencrypt | count }
