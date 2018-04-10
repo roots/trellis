@@ -107,6 +107,7 @@ server {
   {% endblock -%}
 
   {% block includes_d -%}
+  include includes.d/all/*.conf;
   include includes.d/{{ item.key }}/*.conf;
 
   {% endblock -%}

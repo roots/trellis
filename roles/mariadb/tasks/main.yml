@@ -1,4 +1,15 @@
 ---
+- block:
+  - name: Add MariaDB APT key
+    apt_key:
+      keyserver: "{{ mariadb_keyserver }}"
+      id: "{{ mariadb_keyserver_id }}"
+
+  - name: Add MariaDB PPA
+    apt_repository:
+      repo: "{{ mariadb_ppa }}"
+      update_cache: yes
+
 - name: Install MySQL client
   apt:
     name: "{{ mariadb_client_package }}"
