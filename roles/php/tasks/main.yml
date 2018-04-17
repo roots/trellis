@@ -1,37 +1,38 @@
 ---
-- name: Add PHP 7.1 PPA
+- name: Add PHP 7.2 PPA
   apt_repository:
     repo: "ppa:ondrej/php"
     update_cache: yes
 
-- name: Install PHP 7.1
+- name: Install PHP 7.2
   apt:
-    name: "{{ item }}"
-    state: present
-    force: yes
-  with_items:
-  - php7.1-cli
-  - php7.1-common
-  - php7.1-curl
-  - php7.1-dev
-  - php7.1-fpm
-  - php7.1-gd
-  - php7.1-mbstring
-  - php7.1-mcrypt
-  - php7.1-mysql
-  - php7.1-opcache
-  - php7.1-xml
-  - php7.1-xmlrpc
-  - php7.1-zip
+    name: "{{ item.key }}"
+    state: "{{ item.value }}"
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  with_dict: "{{ php_extensions }}"
 
-- name: Start php7.1-fpm service
+- name: Start php7.2-fpm service
   service:
-    name: php7.1-fpm
+    name: php7.2-fpm
     state: started
     enabled: true
+
+- name: Check for existing php7.1-fpm service
+  stat:
+    path: /etc/init.d/php7.1-fpm
+  register: php71_status
+
+- name: Stop php7.1-fpm service if it exists
+  service:
+    name: php7.1-fpm
+    state: stopped
+    enabled: false
+  register: service_stopped
+  when: php71_status.stat.exists
+  notify: reload php-fpm
 
 - name: PHP configuration file
   template:
     src: php.ini.j2
-    dest: /etc/php/7.1/fpm/php.ini
+    dest: /etc/php/7.2/fpm/php.ini
   notify: reload php-fpm

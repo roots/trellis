@@ -1,11 +1,19 @@
 ---
-- include: "{{ deploy_before | default('../hooks/example.yml') }}"
+- include_tasks: "{{ include_path }}"
+  with_items: "{{ deploy_before | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-before
-- include: initialize.yml
-- include: update.yml
-- include: prepare.yml
-- include: build.yml
-- include: share.yml
-- include: finalize.yml
-- include: "{{ deploy_after | default('../hooks/example.yml') }}"
+
+- import_tasks: initialize.yml
+- import_tasks: update.yml
+- import_tasks: prepare.yml
+- import_tasks: build.yml
+- import_tasks: share.yml
+- import_tasks: finalize.yml
+
+- include_tasks: "{{ include_path }}"
+  with_items: "{{ deploy_after | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-after

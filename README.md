@@ -14,7 +14,7 @@ Trellis will configure a server with the following and more:
 
 * Ubuntu 16.04 Xenial LTS
 * Nginx (with optional FastCGI micro-caching)
-* PHP 7.1
+* PHP 7.2
 * MariaDB (a drop-in MySQL replacement)
 * SSL support (scores an A+ on the [Qualys SSL Labs Test](https://www.ssllabs.com/ssltest/))
 * Let's Encrypt integration for free SSL certificates
@@ -27,15 +27,16 @@ Trellis will configure a server with the following and more:
 * Fail2ban
 * ferm
 
+## Documentation
+
+Full documentation is available at [https://roots.io/trellis/docs/](https://roots.io/trellis/docs/).
+
 ## Requirements
 
 Make sure all dependencies have been installed before moving on:
 
-* [Ansible](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-via-pip) >= 2.2
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) >= 4.3.10
-* [Vagrant](https://www.vagrantup.com/downloads.html) >= 1.8.5
-* [vagrant-bindfs](https://github.com/gael-ian/vagrant-bindfs#installation) >= 0.3.1 (Windows users may skip this)
-* [vagrant-hostmanager](https://github.com/smdahlen/vagrant-hostmanager#installation)
+* [Vagrant](https://www.vagrantup.com/downloads.html) >= 2.0.1
 
 ## Installation
 
@@ -58,10 +59,6 @@ See a complete working example in the [roots-example-project.com repo](https://g
 
 Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) for slightly different installation instructions. VirtualBox is known to have poor performance in Windows — use VMware or [see some possible solutions](https://discourse.roots.io/t/virtualbox-performance-in-windows/3932).
 
-## Documentation
-
-Trellis documentation is available at [https://roots.io/trellis/docs/](https://roots.io/trellis/docs/).
-
 ## Local development setup
 
 1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`
@@ -70,6 +67,8 @@ Trellis documentation is available at [https://roots.io/trellis/docs/](https://r
 [Read the local development docs](https://roots.io/trellis/docs/local-development-setup/) for more information.
 
 ## Remote server setup (staging/production)
+
+For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://roots.io/trellis/docs/remote-server-setup/#requirements) for more information.
 
 A base Ubuntu 16.04 server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
 
@@ -92,6 +91,12 @@ A base Ubuntu 16.04 server is required for setting up remote servers. OS X users
 ## Contributing
 
 Contributions are welcome from everyone. We have [contributing guidelines](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md) to help you get started.
+
+## Gold sponsors
+
+Help support our open-source development efforts by [contributing to Trellis on OpenCollective](https://opencollective.com/trellis).
+
+<a href="https://kinsta.com/?kaid=OFDHAJIXUDIV"><img src="https://roots.io/app/uploads/kinsta.svg" alt="Kinsta" width="200" height="150"></a> <a href="https://www.harnessup.com/"><img src="https://roots.io/app/uploads/harness-software.svg" alt="Harness Software" width="200" height="150"></a> <a href="https://k-m.com/"><img src="https://roots.io/app/uploads/km-digital.svg" alt="KM Digital" width="200" height="150"></a> <a href="https://themeisle.com/"><img src="https://roots.io/app/uploads/sponsor-themeisle.svg" alt="ThemeIsle" width="200" height="150"></a>
 
 ## Community
 

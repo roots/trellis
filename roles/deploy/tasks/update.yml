@@ -1,12 +1,15 @@
 ---
-- include: "{{ deploy_update_before | default('../hooks/example.yml') }}"
+- include_tasks: "{{ include_path }}"
+  with_items: "{{ deploy_update_before | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-update-before
 
 - name: Add known_hosts
   known_hosts:
     name: "{{ item.name }}"
     key: "{{ item.key | default(omit) }}"
-    path: "{{ item.path | default('/home/' + ansible_user + '/.ssh/known_hosts') }}"
+    path: "{{ item.path | default(omit) }}"
     state: "{{ item.state | default('present') }}"
   with_items: "{{ known_hosts | default([]) }}"
 
@@ -34,7 +37,7 @@
     repo: "{{ project_git_repo }}"
     dest: "{{ project_source_path }}"
     version: "{{ project_version }}"
-    accept_hostkey: "{{ repo_accept_hostkey | default(true) }}"
+    accept_hostkey: "{{ project.repo_accept_hostkey | default(repo_accept_hostkey | default(true)) }}"
   ignore_errors: true
   no_log: true
   register: git_clone
@@ -48,5 +51,8 @@
       > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
   when: git_clone | failed
 
-- include: "{{ deploy_update_after | default('../hooks/example.yml') }}"
+- include_tasks: "{{ include_path }}"
+  with_items: "{{ deploy_update_after | default([]) }}"
+  loop_control:
+    loop_var: include_path
   tags: deploy-update-after

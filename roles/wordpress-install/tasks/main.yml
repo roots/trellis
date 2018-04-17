@@ -1,5 +1,5 @@
 ---
-- include: directories.yml
+- import_tasks: directories.yml
   tags: wordpress-install-directories
 
 - name: Create .env file
@@ -14,14 +14,15 @@
   command: rsync -ac --info=NAME /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/.env
   with_dict: "{{ wordpress_sites }}"
   register: env_file
-  changed_when: env_file.stdout == "{{ item.key }}.env"
+  changed_when: env_file.stdout == item.key + '.env'
 
 - name: Add known_hosts
   known_hosts:
     name: "{{ item.name }}"
     key: "{{ item.key | default(omit) }}"
-    path: "{{ item.path | default('/home/' + ansible_user + '/.ssh/known_hosts') }}"
+    path: "{{ item.path | default(omit) }}"
     state: "{{ item.state | default('present') }}"
+  become: no
   with_items: "{{ known_hosts | default([]) }}"
 
 - name: Setup packagist.com authentication
@@ -47,7 +48,9 @@
            --url="{{ site_env.wp_home }}"
            {% if item.value.multisite.enabled | default(false) %}
            --base="{{ item.value.multisite.base_path | default('/') }}"
-           --subdomains="{{ item.value.multisite.subdomains | default('false') }}"
+           {% if item.value.multisite.subdomains | default('false') %}
+           --subdomains
+           {% endif %}
            {% endif %}
            --title="{{ item.value.site_title | default(item.key) }}"
            --admin_user="{{ item.value.admin_user | default('admin') }}"

@@ -4,3 +4,11 @@ memcached_fs_file_max: 756024
 memcached_listen_ip: 127.0.0.1
 memcached_max_conn: 1024
 memcached_port: 11211
+memcached_port_udp: 0
+
+memcached_packages_default:
+  memcached: "{{ apt_package_state }}"
+  php-memcached: "{{ apt_package_state }}"
+
+memcached_packages_custom: {}
+memcached_packages: "{{ memcached_packages_default | combine(memcached_packages_custom) }}"

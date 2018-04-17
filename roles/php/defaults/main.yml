@@ -1,6 +1,23 @@
 disable_default_pool: true
 memcached_sessions: false
 
+php_extensions_default:
+  php7.2-cli: "{{ apt_package_state }}"
+  php7.2-common: "{{ apt_package_state }}"
+  php7.2-curl: "{{ apt_package_state }}"
+  php7.2-dev: "{{ apt_package_state }}"
+  php7.2-fpm: "{{ apt_package_state }}"
+  php7.2-gd: "{{ apt_package_state }}"
+  php7.2-mbstring: "{{ apt_package_state }}"
+  php7.2-mysql: "{{ apt_package_state }}"
+  php7.2-opcache: "{{ apt_package_state }}"
+  php7.2-xml: "{{ apt_package_state }}"
+  php7.2-xmlrpc: "{{ apt_package_state }}"
+  php7.2-zip: "{{ apt_package_state }}"
+
+php_extensions_custom: {}
+php_extensions: "{{ php_extensions_default | combine(php_extensions_custom) }}"
+
 php_error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
 php_display_errors: 'Off'
 php_display_startup_errors: 'Off'
@@ -12,6 +29,8 @@ php_mysqlnd_collect_memory_statistics: 'Off'
 php_post_max_size: 25M
 php_sendmail_path: /usr/sbin/ssmtp -t
 php_session_save_path: /tmp
+php_session_cookie_httponly: 'On'
+php_session_cookie_secure: 'Off'
 php_upload_max_filesize: 25M
 php_track_errors: 'Off'
 php_timezone: '{{ ntp_timezone }}'

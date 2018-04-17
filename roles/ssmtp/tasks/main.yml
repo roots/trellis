@@ -1,12 +1,16 @@
 ---
 - name: Install ssmtp
   apt:
-    name: ssmtp
-    state: present
-    update_cache: true
+    name: "{{ ssmtp_package }}"
+    state: "{{ ssmtp_package_state | default(apt_package_state) }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - name: ssmtp configuration
   template:
     src: ssmtp.conf.j2
     dest: /etc/ssmtp/ssmtp.conf
+
+- name: ssmtp revaliases configuration
+  template:
+    src: revaliases.j2
+    dest: /etc/ssmtp/revaliases

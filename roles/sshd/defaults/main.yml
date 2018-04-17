@@ -90,3 +90,10 @@ ssh_send_env: []
 
 ssh_strict_host_key_checking: ask
 ssh_use_roaming: false
+
+sshd_packages_default:
+  openssh-server: "{{ apt_security_package_state }}"
+  openssh-client: "{{ apt_security_package_state }}"
+
+sshd_packages_custom: {}
+sshd_packages: "{{ sshd_packages_default | combine(sshd_packages_custom) }}"
