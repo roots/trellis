@@ -42,5 +42,4 @@
     - { role: letsencrypt, tags: [letsencrypt], when: sites_using_letsencrypt | count }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup, letsencrypt] }
     - { role: wordpress-install, tags: [wordpress, wordpress-install] }
-    - { role: static-sites-setup, tags: [static-sites-setup], when: env != "sandbox" }
     - { role: sandbox-setup, tags: [sandbox, sandbox-setup], when: env == "sandbox" }

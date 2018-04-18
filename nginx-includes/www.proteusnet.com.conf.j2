@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+
+server {
+  listen [::]:80;
+  listen 80;
+  server_name www.proteusnet.com proteusnet.com;
+
+  return 301 https://www.proteusthemes.com/;
+}

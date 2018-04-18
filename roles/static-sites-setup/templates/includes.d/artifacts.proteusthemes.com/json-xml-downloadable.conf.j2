@@ -1,9 +1,0 @@
-# {{ ansible_managed }}
-
-location ~* \.(xml|json) {
-  types {
-    application/octet-stream .json;
-    application/octet-stream .xml;
-  }
-  default_type application/octet-stream;
-}

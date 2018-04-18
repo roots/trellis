@@ -1,37 +1,9 @@
-static_sites:
-  apps.proteusthemes.com:
-    site_hosts:
-      - apps.proteusthemes.com
-    ssl:
-      enabled: true
-      provider: self-signed
-    cache:
-      enabled: false
-      duration: 30s
-    env: production
-  artifacts.proteusthemes.com:
-    site_hosts:
-      - artifacts.proteusthemes.com
-    ssl:
-      enabled: false
-    cache:
-      enabled: false
-    php: false
-    env: production
-  html-demo.proteusthemes.com:
-    site_hosts:
-      - html-demo.proteusthemes.com
-    ssl:
-      enabled: false
-    cache:
-      enabled: false
-    env: production
-  www.proteusnet.com:
-    site_hosts:
-      - www.proteusnet.com
-      - mg.proteusnet.com
-    ssl:
-      enabled: false
-    cache:
-      enabled: false
-    env: production
+# https://roots.io/trellis/docs/nginx-includes/#sites-templates
+
+nginx_sites_confs:
+  - src: no-default.conf.j2
+  - src: ssl.no-default.conf.j2
+    enabled: "{{ sites_use_ssl }}"
+  - src: nginx-includes/artifacts.proteusthemes.com.conf.j2
+  - src: nginx-includes/html-demo.proteusthemes.com.conf.j2
+  - src: nginx-includes/www.proteusnet.com.conf.j2

@@ -54,11 +54,6 @@
     state: absent
   notify: reload nginx
 
-- name: Create base static site config
-  template:
-    src: static-site.conf.j2
-    dest: "{{ nginx_path }}/static-site.conf"
-
 - name: Create web root
   file:
     path: "{{ www_root }}"
