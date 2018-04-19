@@ -28,6 +28,8 @@ wordpress_sites:
   www.proteusthemes.com:
     site_hosts:
       - canonical: www.proteusthemes.com
+        redirects:
+          - proteusthemes.com
     site_title: ProteusThemes
     admin_user: "{{ vault_wordpress_sites['www.proteusthemes.com'].admin_user }}"
     admin_password: "{{ vault_wordpress_sites['www.proteusthemes.com'].admin_password }}"
