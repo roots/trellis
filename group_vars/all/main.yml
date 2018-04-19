@@ -16,6 +16,8 @@ scripts_root: "{{ www_root }}/scripts"
 mariadb_mirror: ams2.mirrors.digitalocean.com
 mariadb_version: "10.1"
 
+h5bp_extra_security_enabled: false
+
 apt_packages_custom:
   zip: "{{ apt_package_state }}"
   unzip: "{{ apt_package_state }}"
