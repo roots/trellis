@@ -4,7 +4,7 @@
 [sandbox]
 188.166.41.120
 10.133.41.208
-10.133.22.156
+10.133.49.216
 localhost
 
 [web]
@@ -15,7 +15,7 @@ localhost
 
 # production over private datacenter network
 [production_over_private]
-10.133.22.156
+10.133.49.216
 
 [local]
 localhost
