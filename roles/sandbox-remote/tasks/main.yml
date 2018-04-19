@@ -1,31 +1,34 @@
 ---
 - include_vars: "{{ playbook_dir }}/roles/mariadb/defaults/main.yml"
-  when: "{{ mariadb_backup_dir is not defined }}"
+  when: mariadb_backup_dir is not defined
 
 - name: Fetch DB files
   fetch:
-    src: "{{ mariadb_backup_dir }}/{{ item }}-latest.sql.gz"
-    dest: "/tmp/{{ item }}.sql.gz"
+    src: "{{ mariadb_backup_dir }}/{{ sandbox_config.shared_db_name }}-latest.sql.gz"
+    dest: "/tmp/{{ sandbox_config.shared_db_name }}.sql.gz"
     fail_on_missing: yes
     flat: yes
-  with_items: "{{ shared_dbs_names }}"
 
 - name: Rsync WP (without uploads)
   synchronize:
-    src:  "{{ www_root }}/{{ src_domain }}/"
+    archive: yes
+    src: "{{ www_root }}/{{ sandbox_config.source_site_key }}/"
     dest: "{{ www_root }}/{{ item.key }}/"
     mode: pull
+    delete: yes
     group: no
     owner: no
-    rsync_opts: "{{ wp_rsync_opts.root }}"
-  with_dict: "{{ sb_wp_sites }}"
+    rsync_opts: "{{ sandbox_config.wp_rsync_opts.root }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Rsync WP uploads
   synchronize:
-    src:  "{{ www_root }}/{{ src_domain }}/wp-content/uploads/"
+    archive: yes
+    src: "{{ www_root }}/{{ sandbox_config.source_site_key }}/wp-content/uploads/"
     dest: "{{ www_root }}/{{ item.key }}/wp-content/uploads/"
     mode: pull
+    delete: yes
     group: no
     owner: no
-    rsync_opts: "{{ wp_rsync_opts.uploads }}"
-  with_dict: "{{ sb_wp_sites }}"
+    rsync_opts: "{{ sandbox_config.wp_rsync_opts.uploads }}"
+  with_dict: "{{ wordpress_sites }}"

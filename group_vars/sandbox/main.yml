@@ -1,1 +1,2 @@
 mysql_root_password: "{{ vault_mysql_root_password }}"
+sb_provision_repo_version: "pt-ops-trellis-v1rc2"

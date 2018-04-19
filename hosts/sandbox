@@ -2,7 +2,20 @@
 # List each machine only once per [group], even if it will host multiple sites.
 
 [sandbox]
-178.62.227.227
+188.166.41.120
+10.133.41.208
+10.133.22.156
+localhost
 
 [web]
-178.62.227.227
+188.166.41.120
+
+[private]
+10.133.41.208
+
+# production over private datacenter network
+[production_over_private]
+10.133.22.156
+
+[local]
+localhost

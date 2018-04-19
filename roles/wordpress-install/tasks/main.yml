@@ -1,5 +1,5 @@
 ---
-- include: directories.yml
+- import_tasks: directories.yml
   tags: wordpress-install-directories
 
 - name: Create .env file
@@ -11,12 +11,28 @@
   with_dict: "{{ wordpress_sites }}"
 
 - name: Copy .env file into web root
-  become: yes
-  become_user: "{{ web_user }}"
   command: rsync -ac --info=NAME /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/.env
   with_dict: "{{ wordpress_sites }}"
   register: env_file
-  changed_when: env_file.stdout == "{{ item.key }}.env"
+  changed_when: env_file.stdout == item.key + '.env'
+
+- name: Add known_hosts
+  known_hosts:
+    name: "{{ item.name }}"
+    key: "{{ item.key | default(omit) }}"
+    path: "{{ item.path | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  become: no
+  with_items: "{{ known_hosts | default([]) }}"
+
+- name: Setup packagist.com authentication
+  composer:
+    command: config
+    arguments: --auth http-basic.repo.packagist.com token {{ item.value.packagist_token }}
+    working_dir: "{{ www_root }}/{{ item.key }}/"
+  no_log: true
+  when: item.value.packagist_token is defined
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Download WP Core
   become: yes
@@ -26,54 +42,49 @@
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/index.php"
   with_dict: "{{ wordpress_sites }}"
-  when: "{{ item.value.site_install | default(true) }} == True"
+  when: item.value.site_install | default(true)
 
 - name: Create wp-config.php
   become: yes
   become_user: "{{ web_user }}"
-  command: |
-            wp core config
-            --dbname="{{ site_env.db_name }}"
-            --dbuser="{{ site_env.db_user }}"
-            --dbpass="{{ site_env.db_password }}"
-            --dbprefix="{{ site_env.db_prefix }}"
+  command: wp config create
+           --dbname="{{ site_env.db_name }}"
+           --dbuser="{{ site_env.db_user }}"
+           --dbpass="{{ site_env.db_password }}"
+           --dbprefix="{{ site_env.db_prefix }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/"
     creates: "{{ www_root }}/{{ item.key }}/wp-config.php"
   with_dict: "{{ wordpress_sites }}"
-  when: "{{ item.value.site_install | default(true) }} == True"
+  when: item.value.site_install | default(true)
 
 - name: Install WP
-  command: wp core install
+  command: wp core {{ item.value.multisite.enabled | default(false) | ternary('multisite-install', 'install') }}
            --allow-root
            --url="{{ site_env.wp_home }}"
-           --title="{{ item.value.site_title | default(item.key) }}"
-           --admin_user="{{ item.value.admin_user | default('admin') }}"
-           --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
-           --admin_email="{{ item.value.admin_email }}"
-  args:
-    chdir: "{{ www_root }}/{{ item.key }}/"
-  register: wp_install_results
-  with_dict: "{{ wordpress_sites }}"
-  when: item.value.site_install | default(true) and not item.value.multisite.enabled | default(false)
-  changed_when: "'WordPress is already installed.' not in wp_install_results.stdout"
-
-- name: Install WP Multisite
-  command: wp core multisite-install
-           --allow-root
-           --url="{{ site_env.wp_home }}"
+           {% if item.value.multisite.enabled | default(false) %}
            --base="{{ item.value.multisite.base_path | default('/') }}"
-           --subdomains="{{ item.value.multisite.subdomains | default('false') }}"
+           {% if item.value.multisite.subdomains | default('false') %}
+           --subdomains
+           {% endif %}
+           {% endif %}
            --title="{{ item.value.site_title | default(item.key) }}"
            --admin_user="{{ item.value.admin_user | default('admin') }}"
            --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
   args:
     chdir: "{{ www_root }}/{{ item.key }}/"
-  register: wp_install_results
+  register: wp_install
   with_dict: "{{ wordpress_sites }}"
-  when: item.value.site_install | default(true) and item.value.multisite.enabled | default(false)
-  changed_when: "'The network already exists.' not in wp_install_results.stdout"
+  when: item.value.site_install | default(true)
+  changed_when: "'WordPress is already installed.' not in wp_install.stdout and 'The network already exists.' not in wp_install.stdout"
+
+- name: Setup Permalink Structure
+  command: wp rewrite structure {{ item.item.value.initial_permalink_structure | default("/%postname%/") }} --allow-root
+  args:
+    chdir: "{{ www_root }}/{{ item.item.key }}/"
+  with_items: "{{ wp_install.results }}"
+  when: item | changed
 
 - name: Update WP Multisite Home URL
   command: wp option update home {{ site_env.wp_home }} --allow-root

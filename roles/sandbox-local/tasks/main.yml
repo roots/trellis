@@ -1,64 +1,58 @@
 ---
 - name: Remove old DB file
   file:
-    path: "/tmp/{{ item }}.sql"
+    path: "/tmp/{{ sandbox_config.shared_db_name }}.sql"
     state: absent
-  with_items: "{{ shared_dbs_names }}"
 
 - name: Unzip DB
-  command: "gunzip {{ item }}.sql.gz"
+  command: "gunzip {{ sandbox_config.shared_db_name }}.sql.gz"
   args:
     chdir: /tmp/
-  with_items: "{{ shared_dbs_names }}"
 
-- name: Replace emails
-  replace:
-    dest: "/tmp/{{ item }}.sql"
-    regexp: "({{ wp_emails.from | join( '|' ) }})"
-    replace: "{{ wp_emails.to }}"
-    backup: yes
-  with_items: "{{ shared_dbs_names }}"
+- name: Replace emails using sed
+  command: >
+    sed -i.orig -r -e "s/({{ wp_emails.from | join( '|' ) }})/{{ wp_emails.to }}/g" /tmp/{{ sandbox_config.shared_db_name }}.sql
 
 - name: Drop old DBs
   mysql_db:
-    name: "{{ item.value.env.db_name }}"
+    name: "{{ site_env.db_name }}"
     state: absent
-    login_host: "{{ item.value.env.db_host | default('localhost') }}"
-    login_user: "{{ item.value.env.db_user }}"
-    login_password: "{{ item.value.env.db_password }}"
-  with_dict: "{{ sb_wp_sites }}"
+    login_host: "{{ site_env.db_host }}"
+    login_user: "{{ site_env.db_user }}"
+    login_password: "{{ site_env.db_password }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Create new DBs
   mysql_db:
-    name: "{{ item.value.env.db_name }}"
+    name: "{{ site_env.db_name }}"
     state: present
-    login_host: "{{ item.value.env.db_host | default('localhost') }}"
-    login_user: "{{ item.value.env.db_user }}"
-    login_password: "{{ item.value.env.db_password }}"
-  with_dict: "{{ sb_wp_sites }}"
+    login_host: "{{ site_env.db_host }}"
+    login_user: "{{ site_env.db_user }}"
+    login_password: "{{ site_env.db_password }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Import SQL to fresh DBs
   mysql_db:
-    name: "{{ item.value.env.db_name }}"
+    name: "{{ site_env.db_name }}"
     state: import
-    target: /tmp/{{ shared_dbs_names[0] }}.sql
-  with_dict: "{{ sb_wp_sites }}"
+    target: /tmp/{{ sandbox_config.shared_db_name }}.sql
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Search/replace domain - table wp_blogs
   command: >
-    mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}blogs set domain='{{ item.key }}' where domain='{{ src_domain }}';"
-  with_dict: "{{ sb_wp_sites }}"
+    mysql -u {{ site_env.db_user }} -p{{ site_env.db_password }} -e "use {{ site_env.db_name }}; update {{ site_env.db_prefix }}blogs set domain='{{ item.key }}' where domain='{{ sandbox_config.source_site_key }}';"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: Search/replace domain - table wp_site
   command: >
-    mysql -u {{ item.value.env.db_user }} -p{{ item.value.env.db_password }} -e "use {{ item.value.env.db_name }}; update {{ item.value.env.db_prefix }}site set domain='{{ item.key }}' where domain='{{ src_domain }}';"
-  with_dict: "{{ sb_wp_sites }}"
+    mysql -u {{ site_env.db_user }} -p{{ site_env.db_password }} -e "use {{ site_env.db_name }}; update {{ site_env.db_prefix }}site set domain='{{ item.key }}' where domain='{{ sandbox_config.source_site_key }}';"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: WP search-replace for the URLs
-  command: "wp search-replace '{{ src_domain }}' '{{ item.key }}' --all-tables --allow-root"
+  command: "wp search-replace '{{ sandbox_config.source_site_key }}' '{{ item.key }}' --all-tables --allow-root"
   args:
     chdir: "{{ www_root }}/{{ item.key }}"
-  with_dict: "{{ sb_wp_sites }}"
+  with_dict: "{{ wordpress_sites }}"
 
 - name: WP search-replace for the other strings only in xml-io
   become: yes
@@ -69,24 +63,18 @@
   with_items: "{{ strings_to_replace }}"
 
 - name: Get list of all user IDs
-  command: wp user list --network --format=csv --fields=ID --allow-root
+  command: wp user list --network --format=csv --field=ID --allow-root
   args:
-    chdir: "{{ www_root }}/{{ export_domain }}"
+    chdir: "{{ www_root }}/{{ sandbox_config.export_site_key }}"
   register: wp_user_ids
 
 - name: Change all user passwords on xml-io
-  command: "wp user update {{ item }} --user_pass='{{ dummy_pass }}' --allow-root"
+  command: "wp user update {{ item[0] }} --user_pass='{{ vault_wordpress_sites[item[1]].admin_password }}' --allow-root"
   args:
-    chdir: "{{ www_root }}/{{ export_domain }}"
-  with_items: "{{ wp_user_ids.stdout_lines }}"
-  when: item != 'ID'
-
-- name: Change all user passwords on sandbox
-  command: "wp user update {{ item }} --user_pass='{{ dummy_pass }}' --allow-root"
-  args:
-    chdir: "{{ www_root }}/sandbox.proteusthemes.com"
-  with_items: "{{ wp_user_ids.stdout_lines }}"
-  when: item != 'ID'
+    chdir: "{{ www_root }}/{{ item[1] }}"
+  with_nested:
+    - "{{ wp_user_ids.stdout_lines }}"
+    - [ 'xml-io.proteusthemes.com', 'sandbox.proteusthemes.com' ]
 
 - include: clean-db.yml
   vars:
@@ -94,22 +82,22 @@
 
 - name: Clean all old XML files within exports directory
   file:
-    path: "{{ xml_paths.local }}"
+    path: "{{ sandbox_config.xml_paths.local }}"
     state: absent
 
-- name: "Ensure {{ xml_paths.local }}/ is a directory"
+- name: "Ensure {{ sandbox_config.xml_paths.local }}/ is a directory"
   file:
-    path: "{{ xml_paths.local }}/"
+    path: "{{ sandbox_config.xml_paths.local }}/"
     state: directory
 
 - name: Export XML files
-  command: "wp export --dir={{ xml_paths.local }}/ --url='{{ export_domain }}/{{ item }}' --allow-root"
+  command: "wp export --dir={{ sandbox_config.xml_paths.local }}/ --url='{{ sandbox_config.export_site_key }}/{{ item }}' --allow-root"
   args:
-    chdir: "{{ www_root }}/{{ export_domain }}"
+    chdir: "{{ www_root }}/{{ sandbox_config.export_site_key }}"
   with_items: "{{ sites_to_export }}"
 
 - name: Rename XMLs that are not properly named when exported
   command: "mv {{ item.value }}.wordpress.{{ ansible_date_time.date }}.000.xml {{ item.key }}.wordpress.{{ ansible_date_time.date }}.000.xml"
   args:
-    chdir: "{{ xml_paths.local }}/"
+    chdir: "{{ sandbox_config.xml_paths.local }}/"
   with_dict: "{{ xmls_to_rename }}"

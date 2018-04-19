@@ -1,14 +1,14 @@
 ---
 - name: Add Nginx PPA
   apt_repository:
-    repo: "ppa:nginx/development"
+    repo: "{{ nginx_ppa }}"
     update_cache: yes
 
 - name: Install Nginx
   apt:
-    name: nginx
-    state: present
-    force: yes
+    name: "{{ nginx_package }}"
+    state: "{{ nginx_package_state | default(apt_package_state) }}"
+    cache_valid_time: "{{ apt_cache_valid_time }}"
 
 - name: Create SSL directory
   file:
@@ -21,26 +21,29 @@
   args:
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
+  when: sites_use_ssl
   notify: reload nginx
-  tags: [diffie-hellman]
+  tags: [diffie-hellman, letsencrypt, wordpress, wordpress-setup, nginx-includes, nginx-sites]
 
 - name: Grab h5bp/server-configs-nginx
   git:
     repo: "https://github.com/h5bp/server-configs-nginx.git"
     dest: "{{ nginx_path }}/h5bp-server-configs"
-    version: 82181a672a7c26f9bc8744fead80318d8a2520b1
+    version: c5c6602232e0976d9e69d69874aa84d2a2698265
     force: yes
 
 - name: Move h5bp configs
-  command: cp -R {{ nginx_path }}/h5bp-server-configs/h5bp {{ nginx_path }}/h5bp
-  args:
-    creates: "{{ nginx_path }}/h5bp/"
+  command: rsync -ac --delete --info=NAME {{ nginx_path }}/h5bp-server-configs/h5bp/ {{ nginx_path }}/h5bp
+  register: h5bp_nginx_sync
+  changed_when: h5bp_nginx_sync.stdout != ''
+  notify: reload nginx
 
 - name: Create nginx.conf
   template:
-    src: nginx.conf.j2
+    src: "{{ nginx_conf }}"
     dest: "{{ nginx_path }}/nginx.conf"
   notify: reload nginx
+  tags: nginx-includes
 
 - include: cloudflare.yml
   when: env != 'development'
@@ -51,32 +54,6 @@
     state: absent
   notify: reload nginx
 
-- name: Enable better default site to drop unknown requests
-  command: cp {{ nginx_path }}/h5bp-server-configs/sites-available/no-default {{ nginx_path }}/sites-enabled/no-default.conf
-  args:
-    creates: "{{ nginx_path }}/sites-enabled/no-default.conf"
-  notify: reload nginx
-
-- name: Create base WordPress config
-  template:
-    src: wordpress.conf.j2
-    dest: "{{ nginx_path }}/wordpress.conf"
-
-- name: Create base WordPress subdirectory Multisite config
-  template:
-    src: wordpress_multisite_subdirectories.conf.j2
-    dest: "{{ nginx_path }}/wordpress_multisite_subdirectories.conf"
-
-- name: Create WordPress config for variable $cache_uri
-  template:
-    src: set-cache-uri.conf.j2
-    dest: "{{ nginx_path }}/set-cache-uri.conf"
-
-- name: Create base static site config
-  template:
-    src: static-site.conf.j2
-    dest: "{{ nginx_path }}/static-site.conf"
-
 - name: Create web root
   file:
     path: "{{ www_root }}"
@@ -84,6 +61,3 @@
     group: "{{ web_group }}"
     mode: "u+rwx,g+rwxs,o-w" # http://brunogirin.blogspot.si/2010/03/shared-folders-in-ubuntu-with-setgid.html
     state: directory
-
-- name: Set default ACL on web root to be group writeable
-  command: "setfacl -d -m u::rwx,g::rwx,o::r-x {{ www_root }}"

@@ -4,7 +4,7 @@
 wordpress_sites:
   demo.proteusthemes.com:
     site_hosts:
-      - demo.proteusthemes.test
+      - canonical: demo.proteusthemes.test
     local_path: ../www/demo.proteusthemes.com # path targeting local Bedrock site directory (relative to Ansible root)
     site_title: ProteusThemes
     admin_user: proteusnet
@@ -27,7 +27,7 @@ wordpress_sites:
       db_prefix: wpsites_
   www.proteusthemes.com:
     site_hosts:
-      - www.proteusthemes.test
+      - canonical: www.proteusthemes.test
     local_path: ../www/www.proteusthemes.com
     site_title: ProteusThemes
     admin_user: proteusnet

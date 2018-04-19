@@ -1,15 +1,25 @@
 ---
-- include: variable-check.yml
+- import_playbook: variable-check.yml
   vars:
     playbook: server.yml
 
-- name: Determine Remote User
+- name: Test Connection and Determine Remote User
   hosts: web:&{{ env }}
   gather_facts: false
   roles:
-    - { role: remote-user, tags: [remote-user, always] }
+    - { role: connection, tags: [connection, always] }
 
-- name: WordPress Server - Install LEMP Stack with PHP 7.0 and MariaDB MySQL
+- name: Install prerequisites
+  hosts: web:&{{ env }}
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Install Python 2.x
+      raw: which python || sudo apt-get update && sudo apt-get install -qq -y python-simplejson
+      register: python_check
+      changed_when: not python_check.stdout | search('/usr/bin/python')
+
+- name: WordPress Server - Install LEMP Stack with PHP 7.2 and MariaDB MySQL
   hosts: web:&{{ env }}
   become: yes
   roles:
@@ -29,8 +39,7 @@
     - { role: composer, tags: [composer] }
     - { role: ansible, tags: [ansible], when: env == "sandbox" }
     - { role: wp-cli, tags: [wp-cli] }
-    - { role: letsencrypt, tags: [letsencrypt], when: letsencrypt_enabled }
+    - { role: letsencrypt, tags: [letsencrypt], when: sites_using_letsencrypt | count }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup, letsencrypt] }
     - { role: wordpress-install, tags: [wordpress, wordpress-install] }
-    - { role: static-sites-setup, tags: [static-sites-setup], when: env != "sandbox" }
     - { role: sandbox-setup, tags: [sandbox, sandbox-setup], when: env == "sandbox" }

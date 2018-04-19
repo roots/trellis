@@ -1,37 +1,99 @@
 ---
-sshd_port: 22
-sshd_listen_address: 0.0.0.0
+# sshd_config
+# ----------------------------
+sshd_config: sshd_config.j2
+
+sshd_ports:
+  - 22
+
+sshd_listen_addresses:
+  - 0.0.0.0
+
 sshd_protocol: 2
-sshd_host_rsa_key: /etc/ssh/ssh_host_rsa_key
-sshd_host_dsa_key: /etc/ssh/ssh_host_dsa_key
-sshd_host_ecdsa_key: /etc/ssh/ssh_host_ecdsa_key
-sshd_use_privilege_separation: true
-sshd_key_regeneration_interval: 3600
-sshd_server_key_bits: 768
-sshd_syslog_facility: AUTH
-sshd_log_level: INFO
-sshd_login_grace_time: 120
-sshd_permit_root_login: true
-sshd_strict_modes: true
-sshd_rsa_authentication: true
-sshd_pubkey_authentication: true
-sshd_authorized_keys_file: "%h/.ssh/authorized_keys"
-sshd_ignore_rhosts: true
-sshd_rhosts_rsa_authentication: false
-sshd_host_based_authentication: false
-sshd_ignore_user_known_hosts: false
-sshd_permit_empty_passwords: false
+
+sshd_accept_env: []
+
+sshd_address_family: inet
+sshd_allow_agent_forwarding: true
+sshd_allow_tcp_forwarding: local
 sshd_challenge_response_authentication: false
+
+sshd_ciphers_default:
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-ctr
+  - aes192-ctr
+  - aes128-ctr
+
+sshd_ciphers_extra: []
+
+sshd_client_alive_interval: 600
+sshd_debian_banner: false
+
+sshd_host_keys:
+  - /etc/ssh/ssh_host_ed25519_key
+  - /etc/ssh/ssh_host_rsa_key
+
+sshd_kex_algorithms_default:
+  - curve25519-sha256@libssh.org
+  - diffie-hellman-group-exchange-sha256
+
+sshd_kex_algorithms_extra: []
+
+sshd_login_grace_time: 30
+
+sshd_macs_default:
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - hmac-ripemd160-etm@openssh.com
+  - umac-128-etm@openssh.com
+  - hmac-sha2-512
+  - hmac-sha2-256
+  - hmac-ripemd160
+
+sshd_macs_extra: []
+
 sshd_password_authentication: false
-sshd_gss_api_authentication: false
-sshd_gss_api_cleanup_credentials: true
-sshd_x11_forwarding: true
-sshd_x11_display_offset: 10
+sshd_permit_root_login: true
+sshd_print_last_log: false
 sshd_print_motd: false
-sshd_print_last_log: true
-sshd_tcp_keep_alive: true
-sshd_max_startups: 10:30:100
-sshd_banner: none
-sshd_accept_env: LANG LC_*
-sshd_subsystem: sftp /usr/lib/openssh/sftp-server
+sshd_subsystem: sftp internal-sftp
+sshd_tcp_keep_alive: false
+
+# PAM authentication enabled to avoid Debian bug with openssh-server.
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=751636
+# can change to `false` once Canonical Main repository includes openssh 1:7.2p2-6
 sshd_use_pam: true
+
+sshd_x11_forwarding: false
+
+
+# ssh_config
+# ----------------------------
+ssh_config: ssh_config.j2
+ssh_port: 22
+ssh_compression: true
+ssh_gssapi_authentication: false
+
+ssh_host_key_algorithms:
+  - ssh-ed25519-cert-v01@openssh.com
+  - ssh-rsa-cert-v01@openssh.com
+  - ssh-ed25519
+  - ssh-rsa
+
+ssh_identity_files:
+  - ~/.ssh/id_ed25519
+  - ~/.ssh/id_rsa
+
+ssh_send_env: []
+
+ssh_strict_host_key_checking: ask
+ssh_use_roaming: false
+
+sshd_packages_default:
+  openssh-server: "{{ apt_security_package_state }}"
+  openssh-client: "{{ apt_security_package_state }}"
+
+sshd_packages_custom: {}
+sshd_packages: "{{ sshd_packages_default | combine(sshd_packages_custom) }}"

@@ -1,0 +1,59 @@
+# Documentation: https://docs.google.com/a/proteusnet.com/document/d/1B6GEpHSMAsxnn4hfh_t-1NvKqh7vHWKNyun3TOaKWM0/edit?usp=sharing
+sites_to_export:
+  - hairpress
+  - webmarket
+  - carpress
+  - organique
+  - readable
+  - buildpress
+  - mentalpress
+  - cargopress
+  - legalpress
+  - repairpress
+  - structurepress
+  - beauty
+  - auto
+  - hammer
+  - bolts
+  - bolts-transport
+  - bolts-factory
+  - bolts-industry
+  - shaka
+  - buildpress-light
+  - adrenaline
+  - consultpress
+  - buildpress-landscape
+  - buildpress-rtl
+  - medicpress
+  - gympress
+  - growthpress
+  - woondershop
+
+# replace these emails to info@example.com when importing
+wp_emails:
+  from:
+    - 'primoz@proteusnet\.com'
+    - 'info@proteusthemes\.com'
+    - 'gregor\.capuder@proteusnet\.com'
+    - 'jejcic\.jaka@gmail\.com'
+    - 'jaka@spaka\.si'
+    - 'marko\.prelec@proteusnet\.com'
+  to: 'info@example.com'
+
+# strings like API keys etc
+strings_to_replace:
+  - from: "{{ vault_forecastio_api_key }}"
+    to: ""
+  - from: "{{ vault_wcappointments_license }}"
+    to: ""
+  - from: "{{ vault_mc_api_key }}"
+    to: ""
+
+xmls_to_rename:
+  hairpress: "hairpresswptheme"
+  bolts-factory: "boltsfactory"
+  bolts-industry: "boltsindustry"
+  bolts-transport: "boltstransport"
+  buildpress-light: "buildpresslight"
+  buildpress-landscape: "buildpresslandscape"
+  buildpress-rtl: "buildpressrtl"

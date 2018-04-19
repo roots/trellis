@@ -3,7 +3,12 @@
   git:
     repo: "{{ sb_provision_repo_url }}"
     dest: "{{ sb_provision_repo_dest }}"
-    version: "{{ sb_provision_repo_version }}"
+    version: "{{ sb_provision_repo_version | default('master') }}"
+
+- name: Create .vault_pass
+  template:
+    src: vault_pass.j2
+    dest: "{{ sb_provision_repo_dest }}/.vault_pass"
 
 - name: Add cron to reset every day
   become: yes
@@ -13,7 +18,7 @@
     state: present
     hour: "{{ sb_reset_cron.hour }}"
     minute: "{{ sb_reset_cron.minute }}"
-    job: "cd {{ sb_provision_repo_dest }} && ANSIBLE_NOCOLOR='1' ansible-playbook sandbox-reset.yml -i hosts/sandbox_internal --vault-password-file ../vault-key > {{ sb_reset_log_path }}/ansible-reset.log 2>&1"
+    job: "cd {{ sb_provision_repo_dest }} && ANSIBLE_NOCOLOR='1' ansible-playbook sandbox-reset.yml > {{ sb_reset_log_path }}/ansible-reset.log 2>&1"
 
 - name: Ensure the sandbox reset log dir is present
   file:

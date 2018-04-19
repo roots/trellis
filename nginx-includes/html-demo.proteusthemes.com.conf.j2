@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+
+server {
+  listen [::]:80;
+  listen 80;
+  server_name html-demo.proteusthemes.com;
+
+  return 301 https://demo.proteusthemes.com$request_uri;
+}

@@ -1,0 +1,24 @@
+---
+vagrant_ip: '192.168.50.5'
+vagrant_cpus: 1
+vagrant_memory: 1024 # in MB
+vagrant_box: 'bento/ubuntu-16.04'
+vagrant_box_version: '>= 201801.02.0'
+vagrant_ansible_version: '2.4.3.0'
+vagrant_skip_galaxy: false
+
+vagrant_install_plugins: true
+vagrant_plugins:
+  - name: vagrant-bindfs
+  - name: vagrant-hostmanager
+
+# Array of synced folders:
+# - local_path: .
+#   destination: /path/on/vm
+#   create: false
+#   type: nfs
+#   bindfs: true
+#   mount_options: []
+#   bindfs_options: {}
+# See https://www.vagrantup.com/docs/synced-folders/basic_usage.html#mount_options
+vagrant_synced_folders: []

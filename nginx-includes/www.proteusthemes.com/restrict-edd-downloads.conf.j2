@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+
+# http://docs.easydigitaldownloads.com/article/682-protected-download-files-on-nginx
+location ~ ^/wp-content/uploads/edd/(.*?)\.zip$ {
+  rewrite / permanent;
+}

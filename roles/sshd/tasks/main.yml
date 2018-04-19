@@ -1,16 +1,29 @@
 ---
-- name: ensure ssh server is installed
+- name: Ensure latest SSH server and client are installed
   apt:
-    pkg: openssh-server
-    state: latest
-    update_cache: true
+    name: "{{ item.key }}"
+    state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  notify:
-    - restart ssh
+  with_dict: "{{ sshd_packages }}"
+  notify: restart ssh
 
-- name: ensure sshd is configured
+- name: Create a secure sshd_config
   template:
-    src: sshd_config.j2
+    src: "{{ sshd_config }}"
     dest: /etc/ssh/sshd_config
-  notify:
-    - restart ssh
+    mode: 0600
+    validate: '/usr/sbin/sshd -T -f %s'
+  notify: restart ssh
+
+- name: Create a secure ssh_config
+  template:
+    src: "{{ ssh_config }}"
+    dest: /etc/ssh/ssh_config
+    mode: 0644
+
+- name: Remove Diffie-Hellman moduli of size < 2000
+  lineinfile:
+    backup: yes
+    dest: /etc/ssh/moduli
+    regexp: ^(\d+\s){4}1
+    state: absent

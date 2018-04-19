@@ -1,4 +1,0 @@
-# these databases are shared between production and sandbox
-
-shared_dbs_names:
-  - demo_proteusthemes_com_production

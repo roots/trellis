@@ -1,8 +1,10 @@
 ---
-- include: database.yml
+- import_tasks: database.yml
   tags: wordpress-setup-database
-- include: self-signed-certificate.yml
+- import_tasks: self-signed-certificate.yml
   tags: wordpress-setup-self-signed-certificate
+- import_tasks: nginx-client-cert.yml
+  tags: wordpress-setup-nginx-client-cert
 
 - name: Create logs folder of sites
   file:
@@ -13,7 +15,23 @@
     state: directory
   with_dict: "{{ wordpress_sites }}"
 
-- include: nginx.yml
+- name: Create WordPress php-fpm configuration file
+  template:
+    src: php-fpm.conf.j2
+    dest: /etc/php/7.2/fpm/pool.d/wordpress.conf
+  notify: reload php-fpm
+
+- name: Disable default PHP-FPM pool
+  command: mv /etc/php/7.2/fpm/pool.d/www.conf /etc/php/7.2/fpm/pool.d/www.disabled
+  args:
+    creates: /etc/php/7.2/fpm/pool.d/www.disabled
+  when: disable_default_pool | default(true)
+  notify: reload php-fpm
+
+- import_tasks: nginx-includes.yml
+  tags: [nginx-includes, wordpress-setup-nginx]
+
+- import_tasks: nginx.yml
   tags: wordpress-setup-nginx
 
 - name: Setup WP system cron
@@ -21,7 +39,17 @@
     name: "{{ item.key }} WordPress cron"
     minute: "*/15"
     user: "{{ web_user }}"
-    job: "curl -k -s {{ site_env.wp_siteurl }}/wp-cron.php > /dev/null 2>&1"
+    job: "cd {{ www_root }}/{{ item.key }} && wp cron event run --due-now > /dev/null 2>&1"
     cron_file: "wordpress-{{ item.key | replace('.', '_') }}"
+    state: "{{ (cron_enabled and not item.value.multisite.enabled) | ternary('present', 'absent') }}"
   with_dict: "{{ wordpress_sites }}"
-  when: site_env.disable_wp_cron and not item.value.multisite.enabled | default(false)
+
+- name: Setup WP Multisite system cron
+  cron:
+    name: "{{ item.key }} WordPress network cron"
+    minute: "*/30"
+    user: "{{ web_user }}"
+    job: "cd {{ www_root }}/{{ item.key }} && wp site list --field=url | xargs -n1 -I \\% wp --url=\\% cron event run --due-now > /dev/null 2>&1"
+    cron_file: "wordpress-multisite-{{ item.key | replace('.', '_') }}"
+    state: "{{ (cron_enabled and item.value.multisite.enabled) | ternary('present', 'absent') }}"
+  with_dict: "{{ wordpress_sites }}"
