@@ -1,9 +1,6 @@
 # Documentation: https://docs.google.com/a/proteusnet.com/document/d/1B6GEpHSMAsxnn4hfh_t-1NvKqh7vHWKNyun3TOaKWM0/edit?usp=sharing
 sites_to_export:
-  - hairpress
-  - webmarket
   - carpress
-  - organique
   - readable
   - buildpress
   - mentalpress
@@ -50,7 +47,6 @@ strings_to_replace:
     to: ""
 
 xmls_to_rename:
-  hairpress: "hairpresswptheme"
   bolts-factory: "boltsfactory"
   bolts-industry: "boltsindustry"
   bolts-transport: "boltstransport"
