@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+
+location ~ "^/mojo-(.+)$" {
+  return 301 /$1;
+}
+
+location = / {
+  return 301 /woondershop/;
+}
