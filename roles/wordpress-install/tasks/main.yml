@@ -68,7 +68,7 @@
   args:
     chdir: "{{ www_root }}/{{ item.item.key }}/{{ item.item.value.current_path | default('current') }}/"
   with_items: "{{ wp_install.results }}"
-  when: item | changed
+  when: item is changed
 
 - name: Update WP Multisite Home URL
   command: wp option update home {{ site_env.wp_home }} --allow-root

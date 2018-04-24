@@ -49,7 +49,7 @@
       More info:
       > https://roots.io/trellis/docs/deploys/#ssh-keys
       > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
-  when: git_clone | failed
+  when: git_clone is failed
 
 - include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_update_after | default([]) }}"
