@@ -1,4 +1,5 @@
 ### HEAD
+* Update wp-cli to 1.5.1 ([#982](https://github.com/roots/trellis/pull/982))
 * Support git url format `ssh://user@host/path/to/repo` ([#975](https://github.com/roots/trellis/pull/975))
 * Fix path to h5bp/mime.types ([#974](https://github.com/roots/trellis/pull/974))
 * Vendor h5bp Nginx configs ([#973](https://github.com/roots/trellis/pull/973))
