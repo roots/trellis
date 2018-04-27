@@ -1,6 +1,6 @@
 - name: composer
   src: geerlingguy.composer
-  version: 1.6.1
+  version: 1.7.0
 
 - name: ntp
   src: geerlingguy.ntp
