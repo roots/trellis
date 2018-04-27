@@ -1,4 +1,5 @@
 ### HEAD
+* Update geerlingguy.composer 1.6.1->1.7.0 ([#983](https://github.com/roots/trellis/pull/983))
 * Update wp-cli to 1.5.1 ([#982](https://github.com/roots/trellis/pull/982))
 * Support git url format `ssh://user@host/path/to/repo` ([#975](https://github.com/roots/trellis/pull/975))
 * Fix path to h5bp/mime.types ([#974](https://github.com/roots/trellis/pull/974))
