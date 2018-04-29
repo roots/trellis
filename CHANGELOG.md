@@ -1,4 +1,5 @@
 ### HEAD
+* Add `xdebug.remote_autostart` to simplify xdebug sessions  ([#985](https://github.com/roots/trellis/pull/985))
 * Enable nginx to start on boot ([#980](https://github.com/roots/trellis/pull/980))
 * Update geerlingguy.ntp 1.5.2->1.6.0 ([#984](https://github.com/roots/trellis/pull/984))
 * Update geerlingguy.composer 1.6.1->1.7.0 ([#983](https://github.com/roots/trellis/pull/983))
