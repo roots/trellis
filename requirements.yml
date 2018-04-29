@@ -1,10 +1,10 @@
 - name: composer
   src: geerlingguy.composer
-  version: 1.6.1
+  version: 1.7.0
 
 - name: ntp
   src: geerlingguy.ntp
-  version: 1.5.2
+  version: 1.6.0
 
 - name: logrotate
   src: nickhammond.logrotate

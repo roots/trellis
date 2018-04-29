@@ -1,4 +1,4 @@
-# Documentation: https://galaxy.ansible.com/list#/roles/1117
+# Documentation: https://github.com/nickhammond/ansible-logrotate
 logrotate_scripts:
   - name: wordpress-sites
     path: "{{ www_root }}/**/logs/*.log"
