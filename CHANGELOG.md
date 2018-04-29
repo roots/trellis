@@ -1,4 +1,5 @@
 ### HEAD
+* Add `xdebug.remote_autostart` to simplify xdebug sessions  ([#985](https://github.com/roots/trellis/pull/985))
 * Support git url format `ssh://user@host/path/to/repo` ([#975](https://github.com/roots/trellis/pull/975))
 * Fix path to h5bp/mime.types ([#974](https://github.com/roots/trellis/pull/974))
 * Vendor h5bp Nginx configs ([#973](https://github.com/roots/trellis/pull/973))
