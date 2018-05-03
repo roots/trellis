@@ -19,7 +19,7 @@ if version_info[0] > 2:
         'Please use Python 2.7.').format(version_info[0], version_info[1], version_info[2]))
 
 version_requirement = '2.4.0.0'
-version_tested_max = '2.5.1'
+version_tested_max = '2.5.2'
 
 if not ge(LooseVersion(__version__), LooseVersion(version_requirement)):
     raise AnsibleError(('Trellis no longer supports Ansible {}.\n'
