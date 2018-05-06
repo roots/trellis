@@ -6,12 +6,17 @@ from ansible import __version__
 from ansible.errors import AnsibleError
 from distutils.version import LooseVersion
 from operator import ge, gt
+from sys import version_info
 
 try:
     from __main__ import display
 except ImportError:
     from ansible.utils.display import Display
     display = Display()
+
+if version_info[0] > 2:
+    raise AnsibleError(('Trellis does not yet support Python {}.{}.{}. \n'
+        'Please use Python 2.7.').format(version_info[0], version_info[1], version_info[2]))
 
 version_requirement = '2.4.0.0'
 version_tested_max = '2.4.3.0'
