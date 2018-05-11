@@ -3,6 +3,7 @@ php_xdebug_package: php-xdebug
 # XDebug Remote Debugging
 xdebug_remote_enable: 0
 xdebug_remote_connect_back: 0
+xdebug_remote_autostart: 0
 xdebug_remote_host: localhost
 xdebug_remote_port: 9000
 xdebug_remote_log: /tmp/xdebug.log

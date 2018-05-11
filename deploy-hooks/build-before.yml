@@ -19,7 +19,7 @@
 #     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #
 # - name: Compile assets for production
-#   command: yarn run build:production
+#   command: yarn build:production
 #   connection: local
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"

@@ -21,21 +21,14 @@
   args:
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
-  when: wordpress_sites.values() | map(attribute='ssl') | selectattr('enabled') | list | count
+  when: sites_use_ssl
   notify: reload nginx
-  tags: [diffie-hellman]
+  tags: [diffie-hellman, letsencrypt, wordpress, wordpress-setup, nginx-includes, nginx-sites]
 
-- name: Grab h5bp/server-configs-nginx
-  git:
-    repo: "https://github.com/h5bp/server-configs-nginx.git"
-    dest: "{{ nginx_path }}/h5bp-server-configs"
-    version: c5c6602232e0976d9e69d69874aa84d2a2698265
-    force: yes
-
-- name: Move h5bp configs
-  command: rsync -ac --delete --info=NAME {{ nginx_path }}/h5bp-server-configs/h5bp/ {{ nginx_path }}/h5bp
-  register: h5bp_nginx_sync
-  changed_when: h5bp_nginx_sync.stdout != ''
+- name: Copy h5bp configs
+  copy:
+    src: templates/h5bp
+    dest: "{{ nginx_path }}"
   notify: reload nginx
 
 - name: Create nginx.conf
@@ -51,21 +44,9 @@
     state: absent
   notify: reload nginx
 
-- name: Create Nginx available sites
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
-  with_items: "{{ nginx_sites_confs }}"
-  when: item.enabled | default(true)
-  notify: reload nginx
-  tags: nginx-sites
-
-- name: Enable or disable Nginx sites
-  file:
-    path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
-    src: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
-    state: "{{ item.enabled | default(true) | ternary('link', 'absent') }}"
-    force: yes
-  with_items: "{{ nginx_sites_confs }}"
-  notify: reload nginx
-  tags: nginx-sites
+- name: Enable Nginx to start on boot
+  service:
+    name: nginx
+    enabled: yes
+    state: started
+    use: service

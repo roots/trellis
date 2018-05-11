@@ -78,8 +78,7 @@
       Development via Vagrant: `vagrant destroy && vagrant up`
 
       Staging/Production: Create a new server with Ubuntu 16.04 and provision
-  when: ansible_distribution_release == 'trusty'
-  run_once: true
+  when: ansible_distribution_release != 'xenial'
 
 - name: Check whether passlib is needed
   fail:
