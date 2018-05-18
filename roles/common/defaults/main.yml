@@ -26,7 +26,7 @@ apt_packages_default:
   build-essential: "{{ apt_package_state }}"
   python-mysqldb: "{{ apt_package_state }}"
   curl: "{{ apt_package_state }}"
-  git-core: "{{ apt_package_state }}"
+  git: "{{ apt_package_state }}"
   dbus: "{{ apt_package_state }}"
   libnss-myhostname: "{{ apt_package_state }}"
 
