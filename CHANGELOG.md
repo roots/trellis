@@ -1,4 +1,5 @@
 ### HEAD
+* Add CSP `frame-ancestors`, make `X-Frame-Options` conditional ([#977](https://github.com/roots/trellis/pull/977))
 * Common: Install `git` instead of `git-core`  ([#989](https://github.com/roots/trellis/pull/989))
 * Add `xdebug.remote_autostart` to simplify xdebug sessions  ([#985](https://github.com/roots/trellis/pull/985))
 * Enable nginx to start on boot ([#980](https://github.com/roots/trellis/pull/980))
