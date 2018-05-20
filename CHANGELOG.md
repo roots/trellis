@@ -1,4 +1,5 @@
 ### HEAD
+* Bump Ansible `version_tested_max` to 2.5.3 ([#981](https://github.com/roots/trellis/pull/981))
 * deploy.sh: Return non-zero exit code when misuse  ([#990](https://github.com/roots/trellis/pull/990))
 * Add CSP `frame-ancestors`, make `X-Frame-Options` conditional ([#977](https://github.com/roots/trellis/pull/977))
 * Common: Install `git` instead of `git-core`  ([#989](https://github.com/roots/trellis/pull/989))
