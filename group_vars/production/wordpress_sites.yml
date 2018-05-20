@@ -19,4 +19,3 @@ wordpress_sites:
       provider: letsencrypt
     cache:
       enabled: false
-      background_update: false
