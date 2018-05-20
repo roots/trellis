@@ -60,5 +60,5 @@
       Make sure that a valid DNS record exists for {{ item.failed_hosts | join(', ') }} and that they point to this server's IP.
       If you don't want these domains in your SSL certificate, then remove them from `site_hosts`.
       See https://roots.io/trellis/docs/ssl for more details.
-  when: not item | skipped and letsencrypt_test_challenges | failed
+  when: item is not skipped and item is failed
   with_items: "{{ letsencrypt_test_challenges.results }}"
