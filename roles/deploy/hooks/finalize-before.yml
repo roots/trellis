@@ -10,7 +10,7 @@
     chdir: "{{ deploy_helper.new_release_path }}"
   register: wp_installed
   changed_when: false
-  failed_when: wp_installed.stderr != ""
+  failed_when: wp_installed.stderr | default("") != "" or wp_installed.rc > 1
 
 - name: Get WP theme template and stylesheet roots
   shell: >
