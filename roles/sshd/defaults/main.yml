@@ -46,11 +46,9 @@ sshd_login_grace_time: 30
 sshd_macs_default:
   - hmac-sha2-512-etm@openssh.com
   - hmac-sha2-256-etm@openssh.com
-  - hmac-ripemd160-etm@openssh.com
   - umac-128-etm@openssh.com
   - hmac-sha2-512
   - hmac-sha2-256
-  - hmac-ripemd160
 
 sshd_macs_extra: []
 
