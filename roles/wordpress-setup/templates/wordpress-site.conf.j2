@@ -189,6 +189,7 @@ server {
     fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
     fastcgi_cache_bypass $skip_cache;
     fastcgi_no_cache $skip_cache;
+    fastcgi_cache_background_update {{ item.value.cache.background_update | default(nginx_cache_background_update) }};
 
     {% endif -%}
     {% endblock -%}
