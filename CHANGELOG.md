@@ -1,4 +1,5 @@
 ### HEAD
+* Verify `wp-cli.phar` checksum ([#996](https://github.com/roots/trellis/pull/996))
 * Enable `fastcgi_cache_background_update` by default ([#962](https://github.com/roots/trellis/pull/962))
 * Bump Ansible `version_tested_max` to 2.5.3 ([#981](https://github.com/roots/trellis/pull/981))
 * deploy.sh: Return non-zero exit code when misuse  ([#990](https://github.com/roots/trellis/pull/990))
