@@ -60,7 +60,7 @@
     debug:
       msg: |
         Note: Ansible will attempt connections as user = {{ ansible_user }}
-        {% if not preferred_host_key_algorithms | skipped %}
+        {% if preferred_host_key_algorithms is not skipped %}
 
         Note: The host `{{ ansible_host }}` was not detected in known_hosts
         so Trellis prompted the host to offer a key type that will work with

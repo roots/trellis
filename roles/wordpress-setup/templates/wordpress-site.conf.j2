@@ -161,6 +161,20 @@ server {
 
   {% endblock %}
 
+  {% block embed_security -%}
+  {% if item.value.nginx_embed_security | default(nginx_embed_security | default(true)) -%}
+  add_header Content-Security-Policy "frame-ancestors 'self'" always;
+
+  # Conditional X-Frame-Options until https://core.trac.wordpress.org/ticket/40020 is resolved
+  set $x_frame_options SAMEORIGIN;
+  if ($arg_customize_changeset_uuid) {
+    set $x_frame_options "";
+  }
+  add_header X-Frame-Options $x_frame_options always;
+
+  {% endif -%}
+  {% endblock -%}
+
   {% block location_php -%}
   location ~ \.php$ {
     {% block location_php_basic -%}
@@ -175,6 +189,7 @@ server {
     fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
     fastcgi_cache_bypass $skip_cache;
     fastcgi_no_cache $skip_cache;
+    fastcgi_cache_background_update {{ item.value.cache.background_update | default(nginx_cache_background_update) }};
 
     {% endif -%}
     {% endblock -%}
