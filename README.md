@@ -75,6 +75,14 @@ PROJECT_DIR=~/code/wp    # set to your project directory
 rsync -av --exclude-from .rsync-exclude ./ "${PROJECT_DIR}/trellis"
 ```
 
+Check for differences in:
+
+```
+group_vars/all/main.yml
+group_vars/all/users.yml
+vagrant.default.yml
+```
+
 ## Local development setup
 
 1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`
