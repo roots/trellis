@@ -18,6 +18,7 @@
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }
+    - { role: nodejs, tags: [nodejs] }
     - { role: wp-cli, tags: [wp-cli] }
     - { role: wordpress-setup, tags: [wordpress, wordpress-setup] }
     - { role: wordpress-install, tags: [wordpress, wordpress-install] }
