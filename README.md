@@ -54,10 +54,26 @@ example.com/      # → Root folder for the project
 See a complete working example in the [roots-example-project.com repo](https://github.com/roots/roots-example-project.com).
 
 1. Create a new project directory: `$ mkdir example.com && cd example.com`
-2. Clone Trellis: `$ git clone --depth=1 git@github.com:roots/trellis.git && rm -rf trellis/.git`
+2. Clone Trellis: `$ git clone --depth=1 git@github.com:Fatsoma/trellis.git && rm -rf trellis/.git`
 3. Clone Bedrock: `$ git clone --depth=1 git@github.com:roots/bedrock.git site && rm -rf site/.git`
 
 Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) for slightly different installation instructions. VirtualBox is known to have poor performance in Windows — use VMware or [see some possible solutions](https://discourse.roots.io/t/virtualbox-performance-in-windows/3932).
+
+## Update trellis
+
+Clone Fatsoma fork of trellis to your preferred location or pull the latest changes if you already have a clone.
+
+```sh
+git clone git@github.com:Fatsoma/trellis.git $TRELLIS_DIR
+```
+
+Copy files from trellis into your project trellis directory (run from your clone of trellis):
+
+```sh
+PROJECT_DIR=~/code/wp    # set to your project directory
+
+rsync -av --exclude-from .rsync-exclude ./ "${PROJECT_DIR}/trellis"
+```
 
 ## Local development setup
 
