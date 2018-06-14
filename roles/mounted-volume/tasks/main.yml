@@ -1,0 +1,70 @@
+#  Lets leave this here so you know how to debug in future
+# - name: Debug wordpress_sites
+#   debug:
+#     var: item.value.mounted_volume
+#   with_dict: "{{ wordpress_sites }}"
+
+# Check if the root directory already exists
+- stat:
+    path: "{{ www_root }}"
+  register: root_configured
+
+# This replicates a task in the wordpress-setup role, it does the groundwork
+# of creating the web root folder for symlinking before cron jobs are assigned on the
+# final wordpress-setup task
+#
+# Note we have to check if the directory exists as a symlink here, as the original state
+# is initially a directory
+- name: Create web root
+  file:
+    path: "{{ www_root }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+  run_once: true
+  with_dict: "{{ wordpress_sites }}"
+  when:
+    - root_configured.stat.islnk is not defined
+    - item.mounted_volume is defined
+    - item.value.mounted_volume
+
+
+# If there's a mounted volume specified we'll create a duplicate folder
+# in that volume ahead of symlinking
+- name: Create mounted volume web root
+  file:
+    path: "{{ item.value.mounted_volume }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+  with_dict: "{{ wordpress_sites }}"
+  when:
+    - item.mounted_volume is defined
+    - item.value.mounted_volume
+
+
+# Actually do the symlink
+- name: Create shared symlinks
+  file:
+    path: "{{ www_root }}"
+    src: "{{ item.value.mounted_volume }}"
+    state: link
+  with_dict: "{{ wordpress_sites }}"
+  when:
+    - item.mounted_volume is defined
+    - item.value.mounted_volume
+
+# Create the database dumping folder which our database grabber scripts
+# will write to
+#
+# @TODO: This should probably be moved to a seperate playbook
+- name: Create database exports folder root
+  file:
+    path: "{{ www_root }}/{{ item.key }}/shared/database-exports"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+  with_dict: "{{ wordpress_sites }}"
