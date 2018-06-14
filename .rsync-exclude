@@ -1,0 +1,21 @@
+# Excludes:
+/.git
+/.rsync-exclude
+/deploy-hooks/build-before.yml
+/group_vars/all/mail.yml
+/group_vars/all/vault.yml
+/group_vars/development/vault.yml
+/group_vars/development/wordpress_sites.yml
+/group_vars/production/vault.yml
+/group_vars/production/wordpress_sites.yml
+/group_vars/staging/vault.yml
+/group_vars/staging/wordpress_sites.yml
+/hosts/development
+/hosts/production
+/hosts/staging
+/server.yml
+
+# Manually check:
+/group_vars/all/main.yml
+/group_vars/all/users.yml
+/vagrant.default.yml
