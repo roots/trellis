@@ -51,8 +51,7 @@ update_db_on_deploy: true
 # Helpers
 project: "{{ wordpress_sites[site] }}"
 project_root: "{{ www_root }}/{{ site }}"
-project_local_path: "{{ (lookup('env', 'USER') == 'vagrant') | ternary(project_root + '/' + project_current_path, project.local_path) }}"
-
+project_build_path: "{{ lookup('env', 'TMPDIR') | default('/tmp/', true) }}trellis/{{ site }}/{{ env }}"
 
 # Deploy hooks
 # For list of hooks and explanation, see https://roots.io/trellis/docs/deploys/#hooks
