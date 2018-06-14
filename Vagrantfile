@@ -69,13 +69,16 @@ Vagrant.configure('2') do |config|
 
   bin_path = File.join(ANSIBLE_PATH_ON_VM, 'bin')
 
-  if Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd')
+  vagrant_mount_type = vconfig.fetch('vagrant_mount_type')
+
+  if vagrant_mount_type != 'nfs' || Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd')
+    vagrant_mount_type = nil if vagrant_mount_type == 'nfs'
     trellis_config.wordpress_sites.each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775'], type: vagrant_mount_type
     end
 
-    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: ['dmode=755', 'fmode=644']
-    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: ['dmode=755', 'fmode=755']
+    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: ['dmode=755', 'fmode=644'], type: vagrant_mount_type
+    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: ['dmode=755', 'fmode=755'], type: vagrant_mount_type
   else
     if !Vagrant.has_plugin? 'vagrant-bindfs'
       fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
