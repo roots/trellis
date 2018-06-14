@@ -1,0 +1,26 @@
+---
+# Set the version of Node.js to install ("0.12", "4.x", "5.x", "6.x", "8.x").
+# Version numbers from Nodesource: https://github.com/nodesource/distributions
+nodejs_version: "6.x"
+
+# The user for whom the npm packages will be installed.
+# nodejs_install_npm_user: username
+
+# The directory for global installations.
+npm_config_prefix: "/usr/local/lib/npm"
+
+# Set to true to suppress the UID/GID switching when running package scripts. If set explicitly to false, then installing as a non-root user will fail.
+npm_config_unsafe_perm: "false"
+
+# Define a list of global packages to be installed with NPM.
+nodejs_npm_global_packages: []
+#  # Install a specific version of a package.
+#  - name: jslint
+#    version: 0.9.3
+#  # Install the latest stable release of a package.
+#  - name: node-sass
+#  # This shorthand syntax also works (same as previous example).
+#  - node-sass
+
+# The path of a package.json file used to install packages globally.
+nodejs_package_json_path: ""

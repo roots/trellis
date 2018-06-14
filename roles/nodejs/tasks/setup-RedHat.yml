@@ -1,0 +1,37 @@
+---
+- name: Set up the Nodesource RPM directory for Node.js > 0.10.
+  set_fact:
+    nodejs_rhel_rpm_dir: "pub_{{ nodejs_version }}"
+  when: nodejs_version != '0.10'
+
+- name: Set up the Nodesource RPM variable for Node.js == 0.10.
+  set_fact:
+    nodejs_rhel_rpm_dir: "pub"
+  when: nodejs_version == '0.10'
+
+- name: Import Nodesource RPM key (CentOS < 7).
+  rpm_key:
+    key: http://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
+    state: present
+  when: ansible_distribution_major_version|int < 7
+
+- name: Import Nodesource RPM key (CentOS 7+)..
+  rpm_key:
+    key: https://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
+    state: present
+  when: ansible_distribution_major_version|int >= 7
+
+- name: Add Nodesource repositories for Node.js (CentOS < 7).
+  yum:
+    name: "http://rpm.nodesource.com/{{ nodejs_rhel_rpm_dir }}/el/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/nodesource-release-el{{ ansible_distribution_major_version }}-1.noarch.rpm"
+    state: present
+  when: ansible_distribution_major_version|int < 7
+
+- name: Add Nodesource repositories for Node.js (CentOS 7+).
+  yum:
+    name: "https://rpm.nodesource.com/{{ nodejs_rhel_rpm_dir }}/el/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/nodesource-release-el{{ ansible_distribution_major_version }}-1.noarch.rpm"
+    state: present
+  when: ansible_distribution_major_version|int >= 7
+
+- name: Ensure Node.js and npm are installed.
+  yum: "name=nodejs-{{ nodejs_version[0] }}.* state=present enablerepo='epel,nodesource'"

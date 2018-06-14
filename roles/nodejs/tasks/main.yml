@@ -1,0 +1,41 @@
+---
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Define nodejs_install_npm_user
+  set_fact:
+    nodejs_install_npm_user: "{{ ansible_user | default(lookup('env', 'USER')) }}"
+  when: nodejs_install_npm_user is not defined
+
+- name: Create npm global directory
+  file:
+    path: "{{ npm_config_prefix }}"
+    owner: "{{ nodejs_install_npm_user }}"
+    group: "{{ nodejs_install_npm_group }}"
+    state: directory
+
+- name: Add npm_config_prefix bin directory to global $PATH.
+  template:
+    src: npm.sh.j2
+    dest: /etc/profile.d/npm.sh
+    mode: 0644
+
+- name: Ensure npm global packages are installed.
+  npm:
+    name: "{{ item.name | default(item) }}"
+    version: "{{ item.version | default('latest') }}"
+    global: yes
+    state: latest
+  environment:
+    NPM_CONFIG_PREFIX: "{{ npm_config_prefix }}"
+    NODE_PATH: "{{ npm_config_prefix }}/lib/node_modules"
+    NPM_CONFIG_UNSAFE_PERM: "{{ npm_config_unsafe_perm }}"
+  with_items: "{{ nodejs_npm_global_packages }}"
+
+- name: Install packages defined in a given package.json.
+  npm:
+    path: "{{ nodejs_package_json_path }}"
+  when: nodejs_package_json_path is defined and nodejs_package_json_path
