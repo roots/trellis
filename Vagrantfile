@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 ANSIBLE_PATH = __dir__ # absolute path to Ansible directory on host machine
-ANSIBLE_PATH_ON_VM = '/home/vagrant/trellis' # absolute path to Ansible directory on virtual machine
+ANSIBLE_PATH_ON_VM = '/home/vagrant/trellis'.freeze # absolute path to Ansible directory on virtual machine
 
 require File.join(ANSIBLE_PATH, 'lib', 'trellis', 'vagrant')
 require File.join(ANSIBLE_PATH, 'lib', 'trellis', 'config')
@@ -29,7 +29,7 @@ Vagrant.configure('2') do |config|
 
   # Fix for: "stdin: is not a tty"
   # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
-  config.ssh.shell = %{bash -c 'BASH_ENV=/etc/profile exec bash'}
+  config.ssh.shell = %(bash -c 'BASH_ENV=/etc/profile exec bash')
 
   # Required for NFS to work
   if vconfig.fetch('vagrant_ip') == 'dhcp'
@@ -39,7 +39,7 @@ Vagrant.configure('2') do |config|
     config.hostmanager.ip_resolver = proc do |vm, _resolving_vm|
       if cached_addresses[vm.name].nil?
         if vm.communicate.ready?
-          vm.communicate.execute("hostname -I | cut -d ' ' -f 2") do |type, contents|
+          vm.communicate.execute("hostname -I | cut -d ' ' -f 2") do |_type, contents|
             cached_addresses[vm.name] = contents.split("\n").first[/(\d+\.\d+\.\d+\.\d+)/, 1]
           end
         end
@@ -69,26 +69,27 @@ Vagrant.configure('2') do |config|
 
   bin_path = File.join(ANSIBLE_PATH_ON_VM, 'bin')
 
-  if Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? and !Vagrant.has_plugin? 'vagrant-winnfsd')
+  vagrant_mount_type = vconfig.fetch('vagrant_mount_type')
+
+  if vagrant_mount_type != 'nfs' || Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? && !Vagrant.has_plugin?('vagrant-winnfsd'))
+    vagrant_mount_type = nil if vagrant_mount_type == 'nfs'
     trellis_config.wordpress_sites.each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775']
+      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775'], type: vagrant_mount_type
     end
 
-    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: ['dmode=755', 'fmode=644']
-    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: ['dmode=755', 'fmode=755']
+    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: ['dmode=755', 'fmode=644'], type: vagrant_mount_type
+    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: ['dmode=755', 'fmode=755'], type: vagrant_mount_type
+  elsif !Vagrant.has_plugin?('vagrant-bindfs')
+    fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
   else
-    if !Vagrant.has_plugin? 'vagrant-bindfs'
-      fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
-    else
-      trellis_config.wordpress_sites.each_pair do |name, site|
-        config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
-        config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'vagrant', g: 'www-data', o: 'nonempty'
-      end
-
-      config.vm.synced_folder ANSIBLE_PATH, '/ansible-nfs', type: 'nfs'
-      config.bindfs.bind_folder '/ansible-nfs', ANSIBLE_PATH_ON_VM, o: 'nonempty', p: '0644,a+D'
-      config.bindfs.bind_folder bin_path, bin_path, perms: '0755'
+    trellis_config.wordpress_sites.each_pair do |name, site|
+      config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
+      config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'vagrant', g: 'www-data', o: 'nonempty'
     end
+
+    config.vm.synced_folder ANSIBLE_PATH, '/ansible-nfs', type: 'nfs'
+    config.bindfs.bind_folder '/ansible-nfs', ANSIBLE_PATH_ON_VM, o: 'nonempty', p: '0644,a+D'
+    config.bindfs.bind_folder bin_path, bin_path, perms: '0755'
   end
 
   vconfig.fetch('vagrant_synced_folders', []).each do |folder|
@@ -130,7 +131,7 @@ Vagrant.configure('2') do |config|
     ansible.tags = ENV['ANSIBLE_TAGS']
     ansible.extra_vars = { 'vagrant_version' => Vagrant::VERSION }
 
-    if vars = ENV['ANSIBLE_VARS']
+    if (vars = ENV['ANSIBLE_VARS'])
       extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
       ansible.extra_vars.merge!(extra_vars)
     end
@@ -149,8 +150,8 @@ Vagrant.configure('2') do |config|
   end
 
   # VMware Workstation/Fusion settings
-  ['vmware_fusion', 'vmware_workstation'].each do |provider|
-    config.vm.provider provider do |vmw, override|
+  %w(vmware_fusion vmware_workstation).each do |provider|
+    config.vm.provider provider do |vmw, _override|
       vmw.name = config.vm.hostname
       vmw.vmx['numvcpus'] = vconfig.fetch('vagrant_cpus')
       vmw.vmx['memsize'] = vconfig.fetch('vagrant_memory')
@@ -158,7 +159,7 @@ Vagrant.configure('2') do |config|
   end
 
   # Parallels settings
-  config.vm.provider 'parallels' do |prl, override|
+  config.vm.provider 'parallels' do |prl, _override|
     prl.name = config.vm.hostname
     prl.cpus = vconfig.fetch('vagrant_cpus')
     prl.memory = vconfig.fetch('vagrant_memory')
