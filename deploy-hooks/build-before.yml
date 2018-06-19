@@ -7,20 +7,11 @@
 # Uncomment the lines below and replace `sage` with your theme folder
 #
 # ---
-# - name: Clone project files
-#   git:
-#     repo: "{{ project_git_repo }}"
-#     version: "{{ project_version }}"
-#     dest: "{{ project_build_path }}"
-#     force: yes
-#   no_log: true
-#   connection: local
-#
 # - name: Install npm dependencies
 #   command: yarn
 #   connection: local
 #   args:
-#     chdir: "{{ project_build_path }}/web/app/themes/sage"
+#     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #
 # - name: Install Composer dependencies
 #   command: composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
@@ -31,11 +22,11 @@
 #   command: yarn build:production
 #   connection: local
 #   args:
-#     chdir: "{{ project_build_path }}/web/app/themes/sage"
+#     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #
 # - name: Copy production assets
 #   synchronize:
-#     src: "{{ project_build_path }}/web/app/themes/sage/dist"
+#     src: "{{ project_local_path }}/web/app/themes/sage/dist"
 #     dest: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #     group: no
 #     owner: no
