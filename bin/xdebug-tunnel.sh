@@ -16,8 +16,10 @@ Examples:
 "
 }
 
+ENABLE_TCP_FORWARDING=
 if [[ $1 == "open" ]]; then
   REMOTE_ENABLE=1
+  ENABLE_TCP_FORWARDING="-e sshd_allow_tcp_forwarding=yes"
 elif [[ $1 == "close" ]]; then
   REMOTE_ENABLE=0
 else
@@ -39,4 +41,4 @@ if [[ -n $DEBUG ]]; then
   PARAMS="$PARAMS ${VERBOSITY:--vvvv}"
 fi
 
-ansible-playbook xdebug-tunnel.yml $XDEBUG_ENABLE $SSH_HOST $PARAMS
+ansible-playbook xdebug-tunnel.yml $XDEBUG_ENABLE $ENABLE_TCP_FORWARDING $SSH_HOST $PARAMS
