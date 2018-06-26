@@ -46,3 +46,8 @@ location = /sitemap.xml.gz {
 location = /wordpress {
   return 301 /;
 }
+
+# woondershop jungle to woondershop (because there can be only one!)
+location /wordpress-themes/woondershop-jungle {
+  return 301 /wordpress-themes/woondershop/;
+}
