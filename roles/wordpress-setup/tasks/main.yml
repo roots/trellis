@@ -13,6 +13,9 @@
     group: "{{ web_group }}"
     mode: 0755
     state: directory
+  with_dict: "{{ wordpress_sites }}"
+  when:
+    - root_configured is not defined
 
 - name: Create logs folder of sites
   file:
