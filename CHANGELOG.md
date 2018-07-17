@@ -1,4 +1,5 @@
 ### HEAD
+* Update xdebug tunnel configuration ([#1007](https://github.com/roots/trellis/pull/1007))
 * Verify `wp-cli.phar` checksum ([#996](https://github.com/roots/trellis/pull/996))
 * Enable `fastcgi_cache_background_update` by default ([#962](https://github.com/roots/trellis/pull/962))
 * Bump Ansible `version_tested_max` to 2.5.3 ([#981](https://github.com/roots/trellis/pull/981))

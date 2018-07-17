@@ -11,7 +11,7 @@
   version: e7a498d
 
 - name: swapfile
-  src: tersmitten.swapfile
+  src: oefenweb.swapfile
   version: v2.0.6
 
 - name: mailhog
