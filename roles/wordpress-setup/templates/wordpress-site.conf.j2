@@ -91,8 +91,8 @@ server {
   ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
 
   {% elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
-  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}-bundled.cert;
-  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
+  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ host.canonical }}-{{ letsencrypt_cert_ids[host.canonical] }}-bundled.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ host.canonical }}.key;
 
   {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
   ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
