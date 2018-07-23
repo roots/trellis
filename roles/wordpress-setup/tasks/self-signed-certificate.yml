@@ -10,7 +10,7 @@ distinguished_name = req_dn\n
 [req_dn]\n
 commonName = {{ item.value.site_hosts[0].canonical }}\n
 [req_ext]\n
-subjectAltName = {{ site_hosts | union(multisite_subdomains_wildcards) | map('regex_replace', '(.*)', 'DNS:\\1') | join(',') }}\n
+subjectAltName = {{ ssl_site_hosts | union(multisite_subdomains_wildcards) | map('regex_replace', '(.*)', 'DNS:\\1') | join(',') }}\n
 EOF\n
     ) \
     -keyout {{ item.key | quote }}.key -out {{ item.key | quote }}.cert"
