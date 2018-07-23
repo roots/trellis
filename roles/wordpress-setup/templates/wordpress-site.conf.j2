@@ -2,6 +2,41 @@
 
 {% block server_before %}{% endblock %}
 
+{% macro https(host) -%}
+  {% if ssl_enabled and host.ssl | default(true) -%}
+  # SSL configuration
+  include h5bp/directive-only/ssl.conf;
+  {% if ssl_stapling_enabled -%}
+  include h5bp/directive-only/ssl-stapling.conf;
+  {% endif -%}
+
+  ssl_dhparam /etc/nginx/ssl/dhparams.pem;
+  ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
+
+  add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
+
+  {% if item.value.ssl.client_cert_url is defined -%}
+  ssl_verify_client       on;
+  ssl_client_certificate  {{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt;
+  {% endif -%}
+
+  {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
+
+  {% elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ host.canonical }}-{{ letsencrypt_cert_ids[host.canonical] }}-bundled.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ host.canonical }}.key;
+
+  {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
+  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ item.key }}.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.key }}.key;
+
+  {% endif -%}
+  {% endif -%}
+{% endmacro -%}
+
 {% for host in item.value.site_hosts %}
 server {
   {% block server_id -%}
@@ -68,40 +103,7 @@ server {
   {% endif -%}
   {% endblock -%}
 
-  {% block https -%}
-  {% if ssl_enabled and host.ssl | default(true) -%}
-  # SSL configuration
-  include h5bp/directive-only/ssl.conf;
-  {% if ssl_stapling_enabled -%}
-  include h5bp/directive-only/ssl-stapling.conf;
-  {% endif -%}
-
-  ssl_dhparam /etc/nginx/ssl/dhparams.pem;
-  ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
-
-  add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
-
-  {% if item.value.ssl.client_cert_url is defined -%}
-  ssl_verify_client       on;
-  ssl_client_certificate  {{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt;
-  {% endif -%}
-
-  {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
-  ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
-  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
-
-  {% elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
-  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ host.canonical }}-{{ letsencrypt_cert_ids[host.canonical] }}-bundled.cert;
-  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ host.canonical }}.key;
-
-  {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
-  ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
-  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ item.key }}.cert;
-  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.key }}.key;
-
-  {% endif -%}
-  {% endif -%}
-  {% endblock -%}
+  {{ https(host) }}
 
   {% block acme_challenge -%}
   include acme-challenge-location.conf;
@@ -244,7 +246,7 @@ server {
   listen 80;
   server_name {{ host.redirects | join(' ') }};
 
-  {{ self.https() -}}
+  {{ https(host) -}}
 
   {{ self.acme_challenge() -}}
 
