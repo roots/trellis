@@ -2,11 +2,12 @@
 
 {% block server_before %}{% endblock %}
 
+{% for host in item.value.site_hosts %}
 server {
   {% block server_id -%}
-  listen {{ ssl_enabled | ternary('[::]:443 ssl http2', '[::]:80') }};
-  listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
-  server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
+  listen {{ ssl_enabled and host.ssl | default(true) | ternary('[::]:443 ssl http2', '[::]:80') }};
+  listen {{ ssl_enabled and host.ssl | default(true) | ternary('443 ssl http2', '80') }};
+  server_name {{ host.canonical | list | union(multisite_subdomains_wildcards) | join(' ') }};
   {% endblock %}
 
   {% block logs -%}
@@ -68,7 +69,7 @@ server {
   {% endblock -%}
 
   {% block https -%}
-  {% if ssl_enabled -%}
+  {% if ssl_enabled and host.ssl | default(true) -%}
   # SSL configuration
   include h5bp/directive-only/ssl.conf;
   {% if ssl_stapling_enabled -%}
@@ -205,14 +206,16 @@ server {
   {%- endblock %}
 
 }
+{% endfor %}
 
 {% block redirects_https %}
-{% if ssl_enabled %}
+{% for host in item.value.site_hosts | default([]) %}
+{% if ssl_enabled and host.ssl | default(true) %}
 # Redirect to https
 server {
   listen [::]:80;
   listen 80;
-  server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
+  server_name {{ host.canonical | list | union(item.value.multisite.subdomains | default(false) | ternary( host.canonical | regex_replace('^(www\.)?(.*)$', '*.\2') | list, [] )) | join(' ') }};
 
   {{ self.acme_challenge() -}}
 
@@ -224,6 +227,7 @@ server {
 }
 
 {% endif %}
+{% endfor %}
 {% endblock -%}
 
 {%- block redirects_domains %}
@@ -232,7 +236,7 @@ server {
 {% endif %}
 {% for host in item.value.site_hosts if host.redirects | default([]) %}
 server {
-  {% if ssl_enabled -%}
+  {% if ssl_enabled and host.ssl | default(true) -%}
   listen [::]:443 ssl http2;
   listen 443 ssl http2;
   {% endif -%}
@@ -247,7 +251,7 @@ server {
   {{ self.includes_d() -}}
 
   location / {
-    return 301 {{ ssl_enabled | ternary('https', 'http') }}://{{ host.canonical }}$request_uri;
+    return 301 {{ ssl_enabled and host.ssl | default(true) | ternary('https', 'http') }}://{{ host.canonical }}$request_uri;
   }
 }
 {% endfor %}
