@@ -43,7 +43,7 @@
   {% endif -%}
 {% endmacro -%}
 
-{% for host in item.value.site_hosts %}
+{% for host in item.value.site_hosts | default([]) %}
 server {
   {{ server_id(host.ssl | default(true), host.canonical) }}
 
@@ -219,7 +219,7 @@ server {
 server {
   listen [::]:80;
   listen 80;
-  server_name {{ host.canonical | list | union(item.value.multisite.subdomains | default(false) | ternary( host.canonical | regex_replace('^(www\.)?(.*)$', '*.\2') | list, [] )) | join(' ') }};
+  server_name {{ [host.canonical] | union(item.value.multisite.subdomains | default(false) | ternary( [host.canonical | regex_replace('^(www\.)?(.*)$', '*.\2')], [] )) | join(' ') }};
 
   {{ self.acme_challenge() -}}
 
@@ -255,7 +255,7 @@ server {
   {{ self.includes_d() -}}
 
   location / {
-    return 301 {{ ssl_enabled and host.ssl | default(true) | ternary('https', 'http') }}://{{ host.canonical }}$request_uri;
+    return 301 {{ (ssl_enabled and host.ssl | default(true)) | ternary('https', 'http') }}://{{ host.canonical }}$request_uri;
   }
 }
 {% endfor %}
