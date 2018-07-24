@@ -2,8 +2,8 @@
 
 {% block server_before %}{% endblock %}
 
-{% macro https(host) -%}
-  {% if ssl_enabled and host.ssl | default(true) -%}
+{% macro https(host_ssl, host_canonical) -%}
+  {% if ssl_enabled and host_ssl -%}
   # SSL configuration
   include h5bp/directive-only/ssl.conf;
   {% if ssl_stapling_enabled -%}
@@ -25,8 +25,8 @@
   ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
 
   {% elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
-  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ host.canonical }}-{{ letsencrypt_cert_ids[host.canonical] }}-bundled.cert;
-  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ host.canonical }}.key;
+  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ host_canonical }}-{{ letsencrypt_cert_ids[host_canonical] }}-bundled.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ host_canonical }}.key;
 
   {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
   ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
@@ -103,7 +103,7 @@ server {
   {% endif -%}
   {% endblock -%}
 
-  {{ https(host) }}
+  {{ https(host.ssl | default(true), host.canonical) }}
 
   {% block acme_challenge -%}
   include acme-challenge-location.conf;
@@ -246,7 +246,7 @@ server {
   listen 80;
   server_name {{ host.redirects | join(' ') }};
 
-  {{ https(host) -}}
+  {{ https(host.ssl | default(true), host.canonical) -}}
 
   {{ self.acme_challenge() -}}
 
