@@ -6,6 +6,7 @@ vagrant_box: 'bento/ubuntu-16.04'
 vagrant_box_version: '>= 201801.02.0'
 vagrant_ansible_version: '2.5.3'
 vagrant_skip_galaxy: false
+vagrant_mount_type: 'nfs'
 
 vagrant_install_plugins: true
 vagrant_plugins:

@@ -11,8 +11,8 @@
   version: e7a498d
 
 - name: swapfile
-  src: kamaln7.swapfile
-  version: 4850d8a
+  src: oefenweb.swapfile
+  version: v2.0.6
 
 - name: mailhog
   src: geerlingguy.mailhog
