@@ -1,4 +1,5 @@
 ### HEAD
+* Deploy: Remove obsoleted `git` remote checking ([#999](https://github.com/roots/trellis/pull/999))
 * Update xdebug tunnel configuration ([#1007](https://github.com/roots/trellis/pull/1007))
 * Verify `wp-cli.phar` checksum ([#996](https://github.com/roots/trellis/pull/996))
 * Enable `fastcgi_cache_background_update` by default ([#962](https://github.com/roots/trellis/pull/962))
