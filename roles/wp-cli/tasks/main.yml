@@ -16,7 +16,7 @@
     dest: /tmp/wp-cli-{{ wp_cli_version }}.phar.asc
 
 - name: Copy WP-CLI release team public key
-  synchronize:
+  copy:
     src: "{{ wp_cli_pgp_public_key }}"
     dest: /tmp/wp-cli.pgp.gpg
 
