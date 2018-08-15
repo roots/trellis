@@ -1,36 +1,44 @@
 ---
 - name: Generate private keys
-  shell: openssl genrsa 4096 > {{ letsencrypt_keys_dir }}/{{ item.key }}.key
+  shell: openssl genrsa 4096 > {{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key
   args:
-    creates: "{{ letsencrypt_keys_dir }}/{{ item.key }}.key"
-  when: site_uses_letsencrypt
-  with_dict: "{{ wordpress_sites }}"
+    creates: "{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key"
+  when: site_host_uses_letsencrypt
+  with_subelements:
+    - "{{ wordpress_sites }}"
+    - site_hosts
 
 - name: Ensure correct permissions on private keys
   file:
-    path: "{{ letsencrypt_keys_dir }}/{{ item.key }}.key"
+    path: "{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key"
     mode: 0600
-  when: site_uses_letsencrypt
-  with_dict: "{{ wordpress_sites }}"
+  when: site_host_uses_letsencrypt
+  with_subelements:
+    - "{{ wordpress_sites }}"
+    - site_hosts
 
 - name: Generate Lets Encrypt certificate IDs
   shell: |
-    echo "{{ [site_hosts | join(' '), letsencrypt_ca, acme_tiny_commit, letsencrypt_intermediate_cert_sha256sum] | join('\n') }}" |
-    cat {{ letsencrypt_account_key }} {{ letsencrypt_keys_dir }}/{{ item.key }}.key - |
+    echo "{{ [[item.1.canonical] | union(item.1.redirects | default([])) | join(' '), letsencrypt_ca, acme_tiny_commit, letsencrypt_intermediate_cert_sha256sum] | join('\n') }}" |
+    cat {{ letsencrypt_account_key }} {{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key - |
     md5sum | cut -c -7
   register: generate_cert_ids
   changed_when: false
-  when: site_uses_letsencrypt
-  with_dict: "{{ wordpress_sites }}"
+  when: site_host_uses_letsencrypt
+  with_subelements:
+    - "{{ wordpress_sites }}"
+    - site_hosts
   tags: [wordpress, wordpress-setup, nginx-includes, nginx-sites]
 
 - name: Generate CSRs
-  shell: "openssl req -new -sha256 -key '{{ letsencrypt_keys_dir }}/{{ item.key }}.key' -subj '/' -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ site_hosts | join(',DNS:') }}')) > {{ acme_tiny_data_directory }}/csrs/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}.csr"
+  shell: "openssl req -new -sha256 -key '{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key' -subj '/' -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ [item.1.canonical] | union(item.1.redirects | default([])) | join(',DNS:') }}')) > {{ acme_tiny_data_directory }}/csrs/{{ item.1.canonical }}-{{ letsencrypt_cert_ids[item.1.canonical] }}.csr"
   args:
     executable: /bin/bash
-    creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}.csr"
-  when: site_uses_letsencrypt
-  with_dict: "{{ wordpress_sites }}"
+    creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.1.canonical }}-{{ letsencrypt_cert_ids[item.1.canonical] }}.csr"
+  when: site_host_uses_letsencrypt
+  with_subelements:
+    - "{{ wordpress_sites }}"
+    - site_hosts
 
 - name: Generate certificate renewal script
   template:

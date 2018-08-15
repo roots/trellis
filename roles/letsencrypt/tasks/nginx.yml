@@ -46,7 +46,7 @@
 
 - name: Test Acme Challenges
   test_challenges:
-    hosts: "{{ site_hosts }}"
+    hosts: "{{ ssl_site_hosts }}"
   register: letsencrypt_test_challenges
   ignore_errors: true
   when: site_uses_letsencrypt
