@@ -19,7 +19,7 @@
 
 - name: Generate Lets Encrypt certificate IDs
   shell: |
-    echo "{{ [item.1.canonical | list | union(item.1.redirects | default([])) | join(' '), letsencrypt_ca, acme_tiny_commit, letsencrypt_intermediate_cert_sha256sum] | join('\n') }}" |
+    echo "{{ [[item.1.canonical] | union(item.1.redirects | default([])) | join(' '), letsencrypt_ca, acme_tiny_commit, letsencrypt_intermediate_cert_sha256sum] | join('\n') }}" |
     cat {{ letsencrypt_account_key }} {{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key - |
     md5sum | cut -c -7
   register: generate_cert_ids
@@ -31,7 +31,7 @@
   tags: [wordpress, wordpress-setup, nginx-includes, nginx-sites]
 
 - name: Generate CSRs
-  shell: "openssl req -new -sha256 -key '{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key' -subj '/' -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ item.1.canonical | union(item.1.redirects | default([])) | join(',DNS:') }}')) > {{ acme_tiny_data_directory }}/csrs/{{ item.1.canonical }}-{{ letsencrypt_cert_ids[item.1.canonical] }}.csr"
+  shell: "openssl req -new -sha256 -key '{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key' -subj '/' -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ [item.1.canonical] | union(item.1.redirects | default([])) | join(',DNS:') }}')) > {{ acme_tiny_data_directory }}/csrs/{{ item.1.canonical }}-{{ letsencrypt_cert_ids[item.1.canonical] }}.csr"
   args:
     executable: /bin/bash
     creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.1.canonical }}-{{ letsencrypt_cert_ids[item.1.canonical] }}.csr"
