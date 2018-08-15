@@ -1,8 +1,8 @@
 ---
 - name: Generate private keys
-  shell: openssl genrsa 4096 > {{ letsencrypt_keys_dir }}/{{ item.1.value.canonical }}.key
+  shell: openssl genrsa 4096 > {{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key
   args:
-    creates: "{{ letsencrypt_keys_dir }}/{{ item.1.value.canonical }}.key"
+    creates: "{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key"
   when: site_host_uses_letsencrypt
   with_subelements:
     - "{{ wordpress_sites }}"
@@ -10,7 +10,7 @@
 
 - name: Ensure correct permissions on private keys
   file:
-    path: "{{ letsencrypt_keys_dir }}/{{ item.1.value.canonical }}.key"
+    path: "{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key"
     mode: 0600
   when: site_host_uses_letsencrypt
   with_subelements:
@@ -19,8 +19,8 @@
 
 - name: Generate Lets Encrypt certificate IDs
   shell: |
-    echo "{{ [item.1.value.canonical | list | union(item.1.value.redirects | default([])) | join(' '), letsencrypt_ca, acme_tiny_commit, letsencrypt_intermediate_cert_sha256sum] | join('\n') }}" |
-    cat {{ letsencrypt_account_key }} {{ letsencrypt_keys_dir }}/{{ item.1.value.canonical }}.key - |
+    echo "{{ [item.1.canonical | list | union(item.1.redirects | default([])) | join(' '), letsencrypt_ca, acme_tiny_commit, letsencrypt_intermediate_cert_sha256sum] | join('\n') }}" |
+    cat {{ letsencrypt_account_key }} {{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key - |
     md5sum | cut -c -7
   register: generate_cert_ids
   changed_when: false
@@ -31,10 +31,10 @@
   tags: [wordpress, wordpress-setup, nginx-includes, nginx-sites]
 
 - name: Generate CSRs
-  shell: "openssl req -new -sha256 -key '{{ letsencrypt_keys_dir }}/{{ item.1.value.canonical }}.key' -subj '/' -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ item.1.value.canonical | union(item.1.value.redirects | default([])) | join(',DNS:') }}')) > {{ acme_tiny_data_directory }}/csrs/{{ item.1.value.canonical }}-{{ letsencrypt_cert_ids[item.1.value.canonical] }}.csr"
+  shell: "openssl req -new -sha256 -key '{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key' -subj '/' -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf '[SAN]\nsubjectAltName=DNS:{{ item.1.canonical | union(item.1.redirects | default([])) | join(',DNS:') }}')) > {{ acme_tiny_data_directory }}/csrs/{{ item.1.canonical }}-{{ letsencrypt_cert_ids[item.1.canonical] }}.csr"
   args:
     executable: /bin/bash
-    creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.1.value.canonical }}-{{ letsencrypt_cert_ids[item.1.value.canonical] }}.csr"
+    creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.1.canonical }}-{{ letsencrypt_cert_ids[item.1.canonical] }}.csr"
   when: site_host_uses_letsencrypt
   with_subelements:
     - "{{ wordpress_sites }}"
