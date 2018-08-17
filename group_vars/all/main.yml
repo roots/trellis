@@ -7,6 +7,7 @@ apt_security_package_state: latest
 apt_dev_package_state: latest
 ntp_timezone: Etc/UTC
 ntp_manage_config: true
+deploy_using_git_archive: false
 www_root: /srv/www
 ip_whitelist:
   - "{{ (env == 'development') | ternary(ansible_default_ipv4.gateway, ipify_public_ip | default('')) }}"
