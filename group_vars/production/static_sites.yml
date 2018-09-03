@@ -7,3 +7,4 @@ nginx_sites_confs:
   - src: nginx-includes/artifacts.proteusthemes.com.conf.j2
   - src: nginx-includes/html-demo.proteusthemes.com.conf.j2
   - src: nginx-includes/www.proteusnet.com.conf.j2
+  - src: nginx-includes/unwantedhero.com.conf.j2

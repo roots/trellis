@@ -1,0 +1,25 @@
+# {{ ansible_managed }}
+
+server {
+  listen [::]:80;
+  listen 80;
+  server_name unwantedhero.com;
+
+  access_log /srv/www/logs/unwantedhero.com/access.log;
+  error_log /srv/www/logs/unwantedhero.com/error.log;
+
+  root /srv/www/unwantedhero.com;
+  index index.html;
+  add_header Fastcgi-Cache $upstream_cache_status;
+
+  # Specify a charset
+  charset utf-8;
+
+  include acme-challenge-location.conf;
+  include includes.d/unwantedhero.com/*.conf;
+
+  include h5bp/directive-only/x-ua-compatible.conf;
+  include h5bp/location/cross-domain-fonts.conf;
+  include h5bp/location/expires.conf;
+  include h5bp/location/protect-system-files.conf;
+}
