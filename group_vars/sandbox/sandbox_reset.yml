@@ -26,6 +26,7 @@ sites_to_export:
   - growthpress
   - woondershop
   - woondershop-jungle
+  - woondershop-fab
 
 # replace these emails to info@example.com when importing
 wp_emails:
@@ -55,3 +56,4 @@ xmls_to_rename:
   buildpress-landscape: "buildpresslandscape"
   buildpress-rtl: "buildpressrtl"
   woondershop-jungle: "woondershopjungle"
+  woondershop-fab: "woondershopfab"
