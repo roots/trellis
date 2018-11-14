@@ -62,7 +62,8 @@ Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) fo
 ## Local development setup
 
 1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`
-2. Run `vagrant up`
+2. Ensure you're in the trellis directory: `cd trellis`
+3. Run `vagrant up`
 
 [Read the local development docs](https://roots.io/trellis/docs/local-development-setup/) for more information.
 
