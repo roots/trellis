@@ -145,7 +145,7 @@
 
 - name: Retrieve SSH client IP
   ipify_facts:
-  connection: local
+  delegate_to: localhost
   become: no
   when: env != 'development' and ssh_client_ip_lookup | default(true)
   tags: [fail2ban, ferm]
