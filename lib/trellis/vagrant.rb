@@ -49,6 +49,14 @@ def nfs_path(path)
   "/vagrant-nfs-#{File.basename(path)}"
 end
 
+def mount_options(mount_type, directory_mode, file_mode)
+  if mount_type == 'smb'
+    ["vers=3.02","mfsymlinks","dir_mode=0#{directory_mode}","file_mode=0#{file_mode}","sec=ntlm"]
+  else
+    ["dmode=#{directory_mode}", "fmode=#{file_mode}"]
+  end
+end
+
 def post_up_message
   msg = 'Your Trellis Vagrant box is ready to use!'
   msg << "\n* Composer and WP-CLI commands need to be run on the virtual machine"
