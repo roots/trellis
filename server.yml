@@ -9,23 +9,6 @@
   roles:
     - { role: connection, tags: [connection, always] }
 
-- name: Install prerequisites
-  hosts: web:&{{ env }}
-  gather_facts: false
-  become: yes
-  tasks:
-    - block:
-      - name: Find path to python interpreter
-        raw: which python3 || which python
-        register: python_path
-        changed_when: false
-      - name: Set path to python interpreter on remote
-        set_fact:
-          ansible_python_interpreter: "{{ python_path.stdout }}"
-        when: python_path.rc == 0
-      when: ansible_python_interpreter is not defined
-      tags: always
-
 - name: WordPress Server - Install LEMP Stack with PHP 7.2 and MariaDB MySQL
   hosts: web:&{{ env }}
   become: yes
