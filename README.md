@@ -12,7 +12,7 @@ Ansible playbooks for setting up a LEMP stack for WordPress.
 
 Trellis will configure a server with the following and more:
 
-* Ubuntu 16.04 Xenial LTS
+* Ubuntu 18.04 Bionic LTS
 * Nginx (with optional FastCGI micro-caching)
 * PHP 7.2
 * MariaDB (a drop-in MySQL replacement)
@@ -71,7 +71,9 @@ Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) fo
 
 For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://roots.io/trellis/docs/remote-server-setup/#requirements) for more information.
 
-A base Ubuntu 16.04 server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
+A base Ubuntu 18.04 (Bionic) server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
+
+Note: Ubuntu 16.04 (Xenial) is still supported as well. See [#992](https://github.com/roots/trellis/pull/992) for details on the minor changes needed to run it.
 
 1. Configure your WordPress sites in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://roots.io/trellis/docs/vault/) for how to encrypt files containing passwords)
 2. Add your server IP/hostnames to `hosts/<environment>`
