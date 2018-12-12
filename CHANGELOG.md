@@ -1,4 +1,5 @@
 ### HEAD
+* [BREAKING] Add Ubuntu 18.04 support and default to it ([#992](https://github.com/roots/trellis/pull/992))
 * Python 3 support ([#1031](https://github.com/roots/trellis/pull/1031))
 * Allow customizing Nginx `worker_connections` ([#1021](https://github.com/roots/trellis/pull/1021))
 * Update wp-cli to 2.0.1 ([#1019](https://github.com/roots/trellis/pull/1019))
