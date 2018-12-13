@@ -13,18 +13,8 @@
   hosts: web:&{{ env }}
   gather_facts: false
   become: yes
-  tasks:
-    - block:
-      - name: Get Ubuntu release
-        raw: lsb_release -cs
-        register: ubuntu_release
-        changed_when: false
-      - name: Set ansible_python_interpreter for Ubuntu 18.04 Bionic
-        set_fact:
-          ansible_python_interpreter: python3
-        when: ubuntu_release.stdout_lines[0] == 'bionic'
-      when: ansible_python_interpreter is not defined
-      tags: always
+  roles:
+    - { role: python_interpreter, tags: [always] }
 
 - name: WordPress Server - Install LEMP Stack with PHP 7.2 and MariaDB MySQL
   hosts: web:&{{ env }}
