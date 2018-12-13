@@ -1,0 +1,11 @@
+- block:
+  - name: Get Ubuntu release
+    raw: lsb_release -cs
+    register: ubuntu_release
+    changed_when: false
+  - name: Set ansible_python_interpreter for Ubuntu 18.04 Bionic
+    set_fact:
+      ansible_python_interpreter: python3
+    when: ubuntu_release.stdout | trim == 'bionic'
+  when: ansible_python_interpreter is not defined
+  tags: always
