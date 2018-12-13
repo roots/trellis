@@ -140,6 +140,14 @@ Vagrant.configure('2') do |config|
           path: File.join(provisioning_path, 'bin/ssh-vagrant-config.sh'),
           args: [main_hostname]
         }
+
+        # Create wp-cli.local.yml file with `wp @vagrant` alias for every site
+        trellis_config.wordpress_sites.each_pair do |name, site|
+          trigger.run = {
+            path: File.join(provisioning_path, 'bin/wp-cli-local.sh'),
+            args: [main_hostname, remote_site_path(name, site), local_site_path(site)]
+          }
+        end
       end
     end
   end
