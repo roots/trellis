@@ -18,7 +18,7 @@ version_requirement = '2.4.0.0'
 version_tested_max = '2.5.3'
 python3_required_version = '2.5.3'
 
-if version_info[0] == 2 and not ge(LooseVersion(__version__), LooseVersion(python3_required_version)):
+if version_info[0] == 3 and not ge(LooseVersion(__version__), LooseVersion(python3_required_version)):
     raise AnsibleError(('Ansible >= {} is required when using Python 3.\n'
         'Either downgrade to Python 2 or update your Ansible version to {}.').format(python3_required_version, python3_required_version))
 
