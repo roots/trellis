@@ -15,7 +15,7 @@ except ImportError:
     display = Display()
 
 version_requirement = '2.4.0.0'
-version_tested_max = '2.5.3'
+version_tested_max = '2.7.5'
 python3_required_version = '2.5.3'
 
 if version_info[0] == 3 and not ge(LooseVersion(__version__), LooseVersion(python3_required_version)):

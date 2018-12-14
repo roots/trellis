@@ -1,4 +1,5 @@
 ### HEAD
+* Bump Ansible `version_tested_max` to 2.7.5 ([#1045](https://github.com/roots/trellis/pull/1045))
 * Add Vagrant `ssh-config` to `~/.ssh/config` on `vagrant up` ([#1042](https://github.com/roots/trellis/pull/1042))
 * [BREAKING] Add Ubuntu 18.04 support and default to it ([#992](https://github.com/roots/trellis/pull/992))
 * Python 3 support ([#1031](https://github.com/roots/trellis/pull/1031))
