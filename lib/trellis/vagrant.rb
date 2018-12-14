@@ -49,11 +49,11 @@ def nfs_path(path)
   "/vagrant-nfs-#{File.basename(path)}"
 end
 
-def mount_options(mount_type, directory_mode, file_mode)
+def mount_options(mount_type, dmode:, fmode:)
   if mount_type == 'smb'
-    ["vers=3.02","mfsymlinks","dir_mode=0#{directory_mode}","file_mode=0#{file_mode}","sec=ntlm"]
+    ["vers=3.02", "mfsymlinks", "dir_mode=0#{dmode}", "file_mode=0#{fmode}", "sec=ntlm"]
   else
-    ["dmode=#{directory_mode}", "fmode=#{file_mode}"]
+    ["dmode=#{dmode}", "fmode=#{fmode}"]
   end
 end
 

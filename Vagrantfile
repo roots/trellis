@@ -71,25 +71,23 @@ Vagrant.configure('2') do |config|
 
   vagrant_mount_type = vconfig.fetch('vagrant_mount_type')
 
-  if vagrant_mount_type == 'smb'
-    smb_username = vconfig.fetch('vagrant_smb_username')
-    smb_password = vconfig.fetch('vagrant_smb_password')
+  extra_options = if vagrant_mount_type == 'smb'
+    {
+      smb_username: vconfig.fetch('vagrant_smb_username', 'vagrant'),
+      smb_password: vconfig.fetch('smb_password', 'vagrant'),
+    }
+  else
+    {}
+  end
 
-    trellis_config.wordpress_sites.each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', smb_username: smb_username, smb_password: smb_password, mount_options: mount_options(vagrant_mount_type, 776, 774), type: vagrant_mount_type
-    end
-
-    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, smb_username: smb_username, smb_password: smb_password, mount_options: mount_options(vagrant_mount_type, 755, 644), type: vagrant_mount_type
-    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, smb_username: smb_username, smb_password: smb_password, mount_options: mount_options(vagrant_mount_type, 755, 755), type: vagrant_mount_type
-
-  elsif vagrant_mount_type != 'nfs' || Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? && !Vagrant.has_plugin?('vagrant-winnfsd'))
+  if vagrant_mount_type != 'nfs' || Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? && !Vagrant.has_plugin?('vagrant-winnfsd'))
     vagrant_mount_type = nil if vagrant_mount_type == 'nfs'
     trellis_config.wordpress_sites.each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: mount_options(vagrant_mount_type, 776, 774), type: vagrant_mount_type
+      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: mount_options(vagrant_mount_type, dmode: 776, fmode: 774), type: vagrant_mount_type, **extra_options
     end
 
-    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: mount_options(vagrant_mount_type, 755, 644), type: vagrant_mount_type
-    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: mount_options(vagrant_mount_type, 755, 755), type: vagrant_mount_type
+    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: mount_options(vagrant_mount_type, dmode: 755, fmode: 644), type: vagrant_mount_type, **extra_options
+    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: mount_options(vagrant_mount_type, dmode: 755, fmode: 755), type: vagrant_mount_type, **extra_options
   elsif !Vagrant.has_plugin?('vagrant-bindfs')
     fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
   else

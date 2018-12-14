@@ -7,8 +7,6 @@ vagrant_box_version: '>= 201801.02.0'
 vagrant_ansible_version: '2.5.3'
 vagrant_skip_galaxy: false
 vagrant_mount_type: 'nfs'
-vagrant_smb_username: 'vagrant'
-vagrant_smb_password: 'vagrant'
 
 vagrant_install_plugins: true
 vagrant_plugins:
