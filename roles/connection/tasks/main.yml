@@ -53,7 +53,7 @@
 - block:
   - name: Set remote user for each host
     set_fact:
-      ansible_user: "{{ ansible_user | default((connection_status.stdout_lines | intersect(['root', '\e[0;32mroot']) | count) | ternary('root', admin_user)) }}"
+      ansible_user: "{{ ansible_user | default((connection_status.stdout_lines | intersect(['root', '\e[0;32mroot', '\e[0;33mroot']) | count) | ternary('root', admin_user)) }}"
     check_mode: no
 
   - name: Announce which user was selected
