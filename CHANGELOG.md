@@ -1,4 +1,5 @@
 ### HEAD
+* Allow overriding rollback variables ([#1047](https://github.com/roots/trellis/pull/1047))
 * Require Vagrant >= 2.1.0 ([#1046](https://github.com/roots/trellis/pull/1046))
 * Bump Ansible `version_tested_max` to 2.7.5 ([#1045](https://github.com/roots/trellis/pull/1045))
 * Add Vagrant `ssh-config` to `~/.ssh/config` on `vagrant up` ([#1042](https://github.com/roots/trellis/pull/1042))
