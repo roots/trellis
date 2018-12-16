@@ -20,4 +20,5 @@ raw_vars:
   - vault_mysql_root_password
   - vault_users.*.password
   - vault_users.*.salt
+  - vault_wordpress_env_defaults
   - vault_wordpress_sites
