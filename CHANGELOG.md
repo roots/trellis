@@ -1,4 +1,5 @@
 ### HEAD
+* Add `vault_wordpress_env_defaults` ([#1048](https://github.com/roots/trellis/pull/1048))
 * Allow overriding rollback variables ([#1047](https://github.com/roots/trellis/pull/1047))
 * Require Vagrant >= 2.1.0 ([#1046](https://github.com/roots/trellis/pull/1046))
 * Bump Ansible `version_tested_max` to 2.7.5 ([#1045](https://github.com/roots/trellis/pull/1045))
