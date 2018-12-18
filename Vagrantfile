@@ -137,7 +137,7 @@ Vagrant.configure('2') do |config|
       config.trigger.after :up do |trigger|
         # Add Vagrant ssh-config to ~/.ssh/config
         trigger.run = {
-          path: File.join(provisioning_path, 'bin/ssh-vagrant-config.sh'),
+          path: File.join(ANSIBLE_PATH, 'bin/ssh-vagrant-config.sh'),
           args: [main_hostname]
         }
       end
