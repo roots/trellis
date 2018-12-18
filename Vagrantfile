@@ -1,3 +1,6 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
 ANSIBLE_PATH = __dir__ # absolute path to Ansible directory on host machine
 ANSIBLE_PATH_ON_VM = '/home/vagrant/trellis'.freeze # absolute path to Ansible directory on virtual machine
 
@@ -132,19 +135,9 @@ Vagrant.configure('2') do |config|
       extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
       ansible.extra_vars.merge!(extra_vars)
     end
-
-    if !Vagrant::Util::Platform.windows?
-      config.trigger.after :up do |trigger|
-        # Add Vagrant ssh-config to ~/.ssh/config
-        trigger.run = {
-          path: File.join(provisioning_path, 'bin/ssh-vagrant-config.sh'),
-          args: [main_hostname]
-        }
-      end
-    end
   end
 
-  # VirtualBox settings
+  # Virtualbox settings
   config.vm.provider 'virtualbox' do |vb|
     vb.name = config.vm.hostname
     vb.customize ['modifyvm', :id, '--cpus', vconfig.fetch('vagrant_cpus')]
