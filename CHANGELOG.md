@@ -1,4 +1,5 @@
 ### HEAD
+* Update to PHP 7.3 ([#1052](https://github.com/roots/trellis/pull/1052))
 * Fix Vagrant trigger path ([#1051](https://github.com/roots/trellis/pull/1051))
 * Fix: `vault_wordpress_env_defaults` not populated during deploy ([#1049](https://github.com/roots/trellis/pull/1049))
 * Add `vault_wordpress_env_defaults` ([#1048](https://github.com/roots/trellis/pull/1048))
