@@ -7,7 +7,7 @@
     pattern: "*.conf.j2"
     recurse: yes
   become: no
-  connection: local
+  delegate_to: localhost
   register: nginx_includes_templates
 
 - name: Warn about deprecated Nginx includes directory

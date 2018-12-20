@@ -43,3 +43,10 @@
     path: "{{ nginx_path }}/sites-enabled/default"
     state: absent
   notify: reload nginx
+
+- name: Enable Nginx to start on boot
+  service:
+    name: nginx
+    enabled: yes
+    state: started
+    use: service

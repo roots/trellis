@@ -67,5 +67,5 @@
   tags: [connection-tests, sshd]
 
 - import_tasks: connection-warnings.yml
-  when: not admin_user_status | skipped and admin_user_status.rc != 0
+  when: admin_user_status is not skipped and admin_user_status.rc != 0
   tags: [connection-tests, sshd]

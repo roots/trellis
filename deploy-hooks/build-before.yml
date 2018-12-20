@@ -9,7 +9,7 @@
 # ---
 # - name: Install npm dependencies
 #   command: yarn
-#   connection: local
+#   delegate_to: localhost
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #
@@ -19,8 +19,8 @@
 #     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #
 # - name: Compile assets for production
-#   command: yarn run build:production
-#   connection: local
+#   command: yarn build:production
+#   delegate_to: localhost
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #

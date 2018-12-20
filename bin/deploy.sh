@@ -21,7 +21,7 @@ Examples:
 "
 }
 
-[[ $# -lt 2 ]] && { show_usage; exit 0; }
+[[ $# -lt 2 ]] && { show_usage; exit 127; }
 
 for arg
 do
@@ -39,7 +39,7 @@ if [[ ! -e $HOSTS_FILE ]]; then
   echo
   echo "Available environments:"
   ( IFS=$'\n'; echo "${ENVIRONMENTS[*]}" )
-  exit 0
+  exit 1
 fi
 
 $DEPLOY_CMD

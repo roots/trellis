@@ -12,7 +12,7 @@ Ansible playbooks for setting up a LEMP stack for WordPress.
 
 Trellis will configure a server with the following and more:
 
-* Ubuntu 16.04 Xenial LTS
+* Ubuntu 18.04 Bionic LTS
 * Nginx (with optional FastCGI micro-caching)
 * PHP 7.2
 * MariaDB (a drop-in MySQL replacement)
@@ -36,7 +36,7 @@ Full documentation is available at [https://roots.io/trellis/docs/](https://root
 Make sure all dependencies have been installed before moving on:
 
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) >= 4.3.10
-* [Vagrant](https://www.vagrantup.com/downloads.html) >= 2.0.1
+* [Vagrant](https://www.vagrantup.com/downloads.html) >= 2.1.0
 
 ## Installation
 
@@ -62,7 +62,8 @@ Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) fo
 ## Local development setup
 
 1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`
-2. Run `vagrant up`
+2. Ensure you're in the trellis directory: `cd trellis`
+3. Run `vagrant up`
 
 [Read the local development docs](https://roots.io/trellis/docs/local-development-setup/) for more information.
 
@@ -70,7 +71,9 @@ Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) fo
 
 For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://roots.io/trellis/docs/remote-server-setup/#requirements) for more information.
 
-A base Ubuntu 16.04 server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
+A base Ubuntu 18.04 (Bionic) server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
+
+Note: Ubuntu 16.04 (Xenial) is still supported as well. See [#992](https://github.com/roots/trellis/pull/992) for details on the minor changes needed to run it.
 
 1. Configure your WordPress sites in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://roots.io/trellis/docs/vault/) for how to encrypt files containing passwords)
 2. Add your server IP/hostnames to `hosts/<environment>`
@@ -92,11 +95,11 @@ A base Ubuntu 16.04 server is required for setting up remote servers. OS X users
 
 Contributions are welcome from everyone. We have [contributing guidelines](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md) to help you get started.
 
-## Gold sponsors
+## Trellis sponsors
 
-Help support our open-source development efforts by [contributing to Trellis on OpenCollective](https://opencollective.com/trellis).
+Help support our open-source development efforts by [becoming a patron](https://www.patreon.com/rootsdev).
 
-<a href="https://kinsta.com/?kaid=OFDHAJIXUDIV"><img src="https://roots.io/app/uploads/kinsta.svg" alt="Kinsta" width="200" height="150"></a> <a href="https://www.harnessup.com/"><img src="https://roots.io/app/uploads/harness-software.svg" alt="Harness Software" width="200" height="150"></a> <a href="https://k-m.com/"><img src="https://roots.io/app/uploads/km-digital.svg" alt="KM Digital" width="200" height="150"></a> <a href="https://themeisle.com/"><img src="https://roots.io/app/uploads/sponsor-themeisle.svg" alt="ThemeIsle" width="200" height="150"></a>
+<a href="https://kinsta.com/?kaid=OFDHAJIXUDIV"><img src="https://cdn.roots.io/app/uploads/kinsta.svg" alt="Kinsta" width="200" height="150"></a> <a href="https://www.harnessup.com/"><img src="https://cdn.roots.io/app/uploads/harness-software.svg" alt="Harness Software" width="200" height="150"></a> <a href="https://k-m.com/"><img src="https://cdn.roots.io/app/uploads/km-digital.svg" alt="KM Digital" width="200" height="150"></a>
 
 ## Community
 

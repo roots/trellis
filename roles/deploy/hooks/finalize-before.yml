@@ -10,7 +10,7 @@
     chdir: "{{ deploy_helper.new_release_path }}"
   register: wp_installed
   changed_when: false
-  failed_when: wp_installed.stderr != ""
+  failed_when: wp_installed.stderr | default("") != "" or wp_installed.rc > 1
 
 - name: Get WP theme template and stylesheet roots
   shell: >
@@ -23,7 +23,7 @@
     chdir: "{{ deploy_helper.current_path }}"
   register: wp_template_root
   changed_when: false
-  failed_when: not wp_template_root.stderr | default('') | match("(|.*Could not get '" + item + "' option\. Does it exist\?)")
+  failed_when: wp_template_root.stderr | default('') is not match("(|.*Could not get '" + item + "' option\. Does it exist\?)")
   when:
     - wp_installed.rc == 0
     - project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool

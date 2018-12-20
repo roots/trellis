@@ -1,18 +1,18 @@
 - name: composer
   src: geerlingguy.composer
-  version: 1.6.1
+  version: 1.7.0
 
 - name: ntp
   src: geerlingguy.ntp
-  version: 1.5.2
+  version: 1.6.0
 
 - name: logrotate
   src: nickhammond.logrotate
-  version: e7a498d
+  version: v0.0.5
 
 - name: swapfile
-  src: kamaln7.swapfile
-  version: 4850d8a
+  src: oefenweb.swapfile
+  version: v2.0.6
 
 - name: mailhog
   src: geerlingguy.mailhog

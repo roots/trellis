@@ -9,6 +9,7 @@ import textwrap
 
 from ansible import __version__
 from ansible.module_utils._text import to_text
+from ansible.module_utils.six import string_types
 
 def system(vagrant_version=None):
     # Get most recent Trellis CHANGELOG entry
@@ -29,7 +30,7 @@ def system(vagrant_version=None):
         else:
             change = re.search(r'^\*\s?(\[BREAKING\])?([^\(\n\[]+)', str, re.M|re.I)
             if change is not None:
-                changelog_msg = '\n  Trellis at "{0}"'.format(change.group(2).strip())
+                changelog_msg = '\n  Trellis version (per changelog): "{0}"'.format(change.group(2).strip())
 
     # Vagrant info, if available
     vagrant = ' Vagrant {0};'.format(vagrant_version) if vagrant_version else ''
@@ -89,7 +90,7 @@ def display(obj, result):
     # Must pass unicode strings to Display.display() to prevent UnicodeError tracebacks
     if isinstance(msg, list):
         msg = '\n'.join([to_text(x) for x in msg])
-    elif not isinstance(msg, unicode):
+    elif not isinstance(msg, string_types):
         msg = to_text(msg)
 
     # Wrap text
