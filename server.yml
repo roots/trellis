@@ -9,22 +9,19 @@
   roles:
     - { role: connection, tags: [connection, always] }
 
-- name: Install prerequisites
+- name: Set ansible_python_interpreter
   hosts: web:&{{ env }}
   gather_facts: false
   become: yes
-  tasks:
-    - name: Install Python 2.x
-      raw: which python || sudo apt-get update && sudo apt-get install -qq -y python-simplejson
-      register: python_check
-      changed_when: not python_check.stdout | search('/usr/bin/python')
+  roles:
+    - { role: python_interpreter, tags: [always] }
 
 - name: WordPress Server - Install LEMP Stack with PHP 7.2 and MariaDB MySQL
   hosts: web:&{{ env }}
   become: yes
   roles:
     - { role: common, tags: [common] }
-    - { role: swapfile, swapfile_size: 1GB, tags: [swapfile] }
+    - { role: swapfile, swapfile_size: 1GB, swapfile_file: /swapfile, tags: [swapfile] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
     - { role: ntp, tags: [ntp] }

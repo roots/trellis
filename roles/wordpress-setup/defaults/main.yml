@@ -30,6 +30,7 @@ hsts_preload: "{{ item.value.ssl.hsts_preload | default(nginx_hsts_preload) | te
 nginx_cache_duration: 30s
 nginx_skip_cache_uri: /wp-admin/|/wp-json/|/xmlrpc.php|wp-.*.php|/feed/|index.php|sitemap(_index)?.xml
 nginx_skip_cache_cookie: comment_author|wordpress_[a-f0-9]+|wp-postpass|wordpress_no_cache|wordpress_logged_in
+nginx_cache_background_update: "on"
 
 # Nginx includes
 nginx_includes_templates_path: nginx-includes

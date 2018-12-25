@@ -54,3 +54,10 @@
     group: "{{ web_group }}"
     mode: "u+rwx,g+rwxs,o-w" # http://brunogirin.blogspot.si/2010/03/shared-folders-in-ubuntu-with-setgid.html
     state: directory
+
+- name: Enable Nginx to start on boot
+  service:
+    name: nginx
+    enabled: yes
+    state: started
+    use: service

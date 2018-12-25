@@ -3,6 +3,7 @@ nginx_ppa: "ppa:nginx/development"
 nginx_package: nginx
 nginx_conf: nginx.conf.j2
 nginx_path: /etc/nginx
+nginx_worker_connections: 8000
 nginx_logs_root: /var/log/nginx
 nginx_user: www-data www-data
 nginx_fastcgi_buffers: 8 8k

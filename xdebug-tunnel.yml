@@ -9,6 +9,7 @@
   hosts: "{{ xdebug_tunnel_inventory_host }}"
   become: yes
   roles:
+    - { role: sshd, tags: [sshd] }
     - { role: xdebug, tags: [xdebug] }
     - { role: xdebug-tunnel, tags: [xdebug-tunnel] }
   handlers:

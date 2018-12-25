@@ -36,7 +36,7 @@
   notify: disable temporary challenge sites
 
 - import_tasks: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
-  when: challenge_site_confs | changed or challenge_sites_enabled | changed
+  when: challenge_site_confs is changed or challenge_sites_enabled is changed
 
 - name: Create test Acme Challenge file
   shell: touch {{ acme_tiny_challenges_directory }}/ping.txt
@@ -60,5 +60,5 @@
       Make sure that a valid DNS record exists for {{ item.failed_hosts | join(', ') }} and that they point to this server's IP.
       If you don't want these domains in your SSL certificate, then remove them from `site_hosts`.
       See https://roots.io/trellis/docs/ssl for more details.
-  when: not item | skipped and letsencrypt_test_challenges | failed
+  when: item is not skipped and item is failed
   with_items: "{{ letsencrypt_test_challenges.results }}"

@@ -36,6 +36,7 @@
     password: '{% for user in vault_users | default([]) if user.name == item.name and user.password is defined %}{{ user.password | password_hash("sha512", (user.salt | default(""))[:16] | regex_replace("[^\.\/a-zA-Z0-9]", "x")) }}{% else %}{{ None }}{% endfor %}'
     state: present
     shell: /bin/bash
+    update_password: "{{ item.update_password | default('always') }}"
   with_items: "{{ users }}"
 
 - name: Add web user sudoers items for services
@@ -66,5 +67,5 @@
   tags: [connection-tests, sshd]
 
 - import_tasks: connection-warnings.yml
-  when: not admin_user_status | skipped and admin_user_status.rc != 0
+  when: admin_user_status is not skipped and admin_user_status.rc != 0
   tags: [connection-tests, sshd]

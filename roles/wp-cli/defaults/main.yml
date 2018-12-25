@@ -1,6 +1,10 @@
-wp_cli_version: 1.5.0
+gpg2_package: gnupg2
+wp_cli_version: 2.0.1
 wp_cli_bin_path: /usr/bin/wp
 wp_cli_phar_url: "https://github.com/wp-cli/wp-cli/releases/download/v{{ wp_cli_version }}/wp-cli-{{ wp_cli_version }}.phar"
+wp_cli_phar_asc_url: "https://github.com/wp-cli/wp-cli/releases/download/v{{ wp_cli_version }}/wp-cli-{{ wp_cli_version }}.phar.asc"
+# Note: wp_cli_pgp_public_key must be in binary format
+wp_cli_pgp_public_key: "{{ playbook_dir }}/roles/wp-cli/templates/wp-cli.pgp.gpg"
 wp_cli_completion_url: "https://raw.githubusercontent.com/wp-cli/wp-cli/v{{ wp_cli_version }}/utils/wp-completion.bash"
 wp_cli_completion_path: /etc/bash_completion.d/wp-completion.bash
 wp_cli_packages: []
