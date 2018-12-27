@@ -137,10 +137,10 @@ Vagrant.configure('2') do |config|
     if !Vagrant::Util::Platform.windows?
       config.trigger.after :up do |trigger|
         # Add Vagrant ssh-config to ~/.ssh/config
-        trigger.run = {
-          path: File.join(ANSIBLE_PATH, 'bin/ssh-vagrant-config.sh'),
-          args: [main_hostname]
-        }
+        trigger.info = "Adding vagrant ssh-config for #{main_hostname } to ~/.ssh/config"
+        trigger.ruby do
+          update_ssh_config(main_hostname)
+        end
       end
     end
   end

@@ -76,3 +76,24 @@ def which(cmd)
     system("#{path} --help", %i(out err) => File::NULL)
   end
 end
+
+def update_ssh_config(main_hostname)
+  regexp = /(Host #{Regexp.quote(main_hostname)}(?:(?!^Host).)*)/m
+  config_file = File.expand_path('~/.ssh/config')
+  vagrant_ssh_config = `vagrant ssh-config --host #{main_hostname}`.chomp
+
+  if File.exists?(config_file)
+    FileUtils.cp(config_file, "#{config_file}.trellis_backup")
+    ssh_config = File.read(config_file)
+
+    content = if ssh_config =~ regexp
+      ssh_config.gsub(regexp, vagrant_ssh_config)
+    else
+      ssh_config << "\n#{vagrant_ssh_config}"
+    end
+
+    File.write(config_file, content)
+  else
+    File.write(config_file, vagrant_ssh_config)
+  end
+end

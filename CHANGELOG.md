@@ -1,4 +1,5 @@
 ### HEAD
+* Use Ruby script for ssh-config trigger ([#1053](https://github.com/roots/trellis/pull/1053))
 * Update to PHP 7.3 ([#1052](https://github.com/roots/trellis/pull/1052))
 * Enable per-user `update_password` behavior ([#767](https://github.com/roots/trellis/pull/767))
 * Fix Vagrant trigger path ([#1051](https://github.com/roots/trellis/pull/1051))
