@@ -1,4 +1,5 @@
 ### 1.0.0: December 27th, 2018
+* Hyper-V and SMB folder sync compatibility ([#1035](https://github.com/roots/trellis/pull/1035))
 * Use Ruby script for ssh-config trigger ([#1053](https://github.com/roots/trellis/pull/1053))
 * Update to PHP 7.3 ([#1052](https://github.com/roots/trellis/pull/1052))
 * Enable per-user `update_password` behavior ([#767](https://github.com/roots/trellis/pull/767))
