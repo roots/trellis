@@ -11,6 +11,13 @@
   roles:
     - { role: connection, tags: [connection, always] }
 
+- name: Set ansible_python_interpreter
+  hosts: web:&{{ env }}
+  gather_facts: false
+  become: yes
+  roles:
+    - { role: python_interpreter, tags: [always] }
+
 - name: Deploy WP site
   hosts: web:&{{ env }}
   remote_user: "{{ web_user }}"
