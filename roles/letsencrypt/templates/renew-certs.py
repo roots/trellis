@@ -45,7 +45,7 @@ for site in {{ sites_using_letsencrypt }}:
             intermediate_cert = intermediate_cert_file.read()
 
         with open(bundled_cert_path, 'wb') as bundled_file:
-            bundled_file.write(''.join([cert, intermediate_cert]))
+            bundled_file.write(b''.join(b[cert, intermediate_cert]))
 
         print('Created certificate for ' + site)
 
