@@ -1,3 +1,6 @@
+### HEAD
+* Add Python 2 explicitly ([#1061](https://github.com/roots/trellis/pull/1061))
+
 ### 1.0.0: December 27th, 2018
 * Hyper-V and SMB folder sync compatibility ([#1035](https://github.com/roots/trellis/pull/1035))
 * Use Ruby script for ssh-config trigger ([#1053](https://github.com/roots/trellis/pull/1053))
