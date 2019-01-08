@@ -32,20 +32,20 @@ for site in {{ sites_using_letsencrypt }}:
            ).format(site, letsencrypt_cert_ids[site])
 
     try:
-        cert = check_output(cmd, stderr=STDOUT, shell=True)
+        cert = check_output(cmd, stderr=STDOUT, shell=True, universal_newlines=True)
     except CalledProcessError as e:
         failed = True
         print('Error while generating certificate for ' + site)
         print(e.output)
     else:
-        with open(cert_path, 'wb') as cert_file:
+        with open(cert_path, 'w') as cert_file:
             cert_file.write(cert)
 
         with open('{{ letsencrypt_intermediate_cert_path }}') as intermediate_cert_file:
             intermediate_cert = intermediate_cert_file.read()
 
-        with open(bundled_cert_path, 'wb') as bundled_file:
-            bundled_file.write(b''.join(b[cert, intermediate_cert]))
+        with open(bundled_cert_path, 'w') as bundled_file:
+            bundled_file.write(cert.join([intermediate_cert]))
 
         print('Created certificate for ' + site)
 
