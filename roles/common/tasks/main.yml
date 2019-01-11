@@ -48,7 +48,7 @@
       php_extensions_custom: "{{ php_extensions_custom }}"
       sshd_packages_default: "{{ sshd_packages_default }}"
       sshd_packages_custom: "{{ sshd_packages_custom }}"
-    package_vars_wrong_format: "[{% for k,v in package_vars.iteritems() if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
+    package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
   tags: [sshd, memcached, php]
 
 - name: Verify dict format for apt package combined variables
@@ -61,13 +61,13 @@
       memcached_packages: "{{ memcached_packages }}"
       php_extensions: "{{ php_extensions }}"
       sshd_packages: "{{ sshd_packages }}"
-    package_vars_wrong_format: "[{% for k,v in package_vars.iteritems() if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
+    package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
   tags: [sshd, memcached, php]
 
 - name: Validate Ubuntu version
   debug:
     msg: |
-      Trellis is built for Ubuntu 16.04 Xenial as of https://github.com/roots/trellis/pull/626
+      Trellis is built for Ubuntu 18.04 Bionic as of https://github.com/roots/trellis/pull/992
 
       Your Ubuntu version is {{ ansible_distribution_version }} {{ ansible_distribution_release }}
 
@@ -77,8 +77,8 @@
 
       Development via Vagrant: `vagrant destroy && vagrant up`
 
-      Staging/Production: Create a new server with Ubuntu 16.04 and provision
-  when: ansible_distribution_release != 'xenial'
+      Staging/Production: Create a new server with Ubuntu 18.04 and provision
+  when: ansible_distribution_release != 'bionic'
 
 - name: Check whether passlib is needed
   fail:
@@ -145,7 +145,7 @@
 
 - name: Retrieve SSH client IP
   ipify_facts:
-  connection: local
+  delegate_to: localhost
   become: no
   when: env != 'development' and ssh_client_ip_lookup | default(true)
   tags: [fail2ban, ferm]

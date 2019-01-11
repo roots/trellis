@@ -1,6 +1,3 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 ANSIBLE_PATH = __dir__ # absolute path to Ansible directory on host machine
 ANSIBLE_PATH_ON_VM = '/home/vagrant/trellis'.freeze # absolute path to Ansible directory on virtual machine
 
@@ -19,7 +16,7 @@ ensure_plugins(vconfig.fetch('vagrant_plugins')) if vconfig.fetch('vagrant_insta
 
 trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH)
 
-Vagrant.require_version '>= 2.0.1'
+Vagrant.require_version '>= 2.1.0'
 
 Vagrant.configure('2') do |config|
   config.vm.box = vconfig.fetch('vagrant_box')
@@ -71,14 +68,23 @@ Vagrant.configure('2') do |config|
 
   vagrant_mount_type = vconfig.fetch('vagrant_mount_type')
 
+  extra_options = if vagrant_mount_type == 'smb'
+    {
+      smb_username: vconfig.fetch('vagrant_smb_username', 'vagrant'),
+      smb_password: vconfig.fetch('vagrant_smb_password', 'vagrant'),
+    }
+  else
+    {}
+  end
+
   if vagrant_mount_type != 'nfs' || Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? && !Vagrant.has_plugin?('vagrant-winnfsd'))
     vagrant_mount_type = nil if vagrant_mount_type == 'nfs'
     trellis_config.wordpress_sites.each_pair do |name, site|
-      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: ['dmode=776', 'fmode=775'], type: vagrant_mount_type
+      config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: mount_options(vagrant_mount_type, dmode: 776, fmode: 775), type: vagrant_mount_type, **extra_options
     end
 
-    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: ['dmode=755', 'fmode=644'], type: vagrant_mount_type
-    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: ['dmode=755', 'fmode=755'], type: vagrant_mount_type
+    config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: mount_options(vagrant_mount_type, dmode: 755, fmode: 644), type: vagrant_mount_type, **extra_options
+    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: mount_options(vagrant_mount_type, dmode: 755, fmode: 755), type: vagrant_mount_type, **extra_options
   elsif !Vagrant.has_plugin?('vagrant-bindfs')
     fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
   else
@@ -122,6 +128,7 @@ Vagrant.configure('2') do |config|
     ansible.playbook = File.join(provisioning_path, 'dev.yml')
     ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
     ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
+    ansible.galaxy_command = 'ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path}'
 
     ansible.groups = {
       'web' => ['default'],
@@ -135,9 +142,19 @@ Vagrant.configure('2') do |config|
       extra_vars = Hash[vars.split(',').map { |pair| pair.split('=') }]
       ansible.extra_vars.merge!(extra_vars)
     end
+
+    if !Vagrant::Util::Platform.windows?
+      config.trigger.after :up do |trigger|
+        # Add Vagrant ssh-config to ~/.ssh/config
+        trigger.info = "Adding vagrant ssh-config for #{main_hostname } to ~/.ssh/config"
+        trigger.ruby do
+          update_ssh_config(main_hostname)
+        end
+      end
+    end
   end
 
-  # Virtualbox settings
+  # VirtualBox settings
   config.vm.provider 'virtualbox' do |vb|
     vb.name = config.vm.hostname
     vb.customize ['modifyvm', :id, '--cpus', vconfig.fetch('vagrant_cpus')]
@@ -164,5 +181,14 @@ Vagrant.configure('2') do |config|
     prl.cpus = vconfig.fetch('vagrant_cpus')
     prl.memory = vconfig.fetch('vagrant_memory')
     prl.update_guest_tools = true
+  end
+
+  # Hyper-V settings
+  config.vm.provider 'hyperv' do |h|
+    h.vmname = config.vm.hostname
+    h.cpus = vconfig.fetch('vagrant_cpus')
+    h.memory = vconfig.fetch('vagrant_memory')
+    h.enable_virtualization_extensions = true
+    h.linked_clone = true
   end
 end
