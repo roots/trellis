@@ -1,4 +1,4 @@
-### HEAD
+### 1.0.1: January 16th, 2019
 * Add Python 2 explicitly ([#1061](https://github.com/roots/trellis/pull/1061))
 
 ### 1.0.0: December 27th, 2018
