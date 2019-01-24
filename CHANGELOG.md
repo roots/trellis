@@ -1,3 +1,6 @@
+### HEAD
+* Extract Sage 9 compiler ([#1030](https://github.com/roots/trellis/pull/1030))
+
 ### 1.0.1: January 16th, 2019
 * Add Python 2 explicitly ([#1061](https://github.com/roots/trellis/pull/1061))
 

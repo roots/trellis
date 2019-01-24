@@ -1,10 +1,14 @@
-# Placeholder `deploy_build_before` hook for building theme assets on the
+# Placeholder `deploy_build_before` hook for building frontend assets on the
 # host machine and then copying the files to the remote server
 #
-# ⚠️ This example assumes your theme is using Sage 9
-# An example for themes built with Sage 8 can be found at: https://git.io/vdgUt
+# ⚠️ The following is an simplified example of:
+#  1. installing npm dependencies
+#  2. compiling assets for production
+#  3. uploading assests to remote servers
 #
-# Uncomment the lines below and replace `sage` with your theme folder
+# An role for themes built with Sage 9 can be found at: https://github.com/ItinerisLtd/trellis-sage-9-compiler
+# An example for themes built with Sage 8 can be found at: https://git.io/vdgUt
+# More user contributed extensions can be found at: https://roots.io/trellis/docs/user-contributed-extensions/
 #
 # ---
 # - name: Install npm dependencies
@@ -12,11 +16,6 @@
 #   delegate_to: localhost
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
-#
-# - name: Install Composer dependencies
-#   command: composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
-#   args:
-#     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #
 # - name: Compile assets for production
 #   command: yarn build:production
