@@ -1,3 +1,8 @@
+### HEAD
+* Improve handling of vars with `AnsibleUnsafe` ([#1071](https://github.com/roots/trellis/pull/1071))
+* Update name of Nginx PPA (`development` to `mainline`) ([#1068](https://github.com/roots/trellis/pull/1068))
+* [REVERT] Don't force install Ansible Galaxy in dev ([#1064](https://github.com/roots/trellis/pull/1064))
+
 ### 1.0.1: January 16th, 2019
 * Add Python 2 explicitly ([#1061](https://github.com/roots/trellis/pull/1061))
 
