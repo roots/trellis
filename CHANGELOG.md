@@ -1,4 +1,4 @@
-### HEAD
+### 1.0.2: March 13th, 2019
 * Improve handling of vars with `AnsibleUnsafe` ([#1071](https://github.com/roots/trellis/pull/1071))
 * Update name of Nginx PPA (`development` to `mainline`) ([#1068](https://github.com/roots/trellis/pull/1068))
 * [REVERT] Don't force install Ansible Galaxy in dev ([#1064](https://github.com/roots/trellis/pull/1064))
