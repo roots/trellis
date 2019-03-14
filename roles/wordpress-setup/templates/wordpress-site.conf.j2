@@ -121,6 +121,13 @@ server {
     deny all;
   }
   {% endblock %}
+  
+  {% block blade_php -%}
+  # Prevent .blade.php files from being accessed directly.
+  location ~* \.(blade.php)$ {
+    deny all;
+  }
+  {% endblock %}
 
   {% block location_primary -%}
   location / {
