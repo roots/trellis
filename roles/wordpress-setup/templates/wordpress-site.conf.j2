@@ -122,9 +122,9 @@ server {
   }
   {% endblock %}
   
-  {% block blade_php -%}
-  # Prevent .blade.php files from being accessed directly.
-  location ~* \.(blade.php)$ {
+  {% block blade_twig_php -%}
+  # Prevent Blade and Twig files from being accessed directly.
+  location ~* \.(blade.php|twig)$ {
     deny all;
   }
   {% endblock %}
