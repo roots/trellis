@@ -128,7 +128,6 @@ Vagrant.configure('2') do |config|
     ansible.playbook = File.join(provisioning_path, 'dev.yml')
     ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
     ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
-    ansible.galaxy_command = 'ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path}'
 
     ansible.groups = {
       'web' => ['default'],

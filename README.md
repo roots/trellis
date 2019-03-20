@@ -38,6 +38,8 @@ Make sure all dependencies have been installed before moving on:
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) >= 4.3.10
 * [Vagrant](https://www.vagrantup.com/downloads.html) >= 2.1.0
 
+**Windows user?** [Read the Windows getting started docs](https://roots.io/getting-started/docs/windows-development-environment-trellis/) for slightly different installation instructions.
+
 ## Installation
 
 The recommended directory structure for a Trellis project looks like:
@@ -65,8 +67,6 @@ $ git clone --depth=1 git@github.com:roots/trellis.git && rm -rf trellis/.git
 ```plain
 $ composer create-project roots/bedrock site
 ```
-
-Windows user? [Read the Windows docs](https://roots.io/trellis/docs/windows/) for slightly different installation instructions. VirtualBox is known to have poor performance in Windows — use VMware or [see some possible solutions](https://discourse.roots.io/t/virtualbox-performance-in-windows/3932).
 
 ## Local development setup
 
