@@ -124,8 +124,8 @@ server {
   
   {% block blade_twig_templates -%}
   # Prevent Blade and Twig templates from being accessed directly.
-  location ~* \.(blade\.php|twig)(/.*)?$ {
-    return 401;
+  location ~* \.(blade\.php|twig)$ {
+    deny all;
   }
   {% endblock %}
 
