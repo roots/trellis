@@ -1,3 +1,8 @@
+### 1.0.3: April 30th, 2019
+* Prevent direct access for `.blade.php` files ([#1075](https://github.com/roots/trellis/pull/1075))
+* Show custom error message if external IP resolution fails ([#1078](https://github.com/roots/trellis/pull/1078))
+* Use all canonical site hosts for Landrush TLD ([#1077](https://github.com/roots/trellis/pull/1077))
+
 ### 1.0.2: March 13th, 2019
 * Improve handling of vars with `AnsibleUnsafe` ([#1071](https://github.com/roots/trellis/pull/1071))
 * Update name of Nginx PPA (`development` to `mainline`) ([#1068](https://github.com/roots/trellis/pull/1068))
