@@ -10,11 +10,6 @@ location = /blog/author/ {
   return 301 /blog/author/primozcigler/;
 }
 
-# redirect everything from /themes/ subdirectory to the root
-location /themes/ {
-  return 301 /;
-}
-
 # more specific rule of the above for the links that end with .html
 location ~ ^/themes/.*\.html?$ {
   return 301 /;
