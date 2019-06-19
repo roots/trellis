@@ -22,18 +22,6 @@ users:
       - sudo
     keys:
       - https://github.com/primozcigler.keys
-  - name: marko
-    groups:
-      - "{{ web_group }}"
-      - sudo
-    keys:
-      - https://github.com/Prelc.keys
-  - name: gregor
-    groups:
-      - "{{ web_group }}"
-      - sudo
-    keys:
-      - https://github.com/capuderg.keys
 
 web_user: deployer
 web_group: www-data
