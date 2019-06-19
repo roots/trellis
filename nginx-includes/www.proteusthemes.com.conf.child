@@ -31,3 +31,15 @@
       /index.php?$args;
   }
   {% endblock %}
+
+  {% block location_uploads_php -%}
+  # Prevent PHP scripts from being executed inside the uploads folder.
+  location ~* /wp-content/uploads/.*\.php$ {
+    deny all;
+  }
+
+  # disable XML RPC
+  location = /xmlrpc.php {
+    deny all;
+  }
+  {% endblock %}
