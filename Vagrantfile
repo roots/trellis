@@ -168,7 +168,7 @@ Vagrant.configure('2') do |config|
   # VMware Workstation/Fusion settings
   %w(vmware_fusion vmware_workstation).each do |provider|
     config.vm.provider provider do |vmw, _override|
-      vmw.name = config.vm.hostname
+      vmw.vmx['displayName'] = config.vm.hostname
       vmw.vmx['numvcpus'] = vconfig.fetch('vagrant_cpus')
       vmw.vmx['memsize'] = vconfig.fetch('vagrant_memory')
     end
