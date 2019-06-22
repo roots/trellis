@@ -1,3 +1,6 @@
+### Head
+* Setup composer HTTP basic authentication for multiple repositories ([#1091](https://github.com/roots/trellis/pull/1091))
+
 ### 1.0.3: April 30th, 2019
 * Prevent direct access for `.blade.php` files ([#1075](https://github.com/roots/trellis/pull/1075))
 * Show custom error message if external IP resolution fails ([#1078](https://github.com/roots/trellis/pull/1078))
