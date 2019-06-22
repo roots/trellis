@@ -17,6 +17,14 @@
   no_log: true
   when: project.packagist_token is defined
 
+- name: Setup composer authentications
+  composer:
+    command: config
+    arguments: --auth http-basic.{{ item.hostname }} {{ item.username }} {{ item.password }}
+    working_dir: "{{ deploy_helper.new_release_path }}"
+  no_log: true
+  loop: "{{ vault_wordpress_sites[site].composer_authentications | default([]) }}"
+
 - name: Install Composer dependencies
   composer:
     no_scripts: yes
