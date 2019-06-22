@@ -1,0 +1,10 @@
+---
+- name: "Setup composer authentications - {{ site }}"
+  composer:
+    command: config
+    arguments: --auth http-basic.{{ composer_authentication.hostname }} {{ composer_authentication.username }} {{ composer_authentication.password }}
+    working_dir: "{{ working_dir }}"
+  no_log: true
+  loop: "{{ composer_authentications }}"
+  loop_control:
+    loop_var: composer_authentication
