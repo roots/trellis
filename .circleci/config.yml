@@ -1,0 +1,58 @@
+version: 2.1
+
+orbs:
+  trellis:
+    executors:
+      python-27:
+        docker:
+          - image: 'circleci/python:2.7-stretch'
+      python-36:
+        docker:
+          - image: 'circleci/python:3.6-stretch'
+
+    jobs:
+      build-python:
+        parameters:
+          executor:
+            type: executor
+        executor: << parameters.executor >>
+        steps:
+          - run: python --version
+          - checkout
+          - restore_cache:
+              keys:
+                - ansible-v1-{{ checksum "requirements.yml" }}
+                - ansible-v1-
+          - run:
+              name: Install Python dependencies in a venv
+              command: |
+                virtualenv venv
+                . venv/bin/activate
+                pip install ansible
+          - run:
+              name: Install Galaxy roles
+              command: |
+                . venv/bin/activate
+                ansible-galaxy install -r requirements.yml -p vendor/roles
+          - save_cache:
+              key: ansible-v1-{{ checksum "requirements.yml" }}
+              paths:
+                - venv
+                - vendor
+          - run:
+              name: Check Playbook syntax
+              command: |
+                . venv/bin/activate
+                ansible-playbook --syntax-check -e env=development deploy.yml
+                ansible-playbook --syntax-check -e env=development dev.yml
+                ansible-playbook --syntax-check -e env=development server.yml
+
+workflows:
+  build:
+    jobs:
+      - trellis/build-python:
+          name: build-python-36
+          executor: trellis/python-36
+      - trellis/build-python:
+          name: build-python-27
+          executor: trellis/python-27
