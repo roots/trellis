@@ -1,0 +1,62 @@
+version: 2.1
+
+orbs:
+  trellis:
+    executors:
+      ubuntu-1804:
+        docker:
+          - image: 'ubuntu:18.04'
+
+    jobs:
+      syntax-check:
+        parameters:
+          ansible-version:
+            type: string
+            description: |
+              Use `ansible` for latest. Otherwise, `ansible-<major>.<minor>`, e.g: `ansible-2.8`
+              Avaiable versions can be found at https://launchpad.net/~ansible
+            default: ansible
+          executor:
+            type: executor
+            default: ubuntu-1804
+        executor: << parameters.executor >>
+        steps:
+          - run: apt-get update
+          - run: apt-get install -y --no-install-recommends software-properties-common
+          - run: add-apt-repository -y ppa:ansible/<< parameters.ansible-version >>
+          - run: apt-get update
+          - run: apt-get install -y --no-install-recommends ansible
+          - run: ansible --version
+
+          - checkout
+
+          - restore_cache:
+              keys:
+                - ansible-v1-<< parameters.ansible-version >>-{{ checksum "requirements.yml" }}
+          - run: ansible-galaxy install -r requirements.yml
+          - save_cache:
+              key: ansible-v1-<< parameters.ansible-version >>-{{ checksum "requirements.yml" }}
+              paths:
+                - vendor
+
+          - run: ansible-playbook --syntax-check -e env=development deploy.yml
+          - run: ansible-playbook --syntax-check -e env=development dev.yml
+          - run: ansible-playbook --syntax-check -e env=development server.yml
+
+workflows:
+  syntax-check:
+    jobs:
+      - trellis/syntax-check:
+          name: syntax-check-ansible-latest
+      - trellis/syntax-check:
+          name: syntax-check-ansible-2.8
+          ansible-version: ansible-2.8
+      - trellis/syntax-check:
+          name: syntax-check-ansible-2.7
+          ansible-version: ansible-2.7
+      - trellis/syntax-check:
+          name: syntax-check-ansible-2.6
+          ansible-version: ansible-2.6
+      - trellis/syntax-check:
+          name: syntax-check-ansible-2.5
+          ansible-version: ansible-2.5
