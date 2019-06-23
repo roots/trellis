@@ -22,7 +22,6 @@ orbs:
           - restore_cache:
               keys:
                 - ansible-v1-{{ checksum "requirements.yml" }}
-                - ansible-v1-
           - run:
               name: Install Python dependencies in a venv
               command: |
