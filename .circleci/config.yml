@@ -11,31 +11,34 @@ orbs:
           - image: 'circleci/python:3.6-stretch'
 
     jobs:
-      build-python:
+      syntax-check:
         parameters:
-          executor:
-            type: executor
-        executor: << parameters.executor >>
+          ansible-version:
+            type: string
+          python-version:
+            type: enum
+            enum: ['36', '27']
+        executor: python-<< parameters.python-version >>
         steps:
           - run: python --version
           - checkout
           - restore_cache:
               keys:
-                - ansible-v1-{{ checksum "requirements.yml" }}
+                - ansible-v1-<< parameters.python-version >>-<< parameters.ansible-version >>-{{ checksum "requirements.yml" }}
           - run:
               name: Install Python dependencies in a venv
               command: |
                 virtualenv venv
                 . venv/bin/activate
-                pip install ansible==2.7.5
+                pip install ansible<< parameters.ansible-version >>
                 ansible --version
           - run:
               name: Install Galaxy roles
               command: |
                 . venv/bin/activate
-                ansible-galaxy install -r requirements.yml -p vendor/roles
+                ansible-galaxy install -r requirements.yml
           - save_cache:
-              key: ansible-v1-{{ checksum "requirements.yml" }}
+              key: ansible-v1-<< parameters.python-version >>-<< parameters.ansible-version >>-{{ checksum "requirements.yml" }}
               paths:
                 - venv
                 - vendor
@@ -48,11 +51,54 @@ orbs:
                 ansible-playbook --syntax-check -e env=development server.yml
 
 workflows:
-  build:
+  syntax-check:
     jobs:
-      - trellis/build-python:
-          name: build-python-36
-          executor: trellis/python-36
-      - trellis/build-python:
-          name: build-python-27
-          executor: trellis/python-27
+      - trellis/syntax-check:
+          name: syntax-check-python-36-ansible-latest
+          python-version: '36'
+          ansible-version: ''
+      - trellis/syntax-check:
+          name: syntax-check-python-36-ansible-2.8
+          python-version: '36'
+          ansible-version: ~=2.8.0
+      - trellis/syntax-check:
+          name: syntax-check-python-36-ansible-2.7
+          python-version: '36'
+          ansible-version: ~=2.7.0
+      - trellis/syntax-check:
+          name: syntax-check-python-36-ansible-2.6
+          python-version: '36'
+          ansible-version: ~=2.6.0
+      - trellis/syntax-check:
+          name: syntax-check-python-36-ansible-2.5
+          python-version: '36'
+          ansible-version: ~=2.5.0
+      - trellis/syntax-check:
+          name: syntax-check-python-36-ansible-2.4
+          python-version: '36'
+          ansible-version: ~=2.4.0
+
+      - trellis/syntax-check:
+          name: syntax-check-python-27-ansible-latest
+          python-version: '27'
+          ansible-version: ''
+      - trellis/syntax-check:
+          name: syntax-check-python-27-ansible-2.8
+          python-version: '27'
+          ansible-version: ~=2.8.0
+      - trellis/syntax-check:
+          name: syntax-check-python-27-ansible-2.7
+          python-version: '27'
+          ansible-version: ~=2.7.0
+      - trellis/syntax-check:
+          name: syntax-check-python-27-ansible-2.6
+          python-version: '27'
+          ansible-version: ~=2.6.0
+      - trellis/syntax-check:
+          name: syntax-check-python-27-ansible-2.5
+          python-version: '27'
+          ansible-version: ~=2.5.0
+      - trellis/syntax-check:
+          name: syntax-check-python-27-ansible-2.4
+          python-version: '27'
+          ansible-version: ~=2.4.0
