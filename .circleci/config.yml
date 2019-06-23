@@ -27,7 +27,8 @@ orbs:
               command: |
                 virtualenv venv
                 . venv/bin/activate
-                pip install ansible
+                pip install ansible==2.7.5
+                ansible --version
           - run:
               name: Install Galaxy roles
               command: |
