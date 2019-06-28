@@ -43,3 +43,17 @@
     deny all;
   }
   {% endblock %}
+
+  {% block embed_security -%}
+  {% if item.value.nginx_embed_security | default(nginx_embed_security | default(true)) -%}
+  add_header Content-Security-Policy "frame-ancestors 'self' https://preview.themeforest.net" always;
+
+  # Conditional X-Frame-Options until https://core.trac.wordpress.org/ticket/40020 is resolved
+  set $x_frame_options SAMEORIGIN;
+  if ($arg_customize_changeset_uuid) {
+    set $x_frame_options "";
+  }
+  add_header X-Frame-Options $x_frame_options always;
+
+  {% endif -%}
+  {% endblock -%}
