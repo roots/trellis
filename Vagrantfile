@@ -58,7 +58,7 @@ Vagrant.configure('2') do |config|
     config.hostmanager.aliases = hostnames + redirects
   elsif Vagrant.has_plugin?('landrush') && trellis_config.multisite_subdomains?
     config.landrush.enabled = true
-    config.landrush.tld = config.vm.hostname
+    config.landrush.tld = trellis_config.site_hosts_canonical.reject { |host| host.end_with?(".#{main_hostname}") }
     hostnames.each { |host| config.landrush.host host, vconfig.fetch('vagrant_ip') }
   else
     fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager\n\nOr install landrush for multisite subdomains:\nvagrant plugin install landrush"
@@ -168,7 +168,7 @@ Vagrant.configure('2') do |config|
   # VMware Workstation/Fusion settings
   %w(vmware_fusion vmware_workstation).each do |provider|
     config.vm.provider provider do |vmw, _override|
-      vmw.name = config.vm.hostname
+      vmw.vmx['displayName'] = config.vm.hostname
       vmw.vmx['numvcpus'] = vconfig.fetch('vagrant_cpus')
       vmw.vmx['memsize'] = vconfig.fetch('vagrant_memory')
     end
