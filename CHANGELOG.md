@@ -1,4 +1,34 @@
-### HEAD
+### 1.0.3: April 30th, 2019
+* Prevent direct access for `.blade.php` files ([#1075](https://github.com/roots/trellis/pull/1075))
+* Show custom error message if external IP resolution fails ([#1078](https://github.com/roots/trellis/pull/1078))
+* Use all canonical site hosts for Landrush TLD ([#1077](https://github.com/roots/trellis/pull/1077))
+
+### 1.0.2: March 13th, 2019
+* Improve handling of vars with `AnsibleUnsafe` ([#1071](https://github.com/roots/trellis/pull/1071))
+* Update name of Nginx PPA (`development` to `mainline`) ([#1068](https://github.com/roots/trellis/pull/1068))
+* [REVERT] Don't force install Ansible Galaxy in dev ([#1064](https://github.com/roots/trellis/pull/1064))
+
+### 1.0.1: January 16th, 2019
+* Add Python 2 explicitly ([#1061](https://github.com/roots/trellis/pull/1061))
+
+### 1.0.0: December 27th, 2018
+* Hyper-V and SMB folder sync compatibility ([#1035](https://github.com/roots/trellis/pull/1035))
+* Use Ruby script for ssh-config trigger ([#1053](https://github.com/roots/trellis/pull/1053))
+* Update to PHP 7.3 ([#1052](https://github.com/roots/trellis/pull/1052))
+* Enable per-user `update_password` behavior ([#767](https://github.com/roots/trellis/pull/767))
+* Fix Vagrant trigger path ([#1051](https://github.com/roots/trellis/pull/1051))
+* Fix: `vault_wordpress_env_defaults` not populated during deploy ([#1049](https://github.com/roots/trellis/pull/1049))
+* Add `vault_wordpress_env_defaults` ([#1048](https://github.com/roots/trellis/pull/1048))
+* Allow overriding rollback variables ([#1047](https://github.com/roots/trellis/pull/1047))
+* Require Vagrant >= 2.1.0 ([#1046](https://github.com/roots/trellis/pull/1046))
+* Bump Ansible `version_tested_max` to 2.7.5 ([#1045](https://github.com/roots/trellis/pull/1045))
+* Add Vagrant `ssh-config` to `~/.ssh/config` on `vagrant up` ([#1042](https://github.com/roots/trellis/pull/1042))
+* [BREAKING] Add Ubuntu 18.04 support and default to it ([#992](https://github.com/roots/trellis/pull/992))
+* Python 3 support ([#1031](https://github.com/roots/trellis/pull/1031))
+* Allow customizing Nginx `worker_connections` ([#1021](https://github.com/roots/trellis/pull/1021))
+* Update wp-cli to 2.0.1 ([#1019](https://github.com/roots/trellis/pull/1019))
+* [BREAKING] Update wp-cli to 2.0.0 and verify its PGP signature ([#1014](https://github.com/roots/trellis/pull/1014))
+* Deploy: Remove obsoleted `git` remote checking ([#999](https://github.com/roots/trellis/pull/999))
 * Update xdebug tunnel configuration ([#1007](https://github.com/roots/trellis/pull/1007))
 * Verify `wp-cli.phar` checksum ([#996](https://github.com/roots/trellis/pull/996))
 * Enable `fastcgi_cache_background_update` by default ([#962](https://github.com/roots/trellis/pull/962))
