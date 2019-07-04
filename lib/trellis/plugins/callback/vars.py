@@ -12,6 +12,7 @@ from ansible.playbook.play_context import PlayContext
 from ansible.playbook.task import Task
 from ansible.plugins.callback import CallbackBase
 from ansible.template import Templar
+from ansible.utils.unsafe_proxy import wrap_var
 
 
 class CallbackModule(CallbackBase):
@@ -26,7 +27,7 @@ class CallbackModule(CallbackBase):
     def raw_triage(self, key_string, item, patterns):
         # process dict values
         if isinstance(item, AnsibleMapping):
-            return AnsibleMapping(dict((key,self.raw_triage('.'.join([key_string, key]), value, patterns)) for key,value in item.iteritems()))
+            return AnsibleMapping(dict((key,self.raw_triage('.'.join([key_string, key]), value, patterns)) for key,value in iteritems(item)))
 
         # process list values
         elif isinstance(item, AnsibleSequence):
@@ -35,7 +36,7 @@ class CallbackModule(CallbackBase):
         # wrap values if they match raw_vars pattern
         elif isinstance(item, AnsibleUnicode):
             match = next((pattern for pattern in patterns if re.match(pattern, key_string)), None)
-            return AnsibleUnicode(''.join(['{% raw %}', item, '{% endraw %}'])) if not item.startswith(('{% raw', '{%raw')) and match else item
+            return wrap_var(item) if match else item
 
         else:
             return item
@@ -68,7 +69,7 @@ class CallbackModule(CallbackBase):
             '--vault-password-file': 'vault_password_file',
             }
 
-        for option,value in strings.iteritems():
+        for option,value in iteritems(strings):
             if getattr(self._options, value, False):
                 options.append("{0}='{1}'".format(option, str(getattr(self._options, value))))
 
@@ -92,7 +93,7 @@ class CallbackModule(CallbackBase):
 
     def v2_playbook_on_play_start(self, play):
         env = play.get_variable_manager().get_vars(play=play).get('env', '')
-        env_group = next((group for key,group in play.get_variable_manager()._inventory.groups.iteritems() if key == env), False)
+        env_group = next((group for key,group in iteritems(play.get_variable_manager()._inventory.groups) if key == env), False)
         if env_group:
             env_group.set_priority(20)
 

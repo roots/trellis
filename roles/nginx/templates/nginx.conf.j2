@@ -32,7 +32,7 @@ events {
   # That's probably the point at which you hire people who are smarter than you as this is *a lot* of requests.
   # Should be < worker_rlimit_nofile.
   # Default: 512
-  worker_connections 8000;
+  worker_connections {{ nginx_worker_connections }};
 }
 {% endblock %}
 

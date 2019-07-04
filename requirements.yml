@@ -8,7 +8,7 @@
 
 - name: logrotate
   src: nickhammond.logrotate
-  version: e7a498d
+  version: v0.0.5
 
 - name: swapfile
   src: oefenweb.swapfile

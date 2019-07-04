@@ -1,5 +1,12 @@
 ---
-- name: "WordPress Server: Install LEMP Stack with PHP 7.2 and MariaDB MySQL"
+- name: Set ansible_python_interpreter
+  hosts: web:&development
+  gather_facts: false
+  become: yes
+  roles:
+    - { role: python_interpreter, tags: [always] }
+
+- name: "WordPress Server: Install LEMP Stack with PHP 7.3 and MariaDB MySQL"
   hosts: web:&development
   become: yes
   remote_user: vagrant

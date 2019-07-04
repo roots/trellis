@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+#!/bin/bash
 show_usage() {
   echo "
 Usage: bin/xdebug-tunnel.sh <action> <host>

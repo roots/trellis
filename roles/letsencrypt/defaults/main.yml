@@ -1,4 +1,4 @@
-sites_using_letsencrypt: "[{% for name, site in wordpress_sites.iteritems() if site.ssl.enabled and site.ssl.provider | default('manual') == 'letsencrypt' %}{% for host in site.site_hosts if host.ssl | default(true) %}'{{ host.canonical }}',{% endfor %}{% endfor %}]"
+sites_using_letsencrypt: "[{% for name, site in wordpress_sites.items() | list if site.ssl.enabled and site.ssl.provider | default('manual') == 'letsencrypt' %}{% for host in site.site_hosts if host.ssl | default(true) %}'{{ host.canonical }}',{% endfor %}{% endfor %}]"
 site_uses_letsencrypt: ssl_enabled and item.value.ssl.provider | default('manual') == 'letsencrypt'
 site_host_uses_letsencrypt: host_ssl_enabled and item.0.ssl.provider | default('manual') == 'letsencrypt'
 missing_hosts: "{{ ssl_site_hosts | difference((current_hosts.results | selectattr('item.key', 'equalto', item.key) | selectattr('stdout_lines', 'defined') | sum(attribute='stdout_lines', start=[]) | map('trim') | list | join(' ')).split(' ')) }}"
