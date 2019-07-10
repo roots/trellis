@@ -114,6 +114,13 @@ Vagrant.configure('2') do |config|
     end
   end
 
+  # Workaround for https://github.com/hashicorp/vagrant/issues/10914
+  config.vm.provision "shell",
+    inline: "sudo apt-get update -y -qq && "\
+      "sudo dpkg-reconfigure libc6 && "\
+      "export DEBIAN_FRONTEND=noninteractive && "\
+      "sudo -E apt-get -q --option \"Dpkg::Options::=--force-confold\" --assume-yes install libssl1.1"
+
   provisioner = local_provisioning? ? :ansible_local : :ansible
   provisioning_path = local_provisioning? ? ANSIBLE_PATH_ON_VM : ANSIBLE_PATH
 
