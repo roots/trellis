@@ -14,7 +14,7 @@ except ImportError:
     from ansible.utils.display import Display
     display = Display()
 
-version_requirement = '2.4.0.0'
+version_requirement = '2.5.0.0'
 version_tested_max = '2.7.5'
 python3_required_version = '2.5.3'
 
