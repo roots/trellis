@@ -1,4 +1,5 @@
 ### Head
+* Update apt packages before checking essentials task ([#1086](https://github.com/roots/trellis/pull/1086))
 * Setup composer HTTP basic authentication for multiple repositories ([#1091](https://github.com/roots/trellis/pull/1091))
 
 ### 1.0.3: April 30th, 2019
