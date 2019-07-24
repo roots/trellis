@@ -154,7 +154,7 @@ server {
   {% endif -%}
 
   {% if h5bp_location_security_file_access -%}
-  include h5bp/security/security_file_access.conf;
+  include h5bp/location/security_file_access.conf;
   {% endif -%}
 
   {% if h5bp_location_web_performance_filename_based_cache_busting -%}
@@ -165,24 +165,12 @@ server {
   include h5bp/location/web_performance_svgz-compression.conf;
   {% endif -%}
 
-  {% if h5bp_media_types_character_encodings -%}
-  include h5bp/media_types/character_encodings.conf;
-  {% endif -%}
-
-  {% if h5bp_media_types_media_types -%}
-  include h5bp/media_types/media_types.conf;
-  {% endif -%}
-
   {% if h5bp_security_content_security_policy -%}
   include h5bp/security/content-security-policy.conf;
   {% endif -%}
 
   {% if h5bp_security_referrer_policy -%}
   include h5bp/security/referrer-policy.conf;
-  {% endif -%}
-
-  {% if h5bp_security_server_software_information -%}
-  include h5bp/security/server_software_information.conf;
   {% endif -%}
 
   {% if h5bp_security_strict_transport_security -%}
@@ -207,10 +195,6 @@ server {
 
   {% if h5bp_web_performance_cache_file_descriptors -%}
   include h5bp/web_performance/cache-file-descriptors.conf;
-  {% endif -%}
-
-  {% if h5bp_web_performance_compression -%}
-  include h5bp/web_performance/compression.conf;
   {% endif -%}
 
   {% if h5bp_web_performance_pre_compressed_content_brotli -%}
