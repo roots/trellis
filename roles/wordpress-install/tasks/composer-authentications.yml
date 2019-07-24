@@ -12,3 +12,4 @@
   loop: "{{ composer_authentications }}"
   loop_control:
     loop_var: composer_authentication
+    label: "{{ composer_authentication.hostname }}"
