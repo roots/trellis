@@ -24,7 +24,7 @@ orbs:
           - checkout
           - restore_cache:
               keys:
-                - ansible-v1-<< parameters.python-version >>-<< parameters.ansible-version >>-{{ checksum "requirements.yml" }}
+                - ansible-v1-<< parameters.python-version >>-<< parameters.ansible-version >>-{{ checksum "galaxy.yml" }}
           - run:
               name: Install Python dependencies in a venv
               command: |
@@ -36,9 +36,9 @@ orbs:
               name: Install Galaxy roles
               command: |
                 . venv/bin/activate
-                ansible-galaxy install -r requirements.yml
+                ansible-galaxy install -r galaxy.yml
           - save_cache:
-              key: ansible-v1-<< parameters.python-version >>-<< parameters.ansible-version >>-{{ checksum "requirements.yml" }}
+              key: ansible-v1-<< parameters.python-version >>-<< parameters.ansible-version >>-{{ checksum "galaxy.yml" }}
               paths:
                 - venv
                 - vendor
