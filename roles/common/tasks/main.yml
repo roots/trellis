@@ -110,6 +110,10 @@
   when: openssh_6_8_plus and validate_ssh | default(true)
   tags: [sshd]
 
+- name: Update apt packages
+  apt:
+    update_cache: yes
+
 - name: Checking essentials
   apt:
     name: "{{ item.key }}"

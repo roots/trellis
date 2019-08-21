@@ -25,13 +25,11 @@
   become: no
   with_items: "{{ known_hosts | default([]) }}"
 
-- name: Setup packagist.com authentication
-  composer:
-    command: config
-    arguments: --auth http-basic.repo.packagist.com token {{ item.value.packagist_token }}
+- include_tasks: tasks/composer-authentications.yml
+  vars:
+    site: "{{ item.key }}"
     working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   no_log: true
-  when: item.value.packagist_token is defined
   with_dict: "{{ wordpress_sites }}"
 
 - name: Install Dependencies with Composer

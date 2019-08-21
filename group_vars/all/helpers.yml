@@ -18,3 +18,9 @@ ssl_enabled: "{{ item.value.ssl is defined and item.value.ssl.enabled | default(
 ssl_stapling_enabled: "{{ item.value.ssl is defined and item.value.ssl.stapling_enabled | default(true) }}"
 cron_enabled: "{{ site_env.disable_wp_cron and (not item.value.multisite.enabled | default(false) or (item.value.multisite.enabled | default(false) and item.value.multisite.cron | default(true))) }}"
 sites_use_ssl: "{{ wordpress_sites.values() | map(attribute='ssl') | selectattr('enabled') | list | count > 0 }}"
+
+# For backward compatibility, to be removed in Trellis v2.
+site_packagist_org_authentications:
+  - { hostname: repo.packagist.com, username: token, password: "{{ vault_wordpress_sites[site].packagist_token | default('') }}" }
+site_composer_authentications: "{{ vault_wordpress_sites[site].composer_authentications | default([]) }}"
+composer_authentications: "{{ site_packagist_org_authentications + site_composer_authentications }}"
