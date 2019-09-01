@@ -126,7 +126,7 @@ Vagrant.configure('2') do |config|
 
     ansible.compatibility_mode = '2.0'
     ansible.playbook = File.join(provisioning_path, 'dev.yml')
-    ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
+    ansible.galaxy_role_file = File.join(provisioning_path, 'galaxy.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
     ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
 
     ansible.groups = {
