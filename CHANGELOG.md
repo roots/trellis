@@ -1,4 +1,5 @@
-### Head
+### 1.1.0: September 1st, 2019
+* Update swapfile role to v2.0.22 ([#1101](https://github.com/roots/trellis/pull/1101))
 * Add pip `requirements.txt` and rename `requirements.yml` to `galaxy.yml` ([#1100](https://github.com/roots/trellis/pull/1100))
 * Update apt packages before checking essentials task ([#1086](https://github.com/roots/trellis/pull/1086))
 * Setup composer HTTP basic authentication for multiple repositories ([#1091](https://github.com/roots/trellis/pull/1091))
