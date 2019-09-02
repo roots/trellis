@@ -12,7 +12,7 @@
 
 - name: swapfile
   src: oefenweb.swapfile
-  version: v2.0.6
+  version: v2.0.22
 
 - name: mailhog
   src: geerlingguy.mailhog
