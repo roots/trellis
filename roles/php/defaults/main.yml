@@ -14,6 +14,8 @@ php_extensions_default:
   php7.3-xml: "{{ apt_package_state }}"
   php7.3-xmlrpc: "{{ apt_package_state }}"
   php7.3-zip: "{{ apt_package_state }}"
+  php7.3-imagick: "{{ apt_package_state }}"
+  php7.3-bcmath: "{{ apt_package_state }}"
 
 php_extensions_custom: {}
 php_extensions: "{{ php_extensions_default | combine(php_extensions_custom) }}"
