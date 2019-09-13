@@ -1,2 +1,2 @@
-ansible>=2.7.12,<2.8
+ansible>=2.7.12,<2.9
 passlib
