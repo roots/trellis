@@ -1,4 +1,4 @@
-### HEAD
+### 1.2.0: October 11th, 2019
 * Lets Encrypt ACME v2 support ([#1114](https://github.com/roots/trellis/pull/1114))
 * Fix self-signed certificates in Ansible 2.8 ([#1110](https://github.com/roots/trellis/pull/1110))
 * Update WP CLI to v2.3.0 ([#1109](https://github.com/roots/trellis/pull/1109))
