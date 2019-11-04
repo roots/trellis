@@ -129,6 +129,36 @@ server {
   }
   {% endblock %}
 
+  {% block dependency_managers -%}
+  # composer
+  location ~* composer\.(json|lock)$ {
+    deny all;
+  }
+
+  location ~* auth\.json$ {
+    deny all;
+  }
+
+  # npm
+  location ~* package(-lock)?\.json$ {
+    deny all;
+  }
+  
+  # yarn
+  location ~* yarn\.lock$ {
+    deny all;
+  }
+  
+  # bundler
+  location ~* Gemfile(\.lock)?$ {
+    deny all;
+  }
+
+  location ~* gems\.(rb|locked)?$ {
+    deny all;
+  }
+  {% endblock %}
+
   {% block location_primary -%}
   location / {
     try_files $uri $uri/ /index.php?$args;

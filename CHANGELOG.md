@@ -1,3 +1,6 @@
+### Head
+* wordpress-setup: Block dependency manager files by Nginx ([#1116](https://github.com/roots/trellis/pull/1116))
+
 ### 1.2.0: October 11th, 2019
 * Lets Encrypt ACME v2 support ([#1114](https://github.com/roots/trellis/pull/1114))
 * Fix self-signed certificates in Ansible 2.8 ([#1110](https://github.com/roots/trellis/pull/1110))
