@@ -33,7 +33,7 @@ Vagrant.configure('2') do |config|
     config.vm.network :private_network, type: 'dhcp', hostsupdater: 'skip'
 
     cached_addresses = {}
-    config.hostmanager.ip_resolver = proc do |vm, _resolving_vm|
+    config.hostmanager.ip_resolver = proc do |vm|
       if cached_addresses[vm.name].nil?
         if vm.communicate.ready?
           vm.communicate.execute("hostname -I | cut -d ' ' -f 2") do |_type, contents|
@@ -181,7 +181,7 @@ Vagrant.configure('2') do |config|
 
   # VMware Workstation/Fusion settings
   %w(vmware_fusion vmware_workstation).each do |provider|
-    config.vm.provider provider do |vmw, _override|
+    config.vm.provider provider do |vmw|
       vmw.vmx['displayName'] = config.vm.hostname
       vmw.vmx['numvcpus'] = vconfig.fetch('vagrant_cpus')
       vmw.vmx['memsize'] = vconfig.fetch('vagrant_memory')
@@ -189,7 +189,7 @@ Vagrant.configure('2') do |config|
   end
 
   # Parallels settings
-  config.vm.provider 'parallels' do |prl, _override|
+  config.vm.provider 'parallels' do |prl|
     prl.name = config.vm.hostname
     prl.cpus = vconfig.fetch('vagrant_cpus')
     prl.memory = vconfig.fetch('vagrant_memory')
