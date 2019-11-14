@@ -17,7 +17,7 @@
 
 - name: Generate self-signed certificates
   shell: "openssl req -new -newkey rsa:2048 \
-    -days 3650 -nodes -x509 -sha256 \
+    -days 825 -nodes -x509 -sha256 \
     -extensions req_ext -config {{ nginx_ssl_path }}/self-signed-openssl-configs/{{ item.key }}.cnf \
     -keyout {{ item.key | quote }}.key -out {{ item.key | quote }}.cert"
   args:
