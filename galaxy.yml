@@ -17,3 +17,7 @@
 - name: mailhog
   src: geerlingguy.mailhog
   version: 2.1.4
+
+- name: redis
+  src: DavidWittman.redis
+  version: 1.2.6

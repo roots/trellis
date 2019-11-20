@@ -22,6 +22,7 @@
     - { role: php, tags: [php] }
     - { role: xdebug, tags: [php, xdebug] }
     - { role: memcached, tags: [memcached] }
+    - { role: redis, tags: [redis] }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }
