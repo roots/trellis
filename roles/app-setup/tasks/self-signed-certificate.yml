@@ -9,7 +9,7 @@
   template:
     src: self-signed-openssl-config.j2
     dest: "{{ nginx_ssl_path }}/self-signed-openssl-configs/{{ item.key }}.cnf"
-  with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
+  with_dict: "{{ sites | combine(ssl_default_site) }}"
   when:
     - sites_use_ssl
     - ssl_enabled

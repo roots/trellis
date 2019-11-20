@@ -23,7 +23,7 @@
 
 - name: Validate sites
   fail:
-    msg: "{{ lookup('template', 'sites.j2') }}"
+    msg: "{{ lookup('template', 'site.j2') }}"
   when: sites.keys() | difference(vault_sites.keys()) | count
   tags: [app]
 
