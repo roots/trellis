@@ -50,6 +50,7 @@ server {
   {% endblock -%}
 
   {% block multisite_rewrites -%}
+  {% if site_type == 'wordpress' -%}
   {% if item.value.multisite.enabled | default(false) -%}
   # Multisite rewrites
   {% if item.value.multisite.subdomains | default(false) -%}
@@ -63,6 +64,7 @@ server {
     rewrite ^(/[^/]+)?(/.*\.php) /wp$2 last;
   }
 
+  {% endif -%}
   {% endif -%}
   {% endif -%}
   {% endblock -%}
@@ -117,9 +119,15 @@ server {
 
   {% block location_uploads_php -%}
   # Prevent PHP scripts from being executed inside the uploads folder.
+  {% if site_type == 'wordpress' -%}
   location ~* /app/uploads/.*\.php$ {
     deny all;
   }
+  {% elif site_type == 'laravel' -%}
+  location ~* /storage/.*\.php$ {
+    deny all;
+  }
+  {% endif -%}
   {% endblock %}
 
   {% block blade_twig_templates -%}
@@ -204,12 +212,14 @@ server {
   {% if item.value.nginx_embed_security | default(nginx_embed_security | default(true)) -%}
   add_header Content-Security-Policy "frame-ancestors 'self'" always;
 
+  {% if site_type == 'wordpress' -%}
   # Conditional X-Frame-Options until https://core.trac.wordpress.org/ticket/40020 is resolved
   set $x_frame_options SAMEORIGIN;
   if ($arg_customize_changeset_uuid) {
     set $x_frame_options "";
   }
   add_header X-Frame-Options $x_frame_options always;
+  {% endif -%}
 
   {% endif -%}
   {% endblock -%}

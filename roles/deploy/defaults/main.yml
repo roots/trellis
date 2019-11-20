@@ -45,8 +45,11 @@ project_environment:
 # - default is 'current'
 project_current_path: "{{ project.current_path | default('current') }}"
 
-# Whether to run `wp core update-db` at end of each deploy
+# Whether to run `wp core update-db` at end of each deploy (for WordPress sites)
 update_db_on_deploy: true
+
+# Whether to run `php artisan migrate` at end of each deploy (for Laravel sites)
+migrate_db_on_deploy: true
 
 # Helpers
 project: "{{ sites[site] }}"
