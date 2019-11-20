@@ -15,7 +15,7 @@ server {
   {% endblock %}
 
   {% block server_basic -%}
-  root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;
+  root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/{{ item.value.web_root | default( (site_type == 'laravel') | ternary('public', 'web') ) }};
   index index.php index.htm index.html;
   add_header Fastcgi-Cache $upstream_cache_status;
 
@@ -121,7 +121,7 @@ server {
     deny all;
   }
   {% endblock %}
-  
+
   {% block blade_twig_templates -%}
   # Prevent Blade and Twig templates from being accessed directly.
   location ~* \.(blade\.php|twig)$ {
@@ -143,12 +143,12 @@ server {
   location ~* package(-lock)?\.json$ {
     deny all;
   }
-  
+
   # yarn
   location ~* yarn\.lock$ {
     deny all;
   }
-  
+
   # bundler
   location ~* Gemfile(\.lock)?$ {
     deny all;
