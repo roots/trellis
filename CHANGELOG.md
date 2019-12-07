@@ -1,5 +1,7 @@
-### Head
-* wordpress-setup: Block dependency manager files by Nginx ([#1116](https://github.com/roots/trellis/pull/1116))
+### HEAD
+* Add `git_sha` and `release_version` to `.env` on deploy ([#1124](https://github.com/roots/trellis/pull/1124))
+* Lower self-signed certificate expiry time for macOS Cataline support ([#1120](https://github.com/roots/trellis/pull/1120))
+* Block dependency manager files in Nginx ([#1116](https://github.com/roots/trellis/pull/1116))
 
 ### 1.2.0: October 11th, 2019
 * Lets Encrypt ACME v2 support ([#1114](https://github.com/roots/trellis/pull/1114))
