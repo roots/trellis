@@ -1,4 +1,4 @@
-### HEAD
+### 1.3.0: December 7th, 2019
 * Add `git_sha` and `release_version` to `.env` on deploy ([#1124](https://github.com/roots/trellis/pull/1124))
 * Lower self-signed certificate expiry time for macOS Cataline support ([#1120](https://github.com/roots/trellis/pull/1120))
 * Block dependency manager files in Nginx ([#1116](https://github.com/roots/trellis/pull/1116))
