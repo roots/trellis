@@ -38,7 +38,6 @@ if eq(LooseVersion(__version__), LooseVersion('2.5.0')):
 # Otherwise import error for Ansible versions older than 2.4 would prevent display of version check message.
 from ansible.plugins.vars import BaseVarsPlugin
 
-
 class VarsModule(BaseVarsPlugin):
 
     def get_vars(self, loader, path, entities, cache=True):
