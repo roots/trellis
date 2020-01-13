@@ -49,6 +49,7 @@ orbs:
                 ansible-playbook --syntax-check -e env=development deploy.yml
                 ansible-playbook --syntax-check -e env=development dev.yml
                 ansible-playbook --syntax-check -e env=development server.yml
+                ansible-playbook --syntax-check -e env=development rollback.yml
 
 workflows:
   syntax-check:
