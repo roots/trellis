@@ -1,5 +1,6 @@
 ### Head
 * Update `wp_cli_version` to 2.4.0 ([#1131](https://github.com/roots/trellis/pull/1131))
+* Allow `composer install` without `--no-scripts` during deploy ([#1133](https://github.com/roots/trellis/pull/1133))
 
 ### 1.3.0: December 7th, 2019
 * Add `git_sha` and `release_version` to `.env` on deploy ([#1124](https://github.com/roots/trellis/pull/1124))
