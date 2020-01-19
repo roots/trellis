@@ -7,9 +7,9 @@
   no_log: true
   changed_when: false
   when:
-    - composer_authentication.hostname is defined and composer_authentication.hostname != ""
-    - composer_authentication.username is defined and composer_authentication.username != ""
-    - composer_authentication.password is defined and composer_authentication.password != ""
+    - not (not composer_authentication.hostname)
+    - not (not composer_authentication.username)
+    - not (not composer_authentication.password)
   loop: "{{ composer_authentications }}"
   loop_control:
     loop_var: composer_authentication
