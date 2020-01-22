@@ -2,6 +2,7 @@
 * Update `wp_cli_version` to 2.4.0 ([#1131](https://github.com/roots/trellis/pull/1131))
 * `composer install` without `--no-scripts` during deploy ([#1133](https://github.com/roots/trellis/pull/1133))
 * Allow `composer install` with `--classmap-authoritative` during deploy ([#1132](https://github.com/roots/trellis/pull/1132))
+* Fix `DEPLOY_UNFINISHED` not being copied over to `release` folder (#[1145])(https://github.com/roots/trellis/pull/1145)
 * Deploy: Remove untracked files from project folder ([#1146](https://github.com/roots/trellis/pull/1146))
 
 ### 1.3.0: December 7th, 2019
