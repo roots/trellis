@@ -4,6 +4,7 @@
 * Allow `composer install` with `--classmap-authoritative` during deploy ([#1132](https://github.com/roots/trellis/pull/1132))
 * Fix `DEPLOY_UNFINISHED` not being copied over to `release` folder (#[1145])(https://github.com/roots/trellis/pull/1145)
 * Deploy: Remove untracked files from project folder ([#1146](https://github.com/roots/trellis/pull/1146))
+* Bump ansible requirement to 2.8.0 ([#1147](https://github.com/roots/trellis/pull/1147))
 
 ### 1.3.0: December 7th, 2019
 * Add `git_sha` and `release_version` to `.env` on deploy ([#1124](https://github.com/roots/trellis/pull/1124))
