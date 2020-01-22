@@ -1,3 +1,6 @@
+### HEAD
+* Bump ansible requirement to 2.8.0 ([#1147](https://github.com/roots/trellis/pull/1147))
+
 ### 1.4.0: April 2nd, 2020
 * Update PHP to 7.4 ([#1164](https://github.com/roots/trellis/pull/1164))
 * Update `wp_cli_version` to 2.4.0 ([#1131](https://github.com/roots/trellis/pull/1131))
