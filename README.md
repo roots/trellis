@@ -8,6 +8,7 @@ Ansible playbooks for setting up a LEMP stack for WordPress.
 - Local development environment with Vagrant
 - High-performance production servers
 - Zero-downtime deploys for your [Bedrock](https://roots.io/bedrock/)-based WordPress sites
+- [trellis-cli](https://github.com/roots/trellis-cli) for easier management
 
 ## What's included
 
@@ -35,13 +36,22 @@ Full documentation is available at [https://roots.io/trellis/docs/](https://root
 
 Make sure all dependencies have been installed before moving on:
 
-* [Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
 * [Virtualbox](https://www.virtualbox.org/wiki/Downloads) >= 4.3.10
 * [Vagrant](https://www.vagrantup.com/downloads.html) >= 2.1.0
+* **Recommended**: [trellis-cli](https://github.com/roots/trellis-cli)
 
 **Windows user?** [Read the Windows getting started docs](https://roots.io/getting-started/docs/windows-development-environment-trellis/) for slightly different installation instructions.
 
 ## Installation
+
+### Using trellis-cli
+
+Create a new project:
+```bash
+$ trellis new example.com
+```
+
+### Manual
 
 The recommended directory structure for a Trellis project looks like:
 
@@ -55,6 +65,8 @@ example.com/      # → Root folder for the project
 ```
 
 See a complete working example in the [roots-example-project.com repo](https://github.com/roots/roots-example-project.com).
+
+
 
 1. Create a new project directory:
 ```plain
@@ -71,6 +83,18 @@ $ composer create-project roots/bedrock site
 
 ## Local development setup
 
+### Using trellis-cli
+
+1. Review the automatically created site in `group_vars/development/wordpress_sites.yml`
+2. Customize settings if necessary
+
+Start the Vagrant virtual machine:
+```bash
+$ trellis up
+```
+
+### Manual
+
 1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`
 2. Ensure you're in the trellis directory: `cd trellis`
 3. Run `vagrant up`
@@ -79,23 +103,68 @@ $ composer create-project roots/bedrock site
 
 ## Remote server setup (staging/production)
 
-For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://roots.io/trellis/docs/remote-server-setup/#requirements) for more information.
-
-A base Ubuntu 18.04 (Bionic) server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
+A base Ubuntu 18.04 (Bionic) server is required for setting up remote servers.
 
 1. Configure your WordPress sites in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://roots.io/trellis/docs/vault/) for how to encrypt files containing passwords)
 2. Add your server IP/hostnames to `hosts/<environment>`
 3. Specify public SSH keys for `users` in `group_vars/all/users.yml` (see the [SSH Keys docs](https://roots.io/trellis/docs/ssh-keys/))
-4. Run `ansible-playbook server.yml -e env=<environment>` to provision the server
+
+### Using trellis-cli
+
+Initialize Trellis (Virtualenv) environment:
+```bash
+$ trellis init
+```
+
+Provision the server:
+```bash
+$ trellis provision production
+```
+
+Or take advantage of its [Digital Ocean](https://roots.io/r/digitalocean) support to create a Droplet *and* provision it in a single command:
+```bash
+$ trellis droplet create production
+```
+
+### Manual
+
+For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://roots.io/trellis/docs/remote-server-setup/#requirements) for more information.
+
+Provision the server:
+```bash
+$ ansible-playbook server.yml -e env=<environment>
+```
 
 [Read the remote server docs](https://roots.io/trellis/docs/remote-server-setup/) for more information.
 
 ## Deploying to remote servers
 
 1. Add the `repo` (Git URL) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file
-2. Set the `branch` you want to deploy
-3. Run `./bin/deploy.sh <environment> <site name>`
-4. To rollback a deploy, run `ansible-playbook rollback.yml -e "site=<site name> env=<environment>"`
+2. Set the `branch` you want to deploy (defaults to `master`)
+
+### Using trellis-cli
+
+Deploy a site:
+```bash
+$ trellis deploy <environment> <site>
+```
+
+Rollback a deploy:
+```bash
+$ trellis rollback <environment> <site>
+```
+
+### Manual
+
+Deploy a site:
+```bash
+$ ./bin/deploy.sh <environment> <site>
+```
+
+Rollback a deploy:
+```bash
+$ ansible-playbook rollback.yml -e "site=<site> env=<environment>"
+```
 
 [Read the deploys docs](https://roots.io/trellis/docs/deploys/) for more information.
 
