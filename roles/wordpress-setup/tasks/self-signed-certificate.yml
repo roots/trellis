@@ -16,12 +16,11 @@
     - item.value.ssl.provider | default('manual') == 'self-signed'
 
 - name: Generate self-signed certificates
-  shell: "openssl req -new -newkey rsa:2048 \
+  command: "openssl req -new -newkey rsa:2048 \
     -days 825 -nodes -x509 -sha256 \
     -extensions req_ext -config {{ nginx_ssl_path }}/self-signed-openssl-configs/{{ item.key }}.cnf \
     -keyout {{ item.key | quote }}.key -out {{ item.key | quote }}.cert"
   args:
-    executable: "/bin/bash"
     chdir: "{{ nginx_ssl_path }}"
     creates: "{{ item.key }}.*"
   with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"

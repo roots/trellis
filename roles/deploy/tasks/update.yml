@@ -24,6 +24,13 @@
   no_log: true
   register: git_clone
 
+- name: Remove untracked files from project folder
+  command: git clean -fdx
+  args:
+    chdir: "{{ project_source_path }}"
+  register: git_clean
+  changed_when: not not(git_clean.stdout)
+
 - name: Failed connection to remote repo
   fail:
     msg: |

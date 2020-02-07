@@ -121,7 +121,7 @@ server {
     deny all;
   }
   {% endblock %}
-  
+
   {% block blade_twig_templates -%}
   # Prevent Blade and Twig templates from being accessed directly.
   location ~* \.(blade\.php|twig)$ {
@@ -135,6 +135,10 @@ server {
     deny all;
   }
 
+  location ~* composer/installed\.json$ {
+    deny all;
+  }
+
   location ~* auth\.json$ {
     deny all;
   }
@@ -143,12 +147,12 @@ server {
   location ~* package(-lock)?\.json$ {
     deny all;
   }
-  
+
   # yarn
   location ~* yarn\.lock$ {
     deny all;
   }
-  
+
   # bundler
   location ~* Gemfile(\.lock)?$ {
     deny all;

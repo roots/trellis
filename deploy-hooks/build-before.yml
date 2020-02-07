@@ -14,7 +14,7 @@
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #
 # - name: Install Composer dependencies
-#   command: composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
+#   command: composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts --classmap-authoritative
 #   args:
 #     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #

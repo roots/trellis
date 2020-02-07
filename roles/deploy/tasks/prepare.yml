@@ -5,11 +5,6 @@
     loop_var: include_path
   tags: deploy-prepare-before
 
-- name: write unfinished file
-  file:
-    path: "{{ project_source_path }}/{{ deploy_helper.unfinished_filename }}"
-    state: touch
-
 - name: Check for project repo subtree
   stat:
     path: "{{ project_source_path }}/{{ project.repo_subtree_path }}"
@@ -37,6 +32,11 @@
   args:
     chdir: "{{ project_source_path }}"
   when: project.repo_subtree_path is defined
+
+- name: write unfinished file
+  file:
+    path: "{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}"
+    state: touch
 
 - include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_prepare_after | default([]) }}"

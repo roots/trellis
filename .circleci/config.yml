@@ -49,6 +49,8 @@ orbs:
                 ansible-playbook --syntax-check -e env=development deploy.yml
                 ansible-playbook --syntax-check -e env=development dev.yml
                 ansible-playbook --syntax-check -e env=development server.yml
+                ansible-playbook --syntax-check -e env=development rollback.yml
+                ansible-playbook --syntax-check -e xdebug_tunnel_inventory_host=1 xdebug-tunnel.yml
 
 workflows:
   syntax-check:

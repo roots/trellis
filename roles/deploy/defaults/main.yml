@@ -48,6 +48,11 @@ project_current_path: "{{ project.current_path | default('current') }}"
 # Whether to run `wp core update-db` at end of each deploy
 update_db_on_deploy: true
 
+# Most scripts are used in development instead of remote servers. Use with caution.
+composer_no_scripts: true
+# Whether to autoload classes from classmap only.
+composer_classmap_authoritative: true
+
 # Helpers
 project: "{{ wordpress_sites[site] }}"
 project_root: "{{ www_root }}/{{ site }}"
