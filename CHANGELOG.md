@@ -7,6 +7,7 @@
 * Fix `DEPLOY_UNFINISHED` not being copied over to `release` folder (#[1145])(https://github.com/roots/trellis/pull/1145)
 * Deploy: Remove untracked files from project folder ([#1146](https://github.com/roots/trellis/pull/1146))
 * Nginx: Block `composer/installed.json` ([#1150](https://github.com/roots/trellis/pull/1150))
+* Run `git clean` after checking `git clone` is successful ([#1151](https://github.com/roots/trellis/pull/1151))
 
 ### 1.3.0: December 7th, 2019
 * Add `git_sha` and `release_version` to `.env` on deploy ([#1124](https://github.com/roots/trellis/pull/1124))
