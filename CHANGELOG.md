@@ -8,6 +8,7 @@
 * Deploy: Remove untracked files from project folder ([#1146](https://github.com/roots/trellis/pull/1146))
 * Nginx: Block `composer/installed.json` ([#1150](https://github.com/roots/trellis/pull/1150))
 * Run `git clean` after checking `git clone` is successful ([#1151](https://github.com/roots/trellis/pull/1151))
+* Lint: Fix: `[206] Variables should have spaces before and after: {{ var_name }}` ([#1152](https://github.com/roots/trellis/pull/1152))
 
 ### 1.3.0: December 7th, 2019
 * Add `git_sha` and `release_version` to `.env` on deploy ([#1124](https://github.com/roots/trellis/pull/1124))
