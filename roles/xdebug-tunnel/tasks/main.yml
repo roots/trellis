@@ -10,7 +10,7 @@
   become: no
   register: xdebug_tunnel
   ignore_errors: true
-  changed_when: false
+  changed_when: true
 
 - name: Interpret and present Xdebug SSH tunnel errors
   fail:
