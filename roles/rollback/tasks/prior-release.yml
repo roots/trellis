@@ -7,6 +7,7 @@
     chdir: "{{ project_root }}"
     executable: /bin/bash
   register: current_release_position
+  changed_when: false
 
 - name: Fail if current release is the oldest available release
   fail:
@@ -18,6 +19,7 @@
   args:
     chdir: "{{ project_root }}"
   register: releases
+  changed_when: false
 
 - name: Create new_release_path variable
   set_fact:

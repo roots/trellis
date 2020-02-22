@@ -9,6 +9,7 @@
   args:
     chdir: "{{ project_root }}"
   register: current_release
+  changed_when: false
 
 - name: Fail if user-specified release doesn't exist or is already active
   fail:

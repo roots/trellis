@@ -10,6 +10,7 @@
 * Run `git clean` after checking `git clone` is successful ([#1151](https://github.com/roots/trellis/pull/1151))
 * Lint: Fix: `[206] Variables should have spaces before and after: {{ var_name }}` ([#1152](https://github.com/roots/trellis/pull/1152))
 * Lint: Fix: `[306] Shells that use pipes should set the pipefail option ([#1153](https://github.com/roots/trellis/pull/1153))
+* Lint: Fix `[301] Commands should not change things if nothing needs doing ([#1139](https://github.com/roots/trellis/pull/1139))
 
 ### 1.3.0: December 7th, 2019
 * Add `git_sha` and `release_version` to `.env` on deploy ([#1124](https://github.com/roots/trellis/pull/1124))
