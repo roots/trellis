@@ -4,6 +4,7 @@
   args:
     chdir: "{{ project_root }}"
   register: current_release_readlink_result
+  changed_when: false
 
 - name: Clean up old and failed releases
   deploy_helper:

@@ -52,6 +52,15 @@ orbs:
                 ansible-playbook --syntax-check -e env=development rollback.yml
                 ansible-playbook --syntax-check -e xdebug_tunnel_inventory_host=1 xdebug-tunnel.yml
 
+      lint:
+        executor: python-3
+        steps:
+          - run: python --version
+          - checkout
+          - run: sudo pip install ansible-lint
+          - run: ansible-lint --version
+          - run: ansible-lint deploy.yml dev.yml server.yml rollback.yml xdebug-tunnel.yml
+
 workflows:
   syntax-check:
     jobs:
@@ -80,3 +89,6 @@ workflows:
           name: syntax-check-python-2-ansible-2.7
           python-version: '2'
           ansible-version: ~=2.7.0
+  lint:
+    jobs:
+      - trellis/lint
