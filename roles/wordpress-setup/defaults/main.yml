@@ -50,6 +50,11 @@ h5bp_cross_domain_fonts_enabled: "{{ h5bp.cross_domain_fonts | default(true) }}"
 h5bp_expires_enabled: "{{ h5bp.expires | default(false) }}"
 h5bp_protect_system_files_enabled: "{{ h5bp.protect_system_files | default(true) }}"
 
+# X-Robots-Tag Header helpers
+not_prod: "{{ env != 'production' }}"
+robots_tag_header: "{{ item.value.robots_tag_header | default({}) }}"
+robots_tag_header_enabled: "{{ robots_tag_header.enabled | default(not_prod) }}"
+
 # PHP FPM
 php_fpm_pm_max_children: 10
 php_fpm_pm_start_servers: 1

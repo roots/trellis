@@ -218,6 +218,14 @@ server {
   {% endif -%}
   {% endblock -%}
 
+  {% block robots_tag_header -%}
+  {% if robots_tag_header_enabled -%}
+  # Prevent search engines from indexing non-production environments
+  add_header X-Robots-Tag "noindex, nofollow" always;
+
+  {% endif -%}
+  {% endblock -%}
+
   {% block location_php -%}
   location ~ \.php$ {
     {% block location_php_basic -%}
