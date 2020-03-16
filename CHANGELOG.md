@@ -12,6 +12,7 @@
 * Lint: Fix: `[306] Shells that use pipes should set the pipefail option ([#1153](https://github.com/roots/trellis/pull/1153))
 * Lint: Fix `[301] Commands should not change things if nothing needs doing ([#1139](https://github.com/roots/trellis/pull/1139))
 * Void rolled back releases ([#1148](https://github.com/roots/trellis/pull/1148))
+* Add `WP_DEBUG_LOG` to `.env` on deploy ([#1160](https://github.com/roots/trellis/pull/1160))
 
 ### 1.3.0: December 7th, 2019
 * Add `git_sha` and `release_version` to `.env` on deploy ([#1124](https://github.com/roots/trellis/pull/1124))
