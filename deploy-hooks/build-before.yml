@@ -7,8 +7,28 @@
 # Uncomment the lines below and replace `sage` with your theme folder
 #
 # ---
+#
+# - name: Use project specific node version
+#   shell: . $NVM_DIR/nvm.sh install lts/* && nvm unalias default && . $NVM_DIR/nvm.sh && nvm install && nvm use
+#   delegate_to: localhost
+#   args:
+#     chdir: "{{ project_local_path }}/web/app/themes/sage"
+#
+# - shell: . $NVM_DIR/nvm.sh && dirname $(nvm which $(nvm current) | tail -1)
+#   delegate_to: localhost
+#   args:
+#     chdir: "{{ project_local_path }}/web/app/themes/sage"
+#   register: nvm_which
+#
+# - shell: npm bin --global
+#   delegate_to: localhost
+#   environment:
+#     PATH: "{{nvm_which.stdout}}:{{ ansible_env.PATH }}"
+#   register: npm_bin_dir
+#
+# 
 # - name: Install npm dependencies
-#   command: yarn
+#   command: "{{npm_bin_dir.stdout}}/npm install"
 #   delegate_to: localhost
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
@@ -19,7 +39,7 @@
 #     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #
 # - name: Compile assets for production
-#   command: yarn build:production
+#   command: "{{npm_bin_dir.stdout}}/npm run build:production"
 #   delegate_to: localhost
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
