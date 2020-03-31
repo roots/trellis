@@ -34,6 +34,6 @@
   when: wp_installed.rc == 0
 
 - name: Reload php-fpm
-  shell: sudo service php7.3-fpm reload
+  shell: sudo service php7.4-fpm reload
   args:
     warn: false

@@ -1,4 +1,5 @@
 ### Head
+* Update PHP to 7.4 ([#1164](https://github.com/roots/trellis/pull/1164))
 * Update `wp_cli_version` to 2.4.0 ([#1131](https://github.com/roots/trellis/pull/1131))
 * Fix `subjectAltName` for self-signed certificates ([#1128](https://github.com/roots/trellis/pull/1128))
 * `composer install` without `--no-scripts` during deploy ([#1133](https://github.com/roots/trellis/pull/1133))

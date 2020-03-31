@@ -26,13 +26,13 @@
 - name: Create WordPress php-fpm configuration file
   template:
     src: php-fpm.conf.j2
-    dest: /etc/php/7.3/fpm/pool.d/wordpress.conf
+    dest: /etc/php/7.4/fpm/pool.d/wordpress.conf
   notify: reload php-fpm
 
 - name: Disable default PHP-FPM pool
-  command: mv /etc/php/7.3/fpm/pool.d/www.conf /etc/php/7.3/fpm/pool.d/www.disabled
+  command: mv /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.disabled
   args:
-    creates: /etc/php/7.3/fpm/pool.d/www.disabled
+    creates: /etc/php/7.4/fpm/pool.d/www.disabled
   when: disable_default_pool | default(true)
   notify: reload php-fpm
 
