@@ -19,4 +19,4 @@ users:
 web_user: web
 web_group: www-data
 web_sudoers:
-  - "/usr/sbin/service php7.3-fpm *"
+  - "/usr/sbin/service php7.4-fpm *"
