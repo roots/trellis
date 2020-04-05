@@ -5,6 +5,14 @@ __metaclass__ = type
 import os.path
 import sys
 
+DOCUMENTATION = '''
+    callback: output
+    type: stdout
+    short_description: Custom output for Trellis
+    extends_documentation_fragment:
+      - default_callback
+'''
+
 from ansible.plugins.callback.default import CallbackModule as CallbackModule_default
 
 try:
