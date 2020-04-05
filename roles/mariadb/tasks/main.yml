@@ -39,6 +39,7 @@
       password: "{{ mysql_root_password }}"
       check_implicit_admin: yes
       state: present
+    no_log: true
     with_items:
       - "{{ inventory_hostname }}"
       - 127.0.0.1
