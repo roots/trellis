@@ -69,6 +69,10 @@ workflows:
           python-version: '3'
           ansible-version: ''
       - trellis/syntax-check:
+          name: syntax-check-python-3-ansible-2.9
+          python-version: '3'
+          ansible-version: ~=2.9.0
+      - trellis/syntax-check:
           name: syntax-check-python-3-ansible-2.8
           python-version: '3'
           ansible-version: ~=2.8.0
@@ -77,6 +81,10 @@ workflows:
           name: syntax-check-python-2-ansible-latest
           python-version: '2'
           ansible-version: ''
+      - trellis/syntax-check:
+          name: syntax-check-python-2-ansible-2.9
+          python-version: '2'
+          ansible-version: ~=2.9.0
       - trellis/syntax-check:
           name: syntax-check-python-2-ansible-2.8
           python-version: '2'
