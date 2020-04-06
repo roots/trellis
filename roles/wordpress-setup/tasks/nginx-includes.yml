@@ -3,17 +3,11 @@
   find:
     paths:
       - "{{ nginx_includes_templates_path }}"
-      - "{{ nginx_includes_deprecated }}"
     pattern: "*.conf.j2"
     recurse: yes
   become: no
   delegate_to: localhost
   register: nginx_includes_templates
-
-- name: Warn about deprecated Nginx includes directory
-  debug:
-    msg: "[DEPRECATION WARNING]: The `{{ nginx_includes_deprecated }}` directory for Trellis Nginx includes templates is deprecated and will no longer function beginning with Trellis 1.0. Please move these templates to a directory named `{{ nginx_includes_templates_path }}` in the root of this project. For more information, see https://roots.io/trellis/docs/nginx-includes/"
-  when: True in nginx_includes_templates.files | map(attribute='path') | map('search', nginx_includes_deprecated | regex_escape) | list
 
 - name: Create includes.d directories
   file:

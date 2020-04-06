@@ -1,4 +1,5 @@
 ### HEAD
+* [BREAKING] Remove `nginx_includes_deprecated` feature ([#1173](https://github.com/roots/trellis/pull/1173))
 * Bump Ansible version_tested_max to 2.8.10 ([#1167](https://github.com/roots/trellis/pull/1167))
 
 ### 1.4.0: April 2nd, 2020
