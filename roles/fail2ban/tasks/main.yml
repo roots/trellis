@@ -17,6 +17,28 @@
   notify:
     - restart fail2ban
 
+- name: build list of fail2ban filter templates
+  find:
+    paths:
+      - "{{ fail2ban_filter_templates_path }}"
+    pattern: "*.conf.j2"
+  become: no
+  delegate_to: localhost
+  register: fail2ban_filter_templates
+
+- name: ensure configuration directory exists
+  file:
+    path: /etc/fail2ban/filter.d/
+    state: directory
+    mode: 0755
+
+- name: template fail2ban filters
+  template:
+    src: "{{ item }}"
+    dest: "/etc/fail2ban/filter.d/{{ item | regex_replace(fail2ban_filter_templates_pattern, '\\2') }}"
+  with_items: "{{ fail2ban_filter_templates.files | map(attribute='path') | list | sort(True) }}"
+  notify: restart fail2ban
+
 - name: ensure fail2ban starts on a fresh reboot
   service:
     name: fail2ban
