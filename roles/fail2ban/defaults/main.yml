@@ -19,8 +19,11 @@ fail2ban_chain: INPUT
 
 fail2ban_action: action_
 
-fail2ban_services:
+fail2ban_services_default:
   - name: ssh
     port: ssh
     filter: sshd
     logpath: /var/log/auth.log
+
+fail2ban_services_custom: []
+fail2ban_services: "{{ fail2ban_services_default + fail2ban_services_custom }}"
