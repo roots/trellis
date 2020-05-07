@@ -55,16 +55,3 @@
   when:
     - item.mounted_volume is defined
     - item.value.mounted_volume
-
-# Create the database dumping folder which our database grabber scripts
-# will write to
-#
-# @TODO: This should probably be moved to a seperate playbook
-- name: Create database exports folder root
-  file:
-    path: "{{ www_root }}/{{ item.key }}/shared/database-exports"
-    owner: "{{ web_user }}"
-    group: "{{ web_group }}"
-    mode: 0755
-    state: directory
-  with_dict: "{{ wordpress_sites }}"

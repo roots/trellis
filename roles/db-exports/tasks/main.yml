@@ -1,0 +1,10 @@
+# Create the database dumping folder which our database grabber scripts
+# will write to
+- name: Create database exports folder root
+  file:
+    path: "{{ www_root }}/{{ item.key }}/shared/database-exports"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: 0755
+    state: directory
+  with_dict: "{{ wordpress_sites }}"
