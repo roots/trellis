@@ -1,9 +1,13 @@
 ---
 - name: Get list position of current symlinked release
-  shell: "ls releases | grep -n $(basename $(readlink {{ project_current_path }})) | cut -f1 -d:"
+  shell: |
+    set -eo pipefail
+    ls releases | grep -n $(basename $(readlink {{ project_current_path }})) | cut -f1 -d:
   args:
     chdir: "{{ project_root }}"
+    executable: /bin/bash
   register: current_release_position
+  changed_when: false
 
 - name: Fail if current release is the oldest available release
   fail:
@@ -15,6 +19,7 @@
   args:
     chdir: "{{ project_root }}"
   register: releases
+  changed_when: false
 
 - name: Create new_release_path variable
   set_fact:

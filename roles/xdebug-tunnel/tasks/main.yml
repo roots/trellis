@@ -2,7 +2,7 @@
 - name: Create or close Xdebug SSH tunnel
   command: |
     {% if xdebug_remote_enable | bool %}
-      ssh -M -S '{{ xdebug_tunnel_control_socket }}' -fnNT -R {{ xdebug_tunnel_port_mapping }} {{ xdebug_tunnel_user_at_host}} '{{ xdebug_tunnel_control_identity }}'
+      ssh -M -S '{{ xdebug_tunnel_control_socket }}' -fnNT -R {{ xdebug_tunnel_port_mapping }} {{ xdebug_tunnel_user_at_host }} '{{ xdebug_tunnel_control_identity }}'
     {% else %}
       ssh -S '{{ xdebug_tunnel_control_socket }}' -O exit '{{ xdebug_tunnel_control_identity }}'
     {% endif %}
@@ -10,6 +10,7 @@
   become: no
   register: xdebug_tunnel
   ignore_errors: true
+  changed_when: true
 
 - name: Interpret and present Xdebug SSH tunnel errors
   fail:

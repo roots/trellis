@@ -19,9 +19,12 @@
 
 - name: Generate Lets Encrypt certificate IDs
   shell: |
-    echo "{{ [[item.1.canonical] | union(item.1.redirects | default([])) | join(' '), letsencrypt_ca, acme_tiny_commit, letsencrypt_intermediate_cert_sha256sum] | join('\n') }}" |
+    set -eo pipefail
+    echo "{{ [[item.1.canonical] | union(item.1.redirects | default([])) | join(' '), letsencrypt_ca, acme_tiny_commit] | join('\n') }}" |
     cat {{ letsencrypt_account_key }} {{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key - |
     md5sum | cut -c -7
+  args:
+    executable: /bin/bash
   register: generate_cert_ids
   changed_when: false
   when: site_host_uses_letsencrypt

@@ -7,5 +7,8 @@ wordpress_env_defaults:
   wp_home: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}"
   wp_siteurl: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}/wp"
   domain_current_site: "{{ project.site_hosts | map(attribute='canonical') | first }}"
+  git_sha: "{{ git_clone.after }}"
+  release_version: "{{ deploy_helper.new_release }}"
+  wp_debug_log: "{{ project_root }}/logs/debug.log"
 
 site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), project.env | default({}), vault_wordpress_sites[site].env) }}"

@@ -33,6 +33,13 @@
       > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
   when: git_clone is failed
 
+- name: Remove untracked files from project folder # noqa 303
+  command: git clean -fdx
+  args:
+    chdir: "{{ project_source_path }}"
+  register: git_clean
+  changed_when: not not(git_clean.stdout)
+
 - include_tasks: "{{ include_path }}"
   with_items: "{{ deploy_update_after | default([]) }}"
   loop_control:
