@@ -9,11 +9,12 @@
   args:
     chdir: "{{ project_root }}"
   register: current_release
+  changed_when: false
 
 - name: Fail if user-specified release doesn't exist or is already active
   fail:
     msg: "Cannot switch to release {{ release }}. Either it does not exist or it is the active release."
-  when: specified.stat.isdir | default(False) == False or current_release.stdout_lines[0] == release
+  when: not (specified.stat.isdir | default(False)) or current_release.stdout_lines[0] == release
 
 - name: Create new_release_path variable
   set_fact:

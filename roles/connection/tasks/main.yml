@@ -12,13 +12,14 @@
   register: preferred_host_key_algorithms
   when:
     - dynamic_host_key_algorithms | default(true)
-    - ansible_ssh_extra_args | default('') == ''
+    - not (not ansible_ssh_extra_args)
     - not (ansible_host_known or ssh_config_host_known)
 
 - name: Check whether Ansible can connect as {{ dynamic_user | default(true) | ternary('root', web_user) }}
-  local_action: |
-    command ansible {{ inventory_hostname }} -m raw -a whoami
+  command: |
+    ansible {{ inventory_hostname }} -m raw -a whoami
     -u {{ dynamic_user | default(true) | ternary('root', web_user) }} {{ cli_options | default('') }} -vvvv
+  delegate_to: localhost
   environment:
     ANSIBLE_SSH_ARGS: "{{ ssh_args_default }} {{ ansible_ssh_extra_args | default('') }}"
   failed_when: false

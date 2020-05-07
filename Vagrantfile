@@ -33,7 +33,7 @@ Vagrant.configure('2') do |config|
     config.vm.network :private_network, type: 'dhcp', hostsupdater: 'skip'
 
     cached_addresses = {}
-    config.hostmanager.ip_resolver = proc do |vm, _resolving_vm|
+    config.hostmanager.ip_resolver = proc do |vm|
       if cached_addresses[vm.name].nil?
         if vm.communicate.ready?
           vm.communicate.execute("hostname -I | cut -d ' ' -f 2") do |_type, contents|
@@ -117,16 +117,30 @@ Vagrant.configure('2') do |config|
   provisioner = local_provisioning? ? :ansible_local : :ansible
   provisioning_path = local_provisioning? ? ANSIBLE_PATH_ON_VM : ANSIBLE_PATH
 
+  # Fix for https://github.com/hashicorp/vagrant/issues/10914
+  if local_provisioning?
+    config.vm.provision 'shell', inline: <<~SHELL
+      sudo apt-get update -y -qq &&
+      sudo dpkg-reconfigure libc6 &&
+      export DEBIAN_FRONTEND=noninteractive &&
+      sudo -E apt-get -q --option \"Dpkg::Options::=--force-confold\" --assume-yes install libssl1.1
+    SHELL
+  end
+
   config.vm.provision provisioner do |ansible|
     if local_provisioning?
       ansible.install_mode = 'pip'
+      if Vagrant::VERSION >= '2.2.5'
+        # Fix for https://github.com/hashicorp/vagrant/issues/10950
+        ansible.pip_install_cmd = 'curl https://bootstrap.pypa.io/get-pip.py | sudo python'
+      end
       ansible.provisioning_path = provisioning_path
       ansible.version = vconfig.fetch('vagrant_ansible_version')
     end
 
     ansible.compatibility_mode = '2.0'
     ansible.playbook = File.join(provisioning_path, 'dev.yml')
-    ansible.galaxy_role_file = File.join(provisioning_path, 'requirements.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
+    ansible.galaxy_role_file = File.join(provisioning_path, 'galaxy.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
     ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
 
     ansible.groups = {
@@ -167,15 +181,15 @@ Vagrant.configure('2') do |config|
 
   # VMware Workstation/Fusion settings
   %w(vmware_fusion vmware_workstation).each do |provider|
-    config.vm.provider provider do |vmw, _override|
-      vmw.name = config.vm.hostname
+    config.vm.provider provider do |vmw|
+      vmw.vmx['displayName'] = config.vm.hostname
       vmw.vmx['numvcpus'] = vconfig.fetch('vagrant_cpus')
       vmw.vmx['memsize'] = vconfig.fetch('vagrant_memory')
     end
   end
 
   # Parallels settings
-  config.vm.provider 'parallels' do |prl, _override|
+  config.vm.provider 'parallels' do |prl|
     prl.name = config.vm.hostname
     prl.cpus = vconfig.fetch('vagrant_cpus')
     prl.memory = vconfig.fetch('vagrant_memory')

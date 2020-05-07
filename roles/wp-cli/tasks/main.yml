@@ -46,6 +46,7 @@
 
 - name: Install WP-CLI packages
   command: wp package install {{ item }}
+  become: true
   become_user: "{{ web_user }}"
   register: wp_cli_packages_installed
   changed_when:

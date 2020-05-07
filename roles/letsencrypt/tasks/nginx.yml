@@ -39,10 +39,10 @@
   when: challenge_site_confs is changed or challenge_sites_enabled is changed
 
 - name: Create test Acme Challenge file
-  shell: touch {{ acme_tiny_challenges_directory }}/ping.txt
-  args:
-    creates: "{{ acme_tiny_challenges_directory }}/ping.txt"
-    warn: false
+  file:
+    path: "{{ acme_tiny_challenges_directory }}/ping.txt"
+    state: touch
+    mode: '0644'
 
 - name: Test Acme Challenges
   test_challenges:

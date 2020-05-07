@@ -11,10 +11,12 @@
   with_dict: "{{ wordpress_sites }}"
 
 - name: Copy .env file into web root
-  command: rsync -ac --info=NAME /tmp/{{ item.key }}.env {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/.env
+  synchronize:
+    src: "/tmp/{{ item.key }}.env"
+    dest: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/.env"
+    checksum: true
   with_dict: "{{ wordpress_sites }}"
-  register: env_file
-  changed_when: env_file.stdout == item.key + '.env'
+  delegate_to: "{{ inventory_hostname }}"
 
 - name: Add known_hosts
   known_hosts:
@@ -25,13 +27,11 @@
   become: no
   with_items: "{{ known_hosts | default([]) }}"
 
-- name: Setup packagist.com authentication
-  composer:
-    command: config
-    arguments: --auth http-basic.repo.packagist.com token {{ item.value.packagist_token }}
+- include_tasks: tasks/composer-authentications.yml
+  vars:
+    site: "{{ item.key }}"
     working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   no_log: true
-  when: item.value.packagist_token is defined
   with_dict: "{{ wordpress_sites }}"
 
 - name: Install Dependencies with Composer
