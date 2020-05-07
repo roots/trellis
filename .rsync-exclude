@@ -1,6 +1,8 @@
 # Excludes:
 /.git
 /.rsync-exclude
+/.circleci
+/.github
 /deploy-hooks/build-before.yml
 /group_vars/all/mail.yml
 /group_vars/all/vault.yml
