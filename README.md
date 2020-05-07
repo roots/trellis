@@ -97,7 +97,14 @@ PROJECT_DIR=~/code/wp    # set to your project directory
 rsync -av --exclude-from .rsync-exclude ./ "${PROJECT_DIR}/trellis"
 ```
 
-Check for differences in:
+Check the changes made to files in `group_vars` - particularly for deletions as
+these are likely things that were added in the project:
+
+```sh
+git diff group_vars
+```
+
+Manually check for differences in:
 
 ```
 group_vars/all/main.yml
