@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://roots.io/trellis/">
-    <img alt="Trellis" src="https://cdn.roots.io/app/uploads/logo-trellis.svg" width="150">
+    <img alt="Trellis" src="https://cdn.roots.io/app/uploads/logo-trellis.svg" width="300">
   </a>
 </p>
 
