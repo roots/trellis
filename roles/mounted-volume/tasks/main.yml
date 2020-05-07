@@ -4,8 +4,8 @@
 #     var: item.value.mounted_volume
 #   with_dict: "{{ wordpress_sites }}"
 
-# Check if the root directory already exists
-- stat:
+- name: Check if the root directory already exists
+  stat:
     path: "{{ www_root }}"
   register: root_configured
 
