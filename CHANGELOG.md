@@ -1,5 +1,6 @@
 ### HEAD
 * Make Fail2ban settings extensible ([#1177](https://github.com/roots/trellis/pull/1177))
+* Improve ip_whitelist in development ([#1183](https://github.com/roots/trellis/pull/1183))
 * Support Ansible 2.9 ([#1169](https://github.com/roots/trellis/pull/1169))
 * [BREAKING] Remove `nginx_includes_deprecated` feature ([#1173](https://github.com/roots/trellis/pull/1173))
 * Bump Ansible version_tested_max to 2.8.10 ([#1167](https://github.com/roots/trellis/pull/1167))
