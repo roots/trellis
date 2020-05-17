@@ -6,6 +6,7 @@
 * [BREAKING] Remove `nginx_includes_deprecated` feature ([#1173](https://github.com/roots/trellis/pull/1173))
 * Bump Ansible version_tested_max to 2.8.10 ([#1167](https://github.com/roots/trellis/pull/1167))
 * Bump Ansible requirement to 2.8.0 ([#1147](https://github.com/roots/trellis/pull/1147))
+* Update CircleCI Config ([#1184](https://github.com/roots/trellis/pull/1184))
 
 ### 1.4.0: April 2nd, 2020
 * Update PHP to 7.4 ([#1164](https://github.com/roots/trellis/pull/1164))
