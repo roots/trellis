@@ -5,7 +5,7 @@ nginx_ssl_path: "{{ nginx_path }}/ssl"
 ssl_default_site:
   no_default:
     site_hosts:
-      - canonical: example.com
+      - canonical: request.is.invalid
     ssl:
       enabled: true
       provider: self-signed
