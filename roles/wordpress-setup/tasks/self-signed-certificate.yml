@@ -9,9 +9,8 @@
   template:
     src: self-signed-openssl-config.j2
     dest: "{{ nginx_ssl_path }}/self-signed-openssl-configs/{{ item.key }}.cnf"
-  with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
+  with_dict: "{{ wordpress_sites }}"
   when:
-    - sites_use_ssl
     - ssl_enabled
     - item.value.ssl.provider | default('manual') == 'self-signed'
 
@@ -23,9 +22,8 @@
   args:
     chdir: "{{ nginx_ssl_path }}"
     creates: "{{ item.key }}.*"
-  with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
+  with_dict: "{{ wordpress_sites }}"
   when:
-    - sites_use_ssl
     - ssl_enabled
     - item.value.ssl.provider | default('manual') == 'self-signed'
   notify: reload nginx
