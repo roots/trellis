@@ -42,8 +42,8 @@
     - sites_use_ssl
     - ssl_enabled
     - item.value.ssl.provider | default('manual') == 'self-signed'
+    - regenerate_self_signed_certificates | default(False) | bool
   notify: reload nginx
-  tags: never
 
 - name: Clean up openssl configs directory
   file:
