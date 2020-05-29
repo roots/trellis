@@ -43,7 +43,7 @@
     - ssl_enabled
     - item.value.ssl.provider | default('manual') == 'self-signed'
   notify: reload nginx
-  tags: [never, force-generate-self-signed-certificates]
+  tags: never
 
 - name: Clean up openssl configs directory
   file:
