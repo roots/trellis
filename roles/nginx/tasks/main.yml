@@ -21,7 +21,7 @@
   args:
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
-  when: sites_use_ssl
+  when: sites_use_ssl | bool
   notify: reload nginx
   tags: [diffie-hellman, letsencrypt, wordpress, wordpress-setup, nginx-includes, nginx-sites]
 

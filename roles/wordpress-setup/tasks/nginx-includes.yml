@@ -33,7 +33,7 @@
     pattern: "*.conf"
     recurse: yes
   register: nginx_includes_existing
-  when: nginx_includes_d_cleanup
+  when: nginx_includes_d_cleanup | bool
 
 - name: Remove unmanaged files from includes.d
   file:

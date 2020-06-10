@@ -29,7 +29,7 @@
       dest: /etc/mysql/conf.d
       owner: root
       group: root
-    when: mysql_binary_logging_disabled
+    when: mysql_binary_logging_disabled | bool
     notify: restart mysql server
 
   - name: Set root user password
