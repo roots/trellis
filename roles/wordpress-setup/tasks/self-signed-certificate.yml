@@ -39,8 +39,8 @@
     chdir: "{{ nginx_ssl_path }}"
   with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
   when:
-    - sites_use_ssl
-    - ssl_enabled
+    - sites_use_ssl | bool
+    - ssl_enabled | bool
     - item.value.ssl.provider | default('manual') == 'self-signed'
     - regenerate_self_signed_certificates | default(False) | bool
   notify: reload nginx
