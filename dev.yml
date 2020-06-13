@@ -6,16 +6,6 @@
   roles:
     - { role: python_interpreter, tags: [always] }
 
-- name: Get control node IP
-  hosts: web:&development
-  become: no
-  gather_facts: yes
-  tasks:
-    - name: Get control node IP
-      set_fact:
-        ansible_control_node_ip: "{{ ansible_env['SSH_CLIENT'].split() | first }}"
-      tags: [fail2ban, ferm]
-
 - name: "WordPress Server: Install LEMP Stack with PHP 7.4 and MariaDB MySQL"
   hosts: web:&development
   become: yes
