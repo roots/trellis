@@ -15,3 +15,7 @@ ferm_input_list:
 # and in 'vault_users' (`group_vars/staging/vault.yml`, `group_vars/production/vault.yml`)
 sshd_permit_root_login: true
 sshd_password_authentication: false
+
+ip_whitelist:
+  - 127.0.0.0/8
+  - "{{ ipify_public_ip | default('') }}"

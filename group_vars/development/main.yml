@@ -1,6 +1,4 @@
 acme_tiny_challenges_directory: "{{ www_root }}/letsencrypt"
 env: development
-ferm_enabled: false
-ip_whitelist: "{{ ansible_all_ipv4_addresses }}"
 mysql_root_password: "{{ vault_mysql_root_password }}" # Define this variable in group_vars/development/vault.yml
 web_user: vagrant
