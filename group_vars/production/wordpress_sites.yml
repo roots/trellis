@@ -48,26 +48,6 @@ wordpress_sites:
       db_user: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_user }}"
       db_password: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_password }}"
       db_prefix: "{{ vault_wordpress_sites['www.proteusthemes.com'].env.db_prefix }}"
-  olm.proteusthemes.com:
-    site_hosts:
-      - canonical: olm.proteusthemes.com
-    site_title: ProteusThemes
-    admin_user: "{{ vault_wordpress_sites['olm.proteusthemes.com'].admin_user }}"
-    admin_password: "{{ vault_wordpress_sites['olm.proteusthemes.com'].admin_password }}"
-    admin_email: "{{ vault_wordpress_sites['olm.proteusthemes.com'].admin_email }}"
-    multisite:
-      enabled: false
-    ssl:
-      enabled: true
-      provider: self-signed
-    cache:
-      enabled: false
-    env:
-      wp_home: "https://olm.proteusthemes.com"
-      wp_siteurl: "https://olm.proteusthemes.com"
-      db_user: "{{ vault_wordpress_sites['olm.proteusthemes.com'].env.db_user }}"
-      db_password: "{{ vault_wordpress_sites['olm.proteusthemes.com'].env.db_password }}"
-      db_prefix: "{{ vault_wordpress_sites['olm.proteusthemes.com'].env.db_prefix }}"
   apps.proteusthemes.com:
     site_hosts:
       - canonical: apps.proteusthemes.com
