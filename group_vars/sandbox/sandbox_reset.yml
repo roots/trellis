@@ -32,11 +32,10 @@ sites_to_export:
 wp_emails:
   from:
     - 'primoz@proteusnet\.com'
+    - 'dmorton@proteusthemes\.com'
     - 'info@proteusthemes\.com'
-    - 'gregor\.capuder@proteusnet\.com'
     - 'jejcic\.jaka@gmail\.com'
     - 'jaka@spaka\.si'
-    - 'marko\.prelec@proteusnet\.com'
   to: 'info@example.com'
 
 # strings like API keys etc

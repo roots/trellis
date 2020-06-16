@@ -10,18 +10,26 @@ users:
       # - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
       - https://github.com/primozcigler.keys
       - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXeBJwAmnwzpsDPivM+T2OJFnruMT2xXCPpmwT9pnQQzB/Tl70LN0oDh0WDj2FwAJ8FMGMQbzaJ59gEPj565bBttb6j4TL1INLTmKTIXBYYrH8s2HAjcAJjtpE3bZQAm64vM1gn5VKWUEhUKRAJ8/yA+fzRhlAtDPTv3KB7N4yZS3C54S3NA2irt7sTyskU/+l7nz9ZrIM/KPMOQ5jsaPNoJhMyntJkyITMx4FBQu7Fa3UE3x3EwIxEw8YOzjbY/eLEbC42WW42/ECqwvQXCFAcqBesN2azzNtNoAo4JyDB/JxCdF0Opn9+Ank3BiRXaTlnQapSNuiuJETUJ7zN5JR VaultPress"
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChcbPZwue2xjHvNHCZXugDYF6VrF90VJR30GNA7slEuYGj1OtvOM5Nx3Qpz2VScPAPLXCkz1GB8dqOb9bea01fz4tOL6Laf8qDHzeoM5gmqeYj6PejmWnCdDx4LrPy5Igee+ftj//0Ro0HlWwcE4kT88a7u2pclqVV4baQ7UHWBSXLWxN3WaFtWd9KDi9tohfYIZUZqAxHNLECN3oBByN5N9Ysk5/Aunne4+VVlmSy0SvXgC+1NViVgm+VOWfAzyVTiOraPQ0PlrrndGNkIOgSveJNNzLAXIABRDtSsHDFpBb7y93JIH2sEiDi8J63ZeFgnB8J3I4tmxkhakRfPsCni5+SBkI3aga8EIZEPNo9eGsGi1VElIVwkmn0BPXWaAG1njmBBoERzXgc5bQ1L6aLBjfRIKiWnWARaQ58aDkp3zTILW8OKsb3a9jtZh5z0xzwLxT82Fs2rE0b3EO9gffZeim1YlPDZczH1nM0vx6OcllZfQXcbV/4e6hZYP3pmqk= dmorton@dmorton-macbookpro.local"
   - name: "{{ admin_user }}"
     groups:
       - "{{ web_group }}"
       - sudo
     keys:
       - https://github.com/primozcigler.keys
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChcbPZwue2xjHvNHCZXugDYF6VrF90VJR30GNA7slEuYGj1OtvOM5Nx3Qpz2VScPAPLXCkz1GB8dqOb9bea01fz4tOL6Laf8qDHzeoM5gmqeYj6PejmWnCdDx4LrPy5Igee+ftj//0Ro0HlWwcE4kT88a7u2pclqVV4baQ7UHWBSXLWxN3WaFtWd9KDi9tohfYIZUZqAxHNLECN3oBByN5N9Ysk5/Aunne4+VVlmSy0SvXgC+1NViVgm+VOWfAzyVTiOraPQ0PlrrndGNkIOgSveJNNzLAXIABRDtSsHDFpBb7y93JIH2sEiDi8J63ZeFgnB8J3I4tmxkhakRfPsCni5+SBkI3aga8EIZEPNo9eGsGi1VElIVwkmn0BPXWaAG1njmBBoERzXgc5bQ1L6aLBjfRIKiWnWARaQ58aDkp3zTILW8OKsb3a9jtZh5z0xzwLxT82Fs2rE0b3EO9gffZeim1YlPDZczH1nM0vx6OcllZfQXcbV/4e6hZYP3pmqk= dmorton@dmorton-macbookpro.local"
   - name: primoz
     groups:
       - "{{ web_group }}"
       - sudo
     keys:
       - https://github.com/primozcigler.keys
+  - name: dmorton
+    groups:
+      - "{{ web_group }}"
+      - sudo
+    keys:
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQChcbPZwue2xjHvNHCZXugDYF6VrF90VJR30GNA7slEuYGj1OtvOM5Nx3Qpz2VScPAPLXCkz1GB8dqOb9bea01fz4tOL6Laf8qDHzeoM5gmqeYj6PejmWnCdDx4LrPy5Igee+ftj//0Ro0HlWwcE4kT88a7u2pclqVV4baQ7UHWBSXLWxN3WaFtWd9KDi9tohfYIZUZqAxHNLECN3oBByN5N9Ysk5/Aunne4+VVlmSy0SvXgC+1NViVgm+VOWfAzyVTiOraPQ0PlrrndGNkIOgSveJNNzLAXIABRDtSsHDFpBb7y93JIH2sEiDi8J63ZeFgnB8J3I4tmxkhakRfPsCni5+SBkI3aga8EIZEPNo9eGsGi1VElIVwkmn0BPXWaAG1njmBBoERzXgc5bQ1L6aLBjfRIKiWnWARaQ58aDkp3zTILW8OKsb3a9jtZh5z0xzwLxT82Fs2rE0b3EO9gffZeim1YlPDZczH1nM0vx6OcllZfQXcbV/4e6hZYP3pmqk= dmorton@dmorton-macbookpro.local"
 
 web_user: deployer
 web_group: www-data
