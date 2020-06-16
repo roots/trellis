@@ -26,7 +26,6 @@
     - { role: ferm, tags: [ferm] }
     - { role: ntp, tags: [ntp] }
     - { role: users, tags: [users] }
-    - { role: dotfiles, tags: [dotfiles], become: yes, become_user: primoz }
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb] }
     - { role: ssmtp, tags: [ssmtp, mail] }
