@@ -67,7 +67,9 @@
 - name: Validate Ubuntu version
   debug:
     msg: |
-      Trellis is built for Ubuntu 18.04 Bionic as of https://github.com/roots/trellis/pull/992
+      Ubuntu 18.04 Bionic is the minimum supported version of Ubuntu in Trellis 1.0+ (as of https://github.com/roots/trellis/pull/992)
+
+      20.04 Focal is the recommend version for Trellis 1.7+ (as of https://github.com/roots/trellis/pull/1197)
 
       Your Ubuntu version is {{ ansible_distribution_version }} {{ ansible_distribution_release }}
 
@@ -77,8 +79,8 @@
 
       Development via Vagrant: `vagrant destroy && vagrant up`
 
-      Staging/Production: Create a new server with Ubuntu 18.04 and provision
-  when: ansible_distribution_release != 'bionic'
+      Staging/Production: Create a new server with Ubuntu 20.04 and provision
+  when: ansible_distribution_version is version('18.04', '<')
 
 - name: Check whether passlib is needed
   fail:
