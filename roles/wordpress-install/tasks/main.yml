@@ -2,21 +2,8 @@
 - import_tasks: directories.yml
   tags: wordpress-install-directories
 
-- name: Create .env file
-  template:
-    src: "env.j2"
-    dest: "/tmp/{{ item.key }}.env"
-    owner: "{{ web_user }}"
-    group: "{{ web_group }}"
-  with_dict: "{{ wordpress_sites }}"
-
-- name: Copy .env file into web root
-  synchronize:
-    src: "/tmp/{{ item.key }}.env"
-    dest: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/.env"
-    checksum: true
-  with_dict: "{{ wordpress_sites }}"
-  delegate_to: "{{ inventory_hostname }}"
+- import_tasks: dotenv.yml
+  tags: dotenv
 
 - name: Add known_hosts
   known_hosts:
