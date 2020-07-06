@@ -11,8 +11,8 @@
     dest: "{{ nginx_ssl_path }}/self-signed-openssl-configs/{{ item.key }}.cnf"
   with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
   when:
-    - sites_use_ssl
-    - ssl_enabled
+    - sites_use_ssl | bool
+    - ssl_enabled | bool
     - item.value.ssl.provider | default('manual') == 'self-signed'
 
 - name: Generate self-signed certificates
@@ -25,8 +25,8 @@
     creates: "{{ item.key }}.*"
   with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
   when:
-    - sites_use_ssl
-    - ssl_enabled
+    - sites_use_ssl | bool
+    - ssl_enabled | bool
     - item.value.ssl.provider | default('manual') == 'self-signed'
   notify: reload nginx
 

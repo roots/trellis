@@ -29,7 +29,7 @@
       dest: /etc/mysql/conf.d
       owner: root
       group: root
-    when: mysql_binary_logging_disabled
+    when: mysql_binary_logging_disabled | bool
     notify: restart mysql server
 
   - name: Set root user password
@@ -39,6 +39,7 @@
       password: "{{ mysql_root_password }}"
       check_implicit_admin: yes
       state: present
+    no_log: true
     with_items:
       - "{{ inventory_hostname }}"
       - 127.0.0.1
@@ -58,6 +59,7 @@
       user: ""
       host: "{{ item }}"
       state: absent
+    no_log: true
     with_items:
       - localhost
       - "{{ inventory_hostname }}"

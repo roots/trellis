@@ -10,6 +10,6 @@
     user: root
     job: cd {{ acme_tiny_data_directory }} && ./renew-certs.py && /usr/sbin/service nginx reload
     day: "{{ letsencrypt_cronjob_daysofmonth }}"
-    hour: 4
-    minute: 30
+    hour: "4"
+    minute: "30"
     state: present

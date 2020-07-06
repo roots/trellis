@@ -14,8 +14,8 @@ except ImportError:
     from ansible.utils.display import Display
     display = Display()
 
-version_requirement = '2.7.12'
-version_tested_max = '2.8.4'
+version_requirement = '2.8.0'
+version_tested_max = '2.9.10'
 python3_required_version = '2.5.3'
 
 if version_info[0] == 3 and not ge(LooseVersion(__version__), LooseVersion(python3_required_version)):
@@ -26,12 +26,12 @@ if not ge(LooseVersion(__version__), LooseVersion(version_requirement)):
     raise AnsibleError(('Trellis no longer supports Ansible {}.\n'
         'Please upgrade to Ansible {} or higher.').format(__version__, version_requirement))
 elif gt(LooseVersion(__version__), LooseVersion(version_tested_max)):
-    display.warning(u'You Ansible version is {} but this version of Trellis has only been tested for '
+    display.warning(u'Your Ansible version is {} but this version of Trellis has only been tested for '
             u'compatability with Ansible {} -> {}. It is advisable to check for Trellis updates or '
             u'downgrade your Ansible version.'.format(__version__, version_requirement, version_tested_max))
 
 if eq(LooseVersion(__version__), LooseVersion('2.5.0')):
-    display.warning(u'You Ansible version is {}. Consider upgrading your Ansible version to avoid '
+    display.warning(u'Your Ansible version is {}. Consider upgrading your Ansible version to avoid '
             u'erroneous warnings such as `Removed restricted key from module data...`'.format(__version__))
 
 # Import BaseVarsPlugin after Ansible version check.

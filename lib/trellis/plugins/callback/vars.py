@@ -13,6 +13,7 @@ from ansible.playbook.task import Task
 from ansible.plugins.callback import CallbackBase
 from ansible.template import Templar
 from ansible.utils.unsafe_proxy import wrap_var
+from ansible import context
 
 
 class CallbackModule(CallbackBase):
@@ -23,13 +24,7 @@ class CallbackModule(CallbackBase):
 
     def __init__(self):
         super(CallbackModule, self).__init__()
-
-        # handle Ansible 2.7 and 2.8 cases by normalizing each into a dict
-        try:
-            from ansible import context
-            self._options = context.CLIARGS
-        except ImportError:
-            self._options = vars(cli.options) if cli else {}
+        self._options = context.CLIARGS
 
     def raw_triage(self, key_string, item, patterns):
         # process dict values

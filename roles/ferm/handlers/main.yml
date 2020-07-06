@@ -1,4 +1,4 @@
 ---
 - name: restart ferm
   service: name=ferm state=restarted
-  when: ferm_enabled
+  when: ferm_enabled | bool

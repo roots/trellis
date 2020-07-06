@@ -5,7 +5,7 @@ fail2ban_loglevel: INFO
 fail2ban_logtarget: /var/log/fail2ban.log
 fail2ban_socket: /var/run/fail2ban/fail2ban.sock
 
-fail2ban_ignoreip: 127.0.0.1/8 {{ ip_whitelist | join(' ') }}
+fail2ban_ignoreip: "{{ ip_whitelist | join(' ') }}"
 fail2ban_bantime: 600
 fail2ban_maxretry: 6
 
@@ -19,8 +19,14 @@ fail2ban_chain: INPUT
 
 fail2ban_action: action_
 
-fail2ban_services:
+fail2ban_services_default:
   - name: ssh
     port: ssh
     filter: sshd
     logpath: /var/log/auth.log
+
+fail2ban_services_custom: []
+fail2ban_services: "{{ fail2ban_services_default + fail2ban_services_custom }}"
+
+fail2ban_filter_templates_path: fail2ban_filters
+fail2ban_filter_templates_pattern: "^({{ fail2ban_filter_templates_path | regex_escape }})/(.*)\\.j2$"

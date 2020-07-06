@@ -1,5 +1,4 @@
 acme_tiny_challenges_directory: "{{ www_root }}/letsencrypt"
 env: development
-ferm_enabled: false
 mysql_root_password: "{{ vault_mysql_root_password }}" # Define this variable in group_vars/development/vault.yml
 web_user: vagrant

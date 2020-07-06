@@ -65,7 +65,7 @@
 - name: ensure iptables rules are enabled
   command: ferm --slow /etc/ferm/ferm.conf
   changed_when: false
-  when: ferm_enabled
+  when: ferm_enabled | bool
 
 - name: ensure iptables rules are disabled
   command: ferm --flush /etc/ferm/ferm.conf

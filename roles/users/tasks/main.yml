@@ -47,7 +47,7 @@
     owner: root
     group: root
     validate: "/usr/sbin/visudo -cf %s"
-  when: web_sudoers
+  when: web_sudoers[0] is defined
 
 - name: Add SSH keys
   authorized_key:

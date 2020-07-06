@@ -5,7 +5,7 @@ nginx_ssl_path: "{{ nginx_path }}/ssl"
 ssl_default_site:
   no_default:
     site_hosts:
-      - canonical: example.com
+      - canonical: request.is.invalid
     ssl:
       enabled: true
       provider: self-signed
@@ -34,8 +34,7 @@ nginx_cache_background_update: "on"
 
 # Nginx includes
 nginx_includes_templates_path: nginx-includes
-nginx_includes_deprecated: roles/wordpress-setup/templates/includes.d
-nginx_includes_pattern: "^({{ nginx_includes_templates_path | regex_escape }}|{{ nginx_includes_deprecated | regex_escape }})/(.*)\\.j2$"
+nginx_includes_pattern: "^({{ nginx_includes_templates_path | regex_escape }})/(.*)\\.j2$"
 nginx_includes_d_cleanup: true
 
 # h5bp helpers
@@ -49,6 +48,11 @@ h5bp_cache_busting_enabled: "{{ h5bp.cache_busting | default(false) }}"
 h5bp_cross_domain_fonts_enabled: "{{ h5bp.cross_domain_fonts | default(true) }}"
 h5bp_expires_enabled: "{{ h5bp.expires | default(false) }}"
 h5bp_protect_system_files_enabled: "{{ h5bp.protect_system_files | default(true) }}"
+
+# X-Robots-Tag Header helpers
+not_prod: "{{ env != 'production' }}"
+robots_tag_header: "{{ item.value.robots_tag_header | default({}) }}"
+robots_tag_header_enabled: "{{ robots_tag_header.enabled | default(not_prod) }}"
 
 # PHP FPM
 php_fpm_pm_max_children: 10

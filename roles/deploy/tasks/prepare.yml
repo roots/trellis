@@ -22,15 +22,21 @@
     state: directory
 
 - name: Run git archive to populate new build dir
-  shell: git archive {{ project_version }} | tar xf - -C {{ deploy_helper.new_release_path }}
+  shell: |
+    set -eo pipefail
+    git archive {{ project_version }} | tar xf - -C {{ deploy_helper.new_release_path }}
   args:
     chdir: "{{ project_source_path }}"
+    executable: /bin/bash
   when: project.repo_subtree_path is not defined
 
 - name: Run git archive with subdirectory to populate new build dir
-  shell: git archive {{ project_version }} {{ project.repo_subtree_path }} | tar -x --strip-components {{ project.repo_subtree_path.split('/') | count }} -f - -C {{ deploy_helper.new_release_path }}
+  shell: |
+    set -eo pipefail
+    git archive {{ project_version }} {{ project.repo_subtree_path }} | tar -x --strip-components {{ project.repo_subtree_path.split('/') | count }} -f - -C {{ deploy_helper.new_release_path }}
   args:
     chdir: "{{ project_source_path }}"
+    executable: /bin/bash
   when: project.repo_subtree_path is defined
 
 - name: write unfinished file

@@ -8,6 +8,7 @@ wordpress_env_defaults:
   wp_home: "{{ ssl_enabled | ternary('https', 'http') }}://{{ site_hosts_canonical | first }}"
   wp_siteurl: "{{ ssl_enabled | ternary('https', 'http') }}://{{ site_hosts_canonical | first }}/wp"
   domain_current_site: "{{ site_hosts_canonical | first }}"
+  wp_debug_log: "{{ www_root }}/{{ item.key }}/logs/debug.log"
 
 site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"

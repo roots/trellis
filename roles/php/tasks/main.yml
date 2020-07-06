@@ -1,21 +1,35 @@
 ---
-- name: Add PHP 7.3 PPA
+- name: Add PHP 7.4 PPA
   apt_repository:
     repo: "ppa:ondrej/php"
     update_cache: yes
 
-- name: Install PHP 7.3
+- name: Install PHP 7.4
   apt:
     name: "{{ item.key }}"
     state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
   with_dict: "{{ php_extensions }}"
 
-- name: Start php7.3-fpm service
+- name: Start php7.4-fpm service
   service:
-    name: php7.3-fpm
+    name: php7.4-fpm
     state: started
     enabled: true
+
+- name: Check for existing php7.3-fpm service
+  stat:
+    path: /etc/init.d/php7.3-fpm
+  register: php73_status
+
+- name: Stop php7.3-fpm service if it exists
+  service:
+    name: php7.3-fpm
+    state: stopped
+    enabled: false
+  register: service_stopped
+  when: php73_status.stat.exists
+  notify: reload php-fpm
 
 - name: Check for existing php7.2-fpm service
   stat:
@@ -34,5 +48,5 @@
 - name: PHP configuration file
   template:
     src: php.ini.j2
-    dest: /etc/php/7.3/fpm/php.ini
+    dest: /etc/php/7.4/fpm/php.ini
   notify: reload php-fpm
