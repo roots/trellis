@@ -30,7 +30,7 @@
   file:
     path: /etc/fail2ban/filter.d/
     state: directory
-    mode: 0755
+    mode: '0755'
 
 - name: template fail2ban filters
   template:
