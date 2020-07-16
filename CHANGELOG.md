@@ -1,4 +1,5 @@
 ### HEAD
+* Support branch variable for deploys ([#1204](https://github.com/roots/trellis/pull/1204))
 * Removes ID from Lets Encrypt bundled certificate and make filename stable ([#834](https://github.com/roots/trellis/pull/834))
 * Make Fail2ban settings extensible ([#1177](https://github.com/roots/trellis/pull/1177))
 * Improve ip_whitelist in development ([#1183](https://github.com/roots/trellis/pull/1183))
