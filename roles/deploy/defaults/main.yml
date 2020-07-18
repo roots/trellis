@@ -2,7 +2,7 @@
 # - you must set a repository (no default)
 project_git_repo: "{{ project.repo }}"
 # - you can set the git ref to deploy (can be a branch, tag or commit hash)
-project_version: "{{ project.branch | default('master') }}"
+project_version: "{{ branch is defined | ternary(branch, project.branch) | default('master') }}"
 
 # The source_path is used to fetch the tags from git, or synchronise via rsync. This way
 # you do not have to download/sync the entire project on every deploy
