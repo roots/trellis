@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@0.3
+  python: circleci/python@0.3.2
 
 commands:
   install-pip-package:
