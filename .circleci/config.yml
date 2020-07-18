@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  python: circleci/python@0.3
+  python: circleci/python@0.3.2
 
 commands:
   install-pip-package:
@@ -121,16 +121,16 @@ workflows:
           name: syntax-check-python-<<matrix.python-version>>-ansible<<matrix.ansible-version>>
           matrix:
             parameters:
-              python-version: ["3.7", "2.7"]
+              python-version: ["3.7.8", "2.7"]
               ansible-version: ["~=2.9.0", "~=2.8.0"]
       - syntax-check-with-requirements-txt:
           name: syntax-check-python-<<matrix.python-version>>-requirements-txt
           matrix:
             parameters:
-              python-version: ["3.7", "2.7"]
+              python-version: ["3.7.8", "2.7"]
 
   lint:
     jobs:
       - lint:
           name: lint-python-3.7
-          python-version: "3.7"
+          python-version: "3.7.8"
