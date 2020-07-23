@@ -1,6 +1,8 @@
 ---
 - name: Check if deploy_build_before scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_build_before_paths
   with_items: "{{ deploy_build_before | default([]) }}"
 
@@ -30,7 +32,9 @@
   when: item.stat.exists
 
 - name: Check if deploy_build_after scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_build_after_paths
   with_items: "{{ deploy_build_after | default([]) }}"
 

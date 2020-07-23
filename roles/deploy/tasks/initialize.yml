@@ -1,6 +1,8 @@
 ---
 - name: Check if deploy_initialize_before scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_initialize_before_paths
   with_items: "{{ deploy_initialize_before | default([]) }}"
 
@@ -18,7 +20,9 @@
     state: present
 
 - name: Check if deploy_initialize_after scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_initialize_after_paths
   with_items: "{{ deploy_initialize_after | default([]) }}"
 
