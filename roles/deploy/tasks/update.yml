@@ -1,6 +1,8 @@
 ---
 - name: Check if deploy_update_before scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_update_before_paths
   with_items: "{{ deploy_update_before | default([]) }}"
 
@@ -47,7 +49,9 @@
   changed_when: not not(git_clean.stdout)
 
 - name: Check if deploy_update_after scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_update_after_paths
   with_items: "{{ deploy_update_after | default([]) }}"
 

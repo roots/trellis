@@ -1,6 +1,8 @@
 ---
 - name: Check if deploy_finalize_before scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_finalize_before_paths
   with_items: "{{ deploy_finalize_before | default([]) }}"
 
@@ -20,7 +22,9 @@
     keep_releases: "{{ project.deploy_keep_releases | default(deploy_keep_releases | default(omit)) }}"
 
 - name: Check if deploy_finalize_after scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_finalize_after_paths
   with_items: "{{ deploy_finalize_after | default([]) }}"
 

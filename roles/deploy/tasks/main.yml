@@ -1,6 +1,8 @@
 ---
 - name: Check if deploy_before scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_before_paths
   with_items: "{{ deploy_before | default([]) }}"
 
@@ -19,7 +21,9 @@
 - import_tasks: finalize.yml
 
 - name: Check if deploy_after scripts exist
-  local_action: stat path="{{ item }}"
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
   register: deploy_after_paths
   with_items: "{{ deploy_after | default([]) }}"
 
