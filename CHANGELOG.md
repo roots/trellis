@@ -1,4 +1,5 @@
-### HEAD
+### 1.5.0: August 5th, 2020
+* Improve Nginx reloading for failed Let's Encrypt certificates ([#1207](https://github.com/roots/trellis/pull/1207))
 * Add support for Lets Encrypt contact emails ([#1206](https://github.com/roots/trellis/pull/1206))
 * Support branch variable for deploys ([#1204](https://github.com/roots/trellis/pull/1204))
 * Removes ID from Lets Encrypt bundled certificate and make filename stable ([#834](https://github.com/roots/trellis/pull/834))
