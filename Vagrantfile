@@ -70,8 +70,8 @@ Vagrant.configure('2') do |config|
 
   extra_options = if vagrant_mount_type == 'smb'
     {
-      smb_username: vconfig.fetch('vagrant_smb_username', 'vagrant'),
-      smb_password: vconfig.fetch('vagrant_smb_password', 'vagrant'),
+      smb_username: vconfig.fetch('vagrant_smb_username', nil),
+      smb_password: vconfig.fetch('vagrant_smb_password', nil),
     }
   else
     {}
