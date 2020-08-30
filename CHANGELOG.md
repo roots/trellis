@@ -1,4 +1,5 @@
 ### HEAD
+* Update MariaDB package to 10.5 ([#1212](https://github.com/roots/trellis/pull/1212))
 * Switch to official Nginx Ubuntu package ([#1208](https://github.com/roots/trellis/pull/1208))
 
 ### 1.5.0: August 5th, 2020
