@@ -14,7 +14,8 @@ from ansible.module_utils.six import string_types
 def system(vagrant_version=None):
     # Get most recent Trellis CHANGELOG entry
     changelog_msg = ''
-    ansible_path = os.getenv('ANSIBLE_CONFIG', os.getcwd())
+    ansible_config_path = os.getenv('ANSIBLE_CONFIG')
+    ansible_path = os.path.dirname(ansible_config_path) if ansible_config_path else os.getcwd()
     changelog = os.path.join(ansible_path, 'CHANGELOG.md')
 
     if os.path.isfile(changelog):
