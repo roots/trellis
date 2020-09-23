@@ -14,13 +14,13 @@ commands:
       - restore_cache:
             name: Restore pip Cache
             keys:
-              - pip-v2-<<parameters.python-version>>-<<parameters.package>>-
+              - pip-v3-<<parameters.python-version>>-<<parameters.package>>-
       - run:
           name: Install pip Package
           command: pip install --user --upgrade <<parameters.package>>
       - save_cache:
           name: Save pip Cache
-          key: pip-v2-<<parameters.python-version>>-<<parameters.package>>-{{ epoch }}
+          key: pip-v3-<<parameters.python-version>>-<<parameters.package>>-{{ epoch }}
           paths:
             - /home/circleci/.local/bin/
             - /home/circleci/.local/lib/
@@ -83,13 +83,13 @@ jobs:
       - restore_cache:
             name: Restore pip Cache
             keys:
-              - pip-v2-<<parameters.python-version>>-{{ checksum "requirements.txt" }}-
+              - pip-v3-<<parameters.python-version>>-{{ checksum "requirements.txt" }}-
       - run:
           name: Install packages from requirements.txt (or any other file) via Pip.
           command: pip install --user --upgrade --requirement requirements.txt
       - save_cache:
           name: Save pip Cache
-          key: pip-v2-<<parameters.python-version>>-{{ checksum "requirements.txt" }}-{{ epoch }}
+          key: pip-v3-<<parameters.python-version>>-{{ checksum "requirements.txt" }}-{{ epoch }}
           paths:
             - /home/circleci/.local/bin/
             - /home/circleci/.local/lib/
