@@ -18,7 +18,8 @@ from ansible.plugins.callback.default import CallbackModule as CallbackModule_de
 try:
     from trellis.utils import output as output
 except ImportError:
-    ansible_path = os.getenv('ANSIBLE_CONFIG', os.getcwd())
+    ansible_config_path = os.getenv('ANSIBLE_CONFIG')
+    ansible_path = os.path.dirname(ansible_config_path) if ansible_config_path else os.getcwd()
     if sys.path.append(os.path.join(ansible_path, 'lib')) in sys.path: raise
     sys.path.append(sys.path.append(os.path.join(ansible_path, 'lib')))
     from trellis.utils import output as output

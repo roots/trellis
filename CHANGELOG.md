@@ -1,4 +1,14 @@
 ### HEAD
+* Allow WP cron intervals to be configurable ([#1222](https://github.com/roots/trellis/pull/1222))
+* Remove default Vagrant SMB credentials ([#1215](https://github.com/roots/trellis/pull/1215))
+* Fix usage of `ANSIBLE_CONFIG` env var ([#1217](https://github.com/roots/trellis/pull/1217))
+* Update MariaDB package to 10.5 ([#1212](https://github.com/roots/trellis/pull/1212))
+* Switch to official Nginx Ubuntu package ([#1208](https://github.com/roots/trellis/pull/1208))
+
+### 1.5.0: August 5th, 2020
+* Improve Nginx reloading for failed Let's Encrypt certificates ([#1207](https://github.com/roots/trellis/pull/1207))
+* Add support for Lets Encrypt contact emails ([#1206](https://github.com/roots/trellis/pull/1206))
+* Support branch variable for deploys ([#1204](https://github.com/roots/trellis/pull/1204))
 * Removes ID from Lets Encrypt bundled certificate and make filename stable ([#834](https://github.com/roots/trellis/pull/834))
 * Make Fail2ban settings extensible ([#1177](https://github.com/roots/trellis/pull/1177))
 * Improve ip_whitelist in development ([#1183](https://github.com/roots/trellis/pull/1183))

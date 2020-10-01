@@ -1,8 +1,16 @@
 ---
-- include_tasks: "{{ include_path }}"
+- name: Check if deploy_share_before scripts exist
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
+  register: deploy_share_before_paths
   with_items: "{{ deploy_share_before | default([]) }}"
+
+- include_tasks: "{{ include_path.item }}"
+  with_items: "{{ deploy_share_before_paths.results }}"
   loop_control:
     loop_var: include_path
+  when: include_path.stat.exists
   tags: deploy-share-before
 
 - name: Ensure shared sources are present -- directories
@@ -48,8 +56,16 @@
     state: link
   with_items: "{{ project.project_shared_children | default(project_shared_children) }}"
 
-- include_tasks: "{{ include_path }}"
+- name: Check if deploy_share_after scripts exist
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
+  register: deploy_share_after_paths
   with_items: "{{ deploy_share_after | default([]) }}"
+
+- include_tasks: "{{ include_path.item }}"
+  with_items: "{{ deploy_share_after_paths.results }}"
   loop_control:
     loop_var: include_path
+  when: include_path.stat.exists
   tags: deploy-share-after

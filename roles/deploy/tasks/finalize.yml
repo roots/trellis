@@ -1,8 +1,16 @@
 ---
-- include_tasks: "{{ include_path }}"
+- name: Check if deploy_finalize_before scripts exist
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
+  register: deploy_finalize_before_paths
   with_items: "{{ deploy_finalize_before | default([]) }}"
+
+- include_tasks: "{{ include_path.item }}"
+  with_items: "{{ deploy_finalize_before_paths.results }}"
   loop_control:
     loop_var: include_path
+  when: include_path.stat.exists
   tags: deploy-finalize-before
 
 - name: Finalize the deploy
@@ -13,10 +21,18 @@
     state: finalize
     keep_releases: "{{ project.deploy_keep_releases | default(deploy_keep_releases | default(omit)) }}"
 
-- include_tasks: "{{ include_path }}"
+- name: Check if deploy_finalize_after scripts exist
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
+  register: deploy_finalize_after_paths
   with_items: "{{ deploy_finalize_after | default([]) }}"
+
+- include_tasks: "{{ include_path.item }}"
+  with_items: "{{ deploy_finalize_after_paths.results }}"
   loop_control:
     loop_var: include_path
+  when: include_path.stat.exists
   tags: deploy-finalize-after
 
 - debug:

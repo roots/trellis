@@ -1,8 +1,16 @@
 ---
-- include_tasks: "{{ include_path }}"
+- name: Check if deploy_before scripts exist
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
+  register: deploy_before_paths
   with_items: "{{ deploy_before | default([]) }}"
+
+- include_tasks: "{{ include_path.item }}"
+  with_items: "{{ deploy_before_paths.results }}"
   loop_control:
     loop_var: include_path
+  when: include_path.stat.exists
   tags: deploy-before
 
 - import_tasks: initialize.yml
@@ -12,8 +20,16 @@
 - import_tasks: share.yml
 - import_tasks: finalize.yml
 
-- include_tasks: "{{ include_path }}"
+- name: Check if deploy_after scripts exist
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
+  register: deploy_after_paths
   with_items: "{{ deploy_after | default([]) }}"
+
+- include_tasks: "{{ include_path.item }}"
+  with_items: "{{ deploy_after_paths.results }}"
   loop_control:
     loop_var: include_path
+  when: include_path.stat.exists
   tags: deploy-after

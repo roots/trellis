@@ -1,8 +1,16 @@
 ---
-- include_tasks: "{{ include_path }}"
+- name: Check if deploy_build_before scripts exist
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
+  register: deploy_build_before_paths
   with_items: "{{ deploy_build_before | default([]) }}"
+
+- include_tasks: "{{ include_path.item }}"
+  with_items: "{{ deploy_build_before_paths.results }}"
   loop_control:
     loop_var: include_path
+  when: include_path.stat.exists
   tags: deploy-build-before
 
 - name: Copy project templates
@@ -23,8 +31,16 @@
   with_items: "{{ project_folder_paths.results }}"
   when: item.stat.exists
 
-- include_tasks: "{{ include_path }}"
+- name: Check if deploy_build_after scripts exist
+  stat:
+    path: "{{ item }}"
+  delegate_to: localhost
+  register: deploy_build_after_paths
   with_items: "{{ deploy_build_after | default([]) }}"
+
+- include_tasks: "{{ include_path.item }}"
+  with_items: "{{ deploy_build_after_paths.results }}"
   loop_control:
     loop_var: include_path
+  when: include_path.stat.exists
   tags: deploy-build-after
