@@ -27,6 +27,7 @@
 - name: Create new release dir
   file:
     path: "{{ deploy_helper.new_release_path }}"
+    mode: '0755'
     state: directory
 
 - name: Run git archive to populate new build dir
@@ -50,6 +51,7 @@
 - name: write unfinished file
   file:
     path: "{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}"
+    mode: '0744'
     state: touch
 
 - name: Check if deploy_prepare_after scripts exist
