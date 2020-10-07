@@ -69,5 +69,6 @@
     mysql_db:
       name: test
       state: absent
+    no_log: true
 
   when: not sites_using_remote_db | count
