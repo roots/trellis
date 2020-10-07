@@ -7,6 +7,7 @@
       login_host: "{{ site_env.db_host }}"
       login_user: "{{ mysql_root_user }}"
       login_password: "{{ mysql_root_password }}"
+    no_log: true
     with_dict: "{{ wordpress_sites }}"
 
   - name: Create/assign database user to db and grant permissions
