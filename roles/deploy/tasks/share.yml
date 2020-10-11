@@ -40,6 +40,7 @@
 - name: Ensure parent directories for shared paths are present
   file:
     path: "{{ deploy_helper.new_release_path }}/{{ item.path | dirname }}"
+    mode: '0777'
     state: directory
   with_items: "{{ project.project_shared_children | default(project_shared_children) }}"
 
