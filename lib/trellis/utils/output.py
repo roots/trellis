@@ -102,17 +102,17 @@ def display(obj, result):
     hr = '-' * int(wrap_width*.67)
 
     if obj.task_failed and first:
-        display(system(obj.vagrant_version), 'bright gray')
-        display(hr, 'bright gray')
+        display(system(obj.vagrant_version), 'bright black')
+        display(hr, 'bright black')
 
     if msg == '':
         if obj.task_failed and not first:
-            display(hr, 'bright gray')
+            display(hr, 'bright black')
         else:
             return
     else:
         if not first:
-            display(hr, 'bright gray')
+            display(hr, 'bright black')
         display(msg, 'red' if obj.task_failed else 'bright purple')
 
 def display_host(obj, result):
