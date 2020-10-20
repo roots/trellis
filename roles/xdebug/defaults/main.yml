@@ -1,4 +1,4 @@
-php_xdebug_package: php-xdebug
+php_xdebug_package: php7.4-xdebug
 
 # XDebug Remote Debugging
 xdebug_remote_enable: 0
