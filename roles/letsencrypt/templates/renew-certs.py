@@ -39,7 +39,7 @@ for site in {{ sites_using_letsencrypt }}:
         ).format(csr_path)
 
         try:
-            new_bundled_cert = check_output(cmd, stderr=STDOUT, shell=True)
+            new_bundled_cert = check_output(cmd, stderr=STDOUT, shell=True, universal_newlines=True)
         except CalledProcessError as e:
             failed = True
             print('Error while generating certificate for {}\n{}'.format(site, e.output), file=sys.stderr)
