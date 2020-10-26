@@ -3,6 +3,7 @@
   template:
     src: "env.j2"
     dest: "/tmp/{{ item.key }}.env"
+    mode: '0644'
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
   with_dict: "{{ wordpress_sites }}"
