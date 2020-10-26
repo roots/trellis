@@ -1,4 +1,5 @@
 ### HEAD
+* Remove prestissimo for Composer 2.0 support ([#1247](https://github.com/roots/trellis/pull/1247))
 * Allow WP cron intervals to be configurable ([#1222](https://github.com/roots/trellis/pull/1222))
 * Remove default Vagrant SMB credentials ([#1215](https://github.com/roots/trellis/pull/1215))
 * Fix usage of `ANSIBLE_CONFIG` env var ([#1217](https://github.com/roots/trellis/pull/1217))
