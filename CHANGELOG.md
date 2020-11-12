@@ -1,4 +1,7 @@
 ### HEAD
+* Officially support Ubuntu 20.04 (and default Vagrant to it) ([#1197](https://github.com/roots/trellis/pull/1197))
+
+### 1.6.0: November 5th, 2020
 * Remove prestissimo for Composer 2.0 support ([#1247](https://github.com/roots/trellis/pull/1247))
 * Allow WP cron intervals to be configurable ([#1222](https://github.com/roots/trellis/pull/1222))
 * Remove default Vagrant SMB credentials ([#1215](https://github.com/roots/trellis/pull/1215))
