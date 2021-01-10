@@ -1,5 +1,6 @@
 ### HEAD
 * Validate that `letsencrypt_contact_emails` is a list ([#1250](https://github.com/roots/trellis/pull/1250))
+* Add config for PHP CLI ([#1261](https://github.com/roots/trellis/pull/1261))
 
 ### 1.7.0: November 9th, 2020
 * Officially support Ubuntu 20.04 (and default Vagrant to it) ([#1197](https://github.com/roots/trellis/pull/1197))
