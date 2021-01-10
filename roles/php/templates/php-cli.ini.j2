@@ -1,0 +1,20 @@
+; {{ ansible_managed }}
+
+[PHP]
+error_reporting = {{ php_error_reporting }}
+sendmail_path = {{ php_sendmail_path }}
+track_errors = {{ php_track_errors }}
+expose_php = Off
+date.timezone = {{ php_timezone }}
+
+[mysqlnd]
+mysqlnd.collect_memory_statistics = {{ php_mysqlnd_collect_memory_statistics }}
+
+[opcache]
+opcache.enable = {{ php_opcache_enable }}
+opcache.enable_cli = {{ php_opcache_enable_cli }}
+opcache.memory_consumption = {{ php_opcache_memory_consumption }}
+opcache.interned_strings_buffer = {{ php_opcache_interned_strings_buffer }}
+opcache.max_accelerated_files = {{ php_opcache_max_accelerated_files }}
+opcache.revalidate_freq = {{ php_opcache_revalidate_freq }}
+opcache.fast_shutdown = {{ php_opcache_fast_shutdown }}
