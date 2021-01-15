@@ -32,7 +32,6 @@ php_session_save_path: /tmp
 php_session_cookie_httponly: 'On'
 php_session_cookie_secure: 'Off'
 php_upload_max_filesize: 25M
-php_track_errors: 'Off'
 php_timezone: '{{ ntp_timezone }}'
 php_output_buffering: 'Off'
 
