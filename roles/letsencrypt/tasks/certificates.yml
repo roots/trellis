@@ -4,18 +4,18 @@
   args:
     creates: "{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key"
   when: site_host_uses_letsencrypt
-  with_subelements:
-    - "{{ wordpress_sites }}"
-    - site_hosts
+  loop: "{{ wordpress_sites | dict2items | subelements('value.site_hosts') }}"
+  loop_control:
+    label: "{{ item.0.key }} => {{ item.1.canonical }}"
 
 - name: Ensure correct permissions on private keys
   file:
     path: "{{ letsencrypt_keys_dir }}/{{ item.1.canonical }}.key"
     mode: 0600
   when: site_host_uses_letsencrypt
-  with_subelements:
-    - "{{ wordpress_sites }}"
-    - site_hosts
+  loop: "{{ wordpress_sites | dict2items | subelements('value.site_hosts') }}"
+  loop_control:
+    label: "{{ item.0.key }} => {{ item.1.canonical }}"
 
 - name: Generate Lets Encrypt certificate IDs
   shell: |
@@ -28,9 +28,9 @@
   register: generate_cert_ids
   changed_when: false
   when: site_host_uses_letsencrypt
-  with_subelements:
-    - "{{ wordpress_sites }}"
-    - site_hosts
+  loop: "{{ wordpress_sites | dict2items | subelements('value.site_hosts') }}"
+  loop_control:
+    label: "{{ item.0.key }} => {'canonical': {{ item.1.canonical }}, 'redirects': {{ item.1.redirects | default([]) }}}"
   tags: [wordpress, wordpress-setup, nginx-includes, nginx-sites]
 
 - name: Generate CSRs
@@ -39,9 +39,9 @@
     executable: /bin/bash
     creates: "{{ acme_tiny_data_directory }}/csrs/{{ item.1.canonical }}-{{ letsencrypt_cert_ids[item.1.canonical] }}.csr"
   when: site_host_uses_letsencrypt
-  with_subelements:
-    - "{{ wordpress_sites }}"
-    - site_hosts
+  loop: "{{ wordpress_sites | dict2items | subelements('value.site_hosts') }}"
+  loop_control:
+    label: "{{ item.0.key }} => {'canonical': {{ item.1.canonical }}, 'redirects': {{ item.1.redirects | default([]) }}}"
 
 - name: Generate certificate renewal script
   template:
