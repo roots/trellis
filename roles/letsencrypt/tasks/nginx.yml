@@ -11,7 +11,9 @@
   register: current_hosts
   changed_when: false
   when: site_uses_letsencrypt
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Create needed Nginx confs for challenges
   template:
@@ -21,7 +23,9 @@
   when:
     - site_uses_letsencrypt
     - missing_hosts | count
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }} => {{ item.value.canonical }}"
 
 - name: Enable Nginx sites
   file:
@@ -32,7 +36,9 @@
   when:
     - site_uses_letsencrypt
     - missing_hosts | count
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }} => {{ item.value.canonical }}"
   notify: disable temporary challenge sites
 
 - import_tasks: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
@@ -50,7 +56,9 @@
   register: letsencrypt_test_challenges
   ignore_errors: true
   when: site_uses_letsencrypt
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }} => {{ item.value.canonical }}"
 
 - name: Notify of challenge failures
   fail:
@@ -61,4 +69,6 @@
       If you don't want these domains in your SSL certificate, then remove them from `site_hosts`.
       See https://roots.io/trellis/docs/ssl for more details.
   when: item is not skipped and item is failed
-  with_items: "{{ letsencrypt_test_challenges.results }}"
+  loop: "{{ letsencrypt_test_challenges.results }}"
+  loop_control:
+    label: "{{ item.failed_hosts | join(', ') }}"
