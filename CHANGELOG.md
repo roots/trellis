@@ -1,4 +1,5 @@
 ### HEAD
+* Improved repo connection failure message on deploys ([#1265](https://github.com/roots/trellis/pull/1265))
 * Fix #1263 - Remove deprecated PHP option `track_errors` ([#1264](https://github.com/roots/trellis/pull/1264))
 * Validate that `letsencrypt_contact_emails` is a list ([#1250](https://github.com/roots/trellis/pull/1250))
 * Add config for PHP CLI ([#1261](https://github.com/roots/trellis/pull/1261))
