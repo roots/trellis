@@ -19,15 +19,6 @@
       state: link
     notify: reload php-fpm
 
-  when: xdebug_remote_enable | bool
-
-- name: Disable Xdebug
-  file:
-    path: /etc/php/7.4/fpm/conf.d/20-xdebug.ini
-    state: absent
-  when: not xdebug_remote_enable | bool
-  notify: reload php-fpm
-
 - name: Disable Xdebug CLI
   file:
     path: /etc/php/7.4/cli/conf.d/20-xdebug.ini

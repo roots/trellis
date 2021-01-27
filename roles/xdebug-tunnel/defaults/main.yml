@@ -1,6 +1,6 @@
-xdebug_tunnel_remote_port: 9000
+xdebug_tunnel_remote_port: 9003
 xdebug_tunnel_host: localhost
-xdebug_tunnel_local_port: 9000
+xdebug_tunnel_local_port: 9003
 xdebug_tunnel_control_socket: /tmp/trellis-xdebug-{{ xdebug_tunnel_inventory_host }}
 xdebug_tunnel_control_identity: "{{ ansible_user_id }}"
 
