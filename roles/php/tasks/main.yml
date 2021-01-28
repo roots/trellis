@@ -45,8 +45,13 @@
   when: php72_status.stat.exists
   notify: reload php-fpm
 
-- name: PHP configuration file
+- name: Copy PHP-FPM configuration file
   template:
-    src: php.ini.j2
+    src: php-fpm.ini.j2
     dest: /etc/php/7.4/fpm/php.ini
   notify: reload php-fpm
+
+- name: Copy PHP CLI configuration file
+  template:
+    src: php-cli.ini.j2
+    dest: /etc/php/7.4/cli/php.ini

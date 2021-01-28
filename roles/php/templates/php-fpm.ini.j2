@@ -1,0 +1,31 @@
+; {{ ansible_managed }}
+
+[PHP]
+error_reporting = {{ php_error_reporting }}
+display_errors = {{ php_display_errors }}
+display_startup_errors = {{ php_display_startup_errors }}
+max_execution_time = {{ php_max_execution_time }}
+max_input_time = {{ php_max_input_time }}
+max_input_vars = {{ php_max_input_vars }}
+memory_limit = {{ php_memory_limit }}
+post_max_size = {{ php_post_max_size }}
+sendmail_path = {{ php_sendmail_path }}
+session.save_path = {{ php_session_save_path }}
+session.cookie_httponly = {{ php_session_cookie_httponly }}
+session.cookie_secure = {{ php_session_cookie_secure }}
+upload_max_filesize = {{ php_upload_max_filesize }}
+expose_php = Off
+date.timezone = {{ php_timezone }}
+output_buffering = {{ php_output_buffering }}
+
+[mysqlnd]
+mysqlnd.collect_memory_statistics = {{ php_mysqlnd_collect_memory_statistics }}
+
+[opcache]
+opcache.enable = {{ php_opcache_enable }}
+opcache.enable_cli = {{ php_opcache_enable_cli }}
+opcache.memory_consumption = {{ php_opcache_memory_consumption }}
+opcache.interned_strings_buffer = {{ php_opcache_interned_strings_buffer }}
+opcache.max_accelerated_files = {{ php_opcache_max_accelerated_files }}
+opcache.revalidate_freq = {{ php_opcache_revalidate_freq }}
+opcache.fast_shutdown = {{ php_opcache_fast_shutdown }}

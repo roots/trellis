@@ -1,4 +1,14 @@
 ### HEAD
+* Migrate to Xdebug 3 ([#1260](https://github.com/roots/trellis/pull/1260))
+
+### 1.7.1: January 20th, 2021
+* Improved repo connection failure message on deploys ([#1265](https://github.com/roots/trellis/pull/1265))
+* Fix #1263 - Remove deprecated PHP option `track_errors` ([#1264](https://github.com/roots/trellis/pull/1264))
+* Validate that `letsencrypt_contact_emails` is a list ([#1250](https://github.com/roots/trellis/pull/1250))
+* Add config for PHP CLI ([#1261](https://github.com/roots/trellis/pull/1261))
+* Fix security issue with empty password ([#1256](https://github.com/roots/trellis/pull/1256))
+
+### 1.7.0: November 9th, 2020
 * Officially support Ubuntu 20.04 (and default Vagrant to it) ([#1197](https://github.com/roots/trellis/pull/1197))
 
 ### 1.6.0: November 5th, 2020

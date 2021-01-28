@@ -35,7 +35,7 @@
 - name: Failed connection to remote repo
   fail:
     msg: |
-      Git repo {{ project.repo }} cannot be accessed. Please verify the repository exists and you have SSH forwarding set up correctly.
+      Git repo {{ project.repo }} on branch {{ project_version }} cannot be accessed. Please verify the repository/branch are correct and you have SSH forwarding set up correctly.
       More info:
       > https://roots.io/trellis/docs/deploys/#ssh-keys
       > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding

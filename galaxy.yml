@@ -1,10 +1,10 @@
 - name: composer
   src: geerlingguy.composer
-  version: 1.7.6
+  version: 1.9.0
 
 - name: ntp
   src: geerlingguy.ntp
-  version: 2.0.0
+  version: 2.2.0
 
 - name: logrotate
   src: nickhammond.logrotate
@@ -12,7 +12,7 @@
 
 - name: swapfile
   src: oefenweb.swapfile
-  version: v2.0.26
+  version: v2.0.32
 
 - name: mailhog
   src: geerlingguy.mailhog
