@@ -117,23 +117,11 @@ Vagrant.configure('2') do |config|
   provisioner = local_provisioning? ? :ansible_local : :ansible
   provisioning_path = local_provisioning? ? ANSIBLE_PATH_ON_VM : ANSIBLE_PATH
 
-  # Fix for https://github.com/hashicorp/vagrant/issues/10914
-  if local_provisioning?
-    config.vm.provision 'shell', inline: <<~SHELL
-      sudo apt-get update -y -qq &&
-      sudo dpkg-reconfigure libc6 &&
-      export DEBIAN_FRONTEND=noninteractive &&
-      sudo -E apt-get -q --option \"Dpkg::Options::=--force-confold\" --assume-yes install libssl1.1
-    SHELL
-  end
-
   config.vm.provision provisioner do |ansible|
     if local_provisioning?
+      ansible.extra_vars = { ansible_python_interpreter: vconfig.fetch('vagrant_ansible_python_interpreter') }
       ansible.install_mode = 'pip'
-      if Vagrant::VERSION >= '2.2.5'
-        # Fix for https://github.com/hashicorp/vagrant/issues/10950
-        ansible.pip_install_cmd = 'curl https://bootstrap.pypa.io/get-pip.py | sudo python'
-      end
+      ansible.pip_install_cmd = 'sudo apt-get install -y -qq python3-distutils && curl https://bootstrap.pypa.io/get-pip.py | sudo python3'
       ansible.provisioning_path = provisioning_path
       ansible.version = vconfig.fetch('vagrant_ansible_version')
     end
