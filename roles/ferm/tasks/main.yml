@@ -28,6 +28,7 @@
   template:
     src: "{{ item }}.j2"
     dest: /{{ item }}
+    mode: 0644
   with_items:
     - etc/default/ferm
     - etc/ferm/ferm.conf
@@ -55,6 +56,7 @@
             {% else %}
             dest=/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ item.type }}_{{ item.dport[0] }}.conf
             {% endif %}
+            mode=0644
   with_flattened:
     - "{{ ferm_input_list }}"
     - "{{ ferm_input_group_list }}"
