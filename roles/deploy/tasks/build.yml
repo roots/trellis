@@ -17,7 +17,7 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ deploy_helper.new_release_path }}/{{ item.dest }}"
-    mode: "{{ item.mode | default('0644') }}"
+    mode: "{{ item.mode | default(0644) }}"
   with_items: "{{ project.project_templates | default(project_templates) }}"
 
 - name: Check if project folders exist
