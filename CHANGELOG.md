@@ -1,4 +1,6 @@
 ### HEAD
+* Use Python 3 for `ansible_local` Vagrant provisioner ([#1269](https://github.com/roots/trellis/pull/1269))
+* Bump `vagrant_ansible_version` to `2.9.10` ([#1268](https://github.com/roots/trellis/pull/1268))
 * Migrate to Xdebug 3 ([#1260](https://github.com/roots/trellis/pull/1260))
 
 ### 1.7.1: January 20th, 2021

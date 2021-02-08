@@ -23,6 +23,7 @@
   template:
     src: "{{ item.src }}"
     dest: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
+    mode: 0644
   with_items: "{{ nginx_sites_confs }}"
   when: item.enabled | default(true)
   notify: reload nginx
@@ -52,12 +53,14 @@
   template:
     src: "{{ playbook_dir }}/roles/letsencrypt/templates/acme-challenge-location.conf.j2"
     dest: "{{ nginx_path }}/acme-challenge-location.conf"
+    mode: 0644
   notify: reload nginx
 
 - name: Create WordPress configuration for Nginx
   template:
     src: "{{ item.value.nginx_wordpress_site_conf | default(nginx_wordpress_site_conf) }}"
     dest: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
+    mode: 0644
   with_dict: "{{ wordpress_sites }}"
   notify: reload nginx
   tags: nginx-includes

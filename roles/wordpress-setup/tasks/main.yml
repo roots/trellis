@@ -27,6 +27,7 @@
   template:
     src: php-fpm.conf.j2
     dest: /etc/php/7.4/fpm/pool.d/wordpress.conf
+    mode: 0644
   notify: reload php-fpm
 
 - name: Disable default PHP-FPM pool

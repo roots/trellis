@@ -29,6 +29,7 @@
       dest: /etc/mysql/conf.d
       owner: root
       group: root
+      mode: 0644
     when: mysql_binary_logging_disabled | bool
     notify: restart mysql server
 
