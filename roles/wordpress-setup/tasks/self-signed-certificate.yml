@@ -3,13 +3,13 @@
   file:
     path: "{{ nginx_ssl_path }}/self-signed-openssl-configs/"
     state: directory
-    mode: 0755
+    mode: '0755'
 
 - name: Template openssl configs
   template:
     src: self-signed-openssl-config.j2
     dest: "{{ nginx_ssl_path }}/self-signed-openssl-configs/{{ item.key }}.cnf"
-    mode: 0644
+    mode: '0644'
   with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
   when:
     - sites_use_ssl | bool

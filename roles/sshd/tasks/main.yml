@@ -11,7 +11,7 @@
   template:
     src: "{{ sshd_config }}"
     dest: /etc/ssh/sshd_config
-    mode: 0600
+    mode: '0600'
     validate: '/usr/sbin/sshd -T -f %s'
   notify: restart ssh
 
@@ -19,7 +19,7 @@
   template:
     src: "{{ ssh_config }}"
     dest: /etc/ssh/ssh_config
-    mode: 0644
+    mode: '0644'
 
 - name: Remove Diffie-Hellman moduli of size < 2000
   lineinfile:

@@ -30,4 +30,4 @@
   file:
     path: "{{ current_release_readlink_result.stdout }}/DEPLOY_UNFINISHED"
     state: touch
-    mode: 0644
+    mode: '0644'

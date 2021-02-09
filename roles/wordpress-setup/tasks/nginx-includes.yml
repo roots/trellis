@@ -13,7 +13,7 @@
   file:
     path: "{{ nginx_path }}/includes.d/{{ item }}"
     state: directory
-    mode: 0755
+    mode: '0755'
   with_items: "{{ nginx_includes_templates.files | map(attribute='path') |
                   map('regex_replace', nginx_includes_pattern, '\\2') |
                   map('dirname') | unique | list | sort
@@ -24,7 +24,7 @@
   template:
     src: "{{ item }}"
     dest: "{{ nginx_path }}/includes.d/{{ item | regex_replace(nginx_includes_pattern, '\\2') }}"
-    mode: 0644
+    mode: '0644'
   with_items: "{{ nginx_includes_templates.files | map(attribute='path') | list | sort(True) }}"
   notify: reload nginx
 

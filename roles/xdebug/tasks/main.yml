@@ -9,7 +9,7 @@
   template:
     src: xdebug.ini.j2
     dest: /etc/php/7.4/mods-available/xdebug.ini
-    mode: 0644
+    mode: '0644'
   notify: reload php-fpm
 
 - name: Ensure 20-xdebug.ini is present
