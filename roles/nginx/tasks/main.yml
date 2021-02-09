@@ -19,14 +19,14 @@
   file:
     path: "{{ nginx_path }}/{{ item }}"
     state: directory
-    mode: 0755
+    mode: '0755'
   with_items:
     - sites-available
     - sites-enabled
 
 - name: Create SSL directory
   file:
-    mode: 0700
+    mode: '0700'
     path: "{{ nginx_path }}/ssl"
     state: directory
 
@@ -43,14 +43,14 @@
   copy:
     src: templates/h5bp
     dest: "{{ nginx_path }}"
-    mode: 0755
+    mode: '0755'
   notify: reload nginx
 
 - name: Create nginx.conf
   template:
     src: "{{ nginx_conf }}"
     dest: "{{ nginx_path }}/nginx.conf"
-    mode: 0644
+    mode: '0644'
   notify: reload nginx
   tags: nginx-includes
 

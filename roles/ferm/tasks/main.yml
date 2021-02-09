@@ -19,7 +19,7 @@
   file:
     path: "{{ item }}"
     state: directory
-    mode: 0750
+    mode: '0750'
   with_items:
     - /etc/ferm/ferm.d
     - /etc/ferm/filter-input.d
@@ -28,7 +28,7 @@
   template:
     src: "{{ item }}.j2"
     dest: /{{ item }}
-    mode: 0644
+    mode: '0644'
   with_items:
     - etc/default/ferm
     - etc/ferm/ferm.conf

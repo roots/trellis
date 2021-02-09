@@ -11,7 +11,7 @@
     path: "{{ www_root }}"
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
-    mode: 0755
+    mode: '0755'
     state: directory
 
 - name: Create logs folder of sites
@@ -19,7 +19,7 @@
     path: "{{ www_root }}/{{ item.key }}/logs"
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
-    mode: 0755
+    mode: '0755'
     state: directory
   with_dict: "{{ wordpress_sites }}"
 
@@ -27,7 +27,7 @@
   template:
     src: php-fpm.conf.j2
     dest: /etc/php/7.4/fpm/pool.d/wordpress.conf
-    mode: 0644
+    mode: '0644'
   notify: reload php-fpm
 
 - name: Disable default PHP-FPM pool
