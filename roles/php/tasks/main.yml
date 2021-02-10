@@ -49,11 +49,11 @@
   template:
     src: php-fpm.ini.j2
     dest: /etc/php/7.4/fpm/php.ini
-    mode: 0644
+    mode: '0644'
   notify: reload php-fpm
 
 - name: Copy PHP CLI configuration file
   template:
     src: php-cli.ini.j2
     dest: /etc/php/7.4/cli/php.ini
-    mode: 0644
+    mode: '0644'

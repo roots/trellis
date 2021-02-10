@@ -3,7 +3,7 @@
   template:
     src: acme-challenge-location.conf.j2
     dest: "{{ nginx_path }}/acme-challenge-location.conf"
-    mode: 0644
+    mode: '0644'
 
 - name: Get list of hosts in current Nginx conf
   shell: |
@@ -18,7 +18,7 @@
   template:
     src: nginx-challenge-site.conf.j2
     dest: "{{ nginx_path }}/sites-available/letsencrypt-{{ item.key }}.conf"
-    mode: 0644
+    mode: '0644'
   register: challenge_site_confs
   when:
     - site_uses_letsencrypt
@@ -44,7 +44,7 @@
   file:
     path: "{{ acme_tiny_challenges_directory }}/ping.txt"
     state: touch
-    mode: 0644
+    mode: '0644'
 
 - name: Test Acme Challenges
   test_challenges:

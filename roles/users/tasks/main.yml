@@ -43,7 +43,7 @@
   template:
     src: sudoers.d.j2
     dest: "/etc/sudoers.d/{{ web_user }}-services"
-    mode: 0440
+    mode: '0440'
     owner: root
     group: root
     validate: "/usr/sbin/visudo -cf %s"

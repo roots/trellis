@@ -11,7 +11,7 @@
   template:
     src: "{{ item }}.j2"
     dest: /etc/fail2ban/{{ item }}
-    mode: 0644
+    mode: '0644'
   with_items:
     - jail.local
     - fail2ban.local
@@ -31,13 +31,13 @@
   file:
     path: /etc/fail2ban/filter.d/
     state: directory
-    mode: 0755
+    mode: '0755'
 
 - name: template fail2ban filters
   template:
     src: "{{ item }}"
     dest: "/etc/fail2ban/filter.d/{{ item | regex_replace(fail2ban_filter_templates_pattern, '\\2') }}"
-    mode: 0644
+    mode: '0644'
   with_items: "{{ fail2ban_filter_templates.files | map(attribute='path') | list | sort(True) }}"
   notify: restart fail2ban
 
