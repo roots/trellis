@@ -1,4 +1,5 @@
-### HEAD
+### 1.8.0: February 12th, 2021
+* Set permissions on all file related tasks ([#1270](https://github.com/roots/trellis/pull/1270))
 * Use Python 3 for `ansible_local` Vagrant provisioner ([#1269](https://github.com/roots/trellis/pull/1269))
 * Bump `vagrant_ansible_version` to `2.9.10` ([#1268](https://github.com/roots/trellis/pull/1268))
 * Migrate to Xdebug 3 ([#1260](https://github.com/roots/trellis/pull/1260))
