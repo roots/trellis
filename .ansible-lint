@@ -1,9 +1,15 @@
 ---
-warn_list: []
+
+
+warn_list:  # or 'skip_list' to silence them completely
+  - load-failure  # Failed to load or parse file
 
 skip_list:
   - 106 # Role name {} does not match ``^[a-z][a-z0-9_]+$`` pattern
   - 204 # Lines should be no longer than 160 chars
+  - syntax-check # Ansible syntax check failed
+  - load-failure # Failed to load or parse file
 
 extra_vars:
   xdebug_tunnel_inventory_host: dummy
+  env: staging

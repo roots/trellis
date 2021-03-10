@@ -11,3 +11,8 @@ ferm_default_policy_forward: DROP
 ferm_input_list: []
 ferm_input_group_list: []
 ferm_input_host_list: []
+
+ferm_inputs:
+  - "{{ ferm_input_list }}"
+  - "{{ ferm_input_group_list }}"
+  - "{{ ferm_input_host_list }}"
