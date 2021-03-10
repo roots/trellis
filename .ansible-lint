@@ -1,8 +1,7 @@
 ---
 
 
-warn_list:  # or 'skip_list' to silence them completely
-  - load-failure  # Failed to load or parse file
+warn_list: []
 
 skip_list:
   - 106 # Role name {} does not match ``^[a-z][a-z0-9_]+$`` pattern
