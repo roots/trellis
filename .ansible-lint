@@ -4,3 +4,6 @@ warn_list: []
 skip_list:
   - 106 # Role name {} does not match ``^[a-z][a-z0-9_]+$`` pattern
   - 204 # Lines should be no longer than 160 chars
+
+extra_vars:
+  xdebug_tunnel_inventory_host: dummy
