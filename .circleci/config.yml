@@ -109,9 +109,11 @@ jobs:
       - run: python --version
       - checkout
       - install-pip-package:
-          package: ansible-lint
+          package: ansible-lint ansible>=2.8.0,<3.0.0
           python-version: <<parameters.python-version>>
       - run: ansible-lint --version
+      - run: ansible-galaxy --version
+      - run: ansible-galaxy install -f -r galaxy.yml
       - run: ansible-lint deploy.yml dev.yml server.yml rollback.yml xdebug-tunnel.yml
 
 workflows:
