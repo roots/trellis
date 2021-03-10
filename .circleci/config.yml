@@ -109,7 +109,7 @@ jobs:
       - run: python --version
       - checkout
       - install-pip-package:
-          package: ansible-lint ansible>=2.8.0,<3.0.0
+          package: ansible-lint 'ansible>=2.8.0,<3.0.0'
           python-version: <<parameters.python-version>>
       - run: ansible-lint --version
       - run: ansible-galaxy --version
