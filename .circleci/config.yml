@@ -98,22 +98,6 @@ jobs:
       - install-galaxy-roles
       - check-playbook-syntax
 
-  lint:
-    parameters:
-      python-version:
-        type: string
-    executor:
-      name: python/default
-      tag: <<parameters.python-version>>
-    steps:
-      - run: python --version
-      - checkout
-      - install-pip-package:
-          package: ansible-lint
-          python-version: <<parameters.python-version>>
-      - run: ansible-lint --version
-      - run: ansible-lint deploy.yml dev.yml server.yml rollback.yml xdebug-tunnel.yml
-
 workflows:
   syntax-check:
     jobs:
@@ -128,9 +112,3 @@ workflows:
           matrix:
             parameters:
               python-version: ["3.7.8", "2.7"]
-
-  lint:
-    jobs:
-      - lint:
-          name: lint-python-3.7
-          python-version: "3.7.8"
