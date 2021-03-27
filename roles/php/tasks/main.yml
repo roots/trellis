@@ -1,21 +1,35 @@
 ---
-- name: Add PHP 7.4 PPA
+- name: Add PHP 8.0 PPA
   apt_repository:
     repo: "ppa:ondrej/php"
     update_cache: yes
 
-- name: Install PHP 7.4
+- name: Install PHP 8.0
   apt:
     name: "{{ item.key }}"
     state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
   with_dict: "{{ php_extensions }}"
 
-- name: Start php7.4-fpm service
+- name: Start php8.0-fpm service
   service:
-    name: php7.4-fpm
+    name: php8.0-fpm
     state: started
     enabled: true
+
+- name: Check for existing php7.4-fpm service
+  stat:
+    path: /etc/init.d/php7.4-fpm
+  register: php73_status
+
+- name: Stop php7.4-fpm service if it exists
+  service:
+    name: php7.4-fpm
+    state: stopped
+    enabled: false
+  register: service_stopped
+  when: php74_status.stat.exists
+  notify: reload php-fpm
 
 - name: Check for existing php7.3-fpm service
   stat:
@@ -48,12 +62,12 @@
 - name: Copy PHP-FPM configuration file
   template:
     src: php-fpm.ini.j2
-    dest: /etc/php/7.4/fpm/php.ini
+    dest: /etc/php/8.0/fpm/php.ini
     mode: '0644'
   notify: reload php-fpm
 
 - name: Copy PHP CLI configuration file
   template:
     src: php-cli.ini.j2
-    dest: /etc/php/7.4/cli/php.ini
+    dest: /etc/php/8.0/cli/php.ini
     mode: '0644'
