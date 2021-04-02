@@ -1,5 +1,3 @@
-php_xdebug_package: php7.4-xdebug
-
 # XDebug Generic
 xdebug_output_dir: /tmp
 xdebug_trigger_value:

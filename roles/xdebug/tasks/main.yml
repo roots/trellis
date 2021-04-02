@@ -8,18 +8,18 @@
 - name: Template the Xdebug configuration file
   template:
     src: xdebug.ini.j2
-    dest: /etc/php/7.4/mods-available/xdebug.ini
+    dest: /etc/php/{{ php_version }}/mods-available/xdebug.ini
     mode: '0644'
   notify: reload php-fpm
 
 - name: Ensure 20-xdebug.ini is present
   file:
-    src: /etc/php/7.4/mods-available/xdebug.ini
-    dest: /etc/php/7.4/fpm/conf.d/20-xdebug.ini
+    src: /etc/php/{{ php_version }}/mods-available/xdebug.ini
+    dest: /etc/php/{{ php_version }}/fpm/conf.d/20-xdebug.ini
     state: link
   notify: reload php-fpm
 
 - name: Disable Xdebug CLI
   file:
-    path: /etc/php/7.4/cli/conf.d/20-xdebug.ini
+    path: /etc/php/{{ php_version }}/cli/conf.d/20-xdebug.ini
     state: absent
