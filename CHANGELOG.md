@@ -1,3 +1,6 @@
+### HEAD
+* Improve handling of PHP versions and support PHP 8.0 (default is still 7.4) ([#1284](https://github.com/roots/trellis/pull/1284))
+
 ### 1.8.0: February 12th, 2021
 * Set permissions on all file related tasks ([#1270](https://github.com/roots/trellis/pull/1270))
 * Use Python 3 for `ansible_local` Vagrant provisioner ([#1269](https://github.com/roots/trellis/pull/1269))
