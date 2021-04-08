@@ -1,8 +1,9 @@
-composer_keep_updated: true
 apt_cache_valid_time: 3600
 apt_package_state: present
 apt_security_package_state: latest
 apt_dev_package_state: latest
+composer_keep_updated: true
+php_version: "7.4"
 ntp_timezone: Etc/UTC
 ntp_manage_config: true
 www_root: /srv/www

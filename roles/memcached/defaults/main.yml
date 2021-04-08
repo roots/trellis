@@ -8,7 +8,6 @@ memcached_port_udp: 0
 
 memcached_packages_default:
   memcached: "{{ apt_package_state }}"
-  php7.4-memcached: "{{ apt_package_state }}"
 
 memcached_packages_custom: {}
-memcached_packages: "{{ memcached_packages_default | combine(memcached_packages_custom) }}"
+memcached_packages: "{{ memcached_packages_default | combine(php_memcached_packages, memcached_packages_custom) }}"
