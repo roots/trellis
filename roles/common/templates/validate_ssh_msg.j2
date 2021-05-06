@@ -21,7 +21,7 @@ Create a corresponding value between the two. Adjust either of the following:
 
 Your local SSH client settings will not support the settings that the sshd role will apply to the SSH server (on {{ ansible_host }}).
 
-See https://github.com/roots/trellis/tree/master/roles/sshd#ciphers-kexalgorithms-and-macs
+See https://github.com/roots/trellis/tree/main/roles/sshd#ciphers-kexalgorithms-and-macs
 ---------------------------------------------------
 
 {{ msg('Ciphers', ssh_client_ciphers, sshd_ciphers_default + sshd_ciphers_extra, overlapping_ciphers, 'sshd_ciphers_extra') -}}
