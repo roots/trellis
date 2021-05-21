@@ -46,3 +46,11 @@
     src: php-cli.ini.j2
     dest: /etc/php/{{ php_version }}/cli/php.ini
     mode: '0644'
+
+- name: Change ImageMagick policy.xml to allow for PDFs
+  replace:
+    path: /etc/ImageMagick-6/policy.xml
+    regexp: '<policy domain="coder" rights="none" pattern="PDF" />'
+    replace: '<policy domain="coder" rights="read" pattern="PDF" />'
+    backup: no
+  notify: reload php-fpm
