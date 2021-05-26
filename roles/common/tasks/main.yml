@@ -34,6 +34,18 @@
   when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count
   tags: [letsencrypt, wordpress]
 
+- name: Import PHP version specific vars
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ php_version }}.yml'
+        - '7.4.yml'
+      paths:
+        - "{{ playbook_dir }}/roles/php/vars/"
+
+  tags: [php, memcached]
+
 - name: Verify dict format for apt package component variables
   fail:
     msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"

@@ -15,5 +15,5 @@
   handlers:
     - name: reload php-fpm
       service:
-        name: php7.4-fpm
+        name: php{{ php_version }}-fpm
         state: reloaded
