@@ -1,4 +1,5 @@
 ### HEAD
+* Replace php-gd with php-imagick ([#1292](https://github.com/roots/trellis/pull/1292))
 * Improve handling of PHP versions and support PHP 8.0 (default is still 7.4) ([#1284](https://github.com/roots/trellis/pull/1284))
 
 ### 1.8.0: February 12th, 2021
