@@ -12,7 +12,7 @@
   register: preferred_host_key_algorithms
   when:
     - dynamic_host_key_algorithms | default(true)
-    - not (not ansible_ssh_extra_args)
+    - not ansible_ssh_extra_args
     - not (ansible_host_known or ssh_config_host_known)
 
 - name: Check whether Ansible can connect as {{ dynamic_user | default(true) | ternary('root', web_user) }}
