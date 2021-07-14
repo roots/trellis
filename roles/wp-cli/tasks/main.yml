@@ -21,9 +21,22 @@
     dest: /tmp/wp-cli.pgp.gpg
     mode: '0744'
 
-- name: Verify WP-CLI Phar Signature
-  command: gpg2 --lock-never --no-default-keyring --keyring /tmp/wp-cli.pgp.gpg --verify /tmp/wp-cli-{{ wp_cli_version }}.phar.asc /tmp/wp-cli-{{ wp_cli_version }}.phar
-  changed_when: false
+- name: Verify WP-CLI
+  block:
+    - name: Check GPG signature
+      command: gpg2 --lock-never --no-default-keyring --keyring /tmp/wp-cli.pgp.gpg --verify /tmp/wp-cli-{{ wp_cli_version }}.phar.asc /tmp/wp-cli-{{ wp_cli_version }}.phar
+      changed_when: false
+  rescue:
+    - name: Delete invalid WP-CLI Phar file
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "/tmp/wp-cli-{{ wp_cli_version }}.phar"
+        - "/tmp/wp-cli-{{ wp_cli_version }}.phar.asc"
+    - name: Fail verification
+      fail:
+        msg: "WP-CLI Phar signature could not be verified. Please try again."
 
 - name: Install WP-CLI
   command: rsync -c --chmod=0755 --info=name /tmp/wp-cli-{{ wp_cli_version }}.phar {{ wp_cli_bin_path }}
