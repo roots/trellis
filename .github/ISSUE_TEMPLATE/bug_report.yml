@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a problem with Trellis. Please provide enough information that we can reproduce the problem.
+description: Report a problem with Trellis. Please provide enough information so that we can reproduce the problem.
 title: "Bug: "
 labels: [bug]
 
@@ -8,7 +8,7 @@ body:
     attributes:
       value: |
         This form is for reporting Trellis technical issues.
-        If want to ask a question is looking for support, [Roots Discourse](https://discourse.roots.io/) is the best place for getting support.
+        If you have a question or you're looking for support, please visit [Roots Discourse](https://discourse.roots.io/).
 
   - type: checkboxes
     id: terms
@@ -60,7 +60,7 @@ body:
     id: expected-behavior
     attributes:
       label: Expected Behavior
-      placeholder: What you expect to happen?
+      placeholder: What did you expect to happen?
     validations:
       required: true
 
