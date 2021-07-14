@@ -10,5 +10,6 @@ wordpress_env_defaults:
   git_sha: "{{ git_clone.after }}"
   release_version: "{{ deploy_helper.new_release }}"
   wp_debug_log: "{{ project_root }}/logs/debug.log"
+  wp_post_revisions: true
 
 site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), project.env | default({}), vault_wordpress_sites[site].env) }}"
