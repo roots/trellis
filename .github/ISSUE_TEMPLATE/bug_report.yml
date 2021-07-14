@@ -36,9 +36,9 @@ body:
 
         #### What insights have you gained?
 
-        #### Possible solutions?
+        #### Possible solutions
 
-        #### Temporary workaround?
+        #### Temporary workarounds
     validations:
       required: true
 
