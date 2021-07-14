@@ -11,6 +11,7 @@ php_max_execution_time: 120
 php_max_input_time: 300
 php_max_input_vars: 1000
 php_memory_limit: 96M
+php_cli_memory_limit: -1
 php_mysqlnd_collect_memory_statistics: 'Off'
 php_post_max_size: 25M
 php_sendmail_path: /usr/sbin/ssmtp -t
