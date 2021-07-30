@@ -1,0 +1,108 @@
+name: Bug Report
+description: Report a problem with Trellis. Please provide enough information so that we can reproduce the problem.
+title: "Bug: "
+labels: [bug]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form is for reporting Trellis technical issues.
+        If you have a question or you're looking for support, please visit [Roots Discourse](https://discourse.roots.io/).
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      options:
+        - label: I have read the [guidelines for Contributing to Roots Projects](https://github.com/roots/.github/blob/master/CONTRIBUTING.md)
+          required: true
+        - label: This request is not a duplicate of an existing issue
+          required: true
+        - label: I have read the [Trellis docs](https://roots.io/docs/trellis/) and followed them (if applicable)
+          required: true
+        - label: I have seached the [Roots Discourse](https://discourse.roots.io/) for answers and followed them (if applicable)
+          required: true
+        - label: This is not a personal support request that should be posted on the [Roots Discourse](https://discourse.roots.io/) community
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      value: |
+        #### What's wrong?
+
+        #### What have you tried?
+
+        #### What insights have you gained?
+
+        #### Possible solutions
+
+        #### Temporary workarounds
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps To Reproduce
+      description: |
+        Non-reproducible issues may be immediately closed as not actionable.
+        Please provide reproduction steps as details as possible.
+      value: |
+        1.
+        1.
+        1.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      placeholder: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      placeholder: What actually happens?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Log Output
+      description: Please copy and paste any relevant log output.
+      render: shell
+
+  - type: input
+    id: trellis-version
+    attributes:
+      label: Trellis Version
+      description: You can get this information from referencing `CHANGELOG.md`. If you know, please provide the [roots/trellis](https://github.com/roots/trellis) Git commit SHA.
+    validations:
+      required: true
+
+  - type: textarea
+    id: ansible-version
+    attributes:
+      label: Ansible Version
+      description: You can get this information by running `$ ansible --version`. Please include the whole console output.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: trellis-cli-version
+    attributes:
+      label: Trellis CLI Version
+      description: If you are using [Trellis CLI](https://github.com/roots/trellis-cli), please provide the version (for stable versions; `$ trellis --version`) or the Git commit SHA (for canary builds).
+
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!

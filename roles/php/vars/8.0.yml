@@ -1,9 +1,10 @@
 php_extensions_default:
+  php8.0-bcmath: "{{ apt_package_state }}"
   php8.0-cli: "{{ apt_package_state }}"
   php8.0-curl: "{{ apt_package_state }}"
   php8.0-dev: "{{ apt_package_state }}"
   php8.0-fpm: "{{ apt_package_state }}"
-  php8.0-gd: "{{ apt_package_state }}"
+  php8.0-imagick: "{{ apt_package_state }}"
   php8.0-intl: "{{ apt_package_state }}"
   php8.0-mbstring: "{{ apt_package_state }}"
   php8.0-mysql: "{{ apt_package_state }}"

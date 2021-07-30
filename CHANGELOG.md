@@ -1,4 +1,8 @@
 ### HEAD
+* Fix #1277 - Disable PHP CLI memory limit ([#1278](https://github.com/roots/trellis/pull/1278))
+* Fix #1285 - Improve handling of WP-CLI failed verification ([#1295](https://github.com/roots/trellis/pull/1295))
+* Fix #1284 - Update logrotate postrotate Nginx command ([#1293](https://github.com/roots/trellis/pull/1293))
+* Replace php-gd with php-imagick ([#1292](https://github.com/roots/trellis/pull/1292))
 * Improve handling of PHP versions and support PHP 8.0 (default is still 7.4) ([#1284](https://github.com/roots/trellis/pull/1284))
 
 ### 1.8.0: February 12th, 2021

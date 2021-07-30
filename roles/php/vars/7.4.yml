@@ -1,9 +1,10 @@
 php_extensions_default:
+  php7.4-bcmath: "{{ apt_package_state }}"
   php7.4-cli: "{{ apt_package_state }}"
   php7.4-curl: "{{ apt_package_state }}"
   php7.4-dev: "{{ apt_package_state }}"
   php7.4-fpm: "{{ apt_package_state }}"
-  php7.4-gd: "{{ apt_package_state }}"
+  php7.4-imagick: "{{ apt_package_state }}"
   php7.4-intl: "{{ apt_package_state }}"
   php7.4-mbstring: "{{ apt_package_state }}"
   php7.4-mysql: "{{ apt_package_state }}"
