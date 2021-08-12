@@ -1,7 +1,7 @@
 # Placeholder `deploy_build_before` hook for building theme assets on the
 # host machine and then copying the files to the remote server
 #
-# ⚠️ This example assumes your theme is using Sage 9
+# ⚠️ This example assumes your theme is using Sage 10
 # An example for themes built with Sage 8 can be found at: https://git.io/vdgUt
 #
 # Uncomment the lines below and replace `sage` with your theme folder
@@ -26,7 +26,7 @@
 #
 # - name: Copy production assets
 #   synchronize:
-#     src: "{{ project_local_path }}/web/app/themes/sage/dist"
+#     src: "{{ project_local_path }}/web/app/themes/sage/public"
 #     dest: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #     group: no
 #     owner: no
