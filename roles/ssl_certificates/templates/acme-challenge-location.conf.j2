@@ -1,0 +1,8 @@
+location ^~ /.well-known/acme-challenge/ {
+  default_type "text/plain";
+  root {{ acme_challenges_path }};
+}
+
+location = /.well-known/acme-challenge/ {
+  return 404;
+}

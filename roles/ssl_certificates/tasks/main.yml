@@ -1,0 +1,35 @@
+- name: Create Nginx SSL directory
+  file:
+    mode: '0700'
+    path: "{{ nginx_ssl_path }}"
+    state: directory
+
+- name: Download SSL client certificate
+  get_url:
+    url: "{{ site_ssl.client_certificate_url }}"
+    dest: "{{ nginx_ssl_path }}/client-{{ (site_ssl.client_certificate_url | hash('md5'))[:7] }}.crt"
+    mode: '0640'
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: site_ssl.client_certificate_url is defined
+  tags: wordpress-setup-nginx-client-cert
+
+- include_tasks:
+    file: acme.yml
+  when:
+    - sites_using_acme_ssl | count
+    - not acme_ca_force_local_server
+
+- include_tasks:
+    file: acme.yml
+  vars:
+    acme_ca_server: "{{ local_acme_ca_server }}"
+  when:
+    - sites_using_acme_ssl | count
+    - acme_ca_force_local_server
+
+- include_tasks:
+    file: manual.yml
+  when:
+    - sites_using_manual_ssl | count

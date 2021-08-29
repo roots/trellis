@@ -31,7 +31,6 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.9'
-      - uses: ./.github/actions/setup-step-ca
       - uses: roots/setup-trellis-cli@v1
         with:
           ansible-vault-password: 'fake'
@@ -50,7 +49,7 @@ jobs:
       - run: trellis exec ansible-playbook --version
         working-directory: example.com/trellis
       - name: Provision
-        run: trellis provision --extra-vars "web_user=runner letsencrypt_ca=https://127.0.0.1:8443/acme/acme" production
+        run: trellis provision --extra-vars "web_user=runner acme_ca_force_local_server=true" production
         working-directory: example.com
       - name: Deploy non-https site
         run: trellis deploy --extra-vars "web_user=runner project_git_repo=https://github.com/roots/bedrock.git" production example.com

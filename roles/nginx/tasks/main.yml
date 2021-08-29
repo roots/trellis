@@ -24,12 +24,6 @@
     - sites-available
     - sites-enabled
 
-- name: Create SSL directory
-  file:
-    mode: '0700'
-    path: "{{ nginx_path }}/ssl"
-    state: directory
-
 - name: Copy h5bp configs
   copy:
     src: templates/h5bp

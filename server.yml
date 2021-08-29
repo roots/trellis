@@ -28,5 +28,5 @@
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }
     - { role: wp-cli, tags: [wp-cli] }
-    - { role: letsencrypt, tags: [letsencrypt], when: sites_using_letsencrypt | count }
-    - { role: wordpress-setup, tags: [wordpress, wordpress-setup, letsencrypt] }
+    - { role: ssl_certificates, tags: [ssl, ssl_certificates], when: sites_using_ssl | count }
+    - { role: wordpress-setup, tags: [wordpress, wordpress-setup, ssl] }

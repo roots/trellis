@@ -34,7 +34,7 @@
   loop_control:
     label: "{{ item.key }}"
   when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count
-  tags: [letsencrypt, wordpress]
+  tags: [ssl, wordpress]
 
 - name: Import PHP version specific vars
   include_vars: "{{ lookup('first_found', params) }}"

@@ -1,4 +1,4 @@
-letsencrypt_contact_emails:
+acme_ca_contact_emails:
   - admin@example.com
 
 wordpress_sites:
@@ -14,7 +14,6 @@ wordpress_sites:
       enabled: false
     ssl:
       enabled: false
-      provider: letsencrypt
     cache:
       enabled: true
   example-https.com:
@@ -29,6 +28,5 @@ wordpress_sites:
       enabled: false
     ssl:
       enabled: true
-      provider: letsencrypt
     cache:
       enabled: false

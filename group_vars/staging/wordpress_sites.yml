@@ -16,6 +16,5 @@ wordpress_sites:
       enabled: false
     ssl:
       enabled: false
-      provider: letsencrypt
     cache:
       enabled: false

@@ -1,0 +1,58 @@
+---
+- name: Create directories and set permissions
+  file:
+    path: "{{ acme_challenges_path }}/.well-known/acme-challenge"
+    state: directory
+    mode: '0755'
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+
+- name: Create Nginx conf for ACME challenges location
+  template:
+    src: acme-challenge-location.conf.j2
+    dest: "{{ nginx_path }}/acme-challenge-location.conf"
+    mode: '0644'
+
+- name: Get list of hosts in current Nginx conf
+  shell: |
+    [ ! -f {{ nginx_path }}/sites-enabled/{{ item.key }}.conf ] ||
+    sed -n -e "/listen 80/,/server_name/{s/server_name \(.*\);/\1/p}" {{ nginx_path }}/sites-enabled/{{ item.key }}.conf
+  register: current_hosts
+  changed_when: false
+  when:
+    - site_uses_acme
+    - site_uses_acme_http_challenge
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Create needed Nginx confs for challenges
+  template:
+    src: nginx-challenge-site.conf.j2
+    dest: "{{ nginx_path }}/sites-available/acme-challenge-{{ item.key }}.conf"
+    mode: '0644'
+  register: challenge_site_confs
+  when:
+    - site_uses_acme
+    - site_uses_acme_http_challenge
+    - missing_hosts | count
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Enable Nginx sites
+  file:
+    src: "{{ nginx_path }}/sites-available/acme-challenge-{{ item.key }}.conf"
+    dest: "{{ nginx_path }}/sites-enabled/acme-challenge-{{ item.key }}.conf"
+    state: link
+  register: challenge_sites_enabled
+  when:
+    - site_uses_acme
+    - site_uses_acme_http_challenge
+    - missing_hosts | count
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- import_tasks: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
+  when: challenge_site_confs is changed or challenge_sites_enabled is changed

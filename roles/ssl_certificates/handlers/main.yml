@@ -1,0 +1,7 @@
+- name: Start step CA
+  systemd:
+    daemon_reload: yes
+    name: step-ca
+    enabled: yes
+    state: started
+  become: yes

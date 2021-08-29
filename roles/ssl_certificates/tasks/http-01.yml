@@ -1,0 +1,11 @@
+- name: Generate certificate via http-01 challenge
+  shell: >
+    certbot certonly
+    --noninteractive
+    --agree-tos
+    --email {{ acme_ca_contact_emails | join(",") }}
+    --cert-name {{ item.key }}
+    --server {{ acme_ca_server }}
+    --webroot
+    --webroot-path {{ acme_challenges_path }}
+    --domains {{ site_hosts | join(",") }}
