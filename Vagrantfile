@@ -167,6 +167,19 @@ Vagrant.configure('2') do |config|
     vb.customize ['modifyvm', :id, '--natdnsproxy1', vconfig.fetch('vagrant_natdnsproxy', 'on')]
   end
 
+   config.vm.provider :docker do |docker, override|
+    override.vm.box = nil
+    #docker.image = "rofrano/vagrant-provider:ubuntu"
+    docker.build_dir = "."
+    docker.remains_running = true
+    docker.has_ssh = true
+    docker.privileged = true
+    docker.volumes = ["/sys/fs/cgroup:/sys/fs/cgroup:ro"]
+    # Uncomment to force arm64 for testing images
+    #docker.create_args = ['--platform=linux/arm64']
+  end
+    config.vm.network :private_network, ip: vconfig.fetch('vagrant_ip'), hostsupdater: 'skip'
+
   # VMware Workstation/Fusion settings
   %w(vmware_fusion vmware_workstation).each do |provider|
     config.vm.provider provider do |vmw|
