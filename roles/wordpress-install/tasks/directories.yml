@@ -22,7 +22,6 @@
     path: "{{ www_root }}/{{ item.key }}"
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
-    mode: '0755'
     state: directory
     recurse: yes
   with_dict: "{{ wordpress_sites }}"
