@@ -10,7 +10,7 @@
     - not (not composer_authentication.hostname)
     - not (not composer_authentication.username)
     - not (not composer_authentication.password)
-  loop: "{{ composer_authentications }}"
+  loop: "{{ composer_authentications | default([]) }}"
   loop_control:
     loop_var: composer_authentication
     label: "{{ composer_authentication.hostname }}"
