@@ -179,7 +179,8 @@ Vagrant.configure('2') do |config|
     # Uncomment to force arm64 for testing images
     #docker.create_args = ['--platform=linux/arm64']
   end
-    config.vm.network :private_network, ip: vconfig.fetch('vagrant_ip'), hostsupdater: 'skip'
+
+  config.vm.network :private_network, ip: vconfig.fetch('vagrant_ip'), hostsupdater: 'skip'
 
   # VMware Workstation/Fusion settings
   %w(vmware_fusion vmware_workstation).each do |provider|
@@ -205,5 +206,22 @@ Vagrant.configure('2') do |config|
     h.memory = vconfig.fetch('vagrant_memory')
     h.enable_virtualization_extensions = true
     h.linked_clone = true
+  end
+
+  if ENV["DOCKER"]
+    config.trigger.before :up do |trigger|
+      trigger.name = "Setup docker local network before up"
+trigger.run = {inline: "bash -c 'sudo ifconfig lo0 alias #{vconfig.fetch('vagrant_ip')}/24'"}
+    end
+    config.trigger.after :halt do |trigger|
+      trigger.name = 'delete docker local network after halt'
+      trigger.run = {inline: "bash -c 'sudo ifconfig lo0 inet delete #{vconfig.fetch('vagrant_ip')}'"}
+      trigger.on_error = :continue
+    end
+    config.trigger.after :destroy do |trigger|
+      trigger.name = 'delete docker local network after destroy'
+      trigger.run = {inline: "bash -c 'sudo ifconfig lo0 inet delete #{vconfig.fetch('vagrant_ip')}'"}
+      trigger.on_error = :continue
+    end
   end
 end
