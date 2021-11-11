@@ -1,3 +1,6 @@
+### 1.9.1: November 11th, 2021
+* Update MariaDB mirror source ([#1320](https://github.com/roots/trellis/pull/1320))
+
 ### 1.9.0: October 27th, 2021
 * Bump max tested Ansible version to `2.10.7` ([#1317](https://github.com/roots/trellis/pull/1317))
 * Fix display color output in logs ([#1316](https://github.com/roots/trellis/pull/1316))
