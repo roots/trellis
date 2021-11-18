@@ -19,7 +19,13 @@ trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH)
 Vagrant.require_version '>= 2.1.0'
 
 Vagrant.configure('2') do |config|
-  config.vm.box = vconfig.fetch('vagrant_box')
+  vagrant_box = if Vagrant::Util::Platform.darwin? && `uname -m`.chomp == "arm64"
+    'jeffnoxon/ubuntu-20.04-arm64'
+  else
+    vconfig.fetch('vagrant_box')
+  end
+
+  config.vm.box = vagrant_box
   config.vm.box_version = vconfig.fetch('vagrant_box_version')
   config.ssh.forward_agent = true
   config.vm.post_up_message = post_up_message
