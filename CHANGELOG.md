@@ -1,3 +1,7 @@
+### HEAD
+* Add GitHub SSH ed25519 key to known hosts ([#1324](https://github.com/roots/trellis/pull/1324))
+* Enable pipelining for local Ansible connections ([#1323](https://github.com/roots/trellis/pull/1323))
+
 ### 1.9.1: November 11th, 2021
 * Update MariaDB mirror source ([#1320](https://github.com/roots/trellis/pull/1320))
 * Remove explicit arch deb options for MariaDB (improves ARM support) ([#1318](https://github.com/roots/trellis/pull/1318))
