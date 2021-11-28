@@ -1,4 +1,5 @@
-### HEAD
+### 1.10.0: November 28th, 2021
+* Default to PHP 8.0 ([#1322](https://github.com/roots/trellis/pull/1322))
 * Add GitHub SSH ed25519 key to known hosts ([#1324](https://github.com/roots/trellis/pull/1324))
 * Enable pipelining for local Ansible connections ([#1323](https://github.com/roots/trellis/pull/1323))
 
