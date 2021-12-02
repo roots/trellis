@@ -8,7 +8,7 @@ body:
     attributes:
       value: |
         This form is for suggesting an idea for Trellis.
-        If want to ask a question is looking for support, [Roots Discourse](https://discourse.roots.io/) is the best place for getting support.
+        If you have a question or you're looking for support, please visit [Roots Discourse](https://discourse.roots.io/).
 
   - type: checkboxes
     id: terms
