@@ -48,7 +48,7 @@ body:
       label: Steps To Reproduce
       description: |
         Non-reproducible issues may be immediately closed as not actionable.
-        Please provide reproduction steps as details as possible.
+        Please provide reproduction steps as detailed as possible.
       value: |
         1.
         1.
