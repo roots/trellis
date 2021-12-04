@@ -1,5 +1,6 @@
 ### HEAD
 * Remove Nginx `ssl_dhparam` directive and Diffie-Hellman params group ([#1326](https://github.com/roots/trellis/pull/1326))
+* Add PHP 8.1 support ([#1325](https://github.com/roots/trellis/pull/1325))
 
 ### 1.10.0: November 28th, 2021
 * Default to PHP 8.0 ([#1322](https://github.com/roots/trellis/pull/1322))
