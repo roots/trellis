@@ -29,7 +29,7 @@
 </p>
 
 <p align="center">
-  <a href="https://roots.io">Official Website</a> | <a href="https://roots.io/docs/trellis/master/installation/">Documentation</a> | <a href="CHANGELOG.md">Change Log</a>
+  <a href="https://roots.io">Official Website</a> | <a href="https://docs.roots.io/trellis/master/installation/">Documentation</a> | <a href="CHANGELOG.md">Change Log</a>
 </p>
 
 ## Supporting
@@ -74,7 +74,7 @@ Trellis will configure a server with the following and more:
 
 ## Documentation
 
-Full documentation is available at [https://roots.io/docs/trellis/master/installation/](https://roots.io/docs/trellis/master/installation/).
+Full documentation is available at [https://docs.roots.io/trellis/master/installation/](https://docs.roots.io/trellis/master/installation/).
 
 ## Requirements
 
@@ -84,7 +84,7 @@ Make sure all dependencies have been installed before moving on:
 - [Vagrant](https://www.vagrantup.com/downloads.html) >= 2.1.0
 - **Recommended**: [trellis-cli](https://github.com/roots/trellis-cli)
 
-**Windows user?** [Read the Windows getting started docs](https://roots.io/docs/getting-started/windows/#working-with-trellis) for slightly different installation instructions.
+**Windows user?** [Read the Windows getting started docs](https://docs.roots.io/getting-started/windows/#working-with-trellis) for slightly different installation instructions.
 
 ## Installation
 
@@ -148,15 +148,15 @@ $ trellis up
 2. Ensure you're in the trellis directory: `cd trellis`
 3. Run `vagrant up`
 
-[Read the local development docs](https://roots.io/docs/trellis/master/local-development/#wordpress-installation) for more information.
+[Read the local development docs](https://docs.roots.io/trellis/master/local-development/#wordpress-installation) for more information.
 
 ## Remote server setup (staging/production)
 
 A base Ubuntu 18.04 (Bionic) or Ubuntu 20.04 (Focal LTS) server is required for setting up remote servers.
 
-1. Configure your WordPress sites in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://roots.io/docs/trellis/master/vault/) for how to encrypt files containing passwords)
+1. Configure your WordPress sites in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://docs.roots.io/trellis/master/vault/) for how to encrypt files containing passwords)
 2. Add your server IP/hostnames to `hosts/<environment>`
-3. Specify public SSH keys for `users` in `group_vars/all/users.yml` (see the [SSH Keys docs](https://roots.io/docs/trellis/master/ssh-keys/))
+3. Specify public SSH keys for `users` in `group_vars/all/users.yml` (see the [SSH Keys docs](https://docs.roots.io/trellis/master/ssh-keys/))
 
 ### Using trellis-cli
 
@@ -180,7 +180,7 @@ $ trellis droplet create production
 
 ### Manual
 
-For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://roots.io/docs/trellis/master/remote-server-setup/#requirements) for more information.
+For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://docs.roots.io/trellis/master/remote-server-setup/#requirements) for more information.
 
 Provision the server:
 
@@ -188,7 +188,7 @@ Provision the server:
 $ ansible-playbook server.yml -e env=<environment>
 ```
 
-[Read the remote server docs](https://roots.io/docs/trellis/master/remote-server-setup/) for more information.
+[Read the remote server docs](https://docs.roots.io/trellis/master/remote-server-setup/) for more information.
 
 ## Deploying to remote servers
 
