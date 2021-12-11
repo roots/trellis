@@ -1,4 +1,5 @@
 ### 1.11.0: December 10th, 2021
+* Bump minimum ansible version to `2.10.0` and add `ansible-base` to requirements ([#1334](https://github.com/roots/trellis/pull/1334))
 * Fix Ansible `2.10.16` - set default for `ansible_ssh_extra_args` ([#1333](https://github.com/roots/trellis/pull/1333))
 * Set max supported Vagrant version to `< 2.2.19` ([#1332](https://github.com/roots/trellis/pull/1332))
 * Bump `vagrant_ansible_version` to `2.10.7` ([#1329](https://github.com/roots/trellis/pull/1329))
