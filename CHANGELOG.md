@@ -1,4 +1,7 @@
-### HEAD
+### 1.11.0: December 10th, 2021
+* Fix Ansible `2.10.16` - set default for `ansible_ssh_extra_args` ([#1333](https://github.com/roots/trellis/pull/1333))
+* Set max supported Vagrant version to `< 2.2.19` ([#1332](https://github.com/roots/trellis/pull/1332))
+* Bump `vagrant_ansible_version` to `2.10.7` ([#1329](https://github.com/roots/trellis/pull/1329))
 * Remove Nginx `ssl_dhparam` directive and Diffie-Hellman params group ([#1326](https://github.com/roots/trellis/pull/1326))
 * Add PHP 8.1 support ([#1325](https://github.com/roots/trellis/pull/1325))
 
