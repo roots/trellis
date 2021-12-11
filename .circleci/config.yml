@@ -106,7 +106,7 @@ workflows:
           matrix:
             parameters:
               python-version: ["3.7.8", "2.7"]
-              ansible-version: ["~=2.9.0", "~=2.8.0"]
+              ansible-version: ["~=2.10.0"]
       - syntax-check-with-requirements-txt:
           name: syntax-check-python-<<matrix.python-version>>-requirements-txt
           matrix:
