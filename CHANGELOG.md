@@ -1,3 +1,7 @@
+### HEAD
+* Fix #1319 - Improve how ssh_args are loaded ([#1337](https://github.com/roots/trellis/pull/1337))
+* Fix #1331 - Improve passlib instructions([#1336](https://github.com/roots/trellis/pull/1336))
+
 ### 1.11.0: December 10th, 2021
 * Bump minimum ansible version to `2.10.0` and add `ansible-base` to requirements ([#1334](https://github.com/roots/trellis/pull/1334))
 * Fix Ansible `2.10.16` - set default for `ansible_ssh_extra_args` ([#1333](https://github.com/roots/trellis/pull/1333))
