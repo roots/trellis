@@ -10,13 +10,7 @@
     state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
   with_dict: "{{ php_extensions }}"
-
-- name: Start php fpm service
-  service:
-    name: "php{{ php_version }}-fpm"
-    state: started
-    enabled: true
-
+  
 - name: Find existing php fpm services
   find:
     paths: /etc/init.d
@@ -33,6 +27,12 @@
   loop_control:
     label: "{{ item.path | basename }}"
   notify: reload php-fpm
+
+- name: Start php fpm service
+  service:
+    name: "php{{ php_version }}-fpm"
+    state: started
+    enabled: true
 
 - name: Copy PHP-FPM configuration file
   template:
