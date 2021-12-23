@@ -16,7 +16,7 @@ ensure_plugins(vconfig.fetch('vagrant_plugins')) if vconfig.fetch('vagrant_insta
 
 trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH)
 
-Vagrant.require_version '>= 2.1.0', '< 2.2.19'
+Vagrant.require_version '>= 2.1.0'#, '< 2.2.19'
 
 Vagrant.configure('2') do |config|
   config.vm.box = vconfig.fetch('vagrant_box')
@@ -170,11 +170,11 @@ Vagrant.configure('2') do |config|
    config.vm.provider :docker do |docker, override|
     override.vm.box = nil
     #docker.image = "rofrano/vagrant-provider:ubuntu"
-    docker.build_dir = "."
+    docker.image = "rootsdev/ubuntu-20.04-trellis"
+    #docker.build_dir = "."
     docker.remains_running = true
     docker.has_ssh = true
     docker.privileged = true
-    docker.ports = ["80:80", "443:443"]
     docker.volumes = ["/sys/fs/cgroup:/sys/fs/cgroup:ro"]
     # Uncomment to force arm64 for testing images
     #docker.create_args = ['--platform=linux/arm64']
