@@ -25,3 +25,4 @@
     state: directory
     recurse: yes
   with_dict: "{{ wordpress_sites }}"
+  when: false
