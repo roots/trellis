@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  wordpress:
+    network_mode: bridge
+    hostname: example.test
+    domainname: example.test
+    image: rootsdev/ubuntu-20.04-trellis
+    ports:
+      - "22:22"
+      - "80:80"
+      - "443:443"
+    dns:
+      - '8.8.8.8'
+      - '8.8.4.4'
+    volumes:
+      - .:/ansible
+      - ../site:/srv/www/example.com/current:rw,delegated
+      - /var/lib/mysql
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    networks:
+      trellis:
+        ipv4_address: 192.168.56.10
+
+networks:
+  trellis:
+    driver: bridge
+    driver_opts:
+      ip: 192.168.56.10
+    ipam:
+      config:
+        - subnet: "192.168.56.0/16"
