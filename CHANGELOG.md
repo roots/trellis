@@ -1,4 +1,5 @@
 ### HEAD
+* Improve support for adding public SSH keys ([#1344](https://github.com/roots/trellis/pull/1344))
 * Fix #1319 - Improve how ssh_args are loaded ([#1337](https://github.com/roots/trellis/pull/1337))
 * Fix #1331 - Improve passlib instructions([#1336](https://github.com/roots/trellis/pull/1336))
 
