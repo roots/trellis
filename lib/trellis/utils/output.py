@@ -55,7 +55,7 @@ def replace_item_with_key(obj, result):
     )
 
     if should_replace:
-        if 'key' in result._result[item]:
+        if type(result._result[item]) is dict and 'key' in result._result[item]:
             result._result[item] = result._result[item]['key']
         elif type(result._result[item]) is dict:
             subitem = '_ansible_item_label' if '_ansible_item_label' in result._result[item] else 'item'
