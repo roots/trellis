@@ -1,5 +1,7 @@
-### HEAD
+### 1.12.0: January 3rd, 2022
 * Improve support for adding public SSH keys ([#1344](https://github.com/roots/trellis/pull/1344))
+* Update default Vagrant IP to 192.168.56.5 ([#1341](https://github.com/roots/trellis/pull/1341))
+* Remove old WP customizer frame options hack ([#1338](https://github.com/roots/trellis/pull/1338))
 * Fix #1319 - Improve how ssh_args are loaded ([#1337](https://github.com/roots/trellis/pull/1337))
 * Fix #1331 - Improve passlib instructions([#1336](https://github.com/roots/trellis/pull/1336))
 
