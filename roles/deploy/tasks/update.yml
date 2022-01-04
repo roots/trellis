@@ -39,6 +39,9 @@
       More info:
       > https://roots.io/trellis/docs/deploys/#ssh-keys
       > https://roots.io/trellis/docs/ssh-keys/#cloning-remote-repo-using-ssh-agent-forwarding
+
+      Error:
+      {{ git_clone.stderr }}
   when: git_clone is failed
 
 - name: Remove untracked files from project folder
