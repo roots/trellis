@@ -131,6 +131,10 @@ Vagrant.configure('2') do |config|
     ansible.galaxy_role_file = File.join(provisioning_path, 'galaxy.yml') unless vconfig.fetch('vagrant_skip_galaxy') || ENV['SKIP_GALAXY']
     ansible.galaxy_roles_path = File.join(provisioning_path, 'vendor/roles')
 
+    if which('trellis')
+      ansible.galaxy_command = 'trellis galaxy install'
+    end
+
     ansible.groups = {
       'web' => ['default'],
       'development' => ['default']
