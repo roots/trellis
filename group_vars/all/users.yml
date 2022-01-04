@@ -7,13 +7,15 @@ users:
     groups:
       - "{{ web_group }}"
     keys:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub', errors='ignore') }}"
+      - "{{ lookup('file', '~/.ssh/id_ed25519.pub', errors='ignore') }}"
       # - https://github.com/username.keys
   - name: "{{ admin_user }}"
     groups:
       - sudo
     keys:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      - "{{ lookup('file', '~/.ssh/id_rsa.pub', errors='ignore') }}"
+      - "{{ lookup('file', '~/.ssh/id_ed25519.pub', errors='ignore') }}"
       # - https://github.com/username.keys
 
 web_user: web
