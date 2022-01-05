@@ -1,3 +1,8 @@
+### HEAD
+* Update default ssh key paths (include ed25519 keys) ([#1348](https://github.com/roots/trellis/pull/1348))
+* Use trellis-cli for Vagrant galaxy install when available ([#1349](https://github.com/roots/trellis/pull/1349))
+* Fix #970 - Improve git clone failure error ([#1351](https://github.com/roots/trellis/pull/1351))
+
 ### 1.12.0: January 3rd, 2022
 * Improve support for adding public SSH keys ([#1344](https://github.com/roots/trellis/pull/1344))
 * Update default Vagrant IP to 192.168.56.5 ([#1341](https://github.com/roots/trellis/pull/1341))
