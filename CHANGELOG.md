@@ -1,3 +1,8 @@
+### HEAD
+* Remove bin scripts (trellis-cli should be used instead) ([#1352](https://github.com/roots/trellis/pull/1352))
+* Update `wp_cli_version` to `2.6.0` ([#1358](https://github.com/roots/trellis/pull/1358))
+* Deploy hook build example: Update Sage build command ([#1356](https://github.com/roots/trellis/pull/1356))
+
 ### 1.13.0: January 21st, 2022
 * Fix #1354 - Prevent apt from installing recommended packages for php ([#1355](https://github.com/roots/trellis/pull/1355))
 * Update default ssh key paths (include ed25519 keys) ([#1348](https://github.com/roots/trellis/pull/1348))
