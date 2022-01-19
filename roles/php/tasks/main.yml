@@ -9,6 +9,7 @@
     name: "{{ item.key }}"
     state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
+    install_recommends: no
   with_dict: "{{ php_extensions }}"
 
 - name: Start php fpm service
