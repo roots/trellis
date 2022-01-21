@@ -1,5 +1,5 @@
-### HEAD
-* Fix #1354 - Disable `install_recommends` for php packages ([#1355](https://github.com/roots/trellis/pull/1355))
+### 1.13.0: January 21st, 2022
+* Fix #1354 - Prevent apt from installing recommended packages for php ([#1355](https://github.com/roots/trellis/pull/1355))
 * Update default ssh key paths (include ed25519 keys) ([#1348](https://github.com/roots/trellis/pull/1348))
 * Use trellis-cli for Vagrant galaxy install when available ([#1349](https://github.com/roots/trellis/pull/1349))
 * Fix #970 - Improve git clone failure error ([#1351](https://github.com/roots/trellis/pull/1351))
