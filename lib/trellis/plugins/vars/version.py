@@ -1,7 +1,3 @@
-# Make coding more python3-ish
-from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
-
 from ansible import __version__
 from ansible.errors import AnsibleError
 from distutils.version import LooseVersion

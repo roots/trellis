@@ -20,7 +20,7 @@ site_keys_by_env_pair: "[
   {% endfor %}
 ]"
 
-_apt_packages_default:
+apt_packages_default:
   build-essential: "{{ apt_package_state }}"
   curl: "{{ apt_package_state }}"
   dbus: "{{ apt_package_state }}"
@@ -29,21 +29,11 @@ _apt_packages_default:
   imagemagick: "{{ apt_package_state }}"
   libgs-dev: "{{ apt_package_state }}"
   libnss-myhostname: "{{ apt_package_state }}"
-  python: "{{ apt_package_state }}"
+  python3: "{{ apt_package_state }}"
+  python3-software-properties: "{{ apt_package_state }}"
+  python3-mysqldb: "{{ apt_package_state }}"
+  python3-pycurl: "{{ apt_package_state }}"
   unzip: "{{ apt_package_state }}"
-
-apt_packages_python:
-  '2':
-    python-software-properties: "{{ apt_package_state }}"
-    python-mysqldb: "{{ apt_package_state }}"
-    python-pycurl: "{{ apt_package_state }}"
-  '3':
-    python3-software-properties: "{{ apt_package_state }}"
-    python3-mysqldb: "{{ apt_package_state }}"
-    python3-pycurl: "{{ apt_package_state }}"
-
-python_major_version: "{{ ansible_python_version[0] }}"
-apt_packages_default: "{{ _apt_packages_default | combine(apt_packages_python[python_major_version]) }}"
 
 apt_packages_custom: {}
 apt_packages: "{{ apt_packages_default | combine(apt_packages_custom) }}"
