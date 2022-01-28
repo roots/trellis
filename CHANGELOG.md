@@ -1,4 +1,5 @@
 ### HEAD
+* Create mysql my.cnf credentials file earlier ([#1360](https://github.com/roots/trellis/pull/1360))
 * Remove bin scripts (trellis-cli should be used instead) ([#1352](https://github.com/roots/trellis/pull/1352))
 * Update `wp_cli_version` to `2.6.0` ([#1358](https://github.com/roots/trellis/pull/1358))
 * Deploy hook build example: Update Sage build command ([#1356](https://github.com/roots/trellis/pull/1356))

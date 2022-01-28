@@ -33,6 +33,14 @@
     when: mysql_binary_logging_disabled | bool
     notify: restart mysql server
 
+  - name: Copy .my.cnf file with root password credentials.
+    template:
+      src: my.cnf.j2
+      dest: ~/.my.cnf
+      owner: root
+      group: root
+      mode: '0600'
+
   - name: Set root user password
     mysql_user:
       name: root
@@ -46,14 +54,6 @@
       - 127.0.0.1
       - ::1
       - localhost
-
-  - name: Copy .my.cnf file with root password credentials.
-    template:
-      src: my.cnf.j2
-      dest: ~/.my.cnf
-      owner: root
-      group: root
-      mode: '0600'
 
   - name: Delete anonymous MySQL server users
     mysql_user:
