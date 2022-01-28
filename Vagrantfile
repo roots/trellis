@@ -64,8 +64,6 @@ Vagrant.configure('2') do |config|
     fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager\n\nOr install landrush for multisite subdomains:\nvagrant plugin install landrush"
   end
 
-  bin_path = File.join(ANSIBLE_PATH_ON_VM, 'bin')
-
   vagrant_mount_type = vconfig.fetch('vagrant_mount_type')
 
   extra_options = if vagrant_mount_type == 'smb'
@@ -84,7 +82,6 @@ Vagrant.configure('2') do |config|
     end
 
     config.vm.synced_folder ANSIBLE_PATH, ANSIBLE_PATH_ON_VM, mount_options: mount_options(vagrant_mount_type, dmode: 755, fmode: 644), type: vagrant_mount_type, **extra_options
-    config.vm.synced_folder File.join(ANSIBLE_PATH, 'bin'), bin_path, mount_options: mount_options(vagrant_mount_type, dmode: 755, fmode: 755), type: vagrant_mount_type, **extra_options
   elsif !Vagrant.has_plugin?('vagrant-bindfs')
     fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
   else
@@ -95,7 +92,6 @@ Vagrant.configure('2') do |config|
 
     config.vm.synced_folder ANSIBLE_PATH, '/ansible-nfs', type: 'nfs'
     config.bindfs.bind_folder '/ansible-nfs', ANSIBLE_PATH_ON_VM, o: 'nonempty', p: '0644,a+D'
-    config.bindfs.bind_folder bin_path, bin_path, perms: '0755'
   end
 
   vconfig.fetch('vagrant_synced_folders', []).each do |folder|
