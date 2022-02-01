@@ -13,8 +13,8 @@
     <img alt="Release" src="https://img.shields.io/github/release/roots/trellis.svg?style=flat-square" />
   </a>
 
-  <a href="https://circleci.com/gh/roots/trellis">
-    <img alt="Build Status" src="https://img.shields.io/circleci/build/gh/roots/trellis?style=flat-square" />
+  <a href="https://github.com/roots/trellis/actions">
+    <img alt="Build Status" src="https://img.shields.io/github/workflow/status/roots/trellis/ci?style=flat-square" />
   </a>
 
   <a href="https://twitter.com/rootswp">
@@ -24,12 +24,10 @@
 
 <p align="center">
   <strong>Ansible-powered LEMP stack for WordPress</strong>
-  <br />
-  Built with ❤️
 </p>
 
 <p align="center">
-  <a href="https://roots.io">Official Website</a> | <a href="https://docs.roots.io/trellis/master/installation/">Documentation</a> | <a href="CHANGELOG.md">Change Log</a>
+  <a href="https://roots.io/"><strong><code>Website</code></strong></a> &nbsp;&nbsp; <a href="https://docs.roots.io/trellis/master/installation/"><strong><code>Documentation</code></strong></a> &nbsp;&nbsp; <a href="https://github.com/roots/trellis/releases"><strong><code>Releases</code></strong></a> &nbsp;&nbsp; <a href="https://discourse.roots.io/"><strong><code>Support</code></strong></a>
 </p>
 
 ## Supporting
@@ -40,7 +38,7 @@ However, the amount of effort needed to maintain and develop new features and pr
 
 <div align="center">
 
-[![Sponsor on GitHub](https://img.shields.io/static/v1?label=sponsor&message=%E2%9D%A4&logo=GitHub)](https://github.com/sponsors/roots)
+[![Sponsor on GitHub](https://img.shields.io/static/v1?label=sponsor&message=%E2%9D%A4&logo=GitHub&style=flat-square)](https://github.com/sponsors/roots)
 [![Sponsor on Patreon](https://img.shields.io/badge/sponsor-patreon-orange.svg?style=flat-square&logo=patreon")](https://www.patreon.com/rootsdev)
 [![Donate via PayPal](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square&logo=paypal)](https://www.paypal.me/rootsdev)
 
@@ -72,10 +70,6 @@ Trellis will configure a server with the following and more:
 - MailHog
 - Memcached
 - Fail2ban and ferm
-
-## Documentation
-
-Full documentation is available at [https://docs.roots.io/trellis/master/installation/](https://docs.roots.io/trellis/master/installation/).
 
 ## Requirements
 
@@ -152,22 +146,18 @@ project trellis-cli compatible by initializing it:
 $ trellis init
 ```
 
-## Contributing
-
-Contributions are welcome from everyone. We have [contributing guidelines](https://github.com/roots/guidelines/blob/master/CONTRIBUTING.md) to help you get started.
-
 ## Trellis sponsors
 
-Help support our open-source development efforts by [becoming a patron](https://www.patreon.com/rootsdev).
+Help support our open-source development efforts by [becoming a GitHub sponsor](https://github.com/sponsors/roots) or [patron](https://www.patreon.com/rootsdev).
 
-<a href="https://kinsta.com/?kaid=OFDHAJIXUDIV"><img src="https://cdn.roots.io/app/uploads/kinsta.svg" alt="Kinsta" width="200" height="150"></a> <a href="https://k-m.com/"><img src="https://cdn.roots.io/app/uploads/km-digital.svg" alt="KM Digital" width="200" height="150"></a> <a href="https://carrot.com/"><img src="https://cdn.roots.io/app/uploads/carrot.svg" alt="Carrot" width="200" height="150"></a> <a href="https://www.c21redwood.com/"><img src="https://cdn.roots.io/app/uploads/c21redwood.svg" alt="C21 Redwood Realty" width="200" height="150"></a> <a href="https://wordpress.com/"><img src="https://cdn.roots.io/app/uploads/wordpress.svg" alt="WordPress.com" width="200" height="150"></a> <a href="https://pantheon.io/"><img src="https://cdn.roots.io/app/uploads/pantheon.svg" alt="Pantheon" width="200" height="150"></a>
+<a href="https://k-m.com/"><img src="https://cdn.roots.io/app/uploads/km-digital.svg" alt="KM Digital" width="200" height="150"></a> <a href="https://carrot.com/"><img src="https://cdn.roots.io/app/uploads/carrot.svg" alt="Carrot" width="200" height="150"></a> <a href="https://www.c21redwood.com/"><img src="https://cdn.roots.io/app/uploads/c21redwood.svg" alt="C21 Redwood Realty" width="200" height="150"></a> <a href="https://wordpress.com/"><img src="https://cdn.roots.io/app/uploads/wordpress.svg" alt="WordPress.com" width="200" height="150"></a> <a href="https://pantheon.io/"><img src="https://cdn.roots.io/app/uploads/pantheon.svg" alt="Pantheon" width="200" height="150"></a>
 
 ## Community
 
 Keep track of development and community news.
 
+- Join us on Roots Slack by becoming a [GitHub sponsor](https://github.com/sponsors/roots) or [patron](https://www.patreon.com/rootsdev)
 - Participate on the [Roots Discourse](https://discourse.roots.io/)
 - Follow [@rootswp on Twitter](https://twitter.com/rootswp)
 - Read and subscribe to the [Roots Blog](https://roots.io/blog/)
 - Subscribe to the [Roots Newsletter](https://roots.io/subscribe/)
-- Listen to the [Roots Radio podcast](https://roots.io/podcast/)
