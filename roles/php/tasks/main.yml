@@ -12,6 +12,11 @@
     install_recommends: no
   with_dict: "{{ php_extensions }}"
 
+- name: Ensure correct PHP version selected
+  community.general.alternatives:
+    name: php
+    path: /usr/bin/php{{ php_version }}
+
 - name: Start php fpm service
   service:
     name: "php{{ php_version }}-fpm"
