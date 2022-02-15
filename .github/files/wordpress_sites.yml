@@ -1,0 +1,34 @@
+letsencrypt_contact_emails:
+  - admin@example.com
+
+wordpress_sites:
+  example.com:
+    site_hosts:
+      - canonical: example.com
+        redirects:
+          - www.example.com
+    local_path: ../site
+    repo: git@github.com:roots/bedrock.git
+    branch: master
+    multisite:
+      enabled: false
+    ssl:
+      enabled: false
+      provider: letsencrypt
+    cache:
+      enabled: true
+  example-https.com:
+    site_hosts:
+      - canonical: example-https.com
+        redirects:
+          - www.example-https.com
+    local_path: ../site
+    repo: git@github.com:roots/bedrock.git
+    branch: master
+    multisite:
+      enabled: false
+    ssl:
+      enabled: true
+      provider: letsencrypt
+    cache:
+      enabled: false

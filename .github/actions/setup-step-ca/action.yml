@@ -1,0 +1,42 @@
+name: Setup Step CA ACME server
+description: Installs and runs an ACME compatible server via step-ca
+inputs:
+  path:
+    description: 'step-ca path'
+    required: false
+    default: /root/.step
+runs:
+  using: composite
+  steps:
+    - name: Set STEP_CA_PATH env
+      run: echo STEP_CA_PATH=${{ inputs.path }} >> $GITHUB_ENV
+      shell: bash
+    - name: Download packages
+      run: |
+        wget -q https://dl.step.sm/gh-release/cli/docs-ca-install/v0.18.1/step-cli_0.18.1_amd64.deb
+        wget -q https://dl.step.sm/gh-release/certificates/docs-ca-install/v0.18.1/step-ca_0.18.1_amd64.deb
+      shell: bash
+    - name: Install packages
+      run: |
+        sudo dpkg -i step-cli_0.18.1_amd64.deb
+        sudo dpkg -i step-ca_0.18.1_amd64.deb
+      shell: bash
+    - name: Create password file
+      run: |
+        sudo mkdir $STEP_CA_PATH && sudo touch $STEP_CA_PATH/password.txt
+        echo $(openssl rand -hex 12) | sudo tee $STEP_CA_PATH/password.txt
+      shell: bash
+    - name: Initialize
+      run: |
+        sudo step ca init --name trellis-local-ca --dns 127.0.0.1 --address :8443 --provisioner admin --password-file $STEP_CA_PATH/password.txt --provisioner-password-file $STEP_CA_PATH/password.txt
+        sudo step ca provisioner add acme --type ACME
+      shell: bash
+    - name: Install certificate to system
+      run: |
+        sudo step certificate install $STEP_CA_PATH/certs/root_ca.crt
+      shell: bash
+    - name: Run service
+      run: |
+        sudo cp .github/files/step-ca.service /etc/systemd/system/step-ca.service
+        sudo systemctl start step-ca
+      shell: bash

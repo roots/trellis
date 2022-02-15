@@ -1,0 +1,36 @@
+# Documentation: https://roots.io/trellis/docs/vault/
+vault_mysql_root_password: productionpw
+
+# Documentation: https://roots.io/trellis/docs/security/
+vault_users:
+  - name: "{{ admin_user }}"
+    password: example_password
+    salt: "generateme"
+
+# Variables to accompany `group_vars/production/wordpress_sites.yml`
+# Note: the site name (`example.com`) must match up with the site name in the above file.
+vault_wordpress_sites:
+  example.com:
+    env:
+      db_password: example_dbpassword
+      # Generate your keys here: https://roots.io/salts.html
+      auth_key: "generateme"
+      secure_auth_key: "generateme"
+      logged_in_key: "generateme"
+      nonce_key: "generateme"
+      auth_salt: "generateme"
+      secure_auth_salt: "generateme"
+      logged_in_salt: "generateme"
+      nonce_salt: "generateme"
+  example-https.com:
+    env:
+      db_password: example_dbpassword
+      # Generate your keys here: https://roots.io/salts.html
+      auth_key: "generateme"
+      secure_auth_key: "generateme"
+      logged_in_key: "generateme"
+      nonce_key: "generateme"
+      auth_salt: "generateme"
+      secure_auth_salt: "generateme"
+      logged_in_salt: "generateme"
+      nonce_salt: "generateme"
