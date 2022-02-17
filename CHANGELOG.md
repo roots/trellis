@@ -1,8 +1,10 @@
-### HEAD
+### 1.14.0: February 16th, 2022
+* Fix #1026 - Preserve nested path for copied folders between deploys ([#1364](https://github.com/roots/trellis/pull/1364))
+* Fix #1354 - Ensure correct PHP version is set ([#1365](https://github.com/roots/trellis/pull/1365))
 * Create mysql my.cnf credentials file earlier ([#1360](https://github.com/roots/trellis/pull/1360))
 * Remove bin scripts (trellis-cli should be used instead) ([#1352](https://github.com/roots/trellis/pull/1352))
 * Update `wp_cli_version` to `2.6.0` ([#1358](https://github.com/roots/trellis/pull/1358))
-* Deploy hook build example: Update Sage build command ([#1356](https://github.com/roots/trellis/pull/1356))
+* Deploy hook build example: update Sage build command ([#1356](https://github.com/roots/trellis/pull/1356))
 
 ### 1.13.0: January 21st, 2022
 * Fix #1354 - Prevent apt from installing recommended packages for php ([#1355](https://github.com/roots/trellis/pull/1355))
