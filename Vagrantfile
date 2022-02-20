@@ -115,9 +115,8 @@ Vagrant.configure('2') do |config|
 
   config.vm.provision provisioner do |ansible|
     if local_provisioning?
-      ansible.extra_vars = { ansible_python_interpreter: vconfig.fetch('vagrant_ansible_python_interpreter') }
       ansible.install_mode = 'pip'
-      ansible.pip_install_cmd = 'sudo apt-get install -y -qq python3-distutils && curl https://bootstrap.pypa.io/get-pip.py | sudo python3'
+      ansible.pip_install_cmd = 'sudo apt-get install -y -qq python3-pip'
       ansible.provisioning_path = provisioning_path
       ansible.version = vconfig.fetch('vagrant_ansible_version')
     end

@@ -1,13 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 import socket
-
-try:
-    from httplib import HTTPConnection, HTTPException
-except ImportError:
-    # Python 3
-    from http.client import HTTPConnection, HTTPException
+from http.client import HTTPConnection, HTTPException
 
 DOCUMENTATION = '''
 ---
