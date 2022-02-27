@@ -73,7 +73,7 @@ Trellis will configure a server with the following and more:
 
 ## Requirements
 
-See the full [installation](https://docs.roots.io/trellis/master/installation/#installation) docs for requirements and our [getting started pages](https://docs.roots.io/getting-started) for more OS specific instructions.
+See the full [installation](https://docs.roots.io/trellis/master/installation/#installation) docs for requirements.
 
 ## Installation
 
