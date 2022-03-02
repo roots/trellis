@@ -5,10 +5,10 @@
 
 - name: Install cronjob for key generation
   cron:
-    cron_file: letsencrypt-certificate-renewal
+    cron_file: "letsencrypt-certificate-renewal{{ letsencrypt_project_name }}"
     name: letsencrypt certificate renewal
     user: root
-    job: cd {{ acme_tiny_data_directory }} && ./renew-certs.py ; /usr/sbin/service nginx reload
+    job: cd {{ acme_tiny_data_directory }} && ./renew-certs{{ letsencrypt_project_name }}.py ; /usr/sbin/service nginx reload
     day: "{{ letsencrypt_cronjob_daysofmonth }}"
     hour: "4"
     minute: "30"

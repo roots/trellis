@@ -38,12 +38,12 @@
 - name: Generate certificate renewal script
   template:
     src: renew-certs.py
-    dest: "{{ acme_tiny_data_directory }}/renew-certs.py"
+    dest: "{{ acme_tiny_data_directory }}/renew-certs{{ letsencrypt_project_name }}.py"
     mode: '0700'
   tags: [wordpress, wordpress-setup, wordpress-setup-nginx, nginx-includes]
 
 - name: Generate the certificates
-  command: ./renew-certs.py
+  command: "./renew-certs{{ letsencrypt_project_name }}.py"
   args:
     chdir: "{{ acme_tiny_data_directory }}"
   register: generate_certs

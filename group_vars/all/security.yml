@@ -19,3 +19,5 @@ sshd_password_authentication: false
 ip_whitelist:
   - 127.0.0.0/8
   - "{{ ipify_public_ip | default('') }}"
+
+letsencrypt_project_name: "{{ wordpress_sites.keys() | list | first | replace('.','') }}"
