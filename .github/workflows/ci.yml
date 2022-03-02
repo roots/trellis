@@ -1,0 +1,37 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.x']
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+      - uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-galaxy-${{ hashFiles('galaxy.yml') }}
+      - run: ansible-galaxy install -r galaxy.yml
+      - name: Check playbook syntax
+        run: |
+          ansible-playbook --syntax-check -e env=development deploy.yml
+          ansible-playbook --syntax-check -e env=development dev.yml
+          ansible-playbook --syntax-check -e env=development server.yml
+          ansible-playbook --syntax-check -e env=development rollback.yml
+          ansible-playbook --syntax-check -e xdebug_tunnel_inventory_host=1 xdebug-tunnel.yml

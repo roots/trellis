@@ -1,4 +1,24 @@
 ### HEAD
+* Remove Python 2 support ([#1361](https://github.com/roots/trellis/pull/1361))
+
+### 1.14.0: February 16th, 2022
+* Fix #1026 - Preserve nested path for copied folders between deploys ([#1364](https://github.com/roots/trellis/pull/1364))
+* Fix #1354 - Ensure correct PHP version is set ([#1365](https://github.com/roots/trellis/pull/1365))
+* Create mysql my.cnf credentials file earlier ([#1360](https://github.com/roots/trellis/pull/1360))
+* Remove bin scripts (trellis-cli should be used instead) ([#1352](https://github.com/roots/trellis/pull/1352))
+* Update `wp_cli_version` to `2.6.0` ([#1358](https://github.com/roots/trellis/pull/1358))
+* Deploy hook build example: update Sage build command ([#1356](https://github.com/roots/trellis/pull/1356))
+
+### 1.13.0: January 21st, 2022
+* Fix #1354 - Prevent apt from installing recommended packages for php ([#1355](https://github.com/roots/trellis/pull/1355))
+* Update default ssh key paths (include ed25519 keys) ([#1348](https://github.com/roots/trellis/pull/1348))
+* Use trellis-cli for Vagrant galaxy install when available ([#1349](https://github.com/roots/trellis/pull/1349))
+* Fix #970 - Improve git clone failure error ([#1351](https://github.com/roots/trellis/pull/1351))
+
+### 1.12.0: January 3rd, 2022
+* Improve support for adding public SSH keys ([#1344](https://github.com/roots/trellis/pull/1344))
+* Update default Vagrant IP to 192.168.56.5 ([#1341](https://github.com/roots/trellis/pull/1341))
+* Remove old WP customizer frame options hack ([#1338](https://github.com/roots/trellis/pull/1338))
 * Fix #1319 - Improve how ssh_args are loaded ([#1337](https://github.com/roots/trellis/pull/1337))
 * Fix #1331 - Improve passlib instructions([#1336](https://github.com/roots/trellis/pull/1336))
 

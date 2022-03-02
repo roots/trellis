@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -29,7 +27,7 @@ for site in {{ sites_using_letsencrypt }}:
               'Not creating a new certificate.'.format(bundled_hashed_cert_path))
 
     else:
-        cmd = ('/usr/bin/env python {{ acme_tiny_software_directory }}/acme_tiny.py '
+        cmd = ('/usr/bin/env python3 {{ acme_tiny_software_directory }}/acme_tiny.py '
             '--quiet '
             '--ca {{ letsencrypt_ca }} '
             '--account-key {{ letsencrypt_account_key }} '

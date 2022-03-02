@@ -35,7 +35,7 @@
 # into the Vagrantfile's `config.vm.provision` section.
 
 [development]
-192.168.50.5 ansible_connection=local
+192.168.56.5 ansible_connection=local
 
 [web]
-192.168.50.5 ansible_connection=local
+192.168.56.5 ansible_connection=local
