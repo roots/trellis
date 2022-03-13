@@ -1,3 +1,2 @@
-ansible>=2.10.0,<3.0
-ansible-base>=2.10,<=2.10.16
+ansible>=2.10.0
 passlib

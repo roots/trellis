@@ -11,7 +11,7 @@ except ImportError:
     display = Display()
 
 version_requirement = '2.10.0'
-version_tested_max = '2.10.16'
+version_tested_max = '5.4.0'
 
 if python_version_tuple()[0] == '2':
     raise AnsibleError(('Trellis no longer supports Python 2 (you are using version {}).'
