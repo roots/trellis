@@ -42,6 +42,8 @@ jobs:
           cp ../../.github/files/wordpress_sites.yml group_vars/production/wordpress_sites.yml
           cp ../../.github/files/vault.yml group_vars/production/vault.yml
         working-directory: example.com/trellis
+      - run: trellis exec ansible-playbook --version
+        working-directory: example.com/trellis
       - name: Provision
         run: trellis provision --extra-vars "web_user=runner letsencrypt_ca=https://127.0.0.1:8443/acme/acme" production
         working-directory: example.com
