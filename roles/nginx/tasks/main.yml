@@ -30,15 +30,6 @@
     path: "{{ nginx_path }}/ssl"
     state: directory
 
-- name: Generate strong unique Diffie-Hellman group.
-  command: openssl dhparam -out dhparams.pem 2048
-  args:
-    chdir: "{{ nginx_path }}/ssl"
-    creates: "{{ nginx_path }}/ssl/dhparams.pem"
-  when: sites_use_ssl | bool
-  notify: reload nginx
-  tags: [diffie-hellman, letsencrypt, wordpress, wordpress-setup, nginx-includes, nginx-sites]
-
 - name: Copy h5bp configs
   copy:
     src: templates/h5bp

@@ -1,0 +1,18 @@
+php_extensions_default:
+  php8.1-bcmath: "{{ apt_package_state }}"
+  php8.1-cli: "{{ apt_package_state }}"
+  php8.1-curl: "{{ apt_package_state }}"
+  php8.1-dev: "{{ apt_package_state }}"
+  php8.1-fpm: "{{ apt_package_state }}"
+  php8.1-imagick: "{{ apt_package_state }}"
+  php8.1-intl: "{{ apt_package_state }}"
+  php8.1-mbstring: "{{ apt_package_state }}"
+  php8.1-mysql: "{{ apt_package_state }}"
+  php8.1-xml: "{{ apt_package_state }}"
+  php8.1-xmlrpc: "{{ apt_package_state }}"
+  php8.1-zip: "{{ apt_package_state }}"
+
+php_memcached_packages:
+  php8.1-memcached: "{{ apt_package_state }}"
+
+php_xdebug_package: php8.1-xdebug

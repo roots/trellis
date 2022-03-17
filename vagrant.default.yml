@@ -1,11 +1,10 @@
 ---
-vagrant_ip: '192.168.50.5'
+vagrant_ip: '192.168.56.5'
 vagrant_cpus: 1
 vagrant_memory: 1024 # in MB
 vagrant_box: 'bento/ubuntu-20.04'
 vagrant_box_version: '>= 202012.23.0'
-vagrant_ansible_version: '2.9.10'
-vagrant_ansible_python_interpreter: '/usr/bin/python3'
+vagrant_ansible_version: '2.10.7'
 vagrant_skip_galaxy: false
 vagrant_mount_type: 'nfs'
 

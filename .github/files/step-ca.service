@@ -1,0 +1,15 @@
+[Unit]
+Description=step-ca service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+Environment=STEPPATH=/root/.step
+WorkingDirectory=/root/.step
+ExecStart=/usr/bin/step-ca config/ca.json --password-file password.txt
+
+[Install]
+WantedBy=multi-user.target

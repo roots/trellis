@@ -75,7 +75,6 @@ server {
   include h5bp/directive-only/ssl-stapling.conf;
   {% endif -%}
 
-  ssl_dhparam /etc/nginx/ssl/dhparams.pem;
   ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
 
   {% if item.value.ssl.provider | default('manual') != 'self-signed' -%}
@@ -207,14 +206,7 @@ server {
   {% block embed_security -%}
   {% if item.value.nginx_embed_security | default(nginx_embed_security | default(true)) -%}
   add_header Content-Security-Policy "frame-ancestors 'self'" always;
-
-  # Conditional X-Frame-Options until https://core.trac.wordpress.org/ticket/40020 is resolved
-  set $x_frame_options SAMEORIGIN;
-  if ($arg_customize_changeset_uuid) {
-    set $x_frame_options "";
-  }
-  add_header X-Frame-Options $x_frame_options always;
-
+  add_header X-Frame-Options SAMEORIGIN always;
   {% endif -%}
   {% endblock -%}
 

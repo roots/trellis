@@ -27,7 +27,11 @@
   with_items: "{{ project.project_copy_folders | default(project_copy_folders) }}"
 
 - name: Copy project folders
-  command: cp -rp {{ deploy_helper.current_path }}/{{ item.item }} {{ deploy_helper.new_release_path }}
+  copy:
+    src: "{{ deploy_helper.current_path }}/{{ item.item }}/"
+    dest: "{{ deploy_helper.new_release_path }}/{{ item.item }}"
+    remote_src: true
+    mode: 'preserve'
   with_items: "{{ project_folder_paths.results }}"
   when: item.stat.exists
 

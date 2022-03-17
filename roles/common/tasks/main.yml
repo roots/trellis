@@ -97,10 +97,21 @@
 - name: Check whether passlib is needed
   fail:
     msg: |
-      Ansible on OS X requires python passlib module to create user password hashes
+      Ansible on macOS requires Python's passlib module to create user password hashes
 
-      sudo easy_install pip
-      pip install passlib
+      If you're seeing this error message, you likely didn't use trellis-cli to create your project.
+      We highly recommend installing and using trellis-cli to manage your Trellis projects.
+
+      See https://github.com/roots/trellis-cli for more documentation.
+
+      For existing projects, you can run `trellis init` which will manage the dependencies automatically and fix this problem
+      as long as you use the `trellis` commands (like `trellis provision`) afterwards.
+
+      To fix this manually, use pip to install the package: pip install passlib
+
+      If pip is not installed, you'll have to install it first.
+      See https://stackoverflow.com/questions/17271319/how-do-i-install-pip-on-macos-or-os-x for many options.
+
   when: env != 'development' and darwin_without_passlib | default(false)
   run_once: true
 

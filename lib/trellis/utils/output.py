@@ -1,5 +1,4 @@
 # Make coding more python3-ish
-from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 import os.path
@@ -9,7 +8,6 @@ import textwrap
 
 from ansible import __version__
 from ansible.module_utils._text import to_text
-from ansible.module_utils.six import string_types
 
 def system(vagrant_version=None):
     # Get most recent Trellis CHANGELOG entry
@@ -55,7 +53,7 @@ def replace_item_with_key(obj, result):
     )
 
     if should_replace:
-        if 'key' in result._result[item]:
+        if type(result._result[item]) is dict and 'key' in result._result[item]:
             result._result[item] = result._result[item]['key']
         elif type(result._result[item]) is dict:
             subitem = '_ansible_item_label' if '_ansible_item_label' in result._result[item] else 'item'
@@ -91,7 +89,7 @@ def display(obj, result):
     # Must pass unicode strings to Display.display() to prevent UnicodeError tracebacks
     if isinstance(msg, list):
         msg = '\n'.join([to_text(x) for x in msg])
-    elif not isinstance(msg, string_types):
+    elif not isinstance(msg, str):
         msg = to_text(msg)
 
     # Wrap text
@@ -102,17 +100,17 @@ def display(obj, result):
     hr = '-' * int(wrap_width*.67)
 
     if obj.task_failed and first:
-        display(system(obj.vagrant_version), 'bright gray')
-        display(hr, 'bright gray')
+        display(system(obj.vagrant_version), 'bright gray', screen_only=True)
+        display(hr, 'bright gray', screen_only=True)
 
     if msg == '':
         if obj.task_failed and not first:
-            display(hr, 'bright gray')
+            display(hr, 'bright gray', screen_only=True)
         else:
             return
     else:
         if not first:
-            display(hr, 'bright gray')
+            display(hr, 'bright gray', screen_only=True)
         display(msg, 'red' if obj.task_failed else 'bright purple')
 
 def display_host(obj, result):

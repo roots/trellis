@@ -1,0 +1,67 @@
+name: Integration
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: mkdir $HOME/.ssh
+      - name: Remove and cleanup mysql
+        run: |
+          sudo apt-get remove --purge mysql*
+          sudo apt-get autoremove
+          sudo apt-get autoclean
+          sudo rm -rf /etc/apparmor.d/abstractions/mysql /etc/apparmor.d/cache/usr.sbin.mysqld /etc/mysql /var/lib/mysql /var/log/mysql* /var/log/upstart/mysql.log* /var/run/mysqld ~/.mysql_history
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - uses: ./.github/actions/setup-step-ca
+      - uses: roots/setup-trellis-cli@v1
+        with:
+          ansible-vault-password: 'fake'
+          auto-init: false
+          galaxy-install: false
+          trellis-directory: '.'
+      - name: Create new Trellis project
+        run: trellis new --name example.com --host www.example.com --trellis-version ${{ github.sha }} ./example.com
+      - name: Update configs
+        run: |
+          sudo echo "127.0.0.1 www.example.com example.com www.example-https.com example-https.com" | sudo tee -a /etc/hosts
+          cp ../../.github/files/inventory hosts/production
+          cp ../../.github/files/wordpress_sites.yml group_vars/production/wordpress_sites.yml
+          cp ../../.github/files/vault.yml group_vars/production/vault.yml
+        working-directory: example.com/trellis
+      - run: trellis exec ansible-playbook --version
+        working-directory: example.com/trellis
+      - name: Provision
+        run: trellis provision --extra-vars "web_user=runner letsencrypt_ca=https://127.0.0.1:8443/acme/acme" production
+        working-directory: example.com
+      - name: Deploy non-https site
+        run: trellis deploy --extra-vars "web_user=runner project_git_repo=https://github.com/roots/bedrock.git" production example.com
+        working-directory: example.com
+      - name: Install WordPress
+        run: |
+          wp core install --url="http://example.com" --title="Example.com" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
+        working-directory: /srv/www/example.com/current
+      - name: Verify install
+        run: curl -s http://example.com | grep "<title>Example"
+      - name: Deploy https site
+        run: trellis deploy --extra-vars "web_user=runner project_git_repo=https://github.com/roots/bedrock.git" production example-https.com
+        working-directory: example.com
+      - name: Install WordPress
+        run: |
+          wp core install --url="http://example-https.com" --title="Example HTTPS" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
+        working-directory: /srv/www/example-https.com/current
+      - name: Verify install
+        run: curl -s https://example-https.com | grep "<title>Example HTTPS"
