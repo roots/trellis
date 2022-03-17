@@ -1,4 +1,5 @@
 ### HEAD
+* Support Ansible >= 2.10 (tested up to 5.4.0) ([#1373](https://github.com/roots/trellis/pull/1373))
 * Remove Python 2 support ([#1361](https://github.com/roots/trellis/pull/1361))
 
 ### 1.14.0: February 16th, 2022
