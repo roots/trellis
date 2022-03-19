@@ -21,6 +21,7 @@
 - name: build list of fail2ban filter templates
   find:
     paths:
+      - "{{ playbook_dir }}/roles/fail2ban/templates/filters"
       - "{{ fail2ban_filter_templates_path }}"
     pattern: "*.conf.j2"
   become: no
@@ -36,7 +37,7 @@
 - name: template fail2ban filters
   template:
     src: "{{ item }}"
-    dest: "/etc/fail2ban/filter.d/{{ item | regex_replace(fail2ban_filter_templates_pattern, '\\2') }}"
+    dest: "/etc/fail2ban/filter.d/{{ item | basename | regex_replace('.j2$', '') }}"
     mode: '0644'
   with_items: "{{ fail2ban_filter_templates.files | map(attribute='path') | list | sort(True) }}"
   notify: restart fail2ban
