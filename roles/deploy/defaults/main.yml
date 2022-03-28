@@ -67,6 +67,7 @@ deploy_build_before:
 
 deploy_build_after:
   - "{{ playbook_dir }}/roles/deploy/hooks/build-after.yml"
+  - "{{ playbook_dir }}/deploy-hooks/build-after.yml"
   # - "{{ playbook_dir }}/deploy-hooks/sites/{{ site }}-build-after.yml"
 
 deploy_finalize_before:
