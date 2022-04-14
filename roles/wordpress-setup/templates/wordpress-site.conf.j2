@@ -15,7 +15,7 @@ server {
   {% endblock %}
 
   {% block server_basic -%}
-  root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web;
+  root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/{{ item.value.public_path | default('web') }};
   index index.php index.htm index.html;
   add_header Fastcgi-Cache $upstream_cache_status;
 
