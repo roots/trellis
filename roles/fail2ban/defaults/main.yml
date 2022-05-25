@@ -29,4 +29,3 @@ fail2ban_services_custom: []
 fail2ban_services: "{{ fail2ban_services_default + fail2ban_services_custom }}"
 
 fail2ban_filter_templates_path: fail2ban_filters
-fail2ban_filter_templates_pattern: "^({{ fail2ban_filter_templates_path | regex_escape }})/(.*)\\.j2$"

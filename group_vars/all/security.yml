@@ -1,3 +1,5 @@
+# Documentation: https://roots.io/trellis/docs/security/
+
 ferm_input_list:
   - type: dport_accept
     dport: [http, https]
@@ -10,7 +12,20 @@ ferm_input_list:
     seconds: 300
     hits: 20
 
-# Documentation: https://roots.io/trellis/docs/security/
+
+# Enable built-in fail2ban services or add your own custom ones
+fail2ban_services_custom:
+  - name: wordpress_xmlrpc
+    filter: wordpress-xmlrpc
+    enabled: "false"
+    port: http,https
+    logpath: "{{ www_root }}/**/logs/access.log"
+  - name: wordpress_wp_login
+    filter: wordpress-wp-login
+    enabled: "false"
+    port: http,https
+    logpath: "{{ www_root }}/**/logs/access.log"
+
 # If sshd_permit_root_login: false, admin_user must be in 'users' (`group_vars/all/users.yml`) with sudo group
 # and in 'vault_users' (`group_vars/staging/vault.yml`, `group_vars/production/vault.yml`)
 sshd_permit_root_login: true
