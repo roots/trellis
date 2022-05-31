@@ -1,16 +1,58 @@
 ---
+# Is installed check
+#   Non-multisite specific check
+- name: WordPress Installed (non-multisite)?
+  command: wp core is-installed --skip-plugins --skip-themes
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  register: wp_installed_single
+  changed_when: false
+  failed_when: wp_installed_single.stderr | length > 0 or wp_installed_single.rc > 1
+  when:
+    - not project.multisite.enabled | default(false)
+
+#   Multisite specific check
 - name: Create file with multisite constants defined as false
   copy:
     src: "tmp_multisite_constants.php"
     dest: "{{ deploy_helper.shared_path }}/tmp_multisite_constants.php"
+  when:
+    - project.multisite.enabled | default(false)
 
-- name: WordPress Installed?
+- name: Set variables used in "WordPress Installed?" check
+  set_fact:
+    php_needle_warning: "Warning: strpos\\(\\): Empty needle in {{ deploy_helper.new_release_path }}/web/wp/wp-includes/link-template.php on line 3535"
+  when:
+    #- project.multisite.enabled | default(false)
+    - not project.multisite.enabled | default(false)
+
+- name: WordPress Installed (multisite)?
   command: wp core is-installed --skip-plugins --skip-themes --require={{ deploy_helper.shared_path }}/tmp_multisite_constants.php
   args:
     chdir: "{{ deploy_helper.new_release_path }}"
-  register: wp_installed
+  register: wp_installed_multisite
   changed_when: false
-  failed_when: wp_installed.stderr | default("") != "" or wp_installed.rc > 1
+  failed_when: (wp_installed_multisite.stderr | length > 0 and wp_installed_multisite.stderr is not match(php_needle_warning)) or wp_installed_multisite.rc > 1
+  when:
+    - project.multisite.enabled | default(false)
+#   /Multisite specific check
+
+#   Because variable is always registered, even with non-applying when-condition
+- name: Set "WordPress installed (non-multisite)?" result variable
+  set_fact:
+    wp_installed: "{{ wp_installed_single }}"
+  when:
+    - not project.multisite.enabled | default(false)
+
+- name: Set "WordPress installed (multisite)?" result variable
+  set_fact:
+    wp_installed: "{{ wp_installed_multisite }}"
+  when:
+    - project.multisite.enabled | default(false)
+# /Is installed check
+
+
+
 
 - name: Get WP theme template and stylesheet roots
   shell: >
