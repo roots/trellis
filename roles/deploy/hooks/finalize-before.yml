@@ -19,12 +19,11 @@
   when:
     - project.multisite.enabled | default(false)
 
-- name: Set variables used in "WordPress Installed?" check
+- name: Set variables used in "WordPress Installed (multisite)?" check
   set_fact:
     php_needle_warning: "Warning: strpos\\(\\): Empty needle in {{ deploy_helper.new_release_path }}/web/wp/wp-includes/link-template.php on line 3535"
   when:
-    #- project.multisite.enabled | default(false)
-    - not project.multisite.enabled | default(false)
+    - project.multisite.enabled | default(false)
 
 - name: WordPress Installed (multisite)?
   command: wp core is-installed --skip-plugins --skip-themes --require={{ deploy_helper.shared_path }}/tmp_multisite_constants.php
