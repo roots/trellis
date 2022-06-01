@@ -1,16 +1,45 @@
 ---
-- name: Create file with multisite constants defined as false
-  copy:
-    src: "tmp_multisite_constants.php"
-    dest: "{{ deploy_helper.shared_path }}/tmp_multisite_constants.php"
+- name: WordPress Installed (non-multisite)?
+  block:
+    - name: "Invoke 'wp core is-installed' command"
+      command: wp core is-installed --skip-plugins --skip-themes
+      args:
+        chdir: "{{ deploy_helper.new_release_path }}"
+      register: wp_installed_singlesite
+      changed_when: false
+      failed_when: wp_installed_singlesite.stderr | length > 0 or wp_installed_singlesite.rc > 1
 
-- name: WordPress Installed?
-  command: wp core is-installed --skip-plugins --skip-themes --require={{ deploy_helper.shared_path }}/tmp_multisite_constants.php
-  args:
-    chdir: "{{ deploy_helper.new_release_path }}"
-  register: wp_installed
-  changed_when: false
-  failed_when: wp_installed.stderr | default("") != "" or wp_installed.rc > 1
+    - name: Set "WordPress installed?" result variable (from non-multisite)
+      set_fact:
+        wp_installed: "{{ wp_installed_singlesite }}"
+  when:
+    - not project.multisite.enabled | default(false)
+
+- name: WordPress Installed (multisite)?
+  block:
+    - name: Create file with multisite constants defined as false
+      copy:
+        src: "tmp_multisite_constants.php"
+        dest: "{{ deploy_helper.shared_path }}/tmp_multisite_constants.php"
+
+    - name: Set variables used in "WordPress Installed (multisite)?" check
+      set_fact:
+        php_needle_warning: "Warning: strpos\\(\\): Empty needle in {{ deploy_helper.new_release_path }}/web/wp/wp-includes/link-template.php"
+
+    - name: "Invoke 'wp core is-installed' command"
+      command: wp core is-installed --skip-plugins --skip-themes --require={{ deploy_helper.shared_path }}/tmp_multisite_constants.php
+      args:
+        chdir: "{{ deploy_helper.new_release_path }}"
+      register: wp_installed_multisite
+      changed_when: false
+      failed_when: (wp_installed_multisite.stderr | length > 0 and wp_installed_multisite.stderr is not match(php_needle_warning)) or wp_installed_multisite.rc > 1
+
+    - name: Set "WordPress installed?" result variable (from multisite)
+      set_fact:
+        wp_installed: "{{ wp_installed_multisite }}"
+  when:
+    - project.multisite.enabled | default(false)
+
 
 - name: Get WP theme template and stylesheet roots
   shell: >
