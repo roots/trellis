@@ -13,8 +13,7 @@
       set_fact:
         wp_installed: "{{ wp_installed_singlesite }}"
   when:
-    #- not project.multisite.enabled | default(false)
-    - project.multisite.enabled | default(false)
+    - not project.multisite.enabled | default(false)
 
 - name: WordPress Installed (multisite)?
   block:
@@ -39,8 +38,7 @@
       set_fact:
         wp_installed: "{{ wp_installed_multisite }}"
   when:
-    #- project.multisite.enabled | default(false)
-    - not project.multisite.enabled | default(false)
+    - project.multisite.enabled | default(false)
 
 
 - name: Get WP theme template and stylesheet roots
