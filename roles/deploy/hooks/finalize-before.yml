@@ -24,7 +24,7 @@
 
     - name: Set variables used in "WordPress Installed (multisite)?" check
       set_fact:
-        php_needle_warning: "Warning: strpos\\(\\): Empty needle in {{ deploy_helper.new_release_path }}/web/wp/wp-includes/link-template.php on line 3535"
+        php_needle_warning: "Warning: strpos\\(\\): Empty needle in {{ deploy_helper.new_release_path }}/web/wp/wp-includes/link-template.php"
 
     - name: "'wp core is-installed' command"
       command: wp core is-installed --skip-plugins --skip-themes --require={{ deploy_helper.shared_path }}/tmp_multisite_constants.php
