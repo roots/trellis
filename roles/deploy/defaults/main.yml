@@ -32,7 +32,7 @@ project_templates:
 #     mode: '0755'      // <- optional, use an octal number starting with 0 or quote it, defaults to `'0755'` if `directory` or `'0644'` if `file`
 #     type: directory // <- optional, defaults to `directory`, options: `directory` or `file`
 project_shared_children:
-  - path: web/app/uploads
+  - path: "{{ project_public_path }}/{{ project_upload_path }}"
     src: uploads
 
 # The project_environment is a list of environment variables that can be used in hooks
@@ -58,6 +58,8 @@ composer_classmap_authoritative: true
 project: "{{ wordpress_sites[site] }}"
 project_root: "{{ www_root }}/{{ site }}"
 project_local_path: "{{ (lookup('env', 'USER') == 'vagrant') | ternary(project_root + '/' + project_current_path, project.local_path) }}"
+project_public_path: "{{ project.public_path | default('web') }}"
+project_upload_path: "{{ project.upload_path | default('app/uploads') }}"
 
 
 # Deploy hooks
