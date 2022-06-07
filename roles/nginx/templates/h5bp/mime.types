@@ -14,7 +14,7 @@ types {
 
     # Normalize to standard type.
     # https://tools.ietf.org/html/rfc4329#section-7.2
-    application/javascript                js;
+    application/javascript                js mjs;
 
 
   # Manifest files
