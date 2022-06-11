@@ -1,4 +1,9 @@
 ---
+- name: Clean up unused, temporary PHP file with multisite constants that had been used for WordPress Installed check.
+  file:
+    state: absent
+    path: "{{ deploy_helper.shared_path }}/tmp_multisite_constants.php"
+
 - name: WordPress Installed (non-multisite)?
   block:
     - name: "Invoke 'wp core is-installed' command"
