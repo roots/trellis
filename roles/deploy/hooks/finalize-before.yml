@@ -1,5 +1,5 @@
 ---
-- name: Clean up unused, temporary PHP file with multisite constants that had been used for WordPress Installed check.
+- name: Clean up unused, temporary PHP file with multisite constants that had been used for WordPress Installed checks.
   file:
     state: absent
     path: "{{ deploy_helper.shared_path }}/tmp_multisite_constants.php"
