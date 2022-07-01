@@ -12,4 +12,9 @@
     name: php{{ php_version }}-fpm
     state: reloaded
 
+- name: restart journald
+  service:
+    name: systemd-journald
+    state: restarted
+
 - import_tasks: reload_nginx.yml
