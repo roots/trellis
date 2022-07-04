@@ -14,6 +14,4 @@ jobs:
         discourse-base-url: ${{ secrets.DISCOURSE_BASE_URL }}
         discourse-author-username: swalkinshaw
         discourse-category: 12
-        discourse-tags:
-          trellis
-          releases
+        discourse-tags: releases
