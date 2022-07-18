@@ -1,4 +1,5 @@
-### HEAD
+### 1.16.0: July 18th, 2022
+* Fix Ansible 6 support - remove broken and unused `cli` import ([#1404](https://github.com/roots/trellis/pull/1404))
 * Fix #1400 - update shared path permission ([#1403](https://github.com/roots/trellis/pull/1403))
 * Update requirements.yml to new format ([#1402](https://github.com/roots/trellis/pull/1402))
 * Set journald max log file size ([#1399](https://github.com/roots/trellis/pull/1399))
