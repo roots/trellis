@@ -2,12 +2,10 @@ import re
 import sys
 import os
 
-from __main__ import cli
 from ansible.module_utils.six import iteritems
 from ansible.errors import AnsibleError
 from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
 from ansible.playbook.play_context import PlayContext
-from ansible.playbook.task import Task
 from ansible.plugins.callback import CallbackBase
 from ansible.template import Templar
 from ansible.utils.unsafe_proxy import wrap_var
