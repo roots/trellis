@@ -190,7 +190,7 @@ server {
   {% endif -%}
 
   {% if h5bp_cross_domain_fonts_enabled -%}
-  include h5bp/location/cross-domain-fonts.conf;
+  include h5bp/directive-only/cross-origin-requests.conf;
   {% endif -%}
 
   {% if h5bp_expires_enabled -%}
