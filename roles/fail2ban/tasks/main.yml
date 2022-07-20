@@ -18,11 +18,19 @@
   notify:
     - restart fail2ban
 
+- name: Check if fail2ban_filter_templates_path exists
+  stat:
+    path: "{{ fail2ban_filter_templates_path }}"
+  become: no
+  delegate_to: localhost
+  register: fail2ban_filter_templates_path_result
+
 - name: build list of fail2ban filter templates
   find:
-    paths:
-      - "{{ playbook_dir }}/roles/fail2ban/templates/filters"
-      - "{{ fail2ban_filter_templates_path }}"
+    paths: "{{ fail2ban_filter_templates_path_result.stat.isdir is defined | ternary(
+        [fail2ban_builtin_filter_templates_path, fail2ban_filter_templates_path],
+        [fail2ban_builtin_filter_templates_path]
+      ) }}"
     pattern: "*.conf.j2"
   become: no
   delegate_to: localhost
