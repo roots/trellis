@@ -1,4 +1,5 @@
 ### HEAD
+* [BREAKING] Disable HSTS `includeSubdomains` by default ([#1409](https://github.com/roots/trellis/pull/1409))
 * Fix #905, #831 - Update hb5p Nginx configs ([#1406](https://github.com/roots/trellis/pull/1406))
 
 ### 1.16.0: July 18th, 2022
