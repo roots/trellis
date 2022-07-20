@@ -28,4 +28,5 @@ fail2ban_services_default:
 fail2ban_services_custom: []
 fail2ban_services: "{{ fail2ban_services_default + fail2ban_services_custom }}"
 
+fail2ban_builtin_filter_templates_path: "{{ playbook_dir }}/roles/fail2ban/templates/filters"
 fail2ban_filter_templates_path: fail2ban_filters
