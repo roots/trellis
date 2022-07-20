@@ -1,3 +1,6 @@
+### HEAD
+* Fix #905, #831 - Update hb5p Nginx configs ([#1406](https://github.com/roots/trellis/pull/1406))
+
 ### 1.16.0: July 18th, 2022
 * Fix Ansible 6 support - remove broken and unused `cli` import ([#1404](https://github.com/roots/trellis/pull/1404))
 * Fix #1400 - update shared path permission ([#1403](https://github.com/roots/trellis/pull/1403))
