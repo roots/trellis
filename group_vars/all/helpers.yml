@@ -22,6 +22,6 @@ sites_use_ssl: "{{ wordpress_sites.values() | map(attribute='ssl') | selectattr(
 
 # For backward compatibility, to be removed in Trellis v2.
 site_packagist_org_authentications:
-  - { hostname: repo.packagist.com, username: token, password: "{{ vault_wordpress_sites[site].packagist_token | default('') }}" }
+  - { hostname: repo.packagist.com, username: token, password: "{{ vault_wordpress_sites[site].packagist_token | default('\"\"') }}" }
 site_composer_authentications: "{{ vault_wordpress_sites[site].composer_authentications | default([]) }}"
 composer_authentications: "{{ site_packagist_org_authentications + site_composer_authentications }}"

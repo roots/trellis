@@ -19,7 +19,6 @@
   when:
     - composer_authentication.hostname is defined and composer_authentication.hostname != ""
     - composer_authentication.username is defined and composer_authentication.username != ""
-    - composer_authentication.password is defined and composer_authentication.password != ""
   loop: "{{ composer_authentications | default([]) }}"
   loop_control:
     loop_var: composer_authentication
