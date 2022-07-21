@@ -3,6 +3,8 @@ site_uses_letsencrypt: "{{ (ssl_enabled and item.value.ssl.provider | default('m
 missing_hosts: "{{ site_hosts | difference((current_hosts.results | selectattr('item.key', 'equalto', item.key) | selectattr('stdout_lines', 'defined') | sum(attribute='stdout_lines', start=[]) | map('trim') | list | join(' ')).split(' ')) }}"
 letsencrypt_cert_ids: "{ {% for item in (generate_cert_ids | default({'results':[{'skipped':True}]})).results if item is not skipped %}'{{ item.item.key }}':'{{ item.stdout }}', {% endfor %} }"
 
+acme_user: acme
+
 acme_tiny_repo: 'https://github.com/diafygi/acme-tiny.git'
 acme_tiny_commit: 'cb094cf3efa34acef8c7139c8480e2135422e755'
 

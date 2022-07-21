@@ -7,9 +7,16 @@
   cron:
     cron_file: letsencrypt-certificate-renewal
     name: letsencrypt certificate renewal
-    user: root
+    user: "{{ acme_user }}"
     job: cd {{ acme_tiny_data_directory }} && ./renew-certs.py ; /usr/sbin/service nginx reload
     day: "{{ letsencrypt_cronjob_daysofmonth }}"
     hour: "4"
     minute: "30"
     state: present
+
+- name: Allow acme_user to reload Nginx
+  community.general.sudoers:
+    name: allow-acme-user-nginx
+    state: present
+    user: "{{ acme_user }}"
+    commands: /usr/sbin/service nginx reload

@@ -35,17 +35,30 @@
   when: site_uses_letsencrypt
   with_dict: "{{ wordpress_sites }}"
 
+- name: Ensure correct permissions on CSRs
+  file:
+    path: "{{ acme_tiny_data_directory }}/csrs/{{ item.key }}-{{ letsencrypt_cert_ids[item.key] }}.csr"
+    mode: '0600'
+    owner: "{{ acme_user }}"
+    group: "{{ acme_user }}"
+  when: site_uses_letsencrypt
+  with_dict: "{{ wordpress_sites }}"
+
 - name: Generate certificate renewal script
   template:
     src: renew-certs.py
     dest: "{{ acme_tiny_data_directory }}/renew-certs.py"
     mode: '0700'
+  become: yes
+  become_user: "{{ acme_user }}"
   tags: [wordpress, wordpress-setup, wordpress-setup-nginx, nginx-includes]
 
 - name: Generate the certificates
   command: ./renew-certs.py
   args:
     chdir: "{{ acme_tiny_data_directory }}"
+  become: yes
+  become_user: "{{ acme_user }}"
   register: generate_certs
   changed_when: generate_certs.stdout is defined and 'Created' in generate_certs.stdout
   notify: reload nginx
