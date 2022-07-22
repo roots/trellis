@@ -16,13 +16,7 @@
   community.general.alternatives:
     name: php
     path: /usr/bin/php{{ php_version }}
-
-- name: Start php fpm service
-  service:
-    name: "php{{ php_version }}-fpm"
-    state: started
-    enabled: true
-
+    
 - name: Find existing php fpm services
   find:
     paths: /etc/init.d
@@ -39,6 +33,12 @@
   loop_control:
     label: "{{ item.path | basename }}"
   notify: reload php-fpm
+
+- name: Start php fpm service
+  service:
+    name: "php{{ php_version }}-fpm"
+    state: started
+    enabled: true
 
 - name: Copy PHP-FPM configuration file
   template:

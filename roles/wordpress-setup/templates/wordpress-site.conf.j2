@@ -190,11 +190,11 @@ server {
   {% endif -%}
 
   {% if h5bp_cross_domain_fonts_enabled -%}
-  include h5bp/location/cross-domain-fonts.conf;
+  include h5bp/directive-only/cross-origin-requests.conf;
   {% endif -%}
 
   {% if h5bp_expires_enabled -%}
-  include h5bp/location/expires.conf;
+  expires $expires;
   {% endif -%}
 
   {% if h5bp_protect_system_files_enabled -%}

@@ -18,7 +18,7 @@ nginx_sites_confs:
 
 # HSTS defaults
 nginx_hsts_max_age: 31536000
-nginx_hsts_include_subdomains: true
+nginx_hsts_include_subdomains: false
 nginx_hsts_preload: false
 
 # HSTS helpers

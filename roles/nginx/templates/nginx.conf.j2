@@ -204,6 +204,35 @@ http {
   include includes.d/http/*.conf;
   {% endblock -%}
 
+  # Add Access-Control-Allow-Origin.
+  # h5bp/directive-only/cross-origin-requests.conf
+  map $sent_http_content_type $cors {
+    # Images
+    image/bmp     "*";
+    image/gif     "*";
+    image/jpeg    "*";
+    image/png     "*";
+    image/svg+xml "*";
+    image/webp    "*";
+    image/x-icon  "*";
+
+    # Web fonts
+    font/collection               "*";
+    application/vnd.ms-fontobject "*";
+    font/eot                      "*";
+    font/opentype                 "*";
+    font/otf                      "*";
+    application/x-font-ttf        "*";
+    font/ttf                      "*";
+    application/font-woff         "*";
+    application/x-font-woff       "*";
+    font/woff                     "*";
+    application/font-woff2        "*";
+    font/woff2                    "*";
+  }
+
+  include h5bp/directive-only/cache_expiration.conf;
+
   {% block sites_enabled -%}
   # Include files in the sites-enabled folder. server{} configuration files should be
   # placed in the sites-available folder, and then the configuration should be enabled
