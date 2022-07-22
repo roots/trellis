@@ -12,7 +12,7 @@
 - name: Setup composer authentications
   composer:
     command: config
-    arguments: --auth http-basic.{{ composer_authentication.hostname }} {{ composer_authentication.username }} {{ composer_authentication.password | default("") | quote }}
+    arguments: --auth http-basic.{{ composer_authentication.hostname | quote }} {{ composer_authentication.username | quote }} {{ composer_authentication.password | default("") | quote }}
     working_dir: "{{ deploy_helper.new_release_path }}"
   no_log: true
   changed_when: false
