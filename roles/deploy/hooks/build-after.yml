@@ -25,6 +25,12 @@
     loop_var: composer_authentication
     label: "{{ composer_authentication.hostname }}"
 
+- name: Run composer check
+  composer:
+    command: check-platform-reqs
+    working_dir: "{{ deploy_helper.new_release_path }}"
+  when: composer_platform_requirements_check
+
 - name: Install Composer dependencies
   composer:
     no_scripts: "{{ composer_no_scripts }}"
