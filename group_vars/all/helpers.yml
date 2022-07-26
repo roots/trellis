@@ -21,3 +21,7 @@ cron_enabled: "{{ site_env.disable_wp_cron and (not item.value.multisite.enabled
 sites_use_ssl: "{{ wordpress_sites.values() | map(attribute='ssl') | selectattr('enabled') | list | count > 0 }}"
 
 composer_authentications: "{{ vault_wordpress_sites[site].composer_authentications | default([]) }}"
+# Default `type` is `http-basic`.
+composer_authentications_using_basic_auth: "{{ composer_authentications | rejectattr('type', 'defined') | union( composer_authentications | selectattr('type', 'defined') | selectattr('type', 'equalto', 'http-basic') ) }}"
+composer_authentications_using_bitbucket_oauth: "{{ composer_authentications | selectattr('type', 'defined') | selectattr('type', 'equalto', 'bitbucket-oauth') }}"
+composer_authentications_using_other_token: "{{ composer_authentications | selectattr('type', 'defined') | rejectattr('type', 'equalto', 'http-basic') | rejectattr('type', 'equalto', 'bitbucket-oauth') }}"
