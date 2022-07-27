@@ -20,6 +20,11 @@ jobs:
           sudo apt-get autoremove
           sudo apt-get autoclean
           sudo rm -rf /etc/apparmor.d/abstractions/mysql /etc/apparmor.d/cache/usr.sbin.mysqld /etc/mysql /var/lib/mysql /var/log/mysql* /var/log/upstart/mysql.log* /var/run/mysqld ~/.mysql_history
+      - name: Remove and cleanup Nginx
+        run: |
+          sudo apt-get remove --purge nginx*
+          sudo apt-get autoremove
+          sudo apt-get autoclean
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
