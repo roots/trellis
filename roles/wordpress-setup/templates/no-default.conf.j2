@@ -12,3 +12,12 @@ server {
   listen 80 default_server deferred;
   return 444;
 }
+
+{% if sites_use_ssl %}
+server {
+  listen [::]:443 ssl default_server deferred;
+  listen 443 ssl default_server deferred;
+
+  ssl_reject_handshake on;
+}
+{% endif %}
