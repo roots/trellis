@@ -5,3 +5,4 @@ vendor/roles
 *.py[co]
 *.retry
 .trellis/virtualenv
+.trellis/root_certificates
