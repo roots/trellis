@@ -29,6 +29,15 @@
   notify: reload nginx
   tags: nginx-sites
 
+- name: Disable Nginx sites
+  file:
+    path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
+    state: absent
+  when: not(item.enabled | default(true))
+  with_items: "{{ nginx_sites_confs }}"
+  notify: reload nginx
+  tags: nginx-sites
+
 - name: Enable Nginx sites
   file:
     path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
@@ -36,15 +45,6 @@
     state: link
     force: yes
   when: item.enabled | default(true)
-  with_items: "{{ nginx_sites_confs }}"
-  notify: reload nginx
-  tags: nginx-sites
-
-- name: Disable Nginx sites
-  file:
-    path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
-    state: absent
-  when: not(item.enabled | default(true))
   with_items: "{{ nginx_sites_confs }}"
   notify: reload nginx
   tags: nginx-sites
