@@ -4,7 +4,9 @@
     name: "{{ item.key }}"
     state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_dict: "{{ memcached_packages }}"
+  loop: "{{ memcached_packages |dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Copy the client configuration file
   template:

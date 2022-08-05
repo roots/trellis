@@ -4,7 +4,7 @@
     include_vars:
       file: group_vars/{{ item }}/wordpress_sites.yml
       name: "{{ item }}_sites"
-    with_items: "{{ envs_with_wp_sites }}"
+    loop: "{{ envs_with_wp_sites }}"
     when: envs_with_wp_sites | count > 1
 
   - name: Fail if there are duplicate site keys within host's wordpress_sites
@@ -15,7 +15,7 @@
         are duplicated between the `{{ item.env_pair | join('` and `') }}` groups:
           {{ item.site_keys | to_nice_yaml | indent(2) }}
     when: item.site_keys | count
-    with_items: "{{ site_keys_by_env_pair }}"
+    loop: "{{ site_keys_by_env_pair }}"
 
   when:
     - env_groups | count > 1
@@ -30,7 +30,9 @@
 - name: Validate format of site_hosts
   fail:
     msg: "{{ lookup('template', 'site_hosts.j2') }}"
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count
   tags: [letsencrypt, wordpress]
 
@@ -144,7 +146,9 @@
     name: "{{ item.key }}"
     state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_dict: "{{ apt_packages }}"
+  loop: "{{ apt_packages | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Validate timezone variable
   stat:

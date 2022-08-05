@@ -8,7 +8,9 @@
       login_user: "{{ mysql_root_user }}"
       login_password: "{{ mysql_root_password }}"
     no_log: true
-    with_dict: "{{ wordpress_sites }}"
+    loop: "{{ wordpress_sites | dict2items }}"
+    loop_control:
+      label: "{{ item.key }}"
 
   - name: Create/assign database user to db and grant permissions
     mysql_user:
@@ -22,6 +24,8 @@
       login_user: "{{ mysql_root_user }}"
       login_password: "{{ mysql_root_password }}"
     no_log: true
-    with_dict: "{{ wordpress_sites }}"
+    loop: "{{ wordpress_sites | dict2items }}"
+    loop_control:
+      label: "{{ item.key }}"
 
   when: site_uses_local_db and item.value.db_create | default(true)

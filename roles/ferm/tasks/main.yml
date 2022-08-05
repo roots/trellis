@@ -20,7 +20,7 @@
     path: "{{ item }}"
     state: directory
     mode: '0750'
-  with_items:
+  loop:
     - /etc/ferm/ferm.d
     - /etc/ferm/filter-input.d
 
@@ -29,7 +29,7 @@
     src: "{{ item }}.j2"
     dest: /{{ item }}
     mode: '0644'
-  with_items:
+  loop:
     - etc/default/ferm
     - etc/ferm/ferm.conf
   notify:
@@ -42,10 +42,7 @@
         {% else %}
         path=/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ item.type }}_{{ item.dport[0] }}.conf
         {% endif %}
-  with_flattened:
-    - "{{ ferm_input_list }}"
-    - "{{ ferm_input_group_list }}"
-    - "{{ ferm_input_host_list }}"
+  loop: "{{ ferm_input_list + ferm_input_group_list + ferm_input_host_list | flatten}}"
   when: ((item.type is defined and item.type) and (item.dport is defined and item.dport)) and
         (item.delete is defined and item.delete)
 
@@ -57,10 +54,7 @@
             dest=/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ item.type }}_{{ item.dport[0] }}.conf
             {% endif %}
             mode=0644
-  with_flattened:
-    - "{{ ferm_input_list }}"
-    - "{{ ferm_input_group_list }}"
-    - "{{ ferm_input_host_list }}"
+  loop: "{{ ferm_input_list + ferm_input_group_list + ferm_input_host_list | flatten}}"
   when: (item.type is defined and item.type and item.dport is defined and item.dport) and
         (item.delete is undefined or (item.delete is defined and not item.delete))
 

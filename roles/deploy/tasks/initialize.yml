@@ -4,10 +4,10 @@
     path: "{{ item }}"
   delegate_to: localhost
   register: deploy_initialize_before_paths
-  with_items: "{{ deploy_initialize_before | default([]) }}"
+  loop: "{{ deploy_initialize_before | default([]) }}"
 
 - include_tasks: "{{ include_path.item }}"
-  with_items: "{{ deploy_initialize_before_paths.results }}"
+  loop: "{{ deploy_initialize_before_paths.results }}"
   loop_control:
     loop_var: include_path
   when: include_path.stat.exists
@@ -24,10 +24,10 @@
     path: "{{ item }}"
   delegate_to: localhost
   register: deploy_initialize_after_paths
-  with_items: "{{ deploy_initialize_after | default([]) }}"
+  loop: "{{ deploy_initialize_after | default([]) }}"
 
 - include_tasks: "{{ include_path.item }}"
-  with_items: "{{ deploy_initialize_after_paths.results }}"
+  loop: "{{ deploy_initialize_after_paths.results }}"
   loop_control:
     loop_var: include_path
   when: include_path.stat.exists

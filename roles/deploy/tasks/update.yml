@@ -4,10 +4,10 @@
     path: "{{ item }}"
   delegate_to: localhost
   register: deploy_update_before_paths
-  with_items: "{{ deploy_update_before | default([]) }}"
+  loop: "{{ deploy_update_before | default([]) }}"
 
 - include_tasks: "{{ include_path.item }}"
-  with_items: "{{ deploy_update_before_paths.results }}"
+  loop: "{{ deploy_update_before_paths.results }}"
   loop_control:
     loop_var: include_path
   when: include_path.stat.exists
@@ -19,7 +19,9 @@
     key: "{{ item.key | default(omit) }}"
     path: "{{ item.path | default(omit) }}"
     state: "{{ item.state | default('present') }}"
-  with_items: "{{ known_hosts | default([]) }}"
+  loop: "{{ known_hosts | default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
 
 - name: Clone project files
   git:
@@ -56,10 +58,10 @@
     path: "{{ item }}"
   delegate_to: localhost
   register: deploy_update_after_paths
-  with_items: "{{ deploy_update_after | default([]) }}"
+  loop: "{{ deploy_update_after | default([]) }}"
 
 - include_tasks: "{{ include_path.item }}"
-  with_items: "{{ deploy_update_after_paths.results }}"
+  loop: "{{ deploy_update_after_paths.results }}"
   loop_control:
     loop_var: include_path
   when: include_path.stat.exists

@@ -4,10 +4,10 @@
     path: "{{ item }}"
   delegate_to: localhost
   register: deploy_prepare_before_paths
-  with_items: "{{ deploy_prepare_before | default([]) }}"
+  loop: "{{ deploy_prepare_before | default([]) }}"
 
 - include_tasks: "{{ include_path.item }}"
-  with_items: "{{ deploy_prepare_before_paths.results }}"
+  loop: "{{ deploy_prepare_before_paths.results }}"
   loop_control:
     loop_var: include_path
   when: include_path.stat.exists
@@ -59,10 +59,10 @@
     path: "{{ item }}"
   delegate_to: localhost
   register: deploy_prepare_after_paths
-  with_items: "{{ deploy_prepare_after | default([]) }}"
+  loop: "{{ deploy_prepare_after | default([]) }}"
 
 - include_tasks: "{{ include_path.item }}"
-  with_items: "{{ deploy_prepare_after_paths.results }}"
+  loop: "{{ deploy_prepare_after_paths.results }}"
   loop_control:
     loop_var: include_path
   when: include_path.stat.exists
