@@ -8,6 +8,9 @@
     changed_when: site_transient_theme_roots.stdout != ''
     when: project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool
 
+  - debug:
+      var: wp_template_root.results
+
   - name: Update WP theme paths
     command: >
       wp option set {{ item[0].item }}
