@@ -26,7 +26,7 @@
     mode: "{{ item.mode | default(omit) }}"
     path: "{{ item.path }}"
     state: directory
-  with_items:
+  loop:
     - path: "{{ acme_tiny_data_directory }}"
       mode: '0700'
     - path: "{{ acme_tiny_data_directory }}/csrs"
@@ -34,6 +34,8 @@
     - path: "{{ acme_tiny_challenges_directory }}"
     - path: "{{ letsencrypt_certs_dir }}"
       mode: '0700'
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: Clone acme-tiny repository
   git:

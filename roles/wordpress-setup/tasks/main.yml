@@ -21,7 +21,9 @@
     group: "{{ web_group }}"
     mode: '0755'
     state: directory
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Create WordPress php-fpm configuration file
   template:
@@ -51,7 +53,9 @@
     job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp cron event run --due-now > /dev/null 2>&1"
     cron_file: "wordpress-{{ item.key | replace('.', '_') }}"
     state: "{{ (cron_enabled and not item.value.multisite.enabled) | ternary('present', 'absent') }}"
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Setup WP Multisite system cron
   cron:
@@ -61,4 +65,6 @@
     job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp site list --field=url | xargs -n1 -I \\% wp --url=\\% cron event run --due-now > /dev/null 2>&1"
     cron_file: "wordpress-multisite-{{ item.key | replace('.', '_') }}"
     state: "{{ (cron_enabled and item.value.multisite.enabled) | ternary('present', 'absent') }}"
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"

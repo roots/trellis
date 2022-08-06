@@ -31,7 +31,7 @@
       file:
         path: "{{ item }}"
         state: absent
-      with_items:
+      loop:
         - "/tmp/wp-cli-{{ wp_cli_version }}.phar"
         - "/tmp/wp-cli-{{ wp_cli_version }}.phar.asc"
     - name: Fail verification
@@ -66,4 +66,4 @@
   changed_when:
     - "'Nothing to install or update' not in wp_cli_packages_installed.stdout"
     - "'Package operations: 0 installs, 0 updates, 0 removals' not in wp_cli_packages_installed.stdout"
-  with_items: "{{ wp_cli_packages }}"
+  loop: "{{ wp_cli_packages }}"

@@ -4,7 +4,9 @@
     name: "{{ item.key }}"
     state: "{{ item.value }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
-  with_dict: "{{ sshd_packages }}"
+  loop: "{{ sshd_packages | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   notify: restart ssh
 
 - name: Create a secure sshd_config
