@@ -1,4 +1,8 @@
 ### HEAD
+* Fix backwards compat for ssl.no-default conf ([#1415](https://github.com/roots/trellis/pull/1415))
+* Simplify Nginx no-default sites for HTTPS ([#1414](https://github.com/roots/trellis/pull/1414))
+* Improve composer authentications password default ([#1412](https://github.com/roots/trellis/pull/1412))
+* Run composer check-platform-reqs during deploy ([#1411](https://github.com/roots/trellis/pull/1411))
 * [BREAKING] Disable HSTS `includeSubdomains` by default ([#1409](https://github.com/roots/trellis/pull/1409))
 * Fix #905, #831 - Update hb5p Nginx configs ([#1406](https://github.com/roots/trellis/pull/1406))
 
