@@ -6,22 +6,11 @@
       ansible-playbook server.yml -e env={{ env | default('production') }} -u root --ask-pass
   when: dynamic_user | default(true) and ansible_user is not defined and cli_ask_pass | default(false)
 
-- name: Specify preferred HostKeyAlgorithms for unknown hosts
-  set_fact:
-    ansible_ssh_extra_args: -o HostKeyAlgorithms={{ host_key_algorithms }}
-  register: preferred_host_key_algorithms
-  when:
-    - dynamic_host_key_algorithms | default(true)
-    - not ansible_ssh_extra_args | default(None)
-    - not (ansible_host_known or ssh_config_host_known)
-
 - name: Check whether Ansible can connect as {{ dynamic_user | default(true) | ternary('root', web_user) }}
   command: |
     ansible {{ inventory_hostname }} -m raw -a whoami
     -u {{ dynamic_user | default(true) | ternary('root', web_user) }} {{ cli_options | default('') }} -vvvv
   delegate_to: localhost
-  environment:
-    ANSIBLE_SSH_ARGS: "{{ ssh_args_default }} {{ ansible_ssh_extra_args | default('') }}"
   failed_when: false
   changed_when: false
   check_mode: no
@@ -61,19 +50,6 @@
     debug:
       msg: |
         Note: Ansible will attempt connections as user = {{ ansible_user }}
-        {% if preferred_host_key_algorithms is not skipped %}
-
-        Note: The host `{{ ansible_host }}` was not detected in known_hosts
-        so Trellis prompted the host to offer a key type that will work with
-        the stronger key types Trellis configures on the server. This avoids future
-        connection failures due to changed host keys. Trellis used this SSH option:
-
-          {{ ansible_ssh_extra_args }}
-
-        To prevent Trellis from ever using this SSH option, add this to group_vars:
-
-          dynamic_host_key_algorithms: false
-        {% endif %}
 
   - name: Load become password
     set_fact:
