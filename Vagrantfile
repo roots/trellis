@@ -181,6 +181,11 @@ Vagrant.configure('2') do |config|
     prl.cpus = vconfig.fetch('vagrant_cpus')
     prl.memory = vconfig.fetch('vagrant_memory')
     prl.update_guest_tools = true
+
+    # Parallels handles DNS resolution itself when used in conjunction with landrush
+    if Vagrant.has_plugin?('landrush') && trellis_config.multisite_subdomains?
+      config.landrush.guest_redirect_dns = false
+    end
   end
 
   # Hyper-V settings
