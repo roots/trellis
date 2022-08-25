@@ -6,12 +6,16 @@
     mode: '0644'
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Copy .env file into web root
   synchronize:
     src: "/tmp/{{ item.key }}.env"
     dest: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/.env"
     checksum: true
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   delegate_to: "{{ inventory_hostname }}"

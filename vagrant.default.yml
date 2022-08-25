@@ -7,6 +7,7 @@ vagrant_box_version: '>= 202012.23.0'
 vagrant_ansible_version: '2.10.7'
 vagrant_skip_galaxy: false
 vagrant_mount_type: 'nfs'
+vagrant_require_version: '>= 2.1.0'
 
 vagrant_install_plugins: true
 vagrant_plugins:

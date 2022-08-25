@@ -4,12 +4,13 @@
     path: "{{ item }}"
   delegate_to: localhost
   register: deploy_finalize_before_paths
-  with_items: "{{ deploy_finalize_before | default([]) }}"
+  loop: "{{ deploy_finalize_before | default([]) }}"
 
 - include_tasks: "{{ include_path.item }}"
-  with_items: "{{ deploy_finalize_before_paths.results }}"
+  loop: "{{ deploy_finalize_before_paths.results }}"
   loop_control:
     loop_var: include_path
+    label: "{{ include_path.item }}"
   when: include_path.stat.exists
   tags: deploy-finalize-before
 
@@ -26,12 +27,13 @@
     path: "{{ item }}"
   delegate_to: localhost
   register: deploy_finalize_after_paths
-  with_items: "{{ deploy_finalize_after | default([]) }}"
+  loop: "{{ deploy_finalize_after | default([]) }}"
 
 - include_tasks: "{{ include_path.item }}"
-  with_items: "{{ deploy_finalize_after_paths.results }}"
+  loop: "{{ deploy_finalize_after_paths.results }}"
   loop_control:
     loop_var: include_path
+    label: "{{ include_path.item }}"
   when: include_path.stat.exists
   tags: deploy-finalize-after
 

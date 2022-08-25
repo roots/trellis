@@ -20,6 +20,11 @@ jobs:
           sudo apt-get autoremove
           sudo apt-get autoclean
           sudo rm -rf /etc/apparmor.d/abstractions/mysql /etc/apparmor.d/cache/usr.sbin.mysqld /etc/mysql /var/lib/mysql /var/log/mysql* /var/log/upstart/mysql.log* /var/run/mysqld ~/.mysql_history
+      - name: Remove and cleanup Nginx
+        run: |
+          sudo apt-get remove --purge nginx*
+          sudo apt-get autoremove
+          sudo apt-get autoclean
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -56,6 +61,9 @@ jobs:
         working-directory: /srv/www/example.com/current
       - name: Verify install
         run: curl -s http://example.com | grep "<title>Example"
+      - name: Deploy previously deployed site
+        run: trellis deploy --extra-vars "web_user=runner project_git_repo=https://github.com/roots/bedrock.git" production example.com
+        working-directory: example.com
       - name: Deploy https site
         run: trellis deploy --extra-vars "web_user=runner project_git_repo=https://github.com/roots/bedrock.git" production example-https.com
         working-directory: example.com

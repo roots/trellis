@@ -12,14 +12,18 @@
     path: "{{ item.path | default(omit) }}"
     state: "{{ item.state | default('present') }}"
   become: no
-  with_items: "{{ known_hosts | default([]) }}"
+  loop: "{{ known_hosts | default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
 
 - include_tasks: tasks/composer-authentications.yml
   vars:
     site: "{{ item.key }}"
     working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   no_log: true
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Install Dependencies with Composer
   composer:
@@ -27,7 +31,9 @@
     optimize_autoloader: no
     working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   become: no
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
 
 - name: Install WP
   command: wp core {{ item.value.multisite.enabled | default(false) | ternary('multisite-install', 'install') }}
@@ -46,7 +52,9 @@
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   register: wp_install
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when: item.value.site_install | default(true)
   changed_when: "'WordPress is already installed.' not in wp_install.stdout and 'The network already exists.' not in wp_install.stdout"
 
@@ -54,12 +62,14 @@
   command: wp rewrite structure {{ item.item.value.initial_permalink_structure | default("/%postname%/") }} --allow-root
   args:
     chdir: "{{ www_root }}/{{ item.item.key }}/{{ item.item.value.current_path | default('current') }}/"
-  with_items: "{{ wp_install.results }}"
+  loop: "{{ wp_install.results }}"
   when: item is changed
 
 - name: Update WP Multisite Home URL
   command: wp option update home {{ site_env.wp_home }} --allow-root
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when: item.value.site_install | default(true) and item.value.multisite.enabled | default(false)

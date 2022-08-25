@@ -21,7 +21,7 @@
       state: directory
       recurse: yes
       mode: '0755'
-    with_items: "{{ nginx_includes_templates.files | map(attribute='path') |
+    loop: "{{ nginx_includes_templates.files | map(attribute='path') |
                     map('regex_replace', nginx_includes_pattern, '\\2') |
                     map('dirname') | unique | list | sort
                  }}"
@@ -32,7 +32,7 @@
       src: "{{ item }}"
       dest: "{{ nginx_path }}/includes.d/{{ item | regex_replace(nginx_includes_pattern, '\\2') }}"
       mode: '0644'
-    with_items: "{{ nginx_includes_templates.files | map(attribute='path') | list | sort(True) }}"
+    loop: "{{ nginx_includes_templates.files | map(attribute='path') | list | sort(True) }}"
     notify: reload nginx
   when: nginx_includes_local_directory.stat.isdir is defined
 
@@ -54,7 +54,7 @@
       file:
         path: "{{ item }}"
         state: absent
-      with_items: "{{ nginx_includes_existing.files | default({}) | map(attribute='path') |
+      loop: "{{ nginx_includes_existing.files | default({}) | map(attribute='path') |
                       difference(nginx_includes_templates.files | default({} )| map(attribute='path') |
                         map('regex_replace', nginx_includes_pattern, nginx_path + '/includes.d/\\2') | unique
                       ) | list

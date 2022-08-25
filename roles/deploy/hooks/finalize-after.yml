@@ -10,15 +10,15 @@
 
   - name: Update WP theme paths
     command: >
-      wp option set {{ item[0].option }}
+      wp option set {{ item[0].item }}
       {{ item[1] | regex_replace('.*' + deploy_helper.releases_path + '/[^/]*(.*)', deploy_helper.new_release_path + '\1') }}
       {% if project.multisite.enabled | default(false) %} --url={{ item[1].split(' ')[0] }}{% endif %}
     args:
       chdir: "{{ deploy_helper.current_path }}"
-    when: project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool
-    with_subelements:
-      - "[{% for result in wp_template_root.results %}{'option': '{{ result.item }}', 'stdout_lines': {{ result.stdout_lines | default ([]) | select('search', deploy_helper.releases_path) | list }}},{% endfor %}]"
-      - stdout_lines
+    loop: "{{ wp_template_root.results | subelements('stdout_lines', skip_missing=true) }}"
+    loop_control:
+      label: "{{ item[0].item }}"
+    when: project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool and item[1] is match(deploy_helper.releases_path)
 
   - name: Warn about updating network database.
     debug:

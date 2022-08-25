@@ -49,7 +49,7 @@
       check_implicit_admin: yes
       state: present
     no_log: true
-    with_items:
+    loop:
       - "{{ inventory_hostname }}"
       - 127.0.0.1
       - ::1
@@ -61,7 +61,7 @@
       host: "{{ item }}"
       state: absent
     no_log: true
-    with_items:
+    loop:
       - localhost
       - "{{ inventory_hostname }}"
       - "{{ ansible_hostname }}"

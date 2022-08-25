@@ -10,7 +10,9 @@
     src: self-signed-openssl-config.j2
     dest: "{{ nginx_ssl_path }}/self-signed-openssl-configs/{{ item.key }}.cnf"
     mode: '0644'
-  with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when:
     - sites_use_ssl | bool
     - ssl_enabled | bool
@@ -24,7 +26,9 @@
   args:
     chdir: "{{ nginx_ssl_path }}"
     creates: "{{ item.key }}.*"
-  with_dict: "{{ wordpress_sites | combine(ssl_default_site) }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when:
     - sites_use_ssl | bool
     - ssl_enabled | bool

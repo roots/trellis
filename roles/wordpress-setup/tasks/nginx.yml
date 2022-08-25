@@ -4,7 +4,9 @@
     src: "{{ item.value.ssl.cert }}"
     dest: "{{ nginx_ssl_path }}/{{ item.value.ssl.cert | basename }}"
     mode: '0640'
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when: ssl_enabled and item.value.ssl.cert is defined
   notify: reload nginx
 
@@ -13,7 +15,9 @@
     src: "{{ item.value.ssl.key }}"
     dest: "{{ nginx_ssl_path }}/{{ item.value.ssl.key | basename }}"
     mode: '0600'
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when: ssl_enabled and item.value.ssl.key is defined
   notify: reload nginx
 
@@ -24,8 +28,17 @@
     src: "{{ item.src }}"
     dest: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
     mode: '0644'
-  with_items: "{{ nginx_sites_confs }}"
+  loop: "{{ nginx_sites_confs }}"
   when: item.enabled | default(true)
+  notify: reload nginx
+  tags: nginx-sites
+
+- name: Disable Nginx sites
+  file:
+    path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
+    state: absent
+  when: not(item.enabled | default(true))
+  loop: "{{ nginx_sites_confs }}"
   notify: reload nginx
   tags: nginx-sites
 
@@ -36,16 +49,7 @@
     state: link
     force: yes
   when: item.enabled | default(true)
-  with_items: "{{ nginx_sites_confs }}"
-  notify: reload nginx
-  tags: nginx-sites
-
-- name: Disable Nginx sites
-  file:
-    path: "{{ nginx_path }}/sites-enabled/{{ item.src | basename | regex_replace('.j2$', '') }}"
-    state: absent
-  when: not(item.enabled | default(true))
-  with_items: "{{ nginx_sites_confs }}"
+  loop: "{{ nginx_sites_confs }}"
   notify: reload nginx
   tags: nginx-sites
 
@@ -61,7 +65,9 @@
     src: "{{ item.value.nginx_wordpress_site_conf | default(nginx_wordpress_site_conf) }}"
     dest: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
     mode: '0644'
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   notify: reload nginx
   tags: nginx-includes
 
@@ -72,5 +78,7 @@
     owner: root
     group: root
     state: link
-  with_dict: "{{ wordpress_sites }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   notify: reload nginx

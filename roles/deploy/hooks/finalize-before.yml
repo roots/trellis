@@ -56,6 +56,6 @@
   when:
     - wp_installed.rc == 0
     - project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool
-  with_items:
+  loop:
     - template_root
     - stylesheet_root

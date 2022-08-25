@@ -51,6 +51,8 @@ update_db_on_deploy: true
 
 # Most scripts are used in development instead of remote servers. Use with caution.
 composer_no_scripts: true
+# Whether to run `composer check-platform-reqs`.
+composer_platform_requirements_check: true
 # Whether to autoload classes from classmap only.
 composer_classmap_authoritative: true
 

@@ -12,18 +12,23 @@
 - name: Setup composer authentications
   composer:
     command: config
-    arguments: --auth http-basic.{{ composer_authentication.hostname }} {{ composer_authentication.username }} {{ composer_authentication.password }}
+    arguments: --auth http-basic.{{ composer_authentication.hostname | quote }} {{ composer_authentication.username | quote }} {{ composer_authentication.password | default("") | quote }}
     working_dir: "{{ deploy_helper.new_release_path }}"
   no_log: true
   changed_when: false
   when:
     - composer_authentication.hostname is defined and composer_authentication.hostname != ""
     - composer_authentication.username is defined and composer_authentication.username != ""
-    - composer_authentication.password is defined and composer_authentication.password != ""
   loop: "{{ composer_authentications | default([]) }}"
   loop_control:
     loop_var: composer_authentication
     label: "{{ composer_authentication.hostname }}"
+
+- name: Run composer check
+  composer:
+    command: check-platform-reqs
+    working_dir: "{{ deploy_helper.new_release_path }}"
+  when: composer_platform_requirements_check
 
 - name: Install Composer dependencies
   composer:
