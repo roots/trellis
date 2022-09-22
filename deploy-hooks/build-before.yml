@@ -24,6 +24,17 @@
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #
+# - name: Check for entrypoints
+#   stat:
+#     path: "{{ project_local_path }}/web/app/themes/sage/public/entrypoints.json"
+#   delegate_to: localhost
+#   register: entrypoints_data
+
+# - name: Entrypoints missing
+#   ansible.builtin.fail:
+#     msg: "The theme is missing the public/entrypoints.json file"
+#   when: not entrypoints_data.stat.exists
+#
 # - name: Copy production assets
 #   synchronize:
 #     src: "{{ project_local_path }}/web/app/themes/sage/public"
