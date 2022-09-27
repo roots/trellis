@@ -4,6 +4,7 @@
     command: config
     arguments: --auth http-basic.{{ composer_authentication.hostname | quote }} {{ composer_authentication.username | quote }} {{ composer_authentication.password | default("") | quote }}
     working_dir: "{{ working_dir }}"
+  become: no
   no_log: true
   changed_when: false
   when:
