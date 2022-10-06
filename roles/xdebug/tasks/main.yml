@@ -1,4 +1,7 @@
 ---
+- name: Include php{{ php_version }} related vars
+  include_vars: 'roles/php/vars/{{ php_version }}.yml'
+
 - name: Install Xdebug
   apt:
     name: "{{ php_xdebug_package }}"
