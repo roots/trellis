@@ -27,7 +27,7 @@
 
 - name: Create WordPress php-fpm configuration file
   template:
-    src: php-fpm.conf.j2
+    src: php-fpm-pool-wordpress.conf.j2
     dest: /etc/php/{{ php_version }}/fpm/pool.d/wordpress.conf
     mode: '0644'
   notify: reload php-fpm

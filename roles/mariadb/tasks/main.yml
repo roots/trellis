@@ -41,6 +41,13 @@
       group: root
       mode: '0600'
 
+  - name: Copy server config file with MariaDB optimisations.
+    template:
+      src: 50-server.cnf.j2
+      dest: /etc/mysql/mariadb.conf.d/50-server.cnf
+      mode: '0644'
+    notify: restart mysql server
+
   - name: Set root user password
     mysql_user:
       name: root
