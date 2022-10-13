@@ -12,13 +12,12 @@ if File.exist?("#{ANSIBLE_PATH}/vagrant.local.yml")
   vconfig.merge!(local_config) if local_config
 end
 
-ensure_plugins(vconfig.fetch('vagrant_plugins')) if vconfig.fetch('vagrant_install_plugins')
-
 trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH)
 
 Vagrant.require_version vconfig.fetch('vagrant_require_version', '>= 2.1.0')
 
 Vagrant.configure('2') do |config|
+  config.vagrant.plugins = plugins_config(vconfig)
   config.vm.box = vconfig.fetch('vagrant_box')
   config.vm.box_version = vconfig.fetch('vagrant_box_version')
   config.ssh.forward_agent = true
