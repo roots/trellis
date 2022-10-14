@@ -43,7 +43,7 @@ server {
   }
 
   # Prevent common API POST like requests being cached
-  if ($request_method ~* (PUT|PATCH|DELETE)) {
+  if ($request_method ~ (PUT|PATCH|DELETE)) {
     set $skip_cache 1;
   }
 
