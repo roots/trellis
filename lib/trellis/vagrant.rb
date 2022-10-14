@@ -6,6 +6,19 @@ ENV['ANSIBLE_LIBRARY'] = "~/.ansible/plugins/modules:/usr/share/ansible/plugins/
 ENV['ANSIBLE_ROLES_PATH'] = File.join(ANSIBLE_PATH, 'vendor', 'roles')
 ENV['ANSIBLE_VARS_PLUGINS'] = "~/.ansible/plugins/vars:/usr/share/ansible/plugins/vars:#{File.join(ANSIBLE_PATH, 'lib/trellis/plugins/vars')}"
 
+def apple_silicon?
+  return false unless Vagrant::Util::Platform.darwin?
+
+  arch = `uname -m`.chomp
+  case arch
+  when "x86_64"
+    translated = `sysctl -in sysctl.proc_translated`.chomp
+    translated == "1"
+  when "arm64"
+    true
+  end
+end
+
 def ensure_plugins(plugins)
   logger = Vagrant::UI::Colored.new
   installed = false
