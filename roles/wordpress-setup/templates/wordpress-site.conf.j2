@@ -36,6 +36,22 @@ server {
   {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
   # Fastcgi cache conditions
   set $skip_cache 0;
+
+  # Prevent POST data being held in cache
+  if ($request_method = POST) {
+      set $skip_cache 1;
+  }
+
+  # Prevent PATCH requests from hitting cache in APIs
+  if ($request_method = PATCH) {
+      set $skip_cache 1;
+  }
+
+  # Prevent PUT requests from hitting cache in APIs
+  if ($request_method = PUT) {
+      set $skip_cache 1;
+  }
+
   if ($query_string != "") {
     set $skip_cache 1;
   }
