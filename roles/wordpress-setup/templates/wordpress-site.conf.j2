@@ -42,14 +42,9 @@ server {
       set $skip_cache 1;
   }
 
-  # Prevent PATCH requests from hitting cache in APIs
-  if ($request_method = PATCH) {
-      set $skip_cache 1;
-  }
-
-  # Prevent PUT requests from hitting cache in APIs
-  if ($request_method = PUT) {
-      set $skip_cache 1;
+  # Prevent common API POST like requests being cached
+  if ( $request_method ~* (PUT|PATCH|DELETE) ) {
+    set $skip_cache 1;
   }
 
   if ($query_string != "") {
