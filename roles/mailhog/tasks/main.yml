@@ -1,0 +1,13 @@
+- ansible.builtin.include_vars:
+    file: "{{ item }}"
+    name: mailhog_overrides
+  with_first_found:
+    - files:
+      - "vars/{{ ansible_architecture }}.yml"
+      - "vars/default.yml"
+
+- ansible.builtin.include_role:
+    name: geerlingguy.mailhog
+  vars:
+    mailhog_binary_url: "{{ mailhog_overrides.mailhog_binary_url }}"
+    mhsendmail_binary_url: "{{ mailhog_overrides.mhsendmail_binary_url }}"
