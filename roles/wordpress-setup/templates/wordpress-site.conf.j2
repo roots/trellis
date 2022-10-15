@@ -37,13 +37,8 @@ server {
   # Fastcgi cache conditions
   set $skip_cache 0;
 
-  # Prevent POST data being held in cache
-  if ($request_method = POST) {
-    set $skip_cache 1;
-  }
-
-  # Prevent common API POST like requests being cached
-  if ($request_method ~ ^(PUT|PATCH|DELETE)$) {
+  # Skip requests with HTTP methods that should not be cached: DELETE, OPTIONS, PATCH, POST, PUT
+  if ($request_method !~ ^(GET|HEAD)$) {
     set $skip_cache 1;
   }
 
