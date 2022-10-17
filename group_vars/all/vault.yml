@@ -1,4 +1,4 @@
-# Documentation: https://roots.io/trellis/docs/vault/
+# Documentation: https://docs.roots.io/trellis/master/vault/
 vault_mail_password: smtp_password
 
 # Variables to accompany `wordpress_env_defaults` in `group_vars/all/helpers.yml`

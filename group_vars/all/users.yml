@@ -1,4 +1,4 @@
-# Documentation: https://roots.io/trellis/docs/ssh-keys/
+# Documentation: https://docs.roots.io/trellis/master/ssh-keys/
 admin_user: admin
 
 # Also define 'vault_users' (`group_vars/staging/vault.yml`, `group_vars/production/vault.yml`)

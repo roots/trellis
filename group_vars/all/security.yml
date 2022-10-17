@@ -1,4 +1,4 @@
-# Documentation: https://roots.io/trellis/docs/security/
+# Documentation: https://docs.roots.io/trellis/master/security/
 
 ferm_input_list:
   - type: dport_accept

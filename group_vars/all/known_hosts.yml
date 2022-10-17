@@ -1,4 +1,4 @@
-# Documentation: https://roots.io/trellis/docs/troubleshooting/#composer-install-host-key-verification-failed
+# Documentation: https://docs.roots.io/trellis/master/troubleshooting/#composer-install-host-key-verification-failed
 
 # Host keys to add to known_hosts, e.g.,
 #   - git host for Bedrock-based project (`repo` variable in `wordpress_sites`)

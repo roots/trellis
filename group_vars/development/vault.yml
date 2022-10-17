@@ -1,4 +1,4 @@
-# Documentation: https://roots.io/trellis/docs/vault/
+# Documentation: https://docs.roots.io/trellis/master/vault/
 vault_mysql_root_password: devpw
 
 # Variables to accompany `group_vars/development/wordpress_sites.yml`

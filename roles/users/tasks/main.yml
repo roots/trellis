@@ -24,7 +24,7 @@
 
       Please note that `sudoer_passwords` and `vault_sudoer_passwords have been replaced with `vault_users`. {% endif %}
       More info:
-      > https://roots.io/trellis/docs/security/#admin-user-sudoer-password
+      > https://docs.roots.io/trellis/master/security/#admin-user-sudoer-password
   when: not sshd_permit_root_login
   tags: sshd
 

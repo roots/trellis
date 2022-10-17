@@ -134,7 +134,7 @@ Host example.com example2.com
 
 ## Troubleshooting
 
-See the Trellis docs for [troubleshooting SSH connections](https://roots.io/trellis/docs/troubleshooting/#ssh-connections).
+See the Trellis docs for [troubleshooting SSH connections](https://docs.roots.io/trellis/master/troubleshooting/#ssh-connections).
 
 ## Resources
 

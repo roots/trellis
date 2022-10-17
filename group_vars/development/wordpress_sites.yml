@@ -1,5 +1,5 @@
-# Documentation: https://roots.io/trellis/docs/local-development-setup/
-# `wordpress_sites` options: https://roots.io/trellis/docs/wordpress-sites
+# Documentation: https://docs.roots.io/trellis/master/local-development/
+# `wordpress_sites` options: https://docs.roots.io/trellis/master/wordpress-sites/
 # Define accompanying passwords/secrets in group_vars/development/vault.yml
 
 wordpress_sites:

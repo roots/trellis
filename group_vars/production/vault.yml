@@ -1,7 +1,7 @@
-# Documentation: https://roots.io/trellis/docs/vault/
+# Documentation: https://docs.roots.io/trellis/master/vault/
 vault_mysql_root_password: productionpw
 
-# Documentation: https://roots.io/trellis/docs/security/
+# Documentation: https://docs.roots.io/trellis/master/security/
 vault_users:
   - name: "{{ admin_user }}"
     password: example_password

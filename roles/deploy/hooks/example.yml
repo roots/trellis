@@ -1,5 +1,5 @@
 # This is a placeholder example hook file
-# To use deploy hooks, please refer to the docs at https://roots.io/trellis/docs/deploys
+# To use deploy hooks, please refer to the docs at https://docs.roots.io/trellis/master/deployments/#hooks
 #
 # tl;dr
 #   1. create a tasks file you wish to include on a certain hook
