@@ -1,3 +1,9 @@
+### 1.18.0: November 8th, 2022
+* Fix xdebug role by including PHP vars ([#1429](https://github.com/roots/trellis/pull/1429))
+* Automate ARM64 Vagrant box support for Apple Silicon ([#1431](https://github.com/roots/trellis/pull/1431))
+* Support ARM64 arch in Mailhog role ([#1432](https://github.com/roots/trellis/pull/1432))
+* Only allow Nginx caching for GET and HEAD requests ([#1435](https://github.com/roots/trellis/pull/1435))
+
 ### 1.17.0: September 27th, 2022
 * [BREAKING] Disable HSTS `includeSubdomains` by default ([#1409](https://github.com/roots/trellis/pull/1409))
 * Don't use sudo for composer authentications in dev ([#1427](https://github.com/roots/trellis/pull/1427))
