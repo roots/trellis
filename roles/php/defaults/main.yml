@@ -24,8 +24,10 @@ php_output_buffering: 'Off'
 
 php_opcache_enable: 1
 php_opcache_enable_cli: 1
+php_opcache_enable_file_override: 0
 php_opcache_fast_shutdown: 1
 php_opcache_interned_strings_buffer: 8
 php_opcache_max_accelerated_files: 4000
 php_opcache_memory_consumption: 128
 php_opcache_revalidate_freq: 60
+php_opcache_validate_timestamps: 1
