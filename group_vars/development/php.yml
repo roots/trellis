@@ -2,7 +2,7 @@ php_error_reporting: 'E_ALL'
 php_display_errors: 'On'
 php_display_startup_errors: 'On'
 php_mysqlnd_collect_memory_statistics: 'On'
-php_opcache_enable: 0
+php_opcache_revalidate_freq: 0
 
 xdebug_mode: 'debug'
 xdebug_start_with_request: 'yes'
