@@ -40,8 +40,6 @@
 
 - name: Install WP-CLI
   command: rsync -c --chmod=0755 --info=name /tmp/wp-cli-{{ wp_cli_version }}.phar {{ wp_cli_bin_path }}
-  args:
-    warn: false
   register: wp_cli
   changed_when: wp_cli.stdout == 'wp-cli-' + wp_cli_version + '.phar'
 
@@ -49,12 +47,9 @@
   command: curl -4Ls {{ wp_cli_completion_url }} -o /tmp/wp-completion-{{ wp_cli_version }}.bash
   args:
     creates: /tmp/wp-completion-{{ wp_cli_version }}.bash
-    warn: false
 
 - name: Install WP-CLI tab completions
   command: rsync -c --chmod=0644 --info=name /tmp/wp-completion-{{ wp_cli_version }}.bash {{ wp_cli_completion_path }}
-  args:
-    warn: false
   register: wp_cli_completion
   changed_when: wp_cli_completion.stdout == 'wp-completion-' + wp_cli_version + '.bash'
 
