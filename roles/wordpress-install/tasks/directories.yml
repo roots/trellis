@@ -31,3 +31,4 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+  when: web_user == "vagrant"
