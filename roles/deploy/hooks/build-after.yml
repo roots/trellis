@@ -9,20 +9,48 @@
     msg: "Unable to find a `composer.json` file in the root of '{{ deploy_helper.new_release_path }}'. Make sure your repo has a `composer.json` file in its root or edit `repo_subtree_path` for '{{ site }}' in `wordpress_sites.yml` so it points to the directory with a `composer.json` file."
   when: not composer_json.stat.exists
 
-- name: Setup composer authentications
+- name: Setup composer authentications (HTTP Basic)
   composer:
     command: config
-    arguments: --auth http-basic.{{ composer_authentication.hostname | quote }} {{ composer_authentication.username | quote }} {{ composer_authentication.password | default("") | quote }}
+    arguments: --auth http-basic.{{ item.hostname | quote }} {{ item.username | quote }} {{ item.password | default("") | quote }}
     working_dir: "{{ deploy_helper.new_release_path }}"
   no_log: true
   changed_when: false
   when:
-    - composer_authentication.hostname is defined and composer_authentication.hostname != ""
-    - composer_authentication.username is defined and composer_authentication.username != ""
-  loop: "{{ composer_authentications | default([]) }}"
+    - item.hostname is defined and item.hostname != ""
+    - item.username is defined and item.username != ""
+  loop: "{{ composer_authentications_using_basic_auth }}"
   loop_control:
-    loop_var: composer_authentication
-    label: "{{ composer_authentication.hostname }}"
+    label: "{{ item.type | default('default-type') }}.{{ item.hostname }}"
+
+- name: Setup composer authentications (BitBucket OAuth)
+  composer:
+    command: config
+    arguments: --auth bitbucket-oauth.{{ item.hostname | quote }} {{ item.consumer_key | quote }} {{ item.consumer_secret | quote }}
+    working_dir: "{{ deploy_helper.new_release_path }}"
+  no_log: true
+  changed_when: false
+  when:
+    - item.hostname is defined and item.hostname != ""
+    - item.consumer_key is defined and item.consumer_key != ""
+    - item.consumer_secret is defined and item.consumer_secret != ""
+  loop: "{{ composer_authentications_using_bitbucket_oauth }}"
+  loop_control:
+    label: "{{ item.type }}.{{ item.hostname }}"
+
+- name: Setup composer authentications (Other Tokens)
+  composer:
+    command: config
+    arguments: --auth {{ item.type | quote }}.{{ item.hostname | quote }} {{ item.token | quote }}
+    working_dir: "{{ deploy_helper.new_release_path }}"
+  no_log: true
+  changed_when: false
+  when:
+    - item.hostname is defined and item.hostname != ""
+    - item.token is defined and item.token != ""
+  loop: "{{ composer_authentications_using_other_token }}"
+  loop_control:
+    label: "{{ item.type }}.{{ item.hostname }}"
 
 - name: Run composer check
   composer:
