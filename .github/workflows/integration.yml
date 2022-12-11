@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       - run: mkdir $HOME/.ssh
       - name: Remove and cleanup mysql
