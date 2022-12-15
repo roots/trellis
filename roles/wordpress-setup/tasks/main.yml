@@ -62,7 +62,7 @@
     name: "{{ item.key }} WordPress network cron"
     minute: "{{ item.value.cron_interval_multisite | default('*/30') }}"
     user: "{{ web_user }}"
-    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && wp site list --field=url | xargs -n1 -I \\% wp --url=\\% cron event run --due-now > /dev/null 2>&1"
+    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && (wp site list --field=url | xargs -n1 -I \\% wp --url=\\% cron event run --due-now) > /dev/null 2>&1"
     cron_file: "wordpress-multisite-{{ item.key | replace('.', '_') }}"
     state: "{{ (cron_enabled and item.value.multisite.enabled) | ternary('present', 'absent') }}"
   loop: "{{ wordpress_sites | dict2items }}"
