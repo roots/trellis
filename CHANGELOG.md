@@ -1,3 +1,15 @@
+### HEAD
+* Prevent ansible-core 2.13.6 [#1448](https://github.com/roots/trellis/pull/1448)
+* Enable PHP opcache in development [#1447](https://github.com/roots/trellis/pull/1447)
+* Remove deprecated warn usage [#1450](https://github.com/roots/trellis/pull/1450)
+* Composer Authentication: Add support for `bearer`, `gitlab-oauth`, `gitlab-token`, `github-oauth` and `bitbucket-oauth` principles [#1413](https://github.com/roots/trellis/pull/1413)
+* Update `wp_cli_version` to 2.7.1 [#1451](https://github.com/roots/trellis/pull/1451)
+* Disable chown site directory task by default [#1452](https://github.com/roots/trellis/pull/1452)
+* Update oefenweb.swapfile role [#1455](https://github.com/roots/trellis/pull/1455)
+* Allow remote and local databases for a site [#1457](https://github.com/roots/trellis/pull/1457)
+* Fix standard output for multisite cron job [#1458](https://github.com/roots/trellis/pull/1458)
+* Fix sshd config - set AcceptEnv conditionally [#1453](https://github.com/roots/trellis/pull/1453)
+
 ### 1.18.0: November 8th, 2022
 * Fix xdebug role by including PHP vars ([#1429](https://github.com/roots/trellis/pull/1429))
 * Automate ARM64 Vagrant box support for Apple Silicon ([#1431](https://github.com/roots/trellis/pull/1431))
