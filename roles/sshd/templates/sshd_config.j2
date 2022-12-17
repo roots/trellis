@@ -13,7 +13,9 @@ ListenAddress {{ address }}
 
 Protocol {{ sshd_protocol }}
 
-AcceptEnv {{ sshd_accept_env | join(' ') }}
+{% if sshd_accept_env | count %}
+  AcceptEnv {{ sshd_accept_env | join(' ') }}
+{% endif -%}
 AllowAgentForwarding {{ sshd_allow_agent_forwarding | ternary('yes', 'no') }}
 AllowTcpForwarding {{ sshd_allow_tcp_forwarding is string | ternary(sshd_allow_tcp_forwarding, sshd_allow_tcp_forwarding | ternary('yes', 'no')) }}
 ChallengeResponseAuthentication {{ sshd_challenge_response_authentication | ternary('yes', 'no') }}
