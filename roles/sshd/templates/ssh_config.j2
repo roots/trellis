@@ -17,7 +17,9 @@ Host *
   KexAlgorithms {{ (ssh_kex_algorithms_default | default(sshd_kex_algorithms_default) + ssh_kex_algorithms_extra | default(sshd_kex_algorithms_extra)) | join(',') }}
   MACs {{ (ssh_macs_default | default(sshd_macs_default) + ssh_macs_extra | default(sshd_macs_extra)) | join(',') }}
   PasswordAuthentication {{ ssh_password_authentication | default(sshd_password_authentication) | ternary('yes', 'no') }}
-  SendEnv {{ ssh_send_env | join(' ') }}
+  {% if ssh_send_env | count %}
+    SendEnv {{ ssh_send_env | join(' ') }}
+  {% endif -%}
   StrictHostKeyChecking {{ ssh_strict_host_key_checking }}
   UseRoaming {{ ssh_use_roaming | ternary('yes','no') }}
 {% endblock %}
