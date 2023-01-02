@@ -1,4 +1,5 @@
-### HEAD
+### 1.19.0: January 2nd, 2023
+* Composer Authentication: Add support for `bearer`, `gitlab-oauth`, `gitlab-token`, `github-oauth` and `bitbucket-oauth` principles [#1413](https://github.com/roots/trellis/pull/1413)
 * Prevent ansible-core 2.13.6 [#1448](https://github.com/roots/trellis/pull/1448)
 * Enable PHP opcache in development [#1447](https://github.com/roots/trellis/pull/1447)
 * Remove deprecated warn usage [#1450](https://github.com/roots/trellis/pull/1450)
