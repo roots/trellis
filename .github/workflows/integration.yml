@@ -37,6 +37,7 @@ jobs:
           ansible-vault-password: 'fake'
           auto-init: false
           galaxy-install: false
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           trellis-directory: '.'
       - name: Create new Trellis project
         run: trellis new --name example.com --host www.example.com --trellis-version ${{ github.sha }} ./example.com
