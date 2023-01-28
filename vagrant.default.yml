@@ -2,7 +2,7 @@
 vagrant_ip: '192.168.56.5'
 vagrant_cpus: 1
 vagrant_memory: 1024 # in MB
-vagrant_box: 'bento/ubuntu-20.04'
+vagrant_box: 'bento/ubuntu-22.04'
 vagrant_box_version: '>= 0'
 vagrant_box_auto_arch: true
 vagrant_ansible_version: '2.10.7'
