@@ -50,6 +50,7 @@
            --admin_user="{{ item.value.admin_user | default('admin') }}"
            --admin_password="{{ vault_wordpress_sites[item.key].admin_password }}"
            --admin_email="{{ item.value.admin_email }}"
+  become: no
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
   register: wp_install
