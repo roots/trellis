@@ -8,6 +8,7 @@ vagrant_box_auto_arch: true
 vagrant_ansible_version: '2.10.7'
 vagrant_skip_galaxy: false
 vagrant_mount_type: 'nfs'
+vagrant_nfs_udp: false
 vagrant_require_version: '>= 2.1.0'
 
 vagrant_install_plugins: true
@@ -20,6 +21,7 @@ vagrant_plugins:
 #   destination: /path/on/vm
 #   create: false
 #   type: nfs
+#   nfs_udp: false
 #   bindfs: true
 #   mount_options: []
 #   bindfs_options: {}
