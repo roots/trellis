@@ -151,6 +151,10 @@ Vagrant.configure('2') do |config|
       ansible.extra_vars.merge!(extra_vars)
     end
 
+    if local_provisioning?
+      ansible.extra_vars.merge!('vagrant_local_provisioning' => true)
+    end
+
     if !Vagrant::Util::Platform.windows?
       config.trigger.after :up do |trigger|
         # Add Vagrant ssh-config to ~/.ssh/config
