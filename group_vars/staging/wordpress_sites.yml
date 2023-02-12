@@ -19,3 +19,5 @@ wordpress_sites:
       provider: letsencrypt
     cache:
       enabled: false
+    xmlrpc:
+      enabled: false
