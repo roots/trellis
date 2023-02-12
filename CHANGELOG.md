@@ -1,3 +1,15 @@
+### 1.20.0: February 12th, 2023
+* Set development web_user to ansible_user [#1464](https://github.com/roots/trellis/pull/1464)
+* Update boxes to Ubuntu 22.04 [#1461](https://github.com/roots/trellis/pull/1461)
+* Composer Authentications: Fix `loop_var` already in use issue [#1469](https://github.com/roots/trellis/pull/1469)
+* Install wp as the default user [#1470](https://github.com/roots/trellis/pull/1470)
+* Allow non-default upload_path [#1471](https://github.com/roots/trellis/pull/1471)
+* Vagrant: disable NFS udp by default [#1472](https://github.com/roots/trellis/pull/1472)
+* Run SSH key generate task for local provision only [#1473](https://github.com/roots/trellis/pull/1473)
+* Disable xmlrpc by default [#1467](https://github.com/roots/trellis/pull/1467)
+
+**Full Changelog**: https://github.com/roots/trellis/compare/v1.19.0...v1.20.0
+
 ### 1.19.0: January 2nd, 2023
 * Composer Authentication: Add support for `bearer`, `gitlab-oauth`, `gitlab-token`, `github-oauth` and `bitbucket-oauth` principles [#1413](https://github.com/roots/trellis/pull/1413)
 * Prevent ansible-core 2.13.6 [#1448](https://github.com/roots/trellis/pull/1448)
