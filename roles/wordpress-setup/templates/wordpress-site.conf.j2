@@ -83,27 +83,22 @@ server {
 
   ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
 
-  {% if item.value.ssl.provider | default('manual') != 'self-signed' -%}
+  {% if env != 'development' -%}
   add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') }}";
   {% endif -%}
 
-  {% if item.value.ssl.client_cert_url is defined -%}
-  ssl_verify_client       on;
-  ssl_client_certificate  {{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt;
+  {% if site_ssl.client_cert_url is defined -%}
+  ssl_verify_client      on
+  ssl_client_certificate {{ nginx_ssl_path }}/client-{{ (site_ssl.manual.client_cert_url | hash('md5'))[:7] }}.crt;
   {% endif -%}
 
-  {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
-  ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
-  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
+  {% if 'manual' in site_ssl and site_ssl.manual.ssl_certificate is defined and site_ssl.manual.key is defined -%}
+  ssl_certificate     {{ nginx_ssl_path }}/{{ site_ssl.manual.ssl_certificate | basename }};
+  ssl_certificate_key {{ nginx_ssl_path }}/{{ site_ssl.manual.key | basename }};
 
-  {% elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
-  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-bundled.cert;
-  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
-
-  {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
-  ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
-  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ item.key }}.cert;
-  ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.key }}.key;
+  {% elif site_ssl.acme is defined -%}
+  ssl_certificate     /etc/letsencrypt/live/{{ item.key }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ item.key }}/privkey.pem;
 
   {% endif -%}
   {% endif -%}

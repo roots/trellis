@@ -1,0 +1,74 @@
+- name: Fail if acme_ca_contact_emails is not defined
+  fail:
+    msg: >
+      Error: the required `acme_ca_contact_emails` variable is not defined or invalid.
+
+
+      Please define it in `groups_vars/all/main.yml` with at least one email (as a list/array, *not* a string):
+
+        acme_ca_contact_emails:
+          - changeme@example.com
+
+      The contact email is used by the ACME certificate authority (usually Let's Encrypt) to send expiry notices when a certificate is coming up for renewal.
+
+
+      See https://letsencrypt.org/docs/expiration-emails/ for more information.
+
+
+      Since Trellis attempts to renew certificates after {{ ssl_renewal_min_age }} days ({{ 90 - ssl_renewal_min_age }} days before renewal),
+      getting an expiry notice email means something has gone wrong giving you enough notice to fix the problem.
+
+  when: (acme_ca_contact_emails is not defined) or (acme_ca_contact_emails is string)
+
+- name: Ensure older Trellis renew cron is removed
+  cron:
+    cron_file: letsencrypt-certificate-renewal
+    name: letsencrypt certificate renewal
+    state: absent
+
+- include_tasks:
+    file: local_ca.yml
+    apply:
+      become: yes
+  when: sites_using_acme_ssl | count and acme_ca_server == local_acme_ca_server
+
+- name: Install certbot packages
+  apt:
+    name:
+      - certbot
+      - python3-certbot
+    state: present
+
+- import_tasks: acme_nginx_challenges.yml
+
+- name: Register with ACME CA server
+  shell: certbot register --agree-tos --no-eff-email --email {{ acme_ca_contact_emails | join(",") }} --server {{ acme_ca_server }}
+  become: yes
+  register: acme_registration
+  failed_when:
+    - acme_registration.rc != 0
+    - '"There is an existing account" not in acme_registration.stderr'
+
+- name: Install cronjob for certificate renewal
+  cron:
+    cron_file: acme-certificate-renewal
+    name: ACME certificate renewal
+    user: root
+    job: certbot renew -q --deploy-hook "/usr/sbin/service nginx reload"
+    day: "{{ ssl_renewal_cronjob_daysofmonth }}"
+    hour: "4"
+    minute: "30"
+    state: present
+
+- name: Generate SSL certificates
+  include_tasks:
+    file: "{{ lookup('first_found', files) }}"
+    apply:
+      become: yes
+  vars:
+    files:
+      - "{{ ssl_certificates_challenge_filepath | default(omit) }}/{{ site_ssl.acme.challenge.type }}.yml"
+      - "{{ site_ssl.acme.challenge.type }}.yml"
+  when: site_uses_acme
+  with_dict: "{{ wordpress_sites }}"
+  tags: [wordpress, wordpress-setup, wordpress-setup-nginx, nginx-includes]

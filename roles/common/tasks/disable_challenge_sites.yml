@@ -1,7 +1,7 @@
 ---
 - name: disable temporary challenge sites
   file:
-    path: "{{ nginx_path }}/sites-enabled/letsencrypt-{{ item }}.conf"
+    path: "{{ nginx_path }}/sites-enabled/acme-challenge-{{ item }}.conf"
     state: absent
   loop: "{{ wordpress_sites.keys() | list }}"
   notify: reload nginx

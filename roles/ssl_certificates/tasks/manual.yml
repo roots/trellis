@@ -1,0 +1,19 @@
+- name: Copy manual SSL certificate
+  copy:
+    src: "{{ site_ssl.manual.certificate }}"
+    dest: "{{ nginx_ssl_path }}/{{ site_ssl.manual.certificate | basename }}"
+    mode: '0640'
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  notify: reload nginx
+
+- name: Copy manual SSL certificate key
+  copy:
+    src: "{{ site_ssl.manual.key }}"
+    dest: "{{ nginx_ssl_path }}/{{ site_ssl.manual.key | basename }}"
+    mode: '0600'
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  notify: reload nginx

@@ -1,0 +1,58 @@
+- name: Get DEB architecture
+  shell: dpkg --print-architecture
+  register: deb_architecture
+
+- name: Install step-cli binary
+  unarchive:
+    src: "{{ step_cli_deb_url | replace('amd64', deb_architecture.stdout) }}"
+    dest: /usr/bin
+    extra_opts:
+      - --strip=2
+    remote_src: yes
+
+- name: Install step-ca binary
+  unarchive:
+    src: "{{ step_ca_deb_url | replace('amd64', deb_architecture.stdout) }}"
+    dest: /usr/bin
+    extra_opts:
+      - --strip=2
+    remote_src: yes
+
+- name: Create step-ca directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ step_ca_path }}"
+
+- name: Generate password file
+  shell:
+    cmd: "echo $(openssl rand -hex 12) > {{ step_ca_path }}/password.txt"
+    creates: "{{ step_ca_path }}/password.txt"
+
+- name: Initialize step certificate authority
+  shell:
+    cmd: |
+      step ca init --name trellis-local-ca --dns 127.0.0.1 --address :{{ step_ca_port }} --provisioner admin --password-file {{ step_ca_path }}/password.txt --provisioner-password-file {{ step_ca_path }}/password.txt
+      step ca provisioner add acme --type ACME
+    creates: "{{ step_ca_path }}/certs/root_ca.crt"
+  environment:
+    STEPPATH: "{{ step_ca_path }}"
+
+- name: Install local root certificate
+  command:
+    cmd: step certificate install {{ step_ca_root_cert_path }}
+  environment:
+    STEPPATH: "{{ step_ca_path }}"
+
+- name: Copy systemd unit
+  template:
+    src: step-ca.service.j2
+    dest: /etc/systemd/system/step-ca.service
+
+- name: Enable step-ca service
+  service:
+    name: step-ca
+    enabled: yes
+    state: started
+    use: service
