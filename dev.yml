@@ -11,7 +11,7 @@
     - { role: ntp, tags: [ntp] }
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb] }
-    - { role: mailhog, tags: [mailhog, mail] }
+    - { role: mailpit, tags: [mailpit, mailhog, mail] }
     - { role: php, tags: [php] }
     - { role: xdebug, tags: [php, xdebug] }
     - { role: memcached, tags: [memcached] }
