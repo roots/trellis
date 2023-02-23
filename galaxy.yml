@@ -19,6 +19,3 @@ roles:
   - name: mailpit
     src: roots.mailpit
     version: v1.0.0
-
-  - src: geerlingguy.mailhog
-    version: 2.3.0
