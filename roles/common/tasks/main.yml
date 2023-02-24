@@ -172,7 +172,7 @@
 
 - name: Generate SSH key for vagrant user for ansible_local provisioning
   user:
-    name: "{{ ansible_user }}"
+    name: vagrant
     generate_ssh_key: yes
   when: vagrant_local_provisioning | default(false)
 
