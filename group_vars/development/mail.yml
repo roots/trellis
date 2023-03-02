@@ -1,2 +1,2 @@
 # Documentation: https://roots.io/trellis/docs/mail/
-php_sendmail_path: "{{ mailhog_install_dir }}/mhsendmail"
+php_sendmail_path: "{{ mailpit_install_dir }}/mailpit sendmail"

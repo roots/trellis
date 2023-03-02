@@ -16,5 +16,6 @@ roles:
     src: oefenweb.swapfile
     version: v2.0.36
 
-  - src: geerlingguy.mailhog
-    version: 2.3.0
+  - name: mailpit
+    src: roots.mailpit
+    version: v1.0.0
