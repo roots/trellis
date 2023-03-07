@@ -36,24 +36,18 @@
     - restart ferm
 
 - name: ensure iptables INPUT rules are removed
-  file: state=absent
-        {% if item.filename is defined and item.filename %}
-        path=/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ item.filename }}.conf
-        {% else %}
-        path=/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ item.type }}_{{ item.dport[0] }}.conf
-        {% endif %}
+  file:
+    path: "/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ (item.filename is defined and item.filename) | ternary(item.filename, item.type + '_' + item.dport[0]) }}.conf"
+    state: absent
   loop: "{{ ferm_input_list + ferm_input_group_list + ferm_input_host_list | flatten}}"
   when: ((item.type is defined and item.type) and (item.dport is defined and item.dport)) and
         (item.delete is defined and item.delete)
 
 - name: ensure iptables INPUT rules are added
-  template: src=etc/ferm/filter-input.d/{{ item.type }}.conf.j2
-            {% if item.filename is defined and item.filename %}
-            dest=/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ item.filename }}.conf
-            {% else %}
-            dest=/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ item.type }}_{{ item.dport[0] }}.conf
-            {% endif %}
-            mode=0644
+  template:
+    src: "etc/ferm/filter-input.d/{{ item.type }}.conf.j2"
+    dest: "/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ (item.filename is defined and item.filename) | ternary(item.filename, item.type + '_' + item.dport[0]) }}.conf"
+    mode: 0644
   loop: "{{ ferm_input_list + ferm_input_group_list + ferm_input_host_list | flatten}}"
   when: (item.type is defined and item.type and item.dport is defined and item.dport) and
         (item.delete is undefined or (item.delete is defined and not item.delete))
