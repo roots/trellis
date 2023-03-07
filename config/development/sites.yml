@@ -1,0 +1,11 @@
+example.com:
+  host: example.test
+  redirects:
+    - from: www.example.test
+      to: example.test
+  extra_hosts:
+    - another-host.test
+  ssl:
+    enabled: false
+  cache:
+    enabled: false

@@ -1,6 +1,0 @@
-server {
-  listen [::]:80;
-  listen 80;
-  server_name {{ missing_hosts | join(' ') }};
-  include acme-challenge-location.conf;
-}

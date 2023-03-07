@@ -1,0 +1,14 @@
+example.com:
+  path: ../site
+  repo: git@github.com/roots/bedrock.git
+  repo_subtree_path: site
+  host: example.com
+  redirects:
+    - from: www.example.com
+      to: example.com
+  extra_hosts:
+    - another-host.test
+  ssl:
+    enabled: true
+  cache:
+    enabled: true

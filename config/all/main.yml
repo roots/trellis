@@ -1,0 +1,3 @@
+composer_keep_updated: true
+php_version: "8.0"
+ntp_timezone: Etc/UTC

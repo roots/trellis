@@ -1,0 +1,1 @@
+web_user: "{{ ansible_user | default ('vagrant') }}"
