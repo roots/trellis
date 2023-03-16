@@ -65,6 +65,8 @@ end
 def mount_options(mount_type, dmode:, fmode:)
   if mount_type == 'smb'
     ["vers=3.02", "mfsymlinks", "dir_mode=0#{dmode}", "file_mode=0#{fmode}", "sec=ntlm"]
+  elsif mount_type == 'parallels'
+    ["share"]
   else
     ["dmode=#{dmode}", "fmode=#{fmode}"]
   end
