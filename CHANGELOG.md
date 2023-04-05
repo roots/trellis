@@ -1,3 +1,10 @@
+### 1.21.0: April 5th, 2023
+* Add optional PHP 8.2 support [#1485](https://github.com/roots/trellis/pull/1485)
+* Default to PHP 8.1 [#1484](https://github.com/roots/trellis/pull/1484)
+* Use appropriate mount_option for 'parallels' provider [#1481](https://github.com/roots/trellis/pull/1481)
+
+**Full Changelog**: https://github.com/roots/trellis/compare/v1.20.1...v1.21.0
+
 ### 1.20.1: March 7th, 2023
 * Fix invalid arg error in ferm task [#1480](https://github.com/roots/trellis/pull/1480)
 * Fix `ansible_user` references for local provisioning [#1479](https://github.com/roots/trellis/pull/1479)
