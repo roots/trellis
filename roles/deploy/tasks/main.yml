@@ -18,14 +18,7 @@
 - import_tasks: prepare.yml
 - import_tasks: build.yml
 
-- name: "Delete the deploy if this is a dry-run"
-  ansible.builtin.file:
-    state: absent
-    path: /tmp/trellis
-  when: dry_run|default(False)
-
-- name: "Stop here if this is a dry-run"
-  meta: end_play
+- include_tasks: dryrun.yml
   when: dry_run|default(False)
 
 - import_tasks: share.yml
