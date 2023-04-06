@@ -17,6 +17,10 @@
 - import_tasks: update.yml
 - import_tasks: prepare.yml
 - import_tasks: build.yml
+
+- include_tasks: dryrun.yml
+  when: dry_run|default(False)
+
 - import_tasks: share.yml
 - import_tasks: finalize.yml
 

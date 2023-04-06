@@ -1,0 +1,7 @@
+- name: "Delete the deploy if this is a dry-run"
+  ansible.builtin.file:
+    state: absent
+    path: "{{ deploy_helper.new_release_path }}"
+
+- name: "Stop here if this is a dry-run"
+  meta: end_play
