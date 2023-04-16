@@ -1,0 +1,6 @@
+# Trellis CLI example config file
+# https://roots.io/trellis/docs/cli/#configuration
+#
+# database_app: sequel-ace
+# open:
+#   admin: "https://mysite.com/wp/wp-admin"
