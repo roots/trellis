@@ -27,7 +27,7 @@
           Invalid Git repository.
           Ensure that your site's `repo` variable is defined in `group_vars/{{ env }}/wordpress_sites.yml` and uses the SSH format (example: git@github.com:roots/bedrock.git)
           More info:
-          > https://roots.io/trellis/docs/deploys/
+          > https://roots.io/trellis/docs/deployments/
       when: project.repo is not defined or project.repo is not match("^ssh://.+@.+|.+@.+:.+")
   roles:
     - deploy
