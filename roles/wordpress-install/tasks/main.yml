@@ -18,13 +18,13 @@
 
 - include_tasks: tasks/composer-authentications.yml
   vars:
-    site: "{{ site.key }}"
-    working_dir: "{{ www_root }}/{{ site.key }}/{{ site.value.current_path | default('current') }}/"
+    site: "{{ loop_item.key }}"
+    working_dir: "{{ www_root }}/{{ loop_item.key }}/{{ loop_item.value.current_path | default('current') }}/"
   no_log: true
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
-    loop_var: site
-    label: "{{ site.key }}"
+    loop_var: loop_item # cannot be 'item' or 'site'.
+    label: "{{ loop_item.key }}"
 
 - name: Install Dependencies with Composer
   composer:
