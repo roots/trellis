@@ -208,4 +208,11 @@ Vagrant.configure('2') do |config|
     h.enable_virtualization_extensions = true
     h.linked_clone = true
   end
+
+  # Libvirt/KVM settings
+  config.vm.provider 'libvirt' do [lv]
+    lv.vmname = config.vm.hostname
+    lv.cpus = vconfig.fetch('vagrant_cpus')
+    lv.memory = vconfig.fetch('vagrant_memory')
+  end
 end
