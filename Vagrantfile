@@ -210,8 +210,9 @@ Vagrant.configure('2') do |config|
   end
 
   # Libvirt/KVM settings
-  config.vm.provider 'libvirt' do [lv]
-    lv.vmname = config.vm.hostname
+  config.vm.provider 'libvirt' do |lv|
+    lv.driver = "kvm"
+    lv.title = config.vm.hostname
     lv.cpus = vconfig.fetch('vagrant_cpus')
     lv.memory = vconfig.fetch('vagrant_memory')
   end
