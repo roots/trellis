@@ -3,6 +3,7 @@
 # ⚠️ This example assumes your theme is using Sage 10
 #
 # Uncomment the lines below if you are using Sage 10
+# NOTE: this task will fail if Sage theme is not activated at time of deployment.
 #
 # ---
 # - name: Run Acorn optimize
