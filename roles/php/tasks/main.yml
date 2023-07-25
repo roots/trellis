@@ -42,10 +42,16 @@
     state: started
     enabled: true
 
-- name: Copy PHP-FPM configuration file
+- name: Copy PHP-FPM php.ini file
   template:
     src: php-fpm.ini.j2
     dest: /etc/php/{{ php_version }}/fpm/php.ini
+    mode: '0644'
+
+- name: Copy PHP-FPM configuration file
+  template:
+    src: php-fpm.conf.j2
+    dest: /etc/php/{{ php_version }}/fpm/php-fpm.conf
     mode: '0644'
   notify: reload php-fpm
 
