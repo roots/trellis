@@ -31,3 +31,10 @@ php_opcache_max_accelerated_files: 4000
 php_opcache_memory_consumption: 128
 php_opcache_revalidate_freq: 60
 php_opcache_validate_timestamps: 1
+
+php_fpm_set_emergency_restart_threshold: false
+php_fpm_emergency_restart_threshold: 0
+php_fpm_set_emergency_restart_interval: false
+php_fpm_emergency_restart_interval: 0
+php_fpm_set_process_control_timeout: false
+php_fpm_process_control_timeout: 0
