@@ -65,7 +65,7 @@ project_upload_path: "{{ project.upload_path | default('app/uploads') }}"
 
 
 # Deploy hooks
-# For list of hooks and explanation, see https://roots.io/trellis/docs/deploys/#hooks
+# For list of hooks and explanation, see https://roots.io/trellis/docs/deployments/#hooks
 deploy_build_before:
   - "{{ playbook_dir }}/deploy-hooks/build-before.yml"
 
