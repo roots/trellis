@@ -22,6 +22,7 @@ site_keys_by_env_pair: "[
 
 apt_packages_default:
   build-essential: "{{ apt_package_state }}"
+  cron: "{{ apt_package_state }}"
   curl: "{{ apt_package_state }}"
   dbus: "{{ apt_package_state }}"
   ghostscript: "{{ apt_package_state }}"
@@ -34,7 +35,6 @@ apt_packages_default:
   python3-mysqldb: "{{ apt_package_state }}"
   python3-pycurl: "{{ apt_package_state }}"
   unzip: "{{ apt_package_state }}"
-  cron: "{{ apt_package_state }}"
 
 apt_packages_custom: {}
 apt_packages: "{{ apt_packages_default | combine(apt_packages_custom) }}"
