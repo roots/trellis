@@ -22,6 +22,7 @@ site_keys_by_env_pair: "[
 
 apt_packages_default:
   build-essential: "{{ apt_package_state }}"
+  cron: "{{ apt_package_state }}"
   curl: "{{ apt_package_state }}"
   dbus: "{{ apt_package_state }}"
   ghostscript: "{{ apt_package_state }}"
