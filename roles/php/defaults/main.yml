@@ -33,6 +33,8 @@ php_opcache_revalidate_freq: 60
 php_opcache_validate_timestamps: 1
 php_opcache_max_wasted_percentage: 5
 php_opcache_huge_code_pages: 0
+php_opcache_jit: 'tracing'
+php_opcache_jit_buffer_size: 256M
 
 php_fpm_set_emergency_restart_threshold: false
 php_fpm_emergency_restart_threshold: 0
