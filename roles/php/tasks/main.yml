@@ -61,6 +61,13 @@
     dest: /etc/php/{{ php_version }}/cli/php.ini
     mode: '0644'
 
+- name: Copy 10-opcache.ini configuration file
+  template:
+    src: 10-opcache.ini.j2
+    dest: /etc/php/{{ php_version }}/fpm/conf.d/10-opcache.ini
+    mode: '0644'
+  notify: reload php-fpm
+
 - name: Change ImageMagick policy.xml to allow for PDFs
   replace:
     path: /etc/ImageMagick-6/policy.xml
