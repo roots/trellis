@@ -1,6 +1,11 @@
 # {{ ansible_managed }}
 
-{% block server_before %}{% endblock %}
+{% block server_before %}
+map $upstream_cache_status $header_x_cache_enabled {
+  default true;
+  BYPASS  "";
+}
+{% endblock %}
 
 server {
   {% block server_id -%}
@@ -18,6 +23,9 @@ server {
   root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/{{ item.value.public_path | default('web') }};
   index index.php index.htm index.html;
   add_header Fastcgi-Cache $upstream_cache_status;
+
+  # Extra header for WordPress (notably its Site Health check)
+  add_header X-Cache-Enabled $header_x_cache_enabled;
 
   # Specify a charset
   charset utf-8;
