@@ -11,21 +11,10 @@
   args:
     removes: "/tmp/mariadb_release_signing_key.asc"
 
-- name: Setup MariaDB repository
-  ansible.builtin.copy:
-    dest: "/etc/apt/sources.list.d/mariadb.list"
-    content: |
-      # Ansible managed
-      {{ mariadb_ppa }}
-    mode: "0644"
-
-- name: Install necessary packages for repository management
-  ansible.builtin.apt:
-    name:
-      - apt-transport-https
-      - gnupg
-    state: present
-    update_cache: true
+- name: Add MariaDB PPA
+  apt_repository:
+    repo: "{{ mariadb_ppa }}"
+    update_cache: yes
 
 - name: Install MySQL client
   ansible.builtin.apt:
