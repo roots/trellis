@@ -41,7 +41,7 @@
   vars:
     params:
       files:
-        - '{{ php_version }}.yml' # e.g. 8.1.yml
+        - '{{ php_version }}.yml' # e.g. 8.2.yml
         - version-specific-defaults.yml
       paths:
         - "{{ playbook_dir }}/roles/php/vars/"
