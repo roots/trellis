@@ -1,15 +1,8 @@
 ---
-- name: Download MariaDB GPG key
-  ansible.builtin.get_url:
+- name: Add an Apt signing key, uses whichever key is at the URL
+  ansible.builtin.apt_key:
     url: "https://mariadb.org/mariadb_release_signing_key.asc"
-    dest: "/tmp/mariadb_release_signing_key.asc"
-    mode: '0644'
-
-- name: Add the MariaDB GPG key to apt
-  ansible.builtin.shell:
-    cmd: "apt-key add /tmp/mariadb_release_signing_key.asc"
-  args:
-    removes: "/tmp/mariadb_release_signing_key.asc"
+    state: present
 
 - name: Add MariaDB PPA
   apt_repository:
