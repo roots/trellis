@@ -1,6 +1,4 @@
 mariadb_version: 10.6
-mariadb_keyserver: "hkp://keyserver.ubuntu.com:80"
-mariadb_keyserver_id: "0xF1656F24C74CD1D8"
 mariadb_ppa: "deb https://mirror.rackspace.com/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main"
 
 mariadb_client_package: mariadb-client
