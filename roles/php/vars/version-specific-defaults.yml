@@ -3,11 +3,11 @@
 #
 # To override these defaults for a specific php version, duplicate this
 # file to roles/php/vars/ and rename with your specific php version
-# e.g. roles/php/vars/8.1.yml.
+# e.g. roles/php/vars/8.2.yml.
 #
 # You can then use e.g.
 # php_extensions_default:
-#   php8.1-bcmath: "{{ apt_package_state }}"
+#   php8.2-bcmath: "{{ apt_package_state }}"
 #
 php_extensions_default:
   "php{{ php_version }}-bcmath": "{{ apt_package_state }}"
