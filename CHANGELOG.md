@@ -1,3 +1,18 @@
+### 1.22.0: April 24th, 2024
+* Fix MariaDB apt-key is deprecated failure [#1515](https://github.com/roots/trellis/pull/1515)
+* Default to PHP 8.2, add PHP 8.3 support [#1514](https://github.com/roots/trellis/pull/1514)
+* Add PHP JIT and enable it by default [#1505](https://github.com/roots/trellis/pull/1505)
+* Update wp_cli_version to 2.9.0 [#1508](https://github.com/roots/trellis/pull/1508)
+* Add `cron` to default `apt` packages [#1506](https://github.com/roots/trellis/pull/1506)
+* Enable PHP OPCache overwrites for `max_wasted_percentage` & `huge_code_pages` [#1503](https://github.com/roots/trellis/pull/1503)
+* Add MariaDB server config for optimizatons [#1497](https://github.com/roots/trellis/pull/1497)
+* Add PHP-FPM conf and tuning settings [#1496](https://github.com/roots/trellis/pull/1496)
+* CLI config updates [#1486](https://github.com/roots/trellis/pull/1486)
+* Update Bitbucket Cloud SSH Host Keys [#1492](https://github.com/roots/trellis/pull/1492)
+* Add Libvirt to the Vagrant config file [#1490](https://github.com/roots/trellis/pull/1490)
+
+**Full Changelog**: https://github.com/roots/trellis/compare/v1.21.0...v1.22.0
+
 ### 1.21.0: April 5th, 2023
 * Add optional PHP 8.2 support [#1485](https://github.com/roots/trellis/pull/1485)
 * Default to PHP 8.1 [#1484](https://github.com/roots/trellis/pull/1484)
