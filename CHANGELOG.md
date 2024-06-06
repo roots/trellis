@@ -1,3 +1,6 @@
+### 1.22.1: May 30th, 2024
+* Fix Nginx apt-key is deprecated failure [#1518](https://github.com/roots/trellis/pull/1518)
+
 ### 1.22.0: April 24th, 2024
 * Fix MariaDB apt-key is deprecated failure [#1515](https://github.com/roots/trellis/pull/1515)
 * Default to PHP 8.2, add PHP 8.3 support [#1514](https://github.com/roots/trellis/pull/1514)

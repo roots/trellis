@@ -1,8 +1,8 @@
 ---
 - name: Add Nginx APT key
-  apt_key:
-    keyserver: "{{ nginx_keyserver }}"
-    id: "{{ nginx_keyserver_id }}"
+  ansible.builtin.apt_key:
+    url: "https://nginx.org/keys/nginx_signing.key"
+    state: present
 
 - name: Add Nginx PPA
   apt_repository:
@@ -10,10 +10,10 @@
     update_cache: yes
 
 - name: Install Nginx
-  apt:
+  ansible.builtin.apt:
     name: "{{ nginx_package }}"
     state: "{{ nginx_package_state | default(apt_package_state) }}"
-    cache_valid_time: "{{ apt_cache_valid_time }}"
+    update_cache: true
 
 - name: Ensure site directories exist
   file:
