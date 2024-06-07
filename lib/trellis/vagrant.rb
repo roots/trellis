@@ -86,7 +86,8 @@ def post_up_message
     wordpress_sites.each do |site_name, site|
       site_url = site['site_hosts'].first
       site_url = site_url.is_a?(Hash) ? site_url['canonical'] : site_url
-      msg << "\n\n   🌱 Name: #{site_name}: \n   🔗 URL: http://#{site_url}"
+      site_url = site['ssl']['enabled'] ? "https://#{site_url}" : "http://#{site_url}"
+      msg << "\n\n   🌱 Name: #{site_name}: \n   🔗 URL: #{site_url}"
     end
   end
 
