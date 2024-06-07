@@ -79,6 +79,16 @@ def post_up_message
   msg << "\n* You can SSH into the machine with `vagrant ssh`."
   msg << "\n* Then navigate to your WordPress sites at `/srv/www`"
   msg << "\n  or to your Trellis files at `#{ANSIBLE_PATH_ON_VM}`."
+  sites = YAML.load_file(File.join(ANSIBLE_PATH, 'group_vars/development/wordpress_sites.yml'))
+  wordpress_sites = sites['wordpress_sites']
+  if wordpress_sites.any?
+    msg << "\n\n* Your Trellis is hosting the following WordPress development sites:"
+    wordpress_sites.each do |site_name, site|
+      site_url = site['site_hosts'].first
+      site_url = site_url.is_a?(Hash) ? site_url['canonical'] : site_url
+      msg << "\n\n   🌱 Name: #{site_name}: \n   🔗 URL: http://#{site_url}"
+    end
+  end
 
   msg
 end
