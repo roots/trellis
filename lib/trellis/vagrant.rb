@@ -82,12 +82,17 @@ def post_up_message
   sites = YAML.load_file(File.join(ANSIBLE_PATH, 'group_vars/development/wordpress_sites.yml'))
   wordpress_sites = sites['wordpress_sites']
   if wordpress_sites.any?
-    msg << "\n\n* Your Trellis is hosting the following WordPress development sites:"
+    msg << "\n\n\e[35m🚀 Development URLs: \e[0m"
     wordpress_sites.each do |site_name, site|
       site_url = site['site_hosts'].first
       site_url = site_url.is_a?(Hash) ? site_url['canonical'] : site_url
       site_url = site['ssl']['enabled'] ? "https://#{site_url}" : "http://#{site_url}"
-      msg << "\n\n   🌱 Name: #{site_name}: \n   🔗 URL: #{site_url}"
+      msg << "\n
+  🌱 \e[37mName:\e[33m #{site_name}\e[0m
+   ├── 🔗 \e[37mURL:\e[33m #{site_url}\e[0m
+   ├── 🛠️ \e[37mAdmin:\e[33m #{site_url}/wp-admin\e[0m
+   └── 📩 \e[37mMailpit:\e[33m #{site_url}:8025\e[0m
+    "
     end
   end
 
