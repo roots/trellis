@@ -2,7 +2,7 @@
 vault_mail_password: smtp_password
 
 # Variables to accompany `wordpress_env_defaults` in `group_vars/all/helpers.yml`
-# Note: These values can be overriden by `vault_wordpress_sites.*.env`
+# Note: These values can be overridden by `vault_wordpress_sites.*.env`
 #
 # vault_wordpress_env_defaults:
 #   my_api_key: 'available to all environments'
