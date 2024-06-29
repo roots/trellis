@@ -19,6 +19,7 @@
     command: config
     arguments: --auth bitbucket-oauth.{{ item.hostname | quote }} {{ item.consumer_key | quote }} {{ item.consumer_secret | quote }}
     working_dir: "{{ working_dir }}"
+  become: no
   no_log: true
   changed_when: false
   when:
@@ -34,6 +35,7 @@
     command: config
     arguments: --auth {{ item.type | quote }}.{{ item.hostname | quote }} {{ item.token | quote }}
     working_dir: "{{ working_dir }}"
+  become: no
   no_log: true
   changed_when: false
   when:
