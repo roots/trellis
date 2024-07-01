@@ -2,14 +2,13 @@
 vagrant_ip: '192.168.56.5'
 vagrant_cpus: 1
 vagrant_memory: 1024 # in MB
-vagrant_box: 'bento/ubuntu-22.04'
+vagrant_box: 'bento/ubuntu-24.04'
 vagrant_box_version: '>= 0'
-vagrant_box_auto_arch: true
 vagrant_ansible_version: '2.10.7'
 vagrant_skip_galaxy: false
 vagrant_mount_type: 'nfs'
 vagrant_nfs_udp: false
-vagrant_require_version: '>= 2.1.0'
+vagrant_require_version: '>= 2.4.0'
 
 vagrant_install_plugins: true
 vagrant_plugins:
