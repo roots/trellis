@@ -7,8 +7,8 @@ nginx_sites_confs:
   - src: ssl.no-default.conf.j2
     enabled: false
 
-http2_enabled: true
-http3_enabled: false
+nginx_http2_enabled: true
+nginx_http3_enabled: false
 
 # HSTS defaults
 nginx_hsts_max_age: 31536000
