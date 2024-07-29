@@ -6,6 +6,13 @@ server {
   {% block server_id -%}
   listen {{ ssl_enabled | ternary('[::]:443 ssl', '[::]:80') }};
   listen {{ ssl_enabled | ternary('443 ssl', '80') }};
+
+  {% if ssl_enabled and nginx_http3_enabled -%}
+  # Listen on UDP for QUIC+HTTP/3
+  listen [::]:443 quic;
+  listen 443 quic;
+  {% endif -%}
+
   http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
@@ -15,6 +22,17 @@ server {
   access_log   {{ www_root }}/{{ item.key }}/logs/access.log main;
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
   {% endblock %}
+
+  {% if ssl_enabled and nginx_http3_enabled -%}
+  quic_retry on;
+  # enable 0-RTT
+  ssl_early_data on;
+  proxy_set_header Early-Data $ssl_early_data;
+  quic_gso on;
+
+  # Add Alt-Svc header to negotiate HTTP/3.
+  add_header alt-svc 'h3=":443"; ma=86400';
+  {% endif -%}
 
   {% block server_basic -%}
   root  {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/{{ item.value.public_path | default('web') }};
@@ -277,6 +295,11 @@ server {
 
   {{ self.includes_d() -}}
 
+  {% if ssl_enabled and nginx_http3_enabled -%}
+  # Add Alt-Svc header to negotiate HTTP/3 (when redirecting from HTTP).
+  add_header alt-svc 'h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443"; ma=86400';
+  {% endif -%}
+
   location / {
     return 301 https://$host$request_uri;
   }
@@ -295,11 +318,30 @@ server {
   listen [::]:443 ssl;
   listen 443 ssl;
   {% endif -%}
+
   listen [::]:80;
   listen 80;
+
+  {% if ssl_enabled and nginx_http3_enabled -%}
+  # Listen on UDP for QUIC+HTTP/3
+  listen [::]:443 quic;
+  listen 443 quic;
+  {% endif -%}
+
   http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ host.redirects | join(' ') }};
+
+  {% if ssl_enabled and nginx_http3_enabled -%}
+  quic_retry on;
+  # enable 0-RTT
+  ssl_early_data on;
+  proxy_set_header Early-Data $ssl_early_data;
+  quic_gso on;
+
+  # Add Alt-Svc header to negotiate HTTP/3 (when redirecting from HTTP).
+  add_header alt-svc 'h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443"; ma=86400';
+  {% endif -%}
 
   {{ self.https() -}}
 

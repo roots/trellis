@@ -11,3 +11,5 @@ ferm_default_policy_forward: DROP
 ferm_input_list: []
 ferm_input_group_list: []
 ferm_input_host_list: []
+
+sites_using_ssl: "[{% for name, site in wordpress_sites.items() | list if site.ssl.enabled %}'{{ name }}',{% endfor %}]"

@@ -2,7 +2,7 @@
 
 ferm_input_list:
   - type: dport_accept
-    dport: [http, https]
+    dport: [http]
     filename: nginx_accept
   - type: dport_accept
     dport: [ssh]
