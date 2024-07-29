@@ -24,6 +24,16 @@
     - /etc/ferm/ferm.d
     - /etc/ferm/filter-input.d
 
+- name: allow inbound HTTPS
+  set_fact:
+    ferm_input_list: "{{ ferm_input_list + [ ferm_dport_nginx_https] }}"
+  when: sites_using_ssl | count
+  vars:
+    ferm_dport_nginx_https:
+      type: dport_accept
+      dport: [https]
+      filename: nginx_accept_https
+
 - name: ensure firewall is configured
   template:
     src: "{{ item }}.j2"
