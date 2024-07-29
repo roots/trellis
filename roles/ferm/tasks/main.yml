@@ -35,6 +35,29 @@
   notify:
     - restart ferm
 
+
+- name: allow conditionally inbound HTTPS
+  set_fact:
+    ferm_input_list: "{{ ferm_input_list + [ ferm_dport_nginx_https] }}"
+  when: sites_using_ssl | count
+  vars:
+    ferm_dport_nginx_https:
+      type: dport_accept
+      dport: [https]
+      filename: nginx_accept_https
+
+- name: allow conditionally port UDP/443 for HTTP/3 (QUIC) support
+  set_fact:
+    ferm_input_list: "{{ ferm_input_list + [ ferm_dport_nginx_http3] }}"
+  when: nginx_http3_enabled and (sites_using_ssl | count)
+  vars:
+    ferm_dport_nginx_http3:
+      type: dport_accept
+      dport: ['443']
+      protocol: udp
+      filename: nginx_accept_http3
+
+
 - name: ensure iptables INPUT rules are removed
   file:
     path: "/etc/ferm/filter-input.d/{{ item.weight | default('50') }}_{{ (item.filename is defined and item.filename) | ternary(item.filename, item.type + '_' + item.dport[0]) }}.conf"
