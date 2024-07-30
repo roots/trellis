@@ -7,7 +7,7 @@ server {
   listen {{ ssl_enabled | ternary('[::]:443 ssl', '[::]:80') }};
   listen {{ ssl_enabled | ternary('443 ssl', '80') }};
 
-  {% if ssl_enabled and nginx_http3_enabled -%}
+  {% if nginx_http3_enabled and ssl_enabled -%}
   # Listen on UDP for QUIC+HTTP/3
   listen [::]:443 quic;
   listen 443 quic;
@@ -23,7 +23,7 @@ server {
   error_log    {{ www_root }}/{{ item.key }}/logs/error.log;
   {% endblock %}
 
-  {% if ssl_enabled and nginx_http3_enabled -%}
+  {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/http3-tune.conf;
   include includes/directive-only/http3-negotiate.conf;
   {% endif -%}
@@ -289,7 +289,7 @@ server {
 
   {{ self.includes_d() -}}
 
-  {% if ssl_enabled and nginx_http3_enabled -%}
+  {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/http3-negotiate-redirect.conf;
   {% endif -%}
 
@@ -315,7 +315,7 @@ server {
   listen [::]:80;
   listen 80;
 
-  {% if ssl_enabled and nginx_http3_enabled -%}
+  {% if nginx_http3_enabled and ssl_enabled -%}
   # Listen on UDP for QUIC+HTTP/3
   listen [::]:443 quic;
   listen 443 quic;
@@ -325,7 +325,7 @@ server {
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ host.redirects | join(' ') }};
 
-  {% if ssl_enabled and nginx_http3_enabled -%}
+  {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/http3-tune.conf;
   include includes/directive-only/http3-negotiate-redirect.conf;
   {% endif -%}
