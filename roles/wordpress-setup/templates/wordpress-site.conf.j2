@@ -24,14 +24,8 @@ server {
   {% endblock %}
 
   {% if ssl_enabled and nginx_http3_enabled -%}
-  quic_retry on;
-  # enable 0-RTT
-  ssl_early_data on;
-  proxy_set_header Early-Data $ssl_early_data;
-  quic_gso on;
-
-  # Add Alt-Svc header to negotiate HTTP/3.
-  add_header alt-svc 'h3=":443"; ma=86400';
+  include includes/directive-only/http3-tune.conf;
+  include includes/directive-only/http3-negotiate.conf;
   {% endif -%}
 
   {% block server_basic -%}
@@ -296,8 +290,7 @@ server {
   {{ self.includes_d() -}}
 
   {% if ssl_enabled and nginx_http3_enabled -%}
-  # Add Alt-Svc header to negotiate HTTP/3 (when redirecting from HTTP).
-  add_header alt-svc 'h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443"; ma=86400';
+  include includes/directive-only/http3-negotiate-redirect.conf;
   {% endif -%}
 
   location / {
@@ -333,14 +326,8 @@ server {
   server_name {{ host.redirects | join(' ') }};
 
   {% if ssl_enabled and nginx_http3_enabled -%}
-  quic_retry on;
-  # enable 0-RTT
-  ssl_early_data on;
-  proxy_set_header Early-Data $ssl_early_data;
-  quic_gso on;
-
-  # Add Alt-Svc header to negotiate HTTP/3 (when redirecting from HTTP).
-  add_header alt-svc 'h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400, h3=":443"; ma=86400';
+  include includes/directive-only/http3-tune.conf;
+  include includes/directive-only/http3-negotiate-redirect.conf;
   {% endif -%}
 
   {{ self.https() -}}
