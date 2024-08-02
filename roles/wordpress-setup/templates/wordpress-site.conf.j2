@@ -26,9 +26,6 @@ server {
   index index.php index.htm index.html;
   add_header Fastcgi-Cache $upstream_cache_status;
 
-  # Extra header for WordPress (notably its Site Health check)
-  add_header X-Cache-Enabled $header_x_cache_enabled;
-
   # Specify a charset
   charset utf-8;
 
@@ -247,6 +244,8 @@ server {
     {% block location_php_basic -%}
     try_files $uri /index.php;
 
+    # Additional proxy header for WordPress (notably its Site Health check)
+    add_header X-Cache-Enabled $loopback_header_x_cache_enabled;
     {% endblock -%}
 
     {% block cache_config -%}

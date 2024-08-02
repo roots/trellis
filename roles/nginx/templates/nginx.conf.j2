@@ -50,7 +50,22 @@ pid        /run/nginx.pid;
 {% endblock %}
 
 http {
-  {% block http_begin %}{% endblock %}
+  {% block http_begin %}
+  map $upstream_cache_status $header_x_cache_enabled {
+    default true;
+    BYPASS  "";
+  }
+
+  map $server_addr:$remote_addr $is_loopback_request {
+    "~^([^:]+):\1$" 1;
+    default         0;
+  }
+
+  map $is_loopback_request:$header_x_cache_enabled $loopback_header_x_cache_enabled {
+    default "";
+    1:true  true;
+  }
+  {% endblock %}
 
   {% block server_tokens -%}
   # Hide nginx version information.
