@@ -23,7 +23,7 @@
 
 - import_tasks: "{{ playbook_dir }}/roles/common/tasks/disable_challenge_sites.yml"
 
-- name: Copy Nginx wordpress site configs
+- name: Copy Nginx Wordpress site include folder
   copy:
     src: templates/includes
     dest: "{{ nginx_path }}"
