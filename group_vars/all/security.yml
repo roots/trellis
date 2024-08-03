@@ -2,12 +2,8 @@
 
 ferm_input_list:
   - type: dport_accept
-    dport: [http]
+    dport: [http, https]
     filename: nginx_accept
-  - type: dport_accept
-    dport: [https]
-    filename: nginx_accept_https
-    delete: "{{ not (sites_use_ssl | bool) }}"
   - type: dport_accept
     dport: ['443']
     protocol: udp
