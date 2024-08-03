@@ -1,11 +1,6 @@
 # {{ ansible_managed }}
 
-{% block server_before %}
-map $upstream_cache_status $header_x_cache_enabled {
-  default true;
-  BYPASS  "";
-}
-{% endblock %}
+{% block server_before %}{% endblock %}
 
 server {
   {% block server_id -%}
