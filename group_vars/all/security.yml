@@ -5,6 +5,11 @@ ferm_input_list:
     dport: [http, https]
     filename: nginx_accept
   - type: dport_accept
+    dport: ['443']
+    protocol: udp
+    filename: nginx_accept_http3
+    delete: "{{ not (nginx_http3_enabled and (sites_use_ssl | bool)) }}"
+  - type: dport_accept
     dport: [ssh]
     saddr: "{{ ip_whitelist }}"
   - type: dport_limit
