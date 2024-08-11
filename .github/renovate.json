@@ -1,14 +1,18 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
-  "ansible-galaxy": {
-    "enabled": true,
-    "fileMatch": ["galaxy.yml"],
-    "packageRules": [
-      {
-        "matchDepTypes": ["roles"],
-        "enabled": true
-      }
-    ]
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^galaxy\\.ya?ml$"],
+      "matchStrings": [
+        "- name: (?<depName>[^\\n]+)\\n\\s+src: (?<packageName>[^\\n]+)\\n\\s+version: (?<currentValue>[^\\n]+)"
+      ],
+      "datasourceTemplate": "galaxy",
+      "versioningTemplate": "loose"
+    }
+  ],
+  "github-actions": {
+    "enabled": true
   }
 }
