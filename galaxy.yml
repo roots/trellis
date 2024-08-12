@@ -2,7 +2,7 @@
 roles:
   - name: composer
     src: geerlingguy.composer
-    version: 1.9.0
+    version: 1.9.2
 
   - name: ntp
     src: geerlingguy.ntp
