@@ -49,6 +49,7 @@ robots_tag_header: "{{ item.value.robots_tag_header | default({}) }}"
 robots_tag_header_enabled: "{{ robots_tag_header.enabled | default(not_prod) }}"
 
 # PHP FPM
+php_fpm_pm: 'dynamic'
 php_fpm_pm_max_children: 10
 php_fpm_pm_start_servers: 1
 php_fpm_pm_min_spare_servers: 1
