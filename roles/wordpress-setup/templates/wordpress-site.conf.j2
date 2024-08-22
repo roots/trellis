@@ -4,8 +4,10 @@
 
 server {
   {% block server_id -%}
-  listen {{ ssl_enabled | ternary('[::]:443 ssl http2', '[::]:80') }};
-  listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
+  listen {{ ssl_enabled | ternary('[::]:443 ssl', '[::]:80') }};
+  listen {{ ssl_enabled | ternary('443 ssl', '80') }};
+  http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
+  http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
   {% endblock %}
 
@@ -290,11 +292,13 @@ server {
 {% for host in item.value.site_hosts if host.redirects | default([]) %}
 server {
   {% if ssl_enabled -%}
-  listen [::]:443 ssl http2;
-  listen 443 ssl http2;
+  listen [::]:443 ssl;
+  listen 443 ssl;
   {% endif -%}
   listen [::]:80;
   listen 80;
+  http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
+  http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ host.redirects | join(' ') }};
 
   {{ self.https() -}}

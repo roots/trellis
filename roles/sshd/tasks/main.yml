@@ -9,6 +9,11 @@
     label: "{{ item.key }}"
   notify: restart ssh
 
+- name: Create the /run/sshd directory
+  file:
+    path: /run/sshd
+    state: directory
+
 - name: Create a secure sshd_config
   template:
     src: "{{ sshd_config }}"

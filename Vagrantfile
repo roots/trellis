@@ -19,14 +19,7 @@ trellis_config = Trellis::Config.new(root_path: ANSIBLE_PATH)
 Vagrant.require_version vconfig.fetch('vagrant_require_version', '>= 2.1.0')
 
 Vagrant.configure('2') do |config|
-  box = vconfig.fetch('vagrant_box')
-  box_auto_arch = vconfig.fetch('vagrant_box_auto_arch', true)
-
-  if box_auto_arch && !box.end_with?("-arm64") && apple_silicon?
-    box = "#{box}-arm64"
-  end
-
-  config.vm.box = box
+  config.vm.box = vconfig.fetch('vagrant_box')
   config.vm.box_version = vconfig.fetch('vagrant_box_version')
   config.ssh.forward_agent = true
   config.vm.post_up_message = post_up_message

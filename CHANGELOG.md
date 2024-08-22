@@ -1,3 +1,7 @@
+### HEAD
+* Update boxes to Ubuntu 24.04 [#1519](https://github.com/roots/trellis/pull/1519)
+* Update MariaDB to 10.11 [#1520](https://github.com/roots/trellis/pull/1520)
+
 ### 1.22.1: May 30th, 2024
 * Fix Nginx apt-key is deprecated failure [#1518](https://github.com/roots/trellis/pull/1518)
 

@@ -7,6 +7,9 @@ nginx_sites_confs:
   - src: ssl.no-default.conf.j2
     enabled: false
 
+nginx_http2_enabled: true
+nginx_http3_enabled: false
+
 # HSTS defaults
 nginx_hsts_max_age: 31536000
 nginx_hsts_include_subdomains: false
@@ -46,6 +49,7 @@ robots_tag_header: "{{ item.value.robots_tag_header | default({}) }}"
 robots_tag_header_enabled: "{{ robots_tag_header.enabled | default(not_prod) }}"
 
 # PHP FPM
+php_fpm_pm: 'dynamic'
 php_fpm_pm_max_children: 10
 php_fpm_pm_start_servers: 1
 php_fpm_pm_min_spare_servers: 1

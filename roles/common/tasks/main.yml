@@ -46,9 +46,9 @@
       paths:
         - "{{ playbook_dir }}/roles/php/vars/"
 
-  tags: [php, memcached]
+  tags: [memcached, php, sshd]
 
-- name: Verify dict format for apt package component variables
+- name: Verify dict format for package component variables
   fail:
     msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
   when: package_vars_wrong_format | count
@@ -63,9 +63,9 @@
       sshd_packages_default: "{{ sshd_packages_default }}"
       sshd_packages_custom: "{{ sshd_packages_custom }}"
     package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
-  tags: [sshd, memcached, php]
+  tags: [memcached, php, sshd]
 
-- name: Verify dict format for apt package combined variables
+- name: Verify dict format for package combined variables
   fail:
     msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
   when: package_vars_wrong_format | count
@@ -76,7 +76,7 @@
       php_extensions: "{{ php_extensions }}"
       sshd_packages: "{{ sshd_packages }}"
     package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
-  tags: [sshd, memcached, php]
+  tags: [memcached, php, sshd]
 
 - name: Validate Ubuntu version
   debug:
