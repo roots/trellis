@@ -4,6 +4,7 @@ nginx_ssl_path: "{{ nginx_path }}/ssl"
 
 nginx_sites_confs:
   - src: no-default.conf.j2
+  - src: http3-reuseport.conf.j2
   - src: ssl.no-default.conf.j2
     enabled: false
 
