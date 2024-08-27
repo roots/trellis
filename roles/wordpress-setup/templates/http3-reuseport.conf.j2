@@ -1,0 +1,23 @@
+# One global listen with reuseport is required for working QUIC+HTTP/3 responses
+{% if nginx_http3_enabled and sites_use_ssl and wordpress_default_site -%}
+server {
+  # Listen on UDP for QUIC+HTTP/3 globally with reuseport
+  listen [::]:443 quic default_server reuseport;
+  listen 443 quic default_server reuseport;
+
+  {% if wordpress_sites[wordpress_default_site].ssl.provider | default('manual') == 'manual' and wordpress_sites[wordpress_default_site].ssl.cert is defined and wordpress_sites[wordpress_default_site].ssl.key is defined -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ wordpress_sites[wordpress_default_site].ssl.cert | basename }};
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ wordpress_sites[wordpress_default_site].ssl.key | basename }};
+
+  {% elif wordpress_sites[wordpress_default_site].ssl.provider | default('manual') == 'letsencrypt' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ wordpress_default_site }}-bundled.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ wordpress_default_site }}.key;
+
+  {% elif wordpress_sites[wordpress_default_site].ssl.provider | default('manual') == 'self-signed' -%}
+  ssl_certificate         {{ nginx_path }}/ssl/{{ wordpress_default_site }}.cert;
+  ssl_trusted_certificate {{ nginx_path }}/ssl/{{ wordpress_default_site }}.cert;
+  ssl_certificate_key     {{ nginx_path }}/ssl/{{ wordpress_default_site }}.key;
+
+  {% endif -%}
+}
+{% endif -%}
