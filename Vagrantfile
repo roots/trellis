@@ -29,7 +29,7 @@ Vagrant.configure('2') do |config|
   config.vm.box = box
   config.vm.box_version = vconfig.fetch('vagrant_box_version')
   config.ssh.forward_agent = true
-  config.vm.post_up_message = post_up_message
+  config.vm.post_up_message = post_up_message(trellis_config)
 
   # Fix for: "stdin: is not a tty"
   # https://github.com/mitchellh/vagrant/issues/1673#issuecomment-28288042
