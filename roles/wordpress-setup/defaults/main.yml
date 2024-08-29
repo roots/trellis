@@ -5,6 +5,7 @@ nginx_ssl_path: "{{ nginx_path }}/ssl"
 nginx_sites_confs:
   - src: no-default.conf.j2
   - src: http3-reuseport.conf.j2
+    enabled: "{{ nginx_http3_enabled and (sites_use_ssl | bool) and wordpress_default_site }}"
   - src: ssl.no-default.conf.j2
     enabled: false
 
