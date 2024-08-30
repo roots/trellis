@@ -45,7 +45,7 @@ server {
   {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/http3-tune.conf;
   include includes/directive-only/http3-negotiate.conf;
-  {% endif -%}
+  {% endif %}
   {% endblock -%}
 
   {% block cache_conditions -%}
@@ -321,7 +321,7 @@ server {
   # Listen on UDP for QUIC+HTTP/3
   listen [::]:443 quic;
   listen 443 quic;
-  {% endif -%}
+  {% endif %}
 
   http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
@@ -330,7 +330,7 @@ server {
   {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/http3-tune.conf;
   include includes/directive-only/http3-negotiate-redirect.conf;
-  {% endif -%}
+  {% endif %}
 
   {{ self.https() -}}
 
