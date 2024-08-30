@@ -293,7 +293,7 @@ server {
 
   {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/http3-negotiate-redirect.conf;
-  {% endif -%}
+  {% endif %}
 
   location / {
     return 301 https://$host$request_uri;
