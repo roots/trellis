@@ -76,7 +76,6 @@
   loop_control:
     label: "{{ item.key }}"
   vars:
-    first_site_using_ssl: "{{ (sites_using_ssl | dict2items | first | default(None, True)) }}"
     is_first_site_use_ssl: "{{ first_site_using_ssl.key == item.key }}"
   notify: reload nginx
   tags: nginx-includes
