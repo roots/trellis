@@ -17,7 +17,6 @@ server {
 
   http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
-  http3_hq {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
   {% endblock %}
 
@@ -326,7 +325,6 @@ server {
 
   http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
-  http3_hq {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ host.redirects | join(' ') }};
 
   {% if nginx_http3_enabled and ssl_enabled -%}
