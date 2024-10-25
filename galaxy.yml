@@ -14,7 +14,7 @@ roles:
 
   - name: swapfile
     src: oefenweb.swapfile
-    version: v2.0.38
+    version: v2.0.41
 
   - name: mailpit
     src: roots.mailpit
