@@ -1,6 +1,16 @@
-### HEAD
-* Update boxes to Ubuntu 24.04 [#1519](https://github.com/roots/trellis/pull/1519)
+### 1.23.0: September 11th, 2024
+* Ubuntu 24.04 support [#1519](https://github.com/roots/trellis/pull/1519)
 * Update MariaDB to 10.11 [#1520](https://github.com/roots/trellis/pull/1520)
+* Update WP-CLI to v2.11.0 [#1533](https://github.com/roots/trellis/pull/1533)
+* Update dependency ntp to v2.5.0 [#1541](https://github.com/roots/trellis/pull/1541)
+* Update dependency swapfile to v2.0.38 [#1540](https://github.com/roots/trellis/pull/1540)
+* Update dependency composer to v1.9.2 [#1539](https://github.com/roots/trellis/pull/1539)
+* Conditionally add HTTPS inbound allow firewall rule [#1530](https://github.com/roots/trellis/pull/1530)
+* Use `http2` and `http3` nginx directives [#1529](https://github.com/roots/trellis/pull/1529)
+* Fix tags for common variable validations [#1544](https://github.com/roots/trellis/pull/1544)
+* Allow overriding 'pm' in PHP-FPM's pool config [#1542](https://github.com/roots/trellis/pull/1542)
+* Prevent warnings running composer as root [#1527](https://github.com/roots/trellis/pull/1527)
+* Fix undefined method `exists?` error [#1524](https://github.com/roots/trellis/pull/1524)
 
 ### 1.22.1: May 30th, 2024
 * Fix Nginx apt-key is deprecated failure [#1518](https://github.com/roots/trellis/pull/1518)
