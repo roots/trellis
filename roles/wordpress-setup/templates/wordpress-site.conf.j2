@@ -255,6 +255,7 @@ server {
 
     {% block fastcgi_basic -%}
     include fastcgi_params;
+    fastcgi_param SERVER_NAME $host;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
     fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
