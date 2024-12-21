@@ -47,8 +47,8 @@ class CallbackModule(CallbackBase):
         if not isinstance(raw_vars, list):
             raise AnsibleError('The `raw_vars` variable must be defined as a list.')
 
-        patterns = [re.sub(r'\*', '(.)*', re.sub(r'\.', '\.', var)) for var in raw_vars if var.split('.')[0] in hostvars]
-        keys = set(pattern.split('\.')[0] for pattern in patterns)
+        patterns = [re.sub(r'\*', '(.)*', re.sub(r'\.', r'\.', var)) for var in raw_vars if var.split('.')[0] in hostvars]
+        keys = set(pattern.split(r'\.')[0] for pattern in patterns)
         for key in keys:
             if key in play.vars:
                 play.vars[key] = self.raw_triage(key, play.vars[key], patterns)
