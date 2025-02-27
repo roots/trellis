@@ -1,6 +1,3 @@
-letsencrypt_contact_emails:
-  - admin@example.com
-
 wordpress_sites:
   example.com:
     site_hosts:

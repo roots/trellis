@@ -32,7 +32,6 @@ for site in {{ sites_using_letsencrypt }}:
             '--ca {{ letsencrypt_ca }} '
             '--account-key {{ letsencrypt_account_key }} '
             '--csr {} '
-            '--contact {{ letsencrypt_contact_emails | map('regex_replace', '(^.*$)', 'mailto:\\1') | join (' ') }} '
             '--acme-dir {{ acme_tiny_challenges_directory }}'
         ).format(csr_path)
 

@@ -1,26 +1,4 @@
 ---
-- name: Fail if letsencrypt_contact_emails is not defined
-  fail:
-    msg: >
-      Error: the required `letsencrypt_contact_emails` variable is not defined or invalid.
-
-
-      Please define it in `groups_vars/all/main.yml` with at least one email (as a list/array, *not* a string):
-
-        letsencrypt_contact_emails:
-          - changeme@example.com
-
-      The contact email is used by Let's Encrypt to send expiry notices when a certificate is coming up for renewal.
-
-
-      See https://letsencrypt.org/docs/expiration-emails/ for more information.
-
-
-      Since Trellis attempts to renew certificates after {{ letsencrypt_min_renewal_age }} days ({{ 90 - letsencrypt_min_renewal_age }} days before renewal),
-      getting an expiry notice email means something has gone wrong giving you enough notice to fix the problem.
-
-  when: (letsencrypt_contact_emails is not defined) or (letsencrypt_contact_emails is string)
-
 - name: Create directories and set permissions
   file:
     mode: "{{ item.mode | default(omit) }}"
