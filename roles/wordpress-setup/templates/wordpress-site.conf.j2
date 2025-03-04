@@ -79,9 +79,6 @@ server {
   {% if ssl_enabled -%}
   # SSL configuration
   include h5bp/directive-only/ssl.conf;
-  {% if ssl_stapling_enabled -%}
-  include h5bp/directive-only/ssl-stapling.conf;
-  {% endif -%}
 
   ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
 
