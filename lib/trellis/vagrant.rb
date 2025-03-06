@@ -72,13 +72,28 @@ def mount_options(mount_type, dmode:, fmode:)
   end
 end
 
-def post_up_message
+def post_up_message(trellis_config)
   msg = 'Your Trellis Vagrant box is ready to use!'
   msg << "\n* Composer and WP-CLI commands need to be run on the virtual machine"
   msg << "\n  for any post-provision modifications."
   msg << "\n* You can SSH into the machine with `vagrant ssh`."
   msg << "\n* Then navigate to your WordPress sites at `/srv/www`"
   msg << "\n  or to your Trellis files at `#{ANSIBLE_PATH_ON_VM}`."
+
+  if trellis_config.wordpress_sites.any?
+    msg << "\n\n\e[35m🚀 Development URLs: \e[0m"
+    trellis_config.wordpress_sites.each do |site_name, site|
+      site_url = site['site_hosts'].first
+      site_url = site_url.is_a?(Hash) ? site_url['canonical'] : site_url
+      site_url = site.dig('ssl', 'enabled') ? "https://#{site_url}" : "http://#{site_url}"
+      msg << "\n
+  🌱 \e[37mName:\e[33m #{site_name}\e[0m
+   ├── \e[37m🔗 URL:\e[33m #{site_url}\e[0m
+   ├── \e[37m🔧 Admin:\e[33m #{site_url}/wp-admin\e[0m
+   └── \e[37m📩 Mailpit:\e[33m #{site_url}:8025\e[0m
+    "
+    end
+  end
 
   msg
 end
