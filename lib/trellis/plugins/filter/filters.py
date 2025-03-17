@@ -4,7 +4,12 @@ from ansible import errors
 from ansible.module_utils.six import string_types
 
 def to_env(dict_value):
-    envs = ["{0}='{1}'".format(key.upper(), str(value).replace("'","\\'")) for key, value in sorted(dict_value.items())]
+    envs = []
+    for key, value in sorted(dict_value.items()):
+        if isinstance(value, string_types) and '\n' in value:
+            envs.append('{0}="{1}"'.format(key.upper(), value.replace('"', '\\"')))
+        else:
+            envs.append("{0}='{1}'".format(key.upper(), str(value).replace("'", "\\'")))
     return "\n".join(envs)
 
 def underscore(value):
