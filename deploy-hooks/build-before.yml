@@ -1,14 +1,14 @@
 # Placeholder `deploy_build_before` hook for building theme assets on the
 # host machine and then copying the files to the remote server
 #
-# ⚠️ This example assumes your theme is using Sage 10
+# ⚠️ This example assumes your theme is using Sage 11
 #
-# Uncomment the lines below if you are using Sage 10
+# Uncomment the lines below if you are using Sage 11
 # and replace `sage` with your theme folder
 #
 # ---
 # - name: Install npm dependencies
-#   command: yarn
+#   command: npm install
 #   delegate_to: localhost
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
@@ -19,20 +19,20 @@
 #     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #
 # - name: Compile assets for production
-#   command: yarn build
+#   command: npm run build
 #   delegate_to: localhost
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
 #
-# - name: Check for entrypoints
+# - name: Check for manifest
 #   stat:
-#     path: "{{ project_local_path }}/web/app/themes/sage/public/entrypoints.json"
+#     path: "{{ project_local_path }}/web/app/themes/sage/public/build/manifest.json"
 #   delegate_to: localhost
 #   register: entrypoints_data
 
 # - name: Entrypoints missing
 #   ansible.builtin.fail:
-#     msg: "The theme is missing the public/entrypoints.json file"
+#     msg: "The theme is missing the build manifest file"
 #   when: not entrypoints_data.stat.exists
 #
 # - name: Copy production assets
