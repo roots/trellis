@@ -18,7 +18,7 @@
 #   args:
 #     chdir: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
 #
-# - name: Compile assets for production
+# - name: Compile assets
 #   command: npm run build
 #   delegate_to: localhost
 #   args:
@@ -35,7 +35,7 @@
 #     msg: "The theme is missing the build manifest file"
 #   when: not entrypoints_data.stat.exists
 #
-# - name: Copy production assets
+# - name: Copy compiled assets
 #   synchronize:
 #     src: "{{ project_local_path }}/web/app/themes/sage/public"
 #     dest: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
