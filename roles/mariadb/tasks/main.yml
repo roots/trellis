@@ -8,6 +8,10 @@
   apt_repository:
     repo: "{{ mariadb_ppa }}"
     update_cache: yes
+  register: result
+  until: result is success
+  retries: 3
+  delay: 5
 
 - name: Install MySQL client
   ansible.builtin.apt:
