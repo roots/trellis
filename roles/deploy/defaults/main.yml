@@ -49,6 +49,9 @@ project_current_path: "{{ project.current_path | default('current') }}"
 # Whether to run `wp core update-db` at end of each deploy
 update_db_on_deploy: true
 
+# Whether to flush rewrite rules at end of each deploy
+flush_rewrite_rules_on_deploy: true
+
 # Most scripts are used in development instead of remote servers. Use with caution.
 composer_no_scripts: true
 # Whether to run `composer check-platform-reqs`.

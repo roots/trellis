@@ -31,6 +31,12 @@
       chdir: "{{ deploy_helper.current_path }}"
     when: project.update_db_on_deploy | default(update_db_on_deploy)
 
+  - name: Flush rewrite rules
+    command: wp rewrite flush
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
+    when: project.flush_rewrite_rules_on_deploy | default(flush_rewrite_rules_on_deploy)
+
   when: wp_installed.rc == 0
 
 - name: Reload php-fpm
