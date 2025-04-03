@@ -1,0 +1,29 @@
+#
+# Set php version in group_vars/all/main.yml
+#
+# To override these defaults for a specific php version, duplicate this
+# file to roles/php/vars/ and rename with your specific php version
+# e.g. roles/php/vars/8.2.yml.
+#
+# You can then use e.g.
+# php_extensions_default:
+#   php8.2-bcmath: "{{ apt_package_state }}"
+#
+php_extensions_default:
+  "php{{ php_version }}-bcmath": "{{ apt_package_state }}"
+  "php{{ php_version }}-cli": "{{ apt_package_state }}"
+  "php{{ php_version }}-curl": "{{ apt_package_state }}"
+  "php{{ php_version }}-dev": "{{ apt_package_state }}"
+  "php{{ php_version }}-fpm": "{{ apt_package_state }}"
+  "php{{ php_version }}-imagick": "{{ apt_package_state }}"
+  "php{{ php_version }}-intl": "{{ apt_package_state }}"
+  "php{{ php_version }}-mbstring": "{{ apt_package_state }}"
+  "php{{ php_version }}-mysql": "{{ apt_package_state }}"
+  "php{{ php_version }}-xml": "{{ apt_package_state }}"
+  "php{{ php_version }}-xmlrpc": "{{ apt_package_state }}"
+  "php{{ php_version }}-zip": "{{ apt_package_state }}"
+
+php_memcached_packages:
+  "php{{ php_version }}-memcached": "{{ apt_package_state }}"
+
+php_xdebug_package: "php{{ php_version }}-xdebug"
