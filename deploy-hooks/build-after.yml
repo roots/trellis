@@ -1,8 +1,8 @@
 # Placeholder `deploy_build_after` hook
 #
-# ⚠️ This example assumes your theme is using Sage 10
+# ⚠️ This example assumes your theme is using Sage 11
 #
-# Uncomment the lines below if you are using Sage 10
+# Uncomment the lines below if you are using Sage 11
 # NOTE: this task will fail if Sage theme is not activated at time of deployment.
 #
 # ---
