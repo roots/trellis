@@ -1,0 +1,29 @@
+# Documentation: https://roots.io/trellis/docs/laravel/
+laravel_sites:
+  laravel-app.com:
+    type: laravel
+    site_hosts:
+      - canonical: laravel-app.com
+        redirects:
+          - www.laravel-app.com
+    local_path: ../laravel # path targeting local Laravel project directory (relative to Ansible root)
+    repo: git@github.com:example/laravel-app.com.git # replace with your Git repo URL
+    # repo_subtree_path: # Optional: relative path to project root in repo
+    branch: main # or master, or your production branch name
+    multisite:
+      enabled: false
+    ssl:
+      enabled: true # Enable SSL for production
+      provider: letsencrypt
+    cache:
+      enabled: true # Enable cache for production
+    # env vars specific to production
+    env:
+      APP_NAME: "Laravel App"
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_URL: https://laravel-app.com
+      # Define other production-specific env vars (DB, Mail, etc.)
+      # DB_DATABASE: laravel_app_production
+      # DB_USERNAME: laravel_app_production
+      # DB_PASSWORD: "{{ vault_db_password_production }}" # Example using vault

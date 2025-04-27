@@ -21,31 +21,3 @@ wordpress_sites:
       enabled: false
     xmlrpc:
       enabled: false
-
-  laravel-app.com:
-    type: laravel
-    site_hosts:
-      - canonical: staging.laravel-app.com
-        # redirects:
-        #   - www.staging.laravel-app.com # Optional redirect for staging
-    local_path: ../laravel # path targeting local Laravel project directory (relative to Ansible root)
-    repo: git@github.com:example/laravel-app.com.git # replace with your Git repo URL
-    # repo_subtree_path: # Optional: relative path to project root in repo (usually not needed for Laravel)
-    branch: staging # or your staging branch name
-    multisite:
-      enabled: false
-    ssl:
-      enabled: true # Enable SSL for staging
-      provider: letsencrypt
-    cache:
-      enabled: true # Enable cache for staging
-    # env vars specific to staging
-    env:
-      APP_NAME: "Laravel App (Staging)"
-      APP_ENV: staging
-      APP_DEBUG: false
-      APP_URL: https://staging.laravel-app.com
-      # Define other staging-specific env vars (DB, Mail, etc.)
-      # DB_DATABASE: laravel_app_staging
-      # DB_USERNAME: laravel_app_staging
-      # DB_PASSWORD: "{{ vault_db_password_staging }}" # Example using vault

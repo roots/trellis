@@ -19,29 +19,3 @@ wordpress_sites:
       enabled: false
     xmlrpc:
       enabled: false
-
-  laravel-app.com: # Renamed from laravel-app
-    type: laravel # Specify that this is a Laravel site
-    site_hosts:
-      - canonical: laravel-app.test # Kept .test for local dev
-        redirects:
-          - www.laravel-app.test # Kept .test for local dev
-    local_path: ../laravel # Updated path (ensure directory name matches)
-    admin_email: admin@laravel-app.test # Updated email domain
-    multisite: # Added for consistency, though unused for Laravel
-      enabled: false
-    ssl:
-      enabled: false
-      provider: self-signed
-    cache:
-      enabled: false
-    env:
-      APP_NAME: "Laravel App"
-      APP_ENV: local
-      APP_DEBUG: true
-      APP_URL: http://laravel-app.test # Kept .test for local dev
-      MAIL_HOST: mailhog
-      MAIL_PORT: 1025
-      CACHE_DRIVER: file
-      SESSION_DRIVER: file
-      QUEUE_DRIVER: sync
