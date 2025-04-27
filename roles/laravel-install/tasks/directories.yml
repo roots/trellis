@@ -22,26 +22,26 @@
     label: "{{ item.key }}"
 
 - name: Create storage and bootstrap/cache directories with write permissions
+  vars:
+    laravel_dirs:
+      - storage
+      - storage/app
+      - storage/app/public
+      - storage/framework
+      - storage/framework/cache
+      - storage/framework/sessions
+      - storage/framework/views
+      - storage/logs
+      - bootstrap/cache
   file:
-    path: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/{{ dir }}"
+    path: "{{ www_root }}/{{ item[0].key }}/{{ item[0].value.current_path | default('current') }}/{{ item[1] }}"
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
     mode: '0775'
     state: directory
-  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop: "{{ (wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list) | product(laravel_dirs) | list }}"
   loop_control:
-    label: "{{ item.key }}"
-  with_items:
-    - storage
-    - storage/app
-    - storage/app/public
-    - storage/framework
-    - storage/framework/cache
-    - storage/framework/sessions
-    - storage/framework/views
-    - storage/logs
-    - bootstrap/cache
-  loop_var: dir
+    label: "{{ item[0].key }} - {{ item[1] }}"
 
 - name: Change site owner to user
   file:
