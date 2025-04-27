@@ -1,0 +1,102 @@
+server {
+  {% if site_uses_ssl %}
+  listen 443 ssl http2;
+  {% else %}
+  listen 80;
+  {% endif %}
+
+  server_name {{ site_hosts_canonical }};
+
+  {% if site_uses_ssl %}
+  ssl_certificate {{ ssl_cert }};
+  ssl_certificate_key {{ ssl_key }};
+  ssl_dhparam {{ nginx_path }}/ssl/dhparams.pem;
+  {% endif %}
+
+  {% if ssl_stapling_enabled %}
+  ssl_stapling on;
+  ssl_stapling_verify on;
+  {% endif %}
+  {% if site_uses_letsencrypt %}
+  include acme-challenge-location.conf;
+  {% endif %}
+
+  root {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/public;
+  index index.php index.html index.htm;
+
+  # Prevent PHP scripts from being executed inside the uploads folder
+  location ~* /app/uploads/.*\.php$ {
+    deny all;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.php?$query_string;
+  }
+
+  include includes.d/{{ item.key }}/*.conf;
+
+  # PHP-FPM Configuration
+  location ~ \.php$ {
+    try_files $uri /index.php =404;
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass unix:/var/run/php/php{{ php_version }}-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include fastcgi_params;
+  }
+
+  # Allow robots.txt without extension
+  location = /robots.txt {
+    allow all;
+    log_not_found off;
+    access_log off;
+  }
+
+  # favicon handling
+  location = /favicon.ico {
+    log_not_found off;
+    access_log off;
+  }
+
+  location ~ /\.ht {
+    deny all;
+  }
+}
+
+{% if site_hosts_redirects | count %}
+server {
+  {% if site_uses_ssl %}
+  listen 443 ssl http2;
+  {% else %}
+  listen 80;
+  {% endif %}
+
+  server_name {{ site_hosts_redirects | join(' ') }};
+
+  {% if site_uses_ssl %}
+  ssl_certificate {{ ssl_cert }};
+  ssl_certificate_key {{ ssl_key }};
+  ssl_dhparam {{ nginx_path }}/ssl/dhparams.pem;
+  {% endif %}
+
+  {% if site_uses_letsencrypt %}
+  include acme-challenge-location.conf;
+  {% endif %}
+
+  return 301 {{ site_ssl_enabled ? 'https' : 'http' }}://{{ site_hosts_canonical }}$request_uri;
+}
+{% endif %}
+
+{% if site_redirects_to_https %}
+server {
+  listen 80;
+
+  server_name {{ site_hosts_canonical }} {{ site_hosts_redirects | default([]) | join(' ') }};
+
+  {% if site_uses_letsencrypt %}
+  include acme-challenge-location.conf;
+  {% endif %}
+
+  return 301 https://$host$request_uri;
+}
+{% endif %}

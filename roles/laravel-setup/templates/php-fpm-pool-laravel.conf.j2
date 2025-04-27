@@ -1,0 +1,36 @@
+[laravel]
+listen = /var/run/php/php{{ php_version }}-fpm.sock
+listen.owner = {{ web_user }}
+listen.group = {{ web_group }}
+listen.mode = 0660
+
+user = {{ web_user }}
+group = {{ web_group }}
+
+pm = dynamic
+pm.max_children = {{ php_max_children }}
+pm.start_servers = {{ php_start_servers }}
+pm.min_spare_servers = {{ php_min_spare_servers }}
+pm.max_spare_servers = {{ php_max_spare_servers }}
+pm.max_requests = {{ php_max_requests }}
+request_terminate_timeout = {{ php_request_terminate_timeout }}s
+
+chdir = /
+
+php_admin_value[memory_limit] = {{ php_memory_limit }}
+php_admin_value[post_max_size] = {{ php_post_max_size }}
+php_admin_value[upload_max_filesize] = {{ php_upload_max_filesize }}
+php_admin_value[max_execution_time] = {{ php_max_execution_time }}
+php_admin_value[max_input_time] = {{ php_max_input_time }}
+php_admin_value[max_input_vars] = {{ php_max_input_vars }}
+php_admin_value[display_errors] = {{ php_display_errors }}
+php_admin_value[display_startup_errors] = {{ php_display_startup_errors }}
+php_admin_value[expose_php] = {{ php_expose }}
+php_admin_value[session.name] = LARAVEL_SESSID
+php_admin_value[session.cookie_httponly] = 1
+php_admin_value[session.cookie_secure] = 1
+
+php_admin_flag[log_errors] = on
+php_admin_value[error_log] = {{ www_root }}/$pool/logs/php-fpm-error.log
+
+catch_workers_output = yes

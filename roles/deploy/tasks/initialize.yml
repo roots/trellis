@@ -19,6 +19,14 @@
     path: "{{ project_root }}"
     state: present
 
+- name: Determine project type
+  set_fact:
+    project_type: "{{ project.type | default('wordpress') }}"
+
+- name: Show detected project type
+  debug:
+    msg: "Deploying {{ project_type }} project: {{ site }}"
+
 - name: Check if deploy_initialize_after scripts exist
   stat:
     path: "{{ item }}"

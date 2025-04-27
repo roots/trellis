@@ -1,0 +1,56 @@
+---
+- name: Create web root of Laravel sites
+  file:
+    path: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/public"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: '0755'
+    state: directory
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Create shared folder of Laravel sites
+  file:
+    path: "{{ www_root }}/{{ item.key }}/shared"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: '0755'
+    state: directory
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Create storage and bootstrap/cache directories with write permissions
+  vars:
+    laravel_dirs:
+      - storage
+      - storage/app
+      - storage/app/public
+      - storage/framework
+      - storage/framework/cache
+      - storage/framework/sessions
+      - storage/framework/views
+      - storage/logs
+      - bootstrap/cache
+  file:
+    path: "{{ www_root }}/{{ item[0].key }}/{{ item[0].value.current_path | default('current') }}/{{ item[1] }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: '0775'
+    state: directory
+  loop: "{{ (wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list) | product(laravel_dirs) | list }}"
+  loop_control:
+    label: "{{ item[0].key }} - {{ item[1] }}"
+
+- name: Change site owner to user
+  file:
+    path: "{{ www_root }}/{{ item.key }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    state: directory
+    recurse: yes
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: chown_site_directory | default(false)
