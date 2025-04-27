@@ -21,3 +21,27 @@ wordpress_sites:
       enabled: false
     xmlrpc:
       enabled: false
+
+  laravel-app.com:
+    # Merged from laravel_sites.yml
+    type: laravel
+    site_hosts:
+      - canonical: laravel-app.com
+        redirects:
+          - www.laravel-app.com
+    local_path: ../laravel
+    repo: git@github.com:example/laravel-app.com.git
+    branch: main
+    multisite:
+      enabled: false
+    ssl:
+      enabled: true
+      provider: letsencrypt
+    cache:
+      enabled: true
+    env:
+      APP_NAME: "Laravel App"
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_URL: https://laravel-app.com
+    # End of merged section

@@ -19,3 +19,29 @@ wordpress_sites:
       enabled: false
     xmlrpc:
       enabled: false
+  laravel-app.com:
+    # Merged from laravel_sites.yml
+    type: laravel # Specify that this is a Laravel site
+    site_hosts:
+      - canonical: laravel-app.test
+        redirects:
+          - www.laravel-app.test
+    local_path: ../laravel # path targeting local Laravel project directory
+    admin_email: admin@laravel-app.test
+    multisite:
+      enabled: false
+    ssl:
+      enabled: false
+      provider: self-signed
+    cache:
+      enabled: false
+    env:
+      APP_NAME: "Laravel App"
+      APP_ENV: local
+      APP_DEBUG: true
+      APP_URL: http://laravel-app.test
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      CACHE_DRIVER: file
+      SESSION_DRIVER: file
+      QUEUE_DRIVER: sync

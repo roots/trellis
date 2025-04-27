@@ -21,3 +21,25 @@ wordpress_sites:
       enabled: false
     xmlrpc:
       enabled: false
+
+  laravel-app.com:
+    # Merged from laravel_sites.yml
+    type: laravel
+    site_hosts:
+      - canonical: staging.laravel-app.com
+    local_path: ../laravel
+    repo: git@github.com:example/laravel-app.com.git
+    branch: staging
+    multisite:
+      enabled: false
+    ssl:
+      enabled: true
+      provider: letsencrypt
+    cache:
+      enabled: true
+    env:
+      APP_NAME: "Laravel App (Staging)"
+      APP_ENV: staging
+      APP_DEBUG: false
+      APP_URL: https://staging.laravel-app.com
+    # End of merged section
