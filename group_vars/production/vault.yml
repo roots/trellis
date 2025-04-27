@@ -22,3 +22,9 @@ vault_wordpress_sites:
       secure_auth_salt: "generateme"
       logged_in_salt: "generateme"
       nonce_salt: "generateme"
+
+  laravel-app.com:
+    env:
+      db_password: laravel_dbpassword_production # Define a DB password for production
+      # Add other sensitive Laravel env vars here (e.g., APP_KEY, mail credentials)
+      # APP_KEY: "generateme" # Generate with `php artisan key:generate --show`
