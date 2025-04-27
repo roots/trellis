@@ -8,3 +8,7 @@ vault_wordpress_sites:
     admin_password: admin
     env:
       db_password: example_dbpassword
+  laravel-app.com: # Add this entry for the Laravel site
+    env:
+      db_password: laravel_dbpassword # Define a DB password, even for development
+      # Add other sensitive Laravel env vars here if needed
