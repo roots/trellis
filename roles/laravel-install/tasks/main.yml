@@ -10,7 +10,7 @@
     no_dev: "{{ not deploy_composer_dev | default(false) }}"
     optimize_autoloader: yes
     working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
-  become: no
+  become: false
   loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
   loop_control:
     label: "{{ item.key }}"
@@ -19,7 +19,7 @@
   command: php artisan key:generate --force
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
-  become: no
+  become: false
   loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
   loop_control:
     label: "{{ item.key }}"
@@ -29,7 +29,7 @@
   command: php artisan migrate --force
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
-  become: no
+  become: false
   loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
   loop_control:
     label: "{{ item.key }}"
@@ -39,7 +39,7 @@
   command: php artisan config:cache
   args:
     chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
-  become: no
+  become: false
   loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
   loop_control:
     label: "{{ item.key }}"
