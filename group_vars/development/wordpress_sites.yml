@@ -19,3 +19,27 @@ wordpress_sites:
       enabled: false
     xmlrpc:
       enabled: false
+
+  laravel-app: # This is a Laravel app
+    type: laravel # Specify that this is a Laravel site
+    site_hosts:
+      - canonical: laravel-app.test
+        redirects:
+          - www.laravel-app.test
+    local_path: ../laravel-app # path to your Laravel project (relative to Ansible root)
+    admin_email: admin@laravel-app.test # required but unused for Laravel
+    ssl:
+      enabled: false
+      provider: self-signed
+    cache:
+      enabled: false
+    env:
+      APP_NAME: "Laravel App"
+      APP_ENV: local
+      APP_DEBUG: true
+      APP_URL: http://laravel-app.test
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      CACHE_DRIVER: file
+      SESSION_DRIVER: file
+      QUEUE_DRIVER: sync

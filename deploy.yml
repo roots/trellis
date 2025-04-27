@@ -31,3 +31,5 @@
       when: project.repo is not defined or project.repo is not match("^ssh://.+@.+|.+@.+:.+")
   roles:
     - deploy
+    - { role: wordpress-install, tags: [wordpress, wordpress-install], when: project_type | default('wordpress') == 'wordpress' }
+    - { role: laravel-install, tags: [laravel, laravel-install], when: project_type | default('wordpress') == 'laravel' }

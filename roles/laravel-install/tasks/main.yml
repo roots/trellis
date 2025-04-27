@@ -1,0 +1,46 @@
+---
+- import_tasks: directories.yml
+  tags: laravel-install-directories
+
+- import_tasks: dotenv.yml
+  tags: dotenv
+
+- name: Install Dependencies with Composer
+  composer:
+    no_dev: "{{ not deploy_composer_dev | default(false) }}"
+    optimize_autoloader: yes
+    working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  become: no
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Generate application key
+  command: php artisan key:generate --force
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  become: no
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.site_install | default(true)
+
+- name: Run database migrations
+  command: php artisan migrate --force
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  become: no
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.site_install | default(true) and item.value.run_migrations | default(true)
+
+- name: Cache configuration
+  command: php artisan config:cache
+  args:
+    chdir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  become: no
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: item.value.site_install | default(true) and item.value.cache_config | default(true)

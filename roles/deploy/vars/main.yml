@@ -12,4 +12,19 @@ wordpress_env_defaults:
   wp_debug_log: "{{ project_root }}/logs/debug.log"
   wp_post_revisions: true
 
-site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), project.env | default({}), vault_wordpress_sites[site].env) }}"
+laravel_env_defaults:
+  db_host: localhost
+  db_name: "{{ site | underscore }}_{{ env }}"
+  db_user: "{{ site | underscore }}"
+  APP_ENV: "{{ env }}"
+  APP_URL: "{{ project.ssl.enabled | default(false) | ternary('https', 'http') }}://{{ project.site_hosts | map(attribute='canonical') | first }}"
+  git_sha: "{{ git_clone.after }}"
+  release_version: "{{ deploy_helper.new_release }}"
+
+# Determine if site is Laravel or WordPress
+project_type: "{{ project.type | default('wordpress') }}"
+
+# Choose appropriate environment defaults based on project type
+env_defaults: "{{ project_type == 'laravel' | ternary(laravel_env_defaults, wordpress_env_defaults) }}"
+
+site_env: "{{ env_defaults | combine(vault_wordpress_env_defaults | default({}), project.env | default({}), vault_wordpress_sites[site].env) }}"

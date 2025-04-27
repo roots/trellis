@@ -1,0 +1,54 @@
+---
+- import_tasks: database.yml
+  tags: laravel-setup-database
+
+- name: Create web root
+  file:
+    path: "{{ www_root }}"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: '0755'
+    state: directory
+
+- name: Create logs folder of sites
+  file:
+    path: "{{ www_root }}/{{ item.key }}/logs"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: '0755'
+    state: directory
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Create Laravel php-fpm configuration file
+  template:
+    src: php-fpm-pool-laravel.conf.j2
+    dest: /etc/php/{{ php_version }}/fpm/pool.d/laravel.conf
+    mode: '0644'
+  notify: reload php-fpm
+
+- name: Disable default PHP-FPM pool
+  command: mv /etc/php/{{ php_version }}/fpm/pool.d/www.conf /etc/php/{{ php_version }}/fpm/pool.d/www.disabled
+  args:
+    creates: /etc/php/{{ php_version }}/fpm/pool.d/www.disabled
+  when: disable_default_pool | default(true)
+  notify: reload php-fpm
+
+- import_tasks: nginx-includes.yml
+  tags: [nginx-includes, laravel-setup-nginx]
+
+- import_tasks: nginx.yml
+  tags: laravel-setup-nginx
+
+- name: Setup Laravel scheduler
+  cron:
+    name: "{{ item.key }} Laravel scheduler"
+    minute: "*"
+    user: "{{ web_user }}"
+    job: "cd {{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }} && php artisan schedule:run >> /dev/null 2>&1"
+    cron_file: "laravel-{{ item.key | replace('.', '_') }}"
+    state: "{{ cron_enabled | ternary('present', 'absent') }}"
+  loop: "{{ wordpress_sites | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
+  loop_control:
+    label: "{{ item.key }}"
