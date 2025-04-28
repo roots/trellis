@@ -35,19 +35,6 @@
   when: disable_default_pool | default(true)
   notify: reload php-fpm
 
-- name: Create Laravel Nginx configuration
-  template:
-    src: nginx.conf.j2
-    dest: "/etc/nginx/sites-available/{{ item.key }}.conf"
-    owner: root
-    group: root
-    mode: '0644'
-  loop: "{{ wordpress_sites | default({}) | dict2items | selectattr('value.type', 'defined') | selectattr('value.type', 'equalto', 'laravel') | list }}"
-  loop_control:
-    label: "{{ item.key }}"
-  notify: reload nginx
-  tags: laravel-setup-nginx
-
 - import_tasks: nginx.yml
   tags: laravel-setup-nginx
 
