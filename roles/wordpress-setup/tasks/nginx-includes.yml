@@ -15,20 +15,20 @@
     delegate_to: localhost
     register: nginx_includes_templates_all
 
-  - name: Combine site keys with extra include folders
+  - name: Normalize extra include folders to a list
     set_fact:
-      nginx_include_contexts: >-
+      nginx_includes_extra_folders_list: >-
         {{
-          (wordpress_sites.keys() | list)
-          + (
-              (nginx_includes_extra_folders
-                if nginx_includes_extra_folders is iterable and not nginx_includes_extra_folders is string
-                else [nginx_includes_extra_folders | default('all')]
-              )
-            )
+          nginx_includes_extra_folders
+          if nginx_includes_extra_folders is iterable and not nginx_includes_extra_folders is string
+          else [nginx_includes_extra_folders | default('all')]
         }}
 
-  - name: Filter Nginx includes templates by existing sites and global folders
+  - name: Combine site keys with extra include folders
+    set_fact:
+      nginx_include_contexts: "{{ wordpress_sites.keys() | list + nginx_includes_extra_folders_list }}"
+
+  - name: Filter Nginx includes templates by existing sites and extra folders
     set_fact:
       nginx_includes_templates:
         files: >-
