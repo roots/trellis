@@ -13,7 +13,30 @@
       recurse: yes
     become: no
     delegate_to: localhost
-    register: nginx_includes_templates
+    register: nginx_includes_templates_all
+
+  - name: Combine site keys with extra include folders
+    set_fact:
+      nginx_include_contexts: >-
+        {{
+          (wordpress_sites.keys() | list)
+          + (
+              (nginx_includes_extra_folders
+                if nginx_includes_extra_folders is iterable and not nginx_includes_extra_folders is string
+                else [nginx_includes_extra_folders | default('all')]
+              )
+            )
+        }}
+
+  - name: Filter Nginx includes templates by existing sites and global folders
+    set_fact:
+      nginx_includes_templates:
+        files: >-
+          {{
+            nginx_includes_templates_all.files
+            | selectattr('path', 'search', '/(' + nginx_include_contexts | join('|') + ')/')
+            | list
+          }}
 
   - name: Create includes.d directories
     file:
