@@ -38,8 +38,3 @@ sshd_password_authentication: false
 ip_whitelist:
   - 127.0.0.0/8
   - "{{ ipify_public_ip | default('') }}"
-
-# Only enable this when you want to reset the SSH keys on the server.
-# You probably don't need this enabled for every server provision.
-# Double check your keys are correct in group_vars/all/users.yml first.
-reset_user_ssh_keys: false
