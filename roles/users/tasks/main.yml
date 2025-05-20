@@ -51,6 +51,18 @@
     validate: "/usr/sbin/visudo -cf %s"
   when: web_sudoers[0] is defined
 
+- name: Replace all user SSH keys with first non-empty key
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ (item['keys'] | select('truthy') | list).0 }}"
+    exclusive: true
+  loop: "{{ users | default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when:
+    - reset_user_ssh_keys | default(false)
+    - (item['keys'] | select('truthy') | list | length) > 0
+
 - name: Add user SSH keys
   authorized_key:
     user: "{{ item.0.name }}"
