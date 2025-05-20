@@ -6,15 +6,6 @@
   register: nginx_includes_local_directory
 
 - block:
-  - name: Build list of Nginx includes templates
-    find:
-      paths: "{{ nginx_includes_templates_path }}"
-      pattern: "*.conf.j2"
-      recurse: yes
-    become: no
-    delegate_to: localhost
-    register: nginx_includes_templates_all
-
   - name: Normalize extra include folders to a list
     set_fact:
       nginx_includes_extra_folders_list: >-
@@ -28,15 +19,14 @@
     set_fact:
       nginx_include_contexts: "{{ wordpress_sites.keys() | list + nginx_includes_extra_folders_list }}"
 
-  - name: Filter Nginx includes templates by existing sites and extra folders
-    set_fact:
-      nginx_includes_templates:
-        files: >-
-          {{
-            nginx_includes_templates_all.files
-            | selectattr('path', 'search', '/(' + nginx_include_contexts | join('|') + ')/')
-            | list
-          }}
+  - name: Build list of Nginx includes templates
+    find:
+      paths: "{{ nginx_includes_templates_path }}"
+      recurse: yes
+      patterns: "{{ nginx_include_contexts | map('regex_replace', '^(.*)$', '\\1/*.conf.j2') | list }}"
+    become: no
+    delegate_to: localhost
+    register: nginx_includes_templates
 
   - name: Create includes.d directories
     file:
