@@ -2,6 +2,7 @@ apt_cache_valid_time: 3600
 apt_package_state: present
 apt_security_package_state: latest
 apt_dev_package_state: latest
+apt_clean_sources: false
 composer_keep_updated: true
 php_version: "8.2"
 ntp_timezone: Etc/UTC
