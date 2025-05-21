@@ -6,25 +6,12 @@
   register: nginx_includes_local_directory
 
 - block:
-  - name: Normalize extra include folders to a list
-    set_fact:
-      nginx_includes_extra_folders_list: >-
-        {{
-          nginx_includes_extra_folders
-          if nginx_includes_extra_folders is iterable and not nginx_includes_extra_folders is string
-          else [nginx_includes_extra_folders | default('all')]
-        }}
-
-  - name: Combine site keys with extra include folders
-    set_fact:
-      nginx_include_contexts: "{{ wordpress_sites.keys() | list + nginx_includes_extra_folders_list }}"
-
   - name: Loop through site keys to build a list of Nginx includes templates per folder
     find:
       paths: "{{ nginx_includes_templates_path }}/{{ item }}"
       patterns: "*.conf.j2"
       recurse: yes
-    loop: "{{ nginx_include_contexts }}"
+    loop: "{{ wordpress_sites.keys() | list + ['all'] }}"
     become: no
     delegate_to: localhost
     register: nginx_includes_folder_results

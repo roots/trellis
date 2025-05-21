@@ -30,7 +30,6 @@ nginx_cache_background_update: "on"
 nginx_includes_templates_path: nginx-includes
 nginx_includes_pattern: "^({{ nginx_includes_templates_path | regex_escape }})/(.*)\\.j2$"
 nginx_includes_d_cleanup: true
-nginx_includes_extra_folders: 'all'
 
 # h5bp helpers
 not_dev: "{{ env != 'development' }}"
