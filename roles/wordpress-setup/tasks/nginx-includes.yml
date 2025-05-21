@@ -19,14 +19,20 @@
     set_fact:
       nginx_include_contexts: "{{ wordpress_sites.keys() | list + nginx_includes_extra_folders_list }}"
 
-  - name: Build list of Nginx includes templates
+  - name: Loop through site keys to build a list of Nginx includes templates per folder
     find:
-      paths: "{{ nginx_includes_templates_path }}"
+      paths: "{{ nginx_includes_templates_path }}/{{ item }}"
+      patterns: "*.conf.j2"
       recurse: yes
-      patterns: "{{ nginx_include_contexts | map('regex_replace', '^(.*)$', '\\1/*.conf.j2') | list }}"
+    loop: "{{ nginx_include_contexts }}"
     become: no
     delegate_to: localhost
-    register: nginx_includes_templates
+    register: nginx_includes_folder_results
+
+  - name: Flatten include template files into one list
+    set_fact:
+      nginx_includes_templates:
+        files: "{{ nginx_includes_folder_results.results | map(attribute='files') | flatten }}"
 
   - name: Create includes.d directories
     file:
