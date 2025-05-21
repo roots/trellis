@@ -1,0 +1,19 @@
+---
+- name: Clean stale APT sources from /etc/apt/sources.list.d
+  find:
+    paths: /etc/apt/sources.list.d
+    patterns:
+      - '*.list'
+      - '*.list.save'
+      - '*.list.distUpgrade'
+    use_regex: false
+  register: stale_sources
+  become: true
+
+- name: Remove stale APT source files
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ stale_sources.files }}"
+  when: stale_sources.matched > 0
+  become: true
