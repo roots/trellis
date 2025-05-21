@@ -3,9 +3,9 @@
   find:
     paths: /etc/apt/sources.list.d
     patterns:
-      - *.list
-      - *.list.save
-      - *.list.distUpgrade
+      - '*.list'
+      - '*.list.save'
+      - '*.list.distUpgrade'
     use_regex: false
   register: stale_sources
   become: true
