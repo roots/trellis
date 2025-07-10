@@ -18,8 +18,10 @@ jobs:
       - name: Get latest WP-CLI version
         id: get-version
         run: |
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/wp-cli/wp-cli/releases/latest | jq -r .tag_name | sed 's/^v//')
+          LATEST_VERSION=$(gh release view --repo wp-cli/wp-cli --json 'tagName' --template '{{slice .tagName 1}}')
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Update wp_cli_version
         run: |
