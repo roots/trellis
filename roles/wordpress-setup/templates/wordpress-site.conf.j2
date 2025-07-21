@@ -21,6 +21,9 @@ server {
   index index.php index.htm index.html;
   add_header Fastcgi-Cache $upstream_cache_status;
 
+  # Additional proxy header for WordPress (notably its Site Health check)
+  add_header X-Cache-Enabled $loopback_header_x_cache_enabled;
+
   # Specify a charset
   charset utf-8;
 
