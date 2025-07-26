@@ -1,0 +1,109 @@
+---
+# This task detects whether the project uses Bedrock v1 (web/) or v2 (public/) structure
+# and automatically adjusts paths accordingly
+
+- name: Check for Bedrock v2 structure (public directory) - Development
+  stat:
+    path: "{{ item.value.local_path }}/public"
+  register: bedrock_v2_local_check
+  delegate_to: localhost
+  become: false
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: 
+    - ansible_connection != 'winrm'
+    - item.value.local_path is defined
+    - ansible_hostname == 'vagrant' or inventory_hostname in groups['development']
+
+- name: Check for Bedrock v1 structure (web directory) - Development
+  stat:
+    path: "{{ item.value.local_path }}/web"
+  register: bedrock_v1_local_check
+  delegate_to: localhost
+  become: false
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: 
+    - ansible_connection != 'winrm'
+    - item.value.local_path is defined
+    - ansible_hostname == 'vagrant' or inventory_hostname in groups['development']
+
+- name: Check for Bedrock v2 structure (public directory) - Remote/Deployed
+  stat:
+    path: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/public"
+  register: bedrock_v2_remote_check
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: 
+    - ansible_connection != 'winrm'
+    - not (ansible_hostname == 'vagrant' or inventory_hostname in groups['development'])
+
+- name: Check for Bedrock v1 structure (web directory) - Remote/Deployed
+  stat:
+    path: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/web"
+  register: bedrock_v1_remote_check
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: 
+    - ansible_connection != 'winrm'
+    - not (ansible_hostname == 'vagrant' or inventory_hostname in groups['development'])
+
+- name: Set public_path based on detected Bedrock version - Development
+  set_fact:
+    wordpress_sites: "{{ wordpress_sites | combine({
+      item.key: item.value | combine({
+        'public_path': (
+          bedrock_v2_local_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('public',
+          bedrock_v1_local_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('web', 
+          item.value.public_path | default('web'))),
+        'upload_path': (
+          bedrock_v2_local_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('uploads',
+          bedrock_v1_local_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('app/uploads', 
+          item.value.upload_path | default('app/uploads'))))
+        })
+      })
+    }) }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+    extended: true
+  when: 
+    - ansible_connection != 'winrm'
+    - ansible_hostname == 'vagrant' or inventory_hostname in groups['development']
+    - bedrock_v2_local_check.results is defined
+
+- name: Set public_path based on detected Bedrock version - Remote/Deployed
+  set_fact:
+    wordpress_sites: "{{ wordpress_sites | combine({
+      item.key: item.value | combine({
+        'public_path': (
+          bedrock_v2_remote_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('public',
+          bedrock_v1_remote_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('web', 
+          item.value.public_path | default('web'))),
+        'upload_path': (
+          bedrock_v2_remote_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('uploads',
+          bedrock_v1_remote_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('app/uploads', 
+          item.value.upload_path | default('app/uploads'))))
+        })
+      })
+    }) }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+    extended: true
+  when: 
+    - ansible_connection != 'winrm'
+    - not (ansible_hostname == 'vagrant' or inventory_hostname in groups['development'])
+    - bedrock_v2_remote_check.results is defined
+
+- name: Debug detected Bedrock structure
+  debug:
+    msg: "Site {{ item.key }}: Using {{ item.value.public_path }} directory (Bedrock {{ 'v2' if item.value.public_path == 'public' else 'v1' }}), uploads: {{ item.value.upload_path | default('app/uploads') }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: ansible_connection != 'winrm'
