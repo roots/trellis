@@ -83,7 +83,7 @@
         'public_path': (
           bedrock_v2_remote_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('public',
           bedrock_v1_remote_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('web', 
-          item.value.public_path | default('web'))),
+          item.value.public_path | default('web')))),
         'upload_path': (
           bedrock_v2_remote_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('uploads',
           bedrock_v1_remote_check.results[ansible_loop.index0].stat.exists | default(false) | ternary('app/uploads', 
