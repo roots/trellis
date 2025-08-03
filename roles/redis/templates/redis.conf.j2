@@ -1,0 +1,105 @@
+# {{ ansible_managed }}
+
+# Network configuration
+bind {{ redis_bind_interface }}
+port {{ redis_port }}
+
+{% if redis_unixsocket %}
+unixsocket {{ redis_unixsocket }}
+unixsocketperm 770
+{% endif %}
+
+# General configuration
+daemonize {{ redis_daemonize }}
+pidfile {{ redis_pidfile }}
+timeout {{ redis_timeout }}
+tcp-keepalive {{ redis_tcp_keepalive }}
+
+# Logging
+loglevel {{ redis_loglevel }}
+logfile {{ redis_logfile }}
+
+# Database configuration
+databases {{ redis_databases }}
+
+# RDB persistence
+{% for save in redis_save %}
+save {{ save }}
+{% endfor %}
+
+stop-writes-on-bgsave-error {{ redis_stop_writes_on_bgsave_error }}
+rdbcompression {{ redis_rdbcompression }}
+rdbchecksum {{ redis_rdbchecksum }}
+dbfilename {{ redis_dbfilename }}
+dir {{ redis_dir }}
+
+# Memory management
+maxclients {{ redis_maxclients }}
+{% if redis_maxmemory %}
+maxmemory {{ redis_maxmemory }}
+maxmemory-policy {{ redis_maxmemory_policy }}
+maxmemory-samples {{ redis_maxmemory_samples }}
+{% endif %}
+
+# AOF persistence
+appendonly {{ redis_appendonly }}
+appendfilename {{ redis_appendfilename }}
+appendfsync {{ redis_appendfsync }}
+no-appendfsync-on-rewrite {{ redis_no_appendfsync_on_rewrite }}
+auto-aof-rewrite-percentage {{ redis_auto_aof_rewrite_percentage }}
+auto-aof-rewrite-min-size {{ redis_auto_aof_rewrite_min_size }}
+aof-load-truncated {{ redis_aof_load_truncated }}
+
+# Lua scripting
+lua-time-limit {{ redis_lua_time_limit }}
+
+# Slow log
+slowlog-log-slower-than {{ redis_slowlog_log_slower_than }}
+slowlog-max-len {{ redis_slowlog_max_len }}
+
+# Latency monitoring
+latency-monitor-threshold {{ redis_latency_monitor_threshold }}
+
+# Event notification
+notify-keyspace-events ""
+
+# Hash table optimizations
+hash-max-ziplist-entries {{ redis_hash_max_ziplist_entries }}
+hash-max-ziplist-value {{ redis_hash_max_ziplist_value }}
+list-max-ziplist-entries {{ redis_list_max_ziplist_entries }}
+list-max-ziplist-value {{ redis_list_max_ziplist_value }}
+set-max-intset-entries {{ redis_set_max_intset_entries }}
+zset-max-ziplist-entries {{ redis_zset_max_ziplist_entries }}
+zset-max-ziplist-value {{ redis_zset_max_ziplist_value }}
+hll-sparse-max-bytes {{ redis_hll_sparse_max_bytes }}
+
+# Rehashing
+activerehashing {{ redis_activerehashing }}
+
+# Client output buffer limits
+client-output-buffer-limit normal {{ redis_client_output_buffer_limit_normal }}
+client-output-buffer-limit replica {{ redis_client_output_buffer_limit_replica }}
+client-output-buffer-limit pubsub {{ redis_client_output_buffer_limit_pubsub }}
+
+# Miscellaneous
+hz {{ redis_hz }}
+aof-rewrite-incremental-fsync {{ redis_aof_rewrite_incremental_fsync }}
+
+# Security
+{% if redis_requirepass %}
+requirepass {{ redis_requirepass }}
+{% endif %}
+
+{% for command in redis_disabled_commands %}
+rename-command {{ command }} ""
+{% endfor %}
+
+# Includes
+{% for include in redis_includes %}
+include {{ include }}
+{% endfor %}
+
+# Custom configuration
+{% for key, value in redis_extra_config.items() %}
+{{ key }} {{ value }}
+{% endfor %}

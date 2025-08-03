@@ -12,4 +12,35 @@ wordpress_env_defaults:
   wp_debug_log: "{{ project_root }}/logs/debug.log"
   wp_post_revisions: true
 
-site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), project.env | default({}), vault_wordpress_sites[site].env) }}"
+# Object cache configuration - enabled when cache.enabled + provider specified
+object_cache_env: |
+  {% set cache = project.cache | default({}) %}
+  {% if cache.enabled | default(false) and cache.provider is defined %}
+  {% if cache.provider == 'redis' %}
+  WP_REDIS_HOST: "{{ cache.host | default('127.0.0.1') }}"
+  WP_REDIS_PORT: "{{ cache.port | default(6379) }}"
+  WP_REDIS_DATABASE: "{{ cache.database | default(0) }}"
+  {% if cache.password is defined %}
+  WP_REDIS_PASSWORD: "{{ cache.password }}"
+  {% endif %}
+  {% if cache.prefix is defined %}
+  WP_REDIS_PREFIX: "{{ cache.prefix }}"
+  {% else %}
+  WP_REDIS_PREFIX: "{{ site | underscore }}_"
+  {% endif %}
+  WP_CACHE_KEY_SALT: "{{ site }}_{{ env }}"
+  {% elif cache.provider == 'memcached' %}
+  WP_MEMCACHED_HOST: "{{ cache.host | default('127.0.0.1') }}"
+  WP_MEMCACHED_PORT: "{{ cache.port | default(11211) }}"
+  {% if cache.prefix is defined %}
+  WP_MEMCACHED_PREFIX: "{{ cache.prefix }}"
+  {% else %}
+  WP_MEMCACHED_PREFIX: "{{ site | underscore }}_"
+  {% endif %}
+  WP_CACHE_KEY_SALT: "{{ site }}_{{ env }}"
+  {% endif %}
+  {% else %}
+  {}
+  {% endif %}
+
+site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), object_cache_env | from_yaml, project.env | default({}), vault_wordpress_sites[site].env) }}"

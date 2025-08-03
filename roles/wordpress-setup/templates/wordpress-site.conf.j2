@@ -38,7 +38,7 @@ server {
   {% endblock -%}
 
   {% block cache_conditions -%}
-  {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+  {% if fastcgi_cache_enabled -%}
   # Fastcgi cache conditions
   set $skip_cache 0;
 
@@ -242,7 +242,7 @@ server {
     {% endblock -%}
 
     {% block cache_config -%}
-    {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+    {% if fastcgi_cache_enabled -%}
     # Fastcgi cache settings
     fastcgi_cache wordpress;
     fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
