@@ -10,7 +10,25 @@ wordpress_env_defaults:
   domain_current_site: "{{ site_hosts_canonical | first }}"
   wp_debug_log: "{{ www_root }}/{{ item.key }}/logs/debug.log"
 
-site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
+# Redis cache environment variables (when enabled)
+redis_cache_env:
+  wp_redis_host: "{{ item.value.cache.host | default('127.0.0.1') }}"
+  wp_redis_port: "{{ item.value.cache.port | default(6379) }}"
+  wp_redis_database: "{{ item.value.cache.database | default(0) }}"
+  wp_redis_prefix: "{{ item.value.cache.prefix | default(item.key | underscore + '_') }}"
+  wp_cache_key_salt: "{{ item.key }}_{{ env }}"
+
+# Memcached cache environment variables (when enabled)
+memcached_cache_env:
+  wp_memcached_host: "{{ item.value.cache.host | default('127.0.0.1') }}"
+  wp_memcached_port: "{{ item.value.cache.port | default(11211) }}"
+  wp_memcached_prefix: "{{ item.value.cache.prefix | default(item.key | underscore + '_') }}"
+  wp_cache_key_salt: "{{ item.key }}_{{ env }}"
+
+site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), cache_enabled_redis | ternary(redis_cache_env, {}), cache_enabled_memcached | ternary(memcached_cache_env, {}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
+
+cache_enabled_redis: "{{ item.value.cache.enabled | default(false) and item.value.cache.provider | default('') == 'redis' }}"
+cache_enabled_memcached: "{{ item.value.cache.enabled | default(false) and item.value.cache.provider | default('') == 'memcached' }}"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"

@@ -26,4 +26,7 @@ php_extensions_default:
 php_memcached_packages:
   "php{{ php_version }}-memcached": "{{ apt_package_state }}"
 
+php_redis_packages:
+  "php{{ php_version }}-redis": "{{ apt_package_state }}"
+
 php_xdebug_package: "php{{ php_version }}-xdebug"
