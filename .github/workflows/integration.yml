@@ -100,11 +100,11 @@ jobs:
         run: curl -s http://redis.example.com | grep "<title>Redis Example"
       - name: Verify FastCGI cache on example.com
         run: |
-          # Check nginx cache directory exists
-          test -d /var/run/nginx-cache
           # Load page to generate cache
           curl -s http://example.com > /dev/null
-          # Verify cache files were created
-          find /var/run/nginx-cache -name "*" -type f | wc -l | grep -v "^0$"
-          # Check for cache headers
-          curl -I http://example.com | grep -E "(X-Cache|X-FastCGI-Cache)"
+          # Check for FastCGI cache headers (first request may be MISS)
+          curl -I http://example.com | grep -i "fastcgi-cache"
+          # Load again to get cache HIT
+          curl -s http://example.com > /dev/null
+          # Verify cache is working (should show HIT or STALE)
+          curl -I http://example.com | grep -E "fastcgi-cache: (HIT|STALE)"
