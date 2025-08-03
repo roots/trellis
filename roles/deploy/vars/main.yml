@@ -12,8 +12,10 @@ wordpress_env_defaults:
   wp_debug_log: "{{ project_root }}/logs/debug.log"
   wp_post_revisions: true
 
-# Object cache configuration - enabled when cache.enabled + provider specified
-object_cache_env: |
+site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), deploy_object_cache_env | from_yaml, project.env | default({}), vault_wordpress_sites[site].env) }}"
+
+# Object cache configuration for deploy - uses different variable names than global helpers
+deploy_object_cache_env: |
   {% set cache = project.cache | default({}) %}
   {% if cache.enabled | default(false) and cache.provider is defined %}
   {% if cache.provider == 'redis' %}
@@ -42,5 +44,3 @@ object_cache_env: |
   {% else %}
   {}
   {% endif %}
-
-site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), object_cache_env | from_yaml, project.env | default({}), vault_wordpress_sites[site].env) }}"
