@@ -27,4 +27,8 @@ deploy_memcached_cache_env:
   wp_memcached_prefix: "{{ project.cache.prefix | default(site | underscore + '_') }}"
   wp_cache_key_salt: "{{ site }}_{{ env }}"
 
-site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), (project.cache.enabled | default(false) and project.cache.provider == 'redis') | ternary(deploy_redis_cache_env, {}), (project.cache.enabled | default(false) and project.cache.provider == 'memcached') | ternary(deploy_memcached_cache_env, {}), project.env | default({}), vault_wordpress_sites[site].env) }}"
+site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), deploy_cache_enabled_redis | ternary(deploy_redis_cache_env, {}), deploy_cache_enabled_memcached | ternary(deploy_memcached_cache_env, {}), project.env | default({}), vault_wordpress_sites[site].env) }}"
+
+# Helper variables for deploy cache conditions
+deploy_cache_enabled_redis: "{{ project.cache.enabled | default(false) and project.cache.provider | default('') == 'redis' }}"
+deploy_cache_enabled_memcached: "{{ project.cache.enabled | default(false) and project.cache.provider | default('') == 'memcached' }}"
