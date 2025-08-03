@@ -25,7 +25,11 @@ memcached_cache_env:
   wp_memcached_prefix: "{{ item.value.cache.prefix | default(item.key | underscore + '_') }}"
   wp_cache_key_salt: "{{ item.key }}_{{ env }}"
 
-site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), (item.value.cache.enabled | default(false) and item.value.cache.provider == 'redis') | ternary(redis_cache_env, {}), (item.value.cache.enabled | default(false) and item.value.cache.provider == 'memcached') | ternary(memcached_cache_env, {}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
+site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), cache_enabled_redis | ternary(redis_cache_env, {}), cache_enabled_memcached | ternary(memcached_cache_env, {}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
+
+# Helper variables for cache conditions
+cache_enabled_redis: "{{ item.value.cache.enabled | default(false) and item.value.cache.provider | default('') == 'redis' }}"
+cache_enabled_memcached: "{{ item.value.cache.enabled | default(false) and item.value.cache.provider | default('') == 'memcached' }}"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"
