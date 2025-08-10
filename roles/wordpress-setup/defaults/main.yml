@@ -28,22 +28,23 @@ nginx_cache_background_update: "on"
 
 # Cache configuration helpers
 cache_config: "{{ item.value.cache | default({}) }}"
+object_cache_config: "{{ item.value.object_cache | default({}) }}"
 
 # FastCGI cache - enabled when cache.enabled is true (backward compatible)
 fastcgi_cache_enabled: "{{ cache_config.enabled | default(false) }}"
 
-# Object cache - enabled when cache.enabled is true AND provider is specified
-object_cache_enabled: "{{ cache_config.enabled | default(false) and cache_config.provider is defined }}"
-object_cache_provider: "{{ cache_config.provider | default('redis') }}"
+# Object cache - enabled when object_cache.enabled is true
+object_cache_enabled: "{{ object_cache_config.enabled | default(false) }}"
+object_cache_provider: "{{ object_cache_config.provider | default('redis') }}"
 
 # Object cache defaults
-redis_host: 127.0.0.1
-redis_port: 6379
-redis_database: "{{ cache_config.database | default(0) }}"
-redis_password: "{{ cache_config.password | default('') }}"
-redis_prefix: "{{ cache_config.prefix | default('') }}"
-memcached_host: 127.0.0.1
-memcached_port: 11211
+redis_host: "{{ object_cache_config.host | default('127.0.0.1') }}"
+redis_port: "{{ object_cache_config.port | default(6379) }}"
+redis_database: "{{ object_cache_config.database | default(0) }}"
+redis_password: "{{ object_cache_config.password | default('') }}"
+redis_prefix: "{{ object_cache_config.prefix | default('') }}"
+memcached_host: "{{ object_cache_config.host | default('127.0.0.1') }}"
+memcached_port: "{{ object_cache_config.port | default(11211) }}"
 
 # Nginx includes
 nginx_includes_templates_path: nginx-includes

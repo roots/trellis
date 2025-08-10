@@ -44,5 +44,7 @@ wordpress_sites:
       provider: letsencrypt
     cache:
       enabled: true
+    object_cache:
+      enabled: true
       provider: redis
       database: 0

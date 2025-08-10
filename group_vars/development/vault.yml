@@ -4,7 +4,7 @@ vault_mysql_root_password: devpw
 # Variables to accompany `group_vars/development/wordpress_sites.yml`
 # Note: the site name (`example.com`) must match up with the site name in the above file.
 vault_wordpress_sites:
-  example.com:
+  redis.com:
     admin_password: admin
     env:
       db_password: example_dbpassword

@@ -3,19 +3,23 @@
 # Define accompanying passwords/secrets in group_vars/development/vault.yml
 
 wordpress_sites:
-  example.com:
+  redis.com:
     site_hosts:
-      - canonical: example.test
+      - canonical: redis.test
         redirects:
-          - www.example.test
+          - www.redis.test
     local_path: ../site # path targeting local Bedrock site directory (relative to Ansible root)
-    admin_email: admin@example.test
+    admin_email: admin@redis.test
     multisite:
       enabled: false
     ssl:
       enabled: false
       provider: self-signed
     cache:
-      enabled: false
+      enabled: true
+    object_cache:
+      enabled: true
+      provider: redis
+      database: 0
     xmlrpc:
       enabled: false
