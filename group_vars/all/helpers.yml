@@ -29,6 +29,10 @@ site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | de
 
 object_cache_enabled_redis: "{{ item.value.object_cache.enabled | default(false) and item.value.object_cache.provider | default('') == 'redis' }}"
 object_cache_enabled_memcached: "{{ item.value.object_cache.enabled | default(false) and item.value.object_cache.provider | default('') == 'memcached' }}"
+
+# Sites using Redis or Memcached object cache
+sites_using_redis: "[{% for name, site in wordpress_sites.items() | list if site.object_cache.enabled | default(false) and site.object_cache.provider | default('') == 'redis' %}'{{ name }}',{% endfor %}]"
+sites_using_memcached: "[{% for name, site in wordpress_sites.items() | list if site.object_cache.enabled | default(false) and site.object_cache.provider | default('') == 'memcached' %}'{{ name }}',{% endfor %}]"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"
