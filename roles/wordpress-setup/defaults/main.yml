@@ -17,8 +17,8 @@ nginx_hsts_preload: false
 
 # HSTS helpers
 hsts_max_age: "{{ item.value.ssl.hsts_max_age | default(nginx_hsts_max_age) }}"
-hsts_include_subdomains: "{{ item.value.ssl.hsts_include_subdomains | default(nginx_hsts_include_subdomains) | ternary('includeSubDomains', None) }}"
-hsts_preload: "{{ item.value.ssl.hsts_preload | default(nginx_hsts_preload) | ternary('preload', None) }}"
+hsts_include_subdomains: "{{ item.value.ssl.hsts_include_subdomains | default(nginx_hsts_include_subdomains) | ternary('includeSubDomains', omit) }}"
+hsts_preload: "{{ item.value.ssl.hsts_preload | default(nginx_hsts_preload) | ternary('preload', omit) }}"
 
 # Fastcgi cache params
 nginx_cache_duration: 30s
