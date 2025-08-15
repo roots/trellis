@@ -19,3 +19,4 @@ wordpress_sites:
       enabled: false
     xmlrpc:
       enabled: false
+

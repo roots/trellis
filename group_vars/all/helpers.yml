@@ -10,7 +10,29 @@ wordpress_env_defaults:
   domain_current_site: "{{ site_hosts_canonical | first }}"
   wp_debug_log: "{{ www_root }}/{{ item.key }}/logs/debug.log"
 
-site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
+# Redis cache environment variables (when enabled)
+redis_cache_env:
+  wp_redis_host: "{{ item.value.object_cache.host | default('127.0.0.1') }}"
+  wp_redis_port: "{{ item.value.object_cache.port | default(6379) }}"
+  wp_redis_database: "{{ item.value.object_cache.database | default(0) }}"
+  wp_redis_prefix: "{{ item.value.object_cache.prefix | default(item.key | underscore + '_') }}"
+  wp_cache_key_salt: "{{ item.key }}_{{ env }}"
+
+# Memcached cache environment variables (when enabled)
+memcached_cache_env:
+  wp_memcached_host: "{{ item.value.object_cache.host | default('127.0.0.1') }}"
+  wp_memcached_port: "{{ item.value.object_cache.port | default(11211) }}"
+  wp_memcached_prefix: "{{ item.value.object_cache.prefix | default(item.key | underscore + '_') }}"
+  wp_cache_key_salt: "{{ item.key }}_{{ env }}"
+
+site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), object_cache_enabled_redis | ternary(redis_cache_env, {}), object_cache_enabled_memcached | ternary(memcached_cache_env, {}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
+
+object_cache_enabled_redis: "{{ item.value.object_cache.enabled | default(false) and item.value.object_cache.provider | default('') == 'redis' }}"
+object_cache_enabled_memcached: "{{ item.value.object_cache.enabled | default(false) and item.value.object_cache.provider | default('') == 'memcached' }}"
+
+# Sites using Redis or Memcached object cache
+sites_using_redis: "[{% for name, site in wordpress_sites.items() | list if site.object_cache.enabled | default(false) and site.object_cache.provider | default('') == 'redis' %}'{{ name }}',{% endfor %}]"
+sites_using_memcached: "[{% for name, site in wordpress_sites.items() | list if site.object_cache.enabled | default(false) and site.object_cache.provider | default('') == 'memcached' %}'{{ name }}',{% endfor %}]"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"
