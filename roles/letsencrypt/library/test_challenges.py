@@ -43,7 +43,9 @@ EXAMPLES = '''
 def get_status(host, path, file):
     try:
         conn = HTTPConnection(host)
-        conn.request('HEAD', '/{0}/{1}'.format(path, file))
+        conn.request('HEAD', '/{0}/{1}'.format(path, file), None, {
+            'User-Agent': 'Trellis Ansible test_challenges module'
+        })
         res = conn.getresponse()
     except (HTTPException, socket.timeout, socket.error):
         return 0
