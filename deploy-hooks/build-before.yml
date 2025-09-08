@@ -8,7 +8,7 @@
 #
 # ---
 # - name: Install npm dependencies
-#   command: npm install
+#   command: npm ci
 #   delegate_to: localhost
 #   args:
 #     chdir: "{{ project_local_path }}/web/app/themes/sage"
