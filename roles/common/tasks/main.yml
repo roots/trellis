@@ -15,7 +15,7 @@
         are duplicated between the `{{ item.env_pair | join('` and `') }}` groups:
           {{ item.site_keys | to_nice_yaml | indent(2) }}
     when: item.site_keys | count > 0
-    loop: "{{ site_keys_by_env_pair | from_json }}"
+    loop: "{{ site_keys_by_env_pair }}"
 
   when:
     - env_groups | count > 1
