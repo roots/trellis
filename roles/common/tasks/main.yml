@@ -14,8 +14,8 @@
         must use different site keys per environment. Adjust the following site keys that
         are duplicated between the `{{ item.env_pair | join('` and `') }}` groups:
           {{ item.site_keys | to_nice_yaml | indent(2) }}
-    when: item.site_keys | count
-    loop: "{{ site_keys_by_env_pair }}"
+    when: item.site_keys | count > 0
+    loop: "{{ site_keys_by_env_pair | from_json }}"
 
   when:
     - env_groups | count > 1
@@ -24,7 +24,7 @@
 - name: Validate wordpress_sites
   fail:
     msg: "{{ lookup('template', 'wordpress_sites.j2') }}"
-  when: wordpress_sites.keys() | difference(vault_wordpress_sites.keys()) | count
+  when: wordpress_sites.keys() | difference(vault_wordpress_sites.keys()) | count > 0
   tags: [wordpress]
 
 - name: Validate format of site_hosts
@@ -33,7 +33,7 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count
+  when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count > 0
   tags: [letsencrypt, wordpress]
 
 - name: Import PHP version specific vars
@@ -51,7 +51,7 @@
 - name: Verify dict format for package component variables
   fail:
     msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
-  when: package_vars_wrong_format | count
+  when: package_vars_wrong_format | count > 0
   vars:
     package_vars:
       apt_packages_default: "{{ apt_packages_default }}"
@@ -62,20 +62,20 @@
       php_extensions_custom: "{{ php_extensions_custom }}"
       sshd_packages_default: "{{ sshd_packages_default }}"
       sshd_packages_custom: "{{ sshd_packages_custom }}"
-    package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
+    package_vars_wrong_format: "{{ package_vars | dict2items | rejectattr('value', 'mapping') | map(attribute='key') | list }}"
   tags: [memcached, php, sshd]
 
 - name: Verify dict format for package combined variables
   fail:
     msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
-  when: package_vars_wrong_format | count
+  when: package_vars_wrong_format | count > 0
   vars:
     package_vars:
       apt_packages: "{{ apt_packages }}"
       memcached_packages: "{{ memcached_packages }}"
       php_extensions: "{{ php_extensions }}"
       sshd_packages: "{{ sshd_packages }}"
-    package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
+    package_vars_wrong_format: "{{ package_vars | dict2items | rejectattr('value', 'mapping') | map(attribute='key') | list }}"
   tags: [memcached, php, sshd]
 
 - name: Validate Ubuntu version
@@ -129,10 +129,10 @@
 - name: Validate compatible settings between SSH client and server
   assert:
     that:
-      - overlapping_ciphers | count
-      - overlapping_kex | count
-      - overlapping_macs | count
-      - overlapping_host_keys | count
+      - overlapping_ciphers != '[]'
+      - overlapping_kex != '[]'
+      - overlapping_macs != '[]'
+      - overlapping_host_keys | length > 0
     msg: "{{ lookup('template', 'validate_ssh_msg.j2') }}"
   when: openssh_6_8_plus and validate_ssh | default(true)
   tags: [sshd]
