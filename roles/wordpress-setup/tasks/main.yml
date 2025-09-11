@@ -39,6 +39,9 @@
   when: disable_default_pool | default(true)
   notify: reload php-fpm
 
+- import_tasks: bedrock-detection.yml
+  tags: bedrock-detection
+
 - import_tasks: nginx-includes.yml
   tags: [nginx-includes, wordpress-setup-nginx]
 
