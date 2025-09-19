@@ -1,3 +1,41 @@
+### 1.26.0: Sept 19, 2025
+* Update actions/checkout action to v5 [#1591](https://github.com/roots/trellis/pull/1591)
+* Replace deprecated `distutils` version usage [#1590](https://github.com/roots/trellis/pull/1590)
+* ✨ Add Redis object cache support [#1589](https://github.com/roots/trellis/pull/1589)
+* Fix HSTS header omitted parts [#1592](https://github.com/roots/trellis/pull/1592)
+* Change npm command to 'npm ci' in build example [#1597](https://github.com/roots/trellis/pull/1597)
+* Add ansible-core version constraint [#1600](https://github.com/roots/trellis/pull/1600)
+
+### 1.25.0: July 31, 2025
+* Allow removal of old SSH keys on provision [#1576](https://github.com/roots/trellis/pull/1576)
+* Filter Nginx includes by sites present on target server [#1573](https://github.com/roots/trellis/pull/1573)
+* Allow cleaning apt sources on provision [#1578](https://github.com/roots/trellis/pull/1578)
+* ⬆️ Use PHP 8.3 by default [#1580](https://github.com/roots/trellis/pull/1580)
+* `wp-cli-version-check.yml`: Use `gh` to fetch WP CLI release info [#1585](https://github.com/roots/trellis/pull/1585)
+* Add `X-Cache-Enabled` HTTP header [#1513](https://github.com/roots/trellis/pull/1513)
+* Run ferm role when letsencrypt tag is defined on provision [#1588](https://github.com/roots/trellis/pull/1588)
+* Update acme_tiny_repo [#1582](https://github.com/roots/trellis/pull/1582)
+
+### 1.24.1: May 8th, 2025
+* Update WP-CLI version to 2.12.0 [#1574](https://github.com/roots/trellis/pull/1574)
+
+### 1.24.0: April 21st, 2025
+* Use proper `$host` for FastCGI `SERVER_NAME` param [#1552](https://github.com/roots/trellis/pull/1552)
+* Fix Python string escape sequences [#1554](https://github.com/roots/trellis/pull/1554)
+* Mitigate REST API cache poisoning via Method Override [#1556](https://github.com/roots/trellis/pull/1556)
+* Update dependency ntp to v2.7.0 [#1553](https://github.com/roots/trellis/pull/1553)
+* Update dependency swapfile to v2.0.42 [#1549](https://github.com/roots/trellis/pull/1549)
+* 🔧 FastCGI Cache: Stop ignoring Cache-Control headers [#1555](https://github.com/roots/trellis/pull/1555)
+* Update build-before.yml for Sage 11 [#1559](https://github.com/roots/trellis/pull/1559)
+* 🔧 PHP 8.4 support [#1560](https://github.com/roots/trellis/pull/1560)
+* Remove Let's Encrypt contact email support [#1558](https://github.com/roots/trellis/pull/1558)
+* Remove OCSP stapling [#1557](https://github.com/roots/trellis/pull/1557)
+* Remove "production" from asset compilation titles [#1566](https://github.com/roots/trellis/pull/1566)
+* 🩹 Add retry to adding PPA's [#1568](https://github.com/roots/trellis/pull/1568)
+* Refactor PHP role to support future versions by default [#1511](https://github.com/roots/trellis/pull/1511)
+* Flush rewrite rules at the end of each deploy [#1567](https://github.com/roots/trellis/pull/1567)
+* Replace link for creating CSP [#1564](https://github.com/roots/trellis/pull/1564)
+
 ### 1.23.0: September 11th, 2024
 * Ubuntu 24.04 support [#1519](https://github.com/roots/trellis/pull/1519)
 * Update MariaDB to 10.11 [#1520](https://github.com/roots/trellis/pull/1520)
