@@ -32,6 +32,7 @@
   when: item.enabled | default(true)
   notify: reload nginx
   tags: nginx-sites
+  become: yes
 
 - name: Disable Nginx sites
   file:
@@ -41,6 +42,7 @@
   loop: "{{ nginx_sites_confs }}"
   notify: reload nginx
   tags: nginx-sites
+  become: yes
 
 - name: Enable Nginx sites
   file:
@@ -52,6 +54,7 @@
   loop: "{{ nginx_sites_confs }}"
   notify: reload nginx
   tags: nginx-sites
+  become: yes
 
 - name: Create Nginx conf for challenges location
   template:
@@ -59,6 +62,7 @@
     dest: "{{ nginx_path }}/acme-challenge-location.conf"
     mode: '0644'
   notify: reload nginx
+  become: yes
 
 - name: Create WordPress configuration for Nginx
   template:
@@ -70,6 +74,7 @@
     label: "{{ item.key }}"
   notify: reload nginx
   tags: nginx-includes
+  become: yes
 
 - name: Enable WordPress site
   file:
@@ -82,3 +87,4 @@
   loop_control:
     label: "{{ item.key }}"
   notify: reload nginx
+  become: yes
