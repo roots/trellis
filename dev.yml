@@ -14,7 +14,8 @@
     - { role: mailpit, tags: [mailpit, mailhog, mail] }
     - { role: php, tags: [php] }
     - { role: xdebug, tags: [php, xdebug] }
-    - { role: memcached, tags: [memcached] }
+    - { role: memcached, tags: [memcached], when: sites_using_memcached | count }
+    - { role: redis, tags: [redis], when: sites_using_redis | count }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }

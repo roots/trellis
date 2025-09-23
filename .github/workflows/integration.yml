@@ -25,7 +25,7 @@ jobs:
           sudo apt-get remove --purge nginx*
           sudo apt-get autoremove
           sudo apt-get autoclean
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - uses: actions/setup-python@v5
@@ -43,7 +43,7 @@ jobs:
         run: trellis new --name example.com --host www.example.com --trellis-version ${{ github.sha }} ./example.com
       - name: Update configs
         run: |
-          sudo echo "127.0.0.1 www.example.com example.com www.example-https.com example-https.com" | sudo tee -a /etc/hosts
+          sudo echo "127.0.0.1 www.example.com example.com www.example-https.com example-https.com www.redis.example.com redis.example.com" | sudo tee -a /etc/hosts
           cp ../../.github/files/inventory hosts/production
           cp ../../.github/files/wordpress_sites.yml group_vars/production/wordpress_sites.yml
           cp ../../.github/files/vault.yml group_vars/production/vault.yml
@@ -74,3 +74,38 @@ jobs:
         working-directory: /srv/www/example-https.com/current
       - name: Verify install
         run: curl -s https://example-https.com | grep "<title>Example HTTPS"
+      - name: Deploy Redis site
+        run: trellis deploy --extra-vars "web_user=runner project_git_repo=https://github.com/roots/bedrock.git" production redis.example.com
+        working-directory: example.com
+      - name: Install WordPress on Redis site
+        run: |
+          wp core install --url="http://redis.example.com" --title="Redis Example" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
+        working-directory: /srv/www/redis.example.com/current
+      - name: Verify Redis service
+        run: |
+          systemctl is-active redis-server
+          redis-cli ping
+      - name: Verify PHP Redis extension
+        run: php -m | grep redis
+      - name: Test Redis basic functionality
+        run: |
+          redis-cli SET test_key "test_value"
+          redis-cli GET test_key | grep "test_value"
+      - name: Verify Redis environment variables
+        run: |
+          grep "WP_REDIS_HOST" /srv/www/redis.example.com/current/.env
+          grep "WP_REDIS_PORT" /srv/www/redis.example.com/current/.env
+          grep "WP_REDIS_DATABASE" /srv/www/redis.example.com/current/.env
+      - name: Verify Redis site install
+        run: curl -s http://redis.example.com | grep "<title>Redis Example"
+      - name: Verify FastCGI cache on example.com
+        run: |
+          # First request - check headers
+          echo "=== First request ==="
+          curl -I http://example.com | grep -i "fastcgi-cache"
+          # Second request - check headers
+          echo "=== Second request ==="
+          curl -I http://example.com | grep -i "fastcgi-cache"
+          # Third request - check headers (should be HIT by now)
+          echo "=== Third request ==="
+          curl -I http://example.com | grep -iE "fastcgi-cache: (MISS|HIT|STALE)"

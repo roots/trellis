@@ -1,0 +1,41 @@
+---
+- name: Install Redis and PHP extension
+  apt:
+    name: "{{ item.key }}"
+    state: "{{ item.value }}"
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  loop: "{{ redis_packages | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Create Redis configuration file
+  template:
+    src: redis.conf.j2
+    dest: /etc/redis/redis.conf
+    owner: redis
+    group: redis
+    mode: 0640
+  notify: restart redis
+
+- name: Create Redis socket directory
+  file:
+    path: /var/run/redis
+    state: directory
+    owner: redis
+    group: redis
+    mode: 0755
+  when: redis_unixsocket is defined
+
+- name: Add web user to redis group for socket access
+  user:
+    name: "{{ web_user }}"
+    groups: redis
+    append: true
+  when: redis_unixsocket is defined
+
+- name: Ensure Redis is started and enabled
+  service:
+    name: redis-server
+    state: started
+    enabled: true

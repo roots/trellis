@@ -41,8 +41,8 @@
   vars:
     params:
       files:
-        - '{{ php_version }}.yml'
-        - '7.4.yml'
+        - '{{ php_version }}.yml' # e.g. 8.2.yml
+        - version-specific-defaults.yml
       paths:
         - "{{ playbook_dir }}/roles/php/vars/"
 
@@ -136,6 +136,10 @@
     msg: "{{ lookup('template', 'validate_ssh_msg.j2') }}"
   when: openssh_6_8_plus and validate_ssh | default(true)
   tags: [sshd]
+
+- name: Clean old APT sources
+  import_tasks: clean-apt-sources.yml
+  when: apt_clean_sources | default(false)
 
 - name: Update apt packages
   apt:

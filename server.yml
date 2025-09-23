@@ -16,14 +16,15 @@
     - { role: common, tags: [common] }
     - { role: swapfile, swapfile_size: 1GB, swapfile_file: /swapfile, tags: [swapfile] }
     - { role: fail2ban, tags: [fail2ban] }
-    - { role: ferm, tags: [ferm] }
+    - { role: ferm, tags: [ferm, letsencrypt] }
     - { role: ntp, tags: [ntp] }
     - { role: users, tags: [users] }
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb] }
     - { role: ssmtp, tags: [ssmtp, mail] }
     - { role: php, tags: [php] }
-    - { role: memcached, tags: [memcached] }
+    - { role: memcached, tags: [memcached], when: sites_using_memcached | count }
+    - { role: redis, tags: [redis], when: sites_using_redis | count }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }

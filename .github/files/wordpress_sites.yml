@@ -29,3 +29,22 @@ wordpress_sites:
       provider: letsencrypt
     cache:
       enabled: false
+  redis.example.com:
+    site_hosts:
+      - canonical: redis.example.com
+        redirects:
+          - www.redis.example.com
+    local_path: ../site
+    repo: git@github.com:roots/bedrock.git
+    branch: master
+    multisite:
+      enabled: false
+    ssl:
+      enabled: false
+      provider: letsencrypt
+    cache:
+      enabled: true
+    object_cache:
+      enabled: true
+      provider: redis
+      database: 0
