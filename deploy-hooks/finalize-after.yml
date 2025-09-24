@@ -1,0 +1,4 @@
+- name: Flush cache
+  command: wp cache flush
+  args:
+    chdir: "{{ deploy_helper.current_path }}"
