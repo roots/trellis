@@ -1,4 +1,12 @@
+- name: Check if WordPress is installed
+  command: wp core is-installed
+  args:
+    chdir: "{{ deploy_helper.current_path }}"
+  register: wp_installed
+  failed_when: false
+
 - name: Flush cache
   command: wp cache flush
   args:
     chdir: "{{ deploy_helper.current_path }}"
+  when: wp_installed.rc == 0
