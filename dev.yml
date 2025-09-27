@@ -8,6 +8,7 @@
     - { role: common, tags: [common] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
+    - { role: hosts, tags: [hosts] }
     - { role: ntp, tags: [ntp] }
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb] }
