@@ -1,0 +1,7 @@
+---
+- name: Add WordPress sites to /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "127.0.0.1 {{ item }}"
+    create: yes
+  with_items: "{{ wordpress_sites.values() | map(attribute='site_hosts') | list | flatten | map(attribute='canonical') | list | union(wordpress_sites.values() | map(attribute='site_hosts') | list | flatten | selectattr('redirects', 'defined') | map(attribute='redirects') | list | flatten) }}"
