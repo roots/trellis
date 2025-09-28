@@ -79,16 +79,6 @@ class CallbackModule(CallbackBase):
 
         return ' '.join(options)
 
-    def darwin_without_passlib(self):
-        if not sys.platform.startswith('darwin'):
-            return False
-
-        try:
-            import passlib.hash
-            return False
-        except:
-            return True
-
     def v2_playbook_on_play_start(self, play):
         play_context = PlayContext(play=play)
 
@@ -103,4 +93,3 @@ class CallbackModule(CallbackBase):
             host.vars['cli_options'] = self.cli_options()
             host.vars['cli_ask_pass'] = self._options.get('ask_pass', False)
             host.vars['cli_ask_become_pass'] = self._options.get('become_ask_pass', False)
-            host.vars['darwin_without_passlib'] = self.darwin_without_passlib()
