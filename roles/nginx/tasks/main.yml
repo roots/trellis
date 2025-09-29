@@ -1,8 +1,14 @@
 ---
 - name: Add Nginx APT key
-  ansible.builtin.apt_key:
+  ansible.builtin.get_url:
     url: "https://nginx.org/keys/nginx_signing.key"
-    state: present
+    dest: /etc/apt/trusted.gpg.d/nginx_signing.key
+    mode: '0644'
+
+- name: Convert nginx key to GPG format
+  ansible.builtin.command:
+    cmd: gpg --dearmor --output /etc/apt/trusted.gpg.d/nginx_signing.gpg /etc/apt/trusted.gpg.d/nginx_signing.key
+    creates: /etc/apt/trusted.gpg.d/nginx_signing.gpg
 
 - name: Add Nginx PPA
   apt_repository:
@@ -24,6 +30,8 @@
     path: "{{ nginx_path }}/{{ item }}"
     state: directory
     mode: '0755'
+    owner: root
+    group: root
   loop:
     - sites-available
     - sites-enabled
