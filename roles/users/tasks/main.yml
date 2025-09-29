@@ -28,18 +28,31 @@
   when: not sshd_permit_root_login
   tags: sshd
 
-- name: Setup users
-  user:
-    name: "{{ item.name }}"
-    group: "{{ item.groups[0] }}"
-    groups: "{{ item.groups | join(',') }}"
-    password: '{% for user in vault_users | default([]) if user.name == item.name and user.password is defined %}{{ user.password | password_hash("sha512", (user.salt | default(""))[:16] | regex_replace("[^\.\/a-zA-Z0-9]", "x")) }}{% else %}{{ "!" }}{% endfor %}'
-    state: present
-    shell: /bin/bash
-    update_password: "{{ item.update_password | default('always') }}"
-  loop: "{{ users }}"
+- name: Hash user passwords
+  command:
+    cmd: |
+      mkpasswd -m sha-512 -s {{ (item.salt | default(''))[:16] |  regex_replace("[^\.\/a-zA-Z0-9]", "x") }}
+    stdin: "{{ item.password }}"
+  loop: "{{ vault_users | default([]) }}"
   loop_control:
     label: "{{ item.name }}"
+  when: item.password is defined
+  register: user_passwords_hashed
+  no_log: true
+  changed_when: false
+
+- name: Setup users
+  user:
+    name: "{{ item.0.name }}"
+    group: "{{ item.0.groups[0] }}"
+    groups: "{{ item.0.groups | join(',') }}"
+    password: "{{ item.1.stdout if item.0.password is defined else omit }}"
+    state: present
+    shell: /bin/bash
+    update_password: "{{ item.0.update_password | default('always') }}"
+  loop: "{{ users | zip(user_passwords_hashed.results) }}"
+  loop_control:
+    label: "{{ item.0.name }}"
 
 - name: Add web user sudoers items for services
   template:
