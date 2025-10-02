@@ -7,6 +7,7 @@
   hosts: web:&{{ env }}
   gather_facts: false
   roles:
+    - { role: ansible-output-prettify, tags: [always] }
     - { role: connection, tags: [connection, always] }
 
 - name: WordPress Server - Install LEMP Stack with PHP and MariaDB MySQL
