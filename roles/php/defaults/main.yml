@@ -40,5 +40,5 @@ php_fpm_set_emergency_restart_threshold: false
 php_fpm_emergency_restart_threshold: 0
 php_fpm_set_emergency_restart_interval: false
 php_fpm_emergency_restart_interval: 0
-php_fpm_set_process_control_timeout: false
-php_fpm_process_control_timeout: 0
+php_fpm_set_process_control_timeout: true
+php_fpm_process_control_timeout: 10
