@@ -1,4 +1,9 @@
-### 1.26.0: Sept 19, 2025
+### 1.26.1: October 6, 2025
+* Add WordPress sites to `/etc/hosts` [#1606](https://github.com/roots/trellis/pull/1606)
+* Set php_fpm_process_control_timeout to 10 to prevent deploy downtime [#1603](https://github.com/roots/trellis/pull/1603)
+* Flush cache after deploy [#1604](https://github.com/roots/trellis/pull/1604)
+
+### 1.26.0: September 19, 2025
 * Update actions/checkout action to v5 [#1591](https://github.com/roots/trellis/pull/1591)
 * Replace deprecated `distutils` version usage [#1590](https://github.com/roots/trellis/pull/1590)
 * ✨ Add Redis object cache support [#1589](https://github.com/roots/trellis/pull/1589)
