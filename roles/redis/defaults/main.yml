@@ -18,7 +18,7 @@ redis_databases: 16
 # Persistence - RDB snapshots
 redis_save:
   - "900 1"
-  - "300 10" 
+  - "300 10"
   - "60 10000"
 
 redis_stop_writes_on_bgsave_error: "yes"
@@ -71,7 +71,6 @@ redis_aof_rewrite_incremental_fsync: "yes"
 # Security
 redis_requirepass: false
 redis_disabled_commands:
-  - FLUSHDB
   - FLUSHALL
   - KEYS
   - CONFIG
