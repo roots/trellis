@@ -24,7 +24,7 @@
   register: challenge_site_confs
   when:
     - site_uses_letsencrypt
-    - missing_hosts | count
+    - missing_hosts | count > 0
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
@@ -37,7 +37,7 @@
   register: challenge_sites_enabled
   when:
     - site_uses_letsencrypt
-    - missing_hosts | count
+    - missing_hosts | count > 0
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
