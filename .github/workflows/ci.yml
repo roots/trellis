@@ -17,7 +17,7 @@ jobs:
         python-version: ['3.x']
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
