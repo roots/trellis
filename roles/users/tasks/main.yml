@@ -28,12 +28,25 @@
   when: not sshd_permit_root_login
   tags: sshd
 
+- name: Hash user passwords
+  command:
+    cmd: |
+      mkpasswd -m sha-512 --salt={{ (item.salt | default(''))[:16] |  regex_replace("[^\.\/a-zA-Z0-9]", "x") }}
+    stdin: "{{ item.password }}"
+  loop: "{{ vault_users | default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
+  when: item.password is defined
+  register: user_passwords_hashed
+  no_log: true
+  changed_when: false
+
 - name: Setup users
   user:
     name: "{{ item.name }}"
     group: "{{ item.groups[0] }}"
     groups: "{{ item.groups | join(',') }}"
-    password: '{% for user in vault_users | default([]) if user.name == item.name and user.password is defined %}{{ user.password | password_hash("sha512", (user.salt | default(""))[:16] | regex_replace("[^\.\/a-zA-Z0-9]", "x")) }}{% else %}{{ "!" }}{% endfor %}'
+    password: "{{ (user_passwords_hashed.results | selectattr('item.name', 'equalto', item.name) | map(attribute='stdout') | first) | default(omit) }}"
     state: present
     shell: /bin/bash
     update_password: "{{ item.update_password | default('always') }}"
