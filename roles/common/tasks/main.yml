@@ -2,7 +2,7 @@
 - name: Validate wordpress_sites
   fail:
     msg: "{{ lookup('template', 'wordpress_sites.j2') }}"
-  when: wordpress_sites.keys() | difference(vault_wordpress_sites.keys()) | count
+  when: wordpress_sites.keys() | difference(vault_wordpress_sites.keys()) | count > 0
   tags: [wordpress]
 
 - name: Validate format of site_hosts
@@ -11,7 +11,7 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count
+  when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count > 0
   tags: [letsencrypt, wordpress]
 
 - name: Import PHP version specific vars
@@ -29,7 +29,7 @@
 - name: Verify dict format for package component variables
   fail:
     msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
-  when: package_vars_wrong_format | count
+  when: package_vars_wrong_format | count > 0
   vars:
     package_vars:
       apt_packages_default: "{{ apt_packages_default }}"
@@ -40,20 +40,20 @@
       php_extensions_custom: "{{ php_extensions_custom }}"
       sshd_packages_default: "{{ sshd_packages_default }}"
       sshd_packages_custom: "{{ sshd_packages_custom }}"
-    package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
+    package_vars_wrong_format: "{{ package_vars | dict2items | rejectattr('value', 'mapping') | map(attribute='key') | list }}"
   tags: [memcached, php, sshd]
 
 - name: Verify dict format for package combined variables
   fail:
     msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
-  when: package_vars_wrong_format | count
+  when: package_vars_wrong_format | count > 0
   vars:
     package_vars:
       apt_packages: "{{ apt_packages }}"
       memcached_packages: "{{ memcached_packages }}"
       php_extensions: "{{ php_extensions }}"
       sshd_packages: "{{ sshd_packages }}"
-    package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
+    package_vars_wrong_format: "{{ package_vars | dict2items | rejectattr('value', 'mapping') | map(attribute='key') | list }}"
   tags: [memcached, php, sshd]
 
 - name: Validate Ubuntu version

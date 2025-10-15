@@ -57,7 +57,9 @@
       host: "{{ item }}"
       password: "{{ mysql_root_password }}"
       check_implicit_admin: yes
+      column_case_sensitive: no
       state: present
+      login_unix_socket: /var/run/mysqld/mysqld.sock
     no_log: true
     loop:
       - "{{ inventory_hostname }}"
@@ -67,9 +69,10 @@
 
   - name: Delete anonymous MySQL server users
     mysql_user:
-      user: ""
+      name: ""
       host: "{{ item }}"
       state: absent
+      column_case_sensitive: no
     no_log: true
     loop:
       - localhost
