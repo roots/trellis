@@ -30,6 +30,7 @@
     version: "{{ project_version }}"
     accept_hostkey: "{{ project.repo_accept_hostkey | default(repo_accept_hostkey | default(true)) }}"
     force: yes
+    depth: 1
   ignore_errors: true
   no_log: true
   register: git_clone
