@@ -31,7 +31,7 @@
                     map('regex_replace', nginx_includes_pattern, '\\2') |
                     map('dirname') | unique | list | sort
                  }}"
-    when: nginx_includes_templates.files | count
+    when: nginx_includes_templates.files | count > 0
 
   - name: Template files out to includes.d
     template:

@@ -13,7 +13,7 @@ ListenAddress {{ address }}
 
 Protocol {{ sshd_protocol }}
 
-{% if sshd_accept_env | count %}
+{% if sshd_accept_env | count > 0 %}
   AcceptEnv {{ sshd_accept_env | join(' ') }}
 {% endif -%}
 AllowAgentForwarding {{ sshd_allow_agent_forwarding | ternary('yes', 'no') }}

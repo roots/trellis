@@ -6,15 +6,18 @@
   service:
     name: memcached
     state: restarted
+  become: yes
 
 - name: reload php-fpm
   service:
     name: php{{ php_version }}-fpm
     state: reloaded
+  become: yes
 
 - name: restart journald
   service:
     name: systemd-journald
     state: restarted
+  become: yes
 
 - import_tasks: reload_nginx.yml
