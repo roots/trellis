@@ -37,10 +37,25 @@
       chdir: "{{ deploy_helper.current_path }}"
     when: project.flush_rewrite_rules_on_deploy | default(flush_rewrite_rules_on_deploy)
 
-  - name: Flush cache
+  - name: Flush cache for Redis
+    command: redis-cli --scan --pattern '*' |
+      grep -E '^{{ (vault_wordpress_sites[item.key].db_user | default(item.key | underscore)) }}_wp:|^wp:' |
+      tr '\n' '\0' | xargs -0 -r -n 100 redis-cli unlink
+    when: item.value.object_cache.enabled | default(false) and item.value.object_cache.provider | default('') == 'redis'
+    loop: "{{ wordpress_sites | dict2items }}"
+    loop_control:
+      label: "{{ item.key }}"
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
+
+  - name: Flush cache for non-Redis
     command: wp cache flush
     args:
       chdir: "{{ deploy_helper.current_path }}"
+    when: not (item.value.object_cache.enabled | default(false) and item.value.object_cache.provider | default('') == 'redis')
+    loop: "{{ wordpress_sites | dict2items }}"
+    loop_control:
+      label: "{{ item.key }}"
 
   when: wp_installed.rc == 0
 
