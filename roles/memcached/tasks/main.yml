@@ -15,12 +15,6 @@
     mode: '0644'
   notify: restart memcached
 
-- name: Set the max open file descriptors
-  sysctl:
-    name: fs.file-max
-    value: "{{ memcached_fs_file_max | string }}"
-    state: present
-
 - name: Start the memcached service
   service:
     name: memcached
