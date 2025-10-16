@@ -19,5 +19,6 @@ server {
   listen 443 ssl default_server deferred;
 
   ssl_reject_handshake on;
+  include h5bp/directive-only/ssl.conf;
 }
 {% endif %}
