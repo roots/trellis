@@ -20,7 +20,7 @@
       label: "{{ item[0].item }}"
     when: project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool and item[1] is match(deploy_helper.releases_path)
 
-  - name: Warn about updating network database.
+  - name: Warn about updating network database
     debug:
       msg: "Updating the network database could take a long time with a large number of sites."
     when: project.update_db_on_deploy | default(update_db_on_deploy) and project.multisite.enabled | default(false)
