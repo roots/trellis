@@ -56,24 +56,6 @@
     package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
   tags: [memcached, php, sshd]
 
-- name: Validate Ubuntu version
-  debug:
-    msg: |
-      Ubuntu 18.04 Bionic is the minimum supported version of Ubuntu in Trellis 1.0+ (as of https://github.com/roots/trellis/pull/992)
-
-      20.04 Focal is the recommend version for Trellis 1.7+ (as of https://github.com/roots/trellis/pull/1197)
-
-      Your Ubuntu version is {{ ansible_distribution_version }} {{ ansible_distribution_release }}
-
-      We recommend you re-create your server to get the best experience.
-
-      Note: both of these methods will delete all your existing data. It's up to you to backup what's needed and restore it.
-
-      Development via Vagrant: `vagrant destroy && vagrant up`
-
-      Staging/Production: Create a new server with Ubuntu 20.04 and provision
-  when: ansible_distribution_version is version('18.04', '<')
-
 - name: Clean old APT sources
   import_tasks: clean-apt-sources.yml
   when: apt_clean_sources | default(false)
@@ -99,12 +81,6 @@
     line: \1 myhostname
     regexp: ^(hosts\:((?!myhostname).)*)$
     state: present
-
-- name: Generate SSH key for vagrant user for ansible_local provisioning
-  user:
-    name: vagrant
-    generate_ssh_key: yes
-  when: vagrant_local_provisioning | default(false)
 
 - block:
     - name: Retrieve SSH client IP
