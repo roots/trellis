@@ -1,3 +1,20 @@
+### 1.27.0: October 23, 2025
+* Drop Vagrant support [#1622](https://github.com/roots/trellis/pull/1622)
+* Remove dot in network database message [#1621](https://github.com/roots/trellis/pull/1621)
+* Remove memcached_fs_file_max setting [#1619](https://github.com/roots/trellis/pull/1619) 
+* Remove timezone validation [#1618](https://github.com/roots/trellis/pull/1618)
+* Remove SSH settings validation [#1614](https://github.com/roots/trellis/pull/1614)
+* Add missing SSL directives [#1476](https://github.com/roots/trellis/pull/1476)
+* Use double quotes for env values [#1617](https://github.com/roots/trellis/pull/1617)
+* Set php-fpm log_level to fix 'unknown value' [#1615](https://github.com/roots/trellis/pull/1615)
+* Set git depth to 1 for deploy role [#1616](https://github.com/roots/trellis/pull/1616)
+* Update dependency python to 3.14 [#1562](https://github.com/roots/trellis/pull/1562)
+* Add a User-Agent header to test_challenges.py. [#1595](https://github.com/roots/trellis/pull/1595)
+* Remove complex duplicate sites validation [#1612](https://github.com/roots/trellis/pull/1612)
+* Add select_sites custom filter [#1611](https://github.com/roots/trellis/pull/1611)
+* Refactor User password hash creation [#1607](https://github.com/roots/trellis/pull/1607)
+* Remove FLUSHDB from redis_disabled_commands [#1609](https://github.com/roots/trellis/pull/1609)
+
 ### 1.26.1: October 6, 2025
 * Add WordPress sites to `/etc/hosts` [#1606](https://github.com/roots/trellis/pull/1606)
 * Set php_fpm_process_control_timeout to 10 to prevent deploy downtime [#1603](https://github.com/roots/trellis/pull/1603)
