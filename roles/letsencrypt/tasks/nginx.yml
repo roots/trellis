@@ -4,6 +4,7 @@
     src: acme-challenge-location.conf.j2
     dest: "{{ nginx_path }}/acme-challenge-location.conf"
     mode: '0644'
+  become: yes
 
 - name: Get list of hosts in current Nginx conf
   shell: |
@@ -24,10 +25,11 @@
   register: challenge_site_confs
   when:
     - site_uses_letsencrypt
-    - missing_hosts | count
+    - missing_hosts | count > 0
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+  become: yes
 
 - name: Enable Nginx sites
   file:
@@ -37,10 +39,11 @@
   register: challenge_sites_enabled
   when:
     - site_uses_letsencrypt
-    - missing_hosts | count
+    - missing_hosts | count > 0
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+  become: yes
   notify: disable temporary challenge sites
 
 - import_tasks: "{{ playbook_dir }}/roles/common/tasks/reload_nginx.yml"
