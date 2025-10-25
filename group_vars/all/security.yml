@@ -29,6 +29,13 @@ fail2ban_services_custom:
     enabled: "false"
     port: http,https
     logpath: "{{ www_root }}/**/logs/access.log"
+  - name: nginx_env_probe
+    filter: nginx-env-probe
+    enabled: "true"
+    port: http,https
+    logpath: "{{ www_root }}/**/logs/error.log"
+    maxretry: 1
+    bantime: 3600
 
 # If sshd_permit_root_login: false, admin_user must be in 'users' (`group_vars/all/users.yml`) with sudo group
 # and in 'vault_users' (`group_vars/staging/vault.yml`, `group_vars/production/vault.yml`)
