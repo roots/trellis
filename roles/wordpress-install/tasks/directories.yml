@@ -9,6 +9,7 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+  become_method: sudo
 
 - name: Create shared folder of sites
   file:
@@ -20,6 +21,7 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+  become_method: sudo
 
 - name: Change site owner to user
   file:
@@ -31,4 +33,5 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+  become_method: sudo
   when: chown_site_directory | default(false)
