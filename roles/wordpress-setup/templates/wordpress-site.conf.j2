@@ -170,6 +170,17 @@ server {
   }
   {% endblock %}
 
+  {% block plugin_docs_files -%}
+  # Block .txt and .md files in plugins and mu-plugins directories to prevent version disclosure
+  location ~* /plugins/.+\.(txt|md)$ {
+    deny all;
+  }
+
+  location ~* /mu-plugins/.+\.(txt|md)$ {
+    deny all;
+  }
+  {% endblock %}
+
   {% block location_primary -%}
   location / {
     try_files $uri $uri/ /index.php?$args;
