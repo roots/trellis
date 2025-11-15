@@ -30,6 +30,7 @@
     mode: '0644'
   loop: "{{ nginx_sites_confs }}"
   when: item.enabled | default(true)
+  become: yes
   notify: reload nginx
   tags: nginx-sites
 
@@ -39,6 +40,7 @@
     state: absent
   when: not(item.enabled | default(true))
   loop: "{{ nginx_sites_confs }}"
+  become: yes
   notify: reload nginx
   tags: nginx-sites
 
@@ -48,8 +50,9 @@
     src: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
     state: link
     force: yes
-  when: item.enabled | default(true)
   loop: "{{ nginx_sites_confs }}"
+  when: item.enabled | default(true)
+  become: yes
   notify: reload nginx
   tags: nginx-sites
 
@@ -58,6 +61,7 @@
     src: "{{ playbook_dir }}/roles/letsencrypt/templates/acme-challenge-location.conf.j2"
     dest: "{{ nginx_path }}/acme-challenge-location.conf"
     mode: '0644'
+  become: yes
   notify: reload nginx
 
 - name: Create WordPress configuration for Nginx
@@ -69,6 +73,7 @@
   loop_control:
     label: "{{ item.key }}"
   notify: reload nginx
+  become: yes
   tags: nginx-includes
 
 - name: Enable WordPress site
@@ -81,4 +86,5 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+  become: yes
   notify: reload nginx

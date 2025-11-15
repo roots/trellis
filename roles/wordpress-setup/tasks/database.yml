@@ -23,6 +23,7 @@
       login_host: "{{ site_env.db_host }}"
       login_user: "{{ mysql_root_user }}"
       login_password: "{{ mysql_root_password }}"
+      column_case_sensitive: no
     no_log: true
     loop: "{{ wordpress_sites | dict2items }}"
     loop_control:

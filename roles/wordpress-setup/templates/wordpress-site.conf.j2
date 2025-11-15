@@ -287,7 +287,7 @@ server {
 {% endblock -%}
 
 {%- block redirects_domains %}
-{% if site_hosts_redirects | default([]) | count %}
+{% if site_hosts_redirects | default([]) | count > 0 %}
 # Redirect some domains
 {% endif %}
 {% for host in item.value.site_hosts if host.redirects | default([]) %}
