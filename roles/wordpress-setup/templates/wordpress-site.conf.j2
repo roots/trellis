@@ -170,13 +170,9 @@ server {
   }
   {% endblock %}
 
-  {% block plugin_docs_files -%}
-  # Block .txt and .md files in plugins and mu-plugins directories to prevent version disclosure
-  location ~* /plugins/.+\.(txt|md)$ {
-    deny all;
-  }
-
-  location ~* /mu-plugins/.+\.(txt|md)$ {
+  {% block plugin_theme_docs_files -%}
+  # Block .txt and .md files in plugins, mu-plugins, and themes directories to prevent version disclosure
+  location ~* /app/(plugins|mu-plugins|themes)/.+\.(txt|md)$ {
     deny all;
   }
   {% endblock %}
