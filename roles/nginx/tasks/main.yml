@@ -24,6 +24,8 @@
     path: "{{ nginx_path }}/{{ item }}"
     state: directory
     mode: '0755'
+    owner: root
+    group: root
   loop:
     - sites-available
     - sites-enabled
