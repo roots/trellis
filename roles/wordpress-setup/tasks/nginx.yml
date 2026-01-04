@@ -48,8 +48,8 @@
     src: "{{ nginx_path }}/sites-available/{{ item.src | basename | regex_replace('.j2$', '') }}"
     state: link
     force: yes
-  when: item.enabled | default(true)
   loop: "{{ nginx_sites_confs }}"
+  when: item.enabled | default(true)
   notify: reload nginx
   tags: nginx-sites
 
