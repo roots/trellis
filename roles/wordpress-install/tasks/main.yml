@@ -65,6 +65,8 @@
   args:
     chdir: "{{ www_root }}/{{ item.item.key }}/{{ item.item.value.current_path | default('current') }}/"
   loop: "{{ wp_install.results }}"
+  loop_control:
+    label: "{{ item.item.key }}"
   when: item is changed
 
 - name: Update WP Multisite Home URL

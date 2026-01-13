@@ -7,4 +7,4 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: ssl_enabled and item.value.ssl.client_cert_url is defined
+  when: ssl_enabled and 'client_cert_url' in item.value.ssl
