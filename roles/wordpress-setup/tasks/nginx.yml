@@ -7,7 +7,7 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: ssl_enabled and item.value.ssl.cert is defined
+  when: ssl_enabled and 'cert' in item.value.ssl
   notify: reload nginx
 
 - name: Copy SSL key
@@ -18,7 +18,7 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
-  when: ssl_enabled and item.value.ssl.key is defined
+  when: ssl_enabled and 'key' in item.value.ssl
   notify: reload nginx
 
 - import_tasks: "{{ playbook_dir }}/roles/common/tasks/disable_challenge_sites.yml"
