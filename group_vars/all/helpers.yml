@@ -33,6 +33,7 @@ object_cache_enabled_memcached: "{{ item.value.object_cache.enabled | default(fa
 # Sites using Redis or Memcached object cache
 sites_using_redis: "{{ (wordpress_sites | select_sites('object_cache.enabled', 'true') | select_sites('object_cache.provider', 'eq', 'redis')).keys() | list }}"
 sites_using_memcached: "{{ (wordpress_sites | select_sites('object_cache.enabled', 'true') | select_sites('object_cache.provider', 'eq', 'memcached')).keys() | list }}"
+sites_using_letsencrypt: "{{ (wordpress_sites | select_sites('ssl.enabled', 'true') | select_sites('ssl.provider', 'eq', 'letsencrypt')).keys() | list }}"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"
