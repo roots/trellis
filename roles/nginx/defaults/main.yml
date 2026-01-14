@@ -15,3 +15,15 @@ nginx_cache_path: /var/cache/nginx
 nginx_cache_key_storage_size: 10m
 nginx_cache_size: 250m
 nginx_cache_inactive: 1h
+
+# Resolver for ACME and other dynamic operations
+nginx_resolver: 1.1.1.1 8.8.8.8
+nginx_resolver_timeout: 5s
+
+# ACME (Let's Encrypt) params
+acme_server: https://acme-v02.api.letsencrypt.org/directory
+acme_account_key_type: ecdsa:256
+acme_certificate_key_type: ecdsa:256
+acme_ssl_verify: "on"
+nginx_acme_state_path: /var/lib/nginx/acme
+nginx_acme_zone_size: 1M
