@@ -1,6 +1,13 @@
 ---
-- name: Include php{{ php_version }} related vars
-  include_vars: 'roles/php/vars/{{ php_version }}.yml'
+- name: Import PHP version specific vars
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - '{{ php_version }}.yml' # e.g. 8.2.yml
+        - version-specific-defaults.yml
+      paths:
+        - "{{ playbook_dir }}/roles/php/vars/"
 
 - name: Install Xdebug
   apt:

@@ -20,7 +20,7 @@
       label: "{{ item[0].item }}"
     when: project.update_wp_theme_paths | default(update_wp_theme_paths | default(true)) | bool and item[1] is match(deploy_helper.releases_path)
 
-  - name: Warn about updating network database.
+  - name: Warn about updating network database
     debug:
       msg: "Updating the network database could take a long time with a large number of sites."
     when: project.update_db_on_deploy | default(update_db_on_deploy) and project.multisite.enabled | default(false)
@@ -30,6 +30,17 @@
     args:
       chdir: "{{ deploy_helper.current_path }}"
     when: project.update_db_on_deploy | default(update_db_on_deploy)
+
+  - name: Flush rewrite rules
+    command: wp rewrite flush
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
+    when: project.flush_rewrite_rules_on_deploy | default(flush_rewrite_rules_on_deploy)
+
+  - name: Flush cache
+    command: wp cache flush
+    args:
+      chdir: "{{ deploy_helper.current_path }}"
 
   when: wp_installed.rc == 0
 

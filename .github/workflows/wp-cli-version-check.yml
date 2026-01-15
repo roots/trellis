@@ -13,20 +13,22 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Get latest WP-CLI version
         id: get-version
         run: |
-          LATEST_VERSION=$(curl -s https://api.github.com/repos/wp-cli/wp-cli/releases/latest | jq -r .tag_name | sed 's/^v//')
+          LATEST_VERSION=$(gh release view --repo wp-cli/wp-cli --json 'tagName' --template '{{slice .tagName 1}}')
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Update wp_cli_version
         run: |
           sed -i "s/wp_cli_version: .*/wp_cli_version: ${{ steps.get-version.outputs.LATEST_VERSION }}/" roles/wp-cli/defaults/main.yml
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Update WP-CLI version to ${{ steps.get-version.outputs.LATEST_VERSION }}

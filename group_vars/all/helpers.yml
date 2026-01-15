@@ -10,13 +10,34 @@ wordpress_env_defaults:
   domain_current_site: "{{ site_hosts_canonical | first }}"
   wp_debug_log: "{{ www_root }}/{{ item.key }}/logs/debug.log"
 
-site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
+# Redis cache environment variables (when enabled)
+redis_cache_env:
+  wp_redis_host: "{{ item.value.object_cache.host | default('127.0.0.1') }}"
+  wp_redis_port: "{{ item.value.object_cache.port | default(6379) }}"
+  wp_redis_database: "{{ item.value.object_cache.database | default(0) }}"
+  wp_redis_prefix: "{{ item.value.object_cache.prefix | default(item.key | underscore + '_') }}"
+  wp_cache_key_salt: "{{ item.key }}_{{ env }}"
+
+# Memcached cache environment variables (when enabled)
+memcached_cache_env:
+  wp_memcached_host: "{{ item.value.object_cache.host | default('127.0.0.1') }}"
+  wp_memcached_port: "{{ item.value.object_cache.port | default(11211) }}"
+  wp_memcached_prefix: "{{ item.value.object_cache.prefix | default(item.key | underscore + '_') }}"
+  wp_cache_key_salt: "{{ item.key }}_{{ env }}"
+
+site_env: "{{ wordpress_env_defaults | combine(vault_wordpress_env_defaults | default({}), object_cache_enabled_redis | ternary(redis_cache_env, {}), object_cache_enabled_memcached | ternary(memcached_cache_env, {}), item.value.env | default({}), vault_wordpress_sites[item.key].env) }}"
+
+object_cache_enabled_redis: "{{ item.value.object_cache.enabled | default(false) and item.value.object_cache.provider | default('') == 'redis' }}"
+object_cache_enabled_memcached: "{{ item.value.object_cache.enabled | default(false) and item.value.object_cache.provider | default('') == 'memcached' }}"
+
+# Sites using Redis or Memcached object cache
+sites_using_redis: "{{ (wordpress_sites | select_sites('object_cache.enabled', 'true') | select_sites('object_cache.provider', 'eq', 'redis')).keys() | list }}"
+sites_using_memcached: "{{ (wordpress_sites | select_sites('object_cache.enabled', 'true') | select_sites('object_cache.provider', 'eq', 'memcached')).keys() | list }}"
 site_hosts_canonical: "{{ item.value.site_hosts | map(attribute='canonical') | list }}"
 site_hosts_redirects: "{{ item.value.site_hosts | selectattr('redirects', 'defined') | sum(attribute='redirects', start=[]) | list }}"
 site_hosts: "{{ site_hosts_canonical | union(site_hosts_redirects) }}"
 multisite_subdomains_wildcards: "{{ item.value.multisite.subdomains | default(false) | ternary( site_hosts_canonical | map('regex_replace', '^(www\\.)?(.*)$', '*.\\2') | list, [] ) }}"
 ssl_enabled: "{{ item.value.ssl is defined and item.value.ssl.enabled | default(false) }}"
-ssl_stapling_enabled: "{{ item.value.ssl is defined and item.value.ssl.stapling_enabled | default(true) }}"
 cron_enabled: "{{ site_env.disable_wp_cron and (not item.value.multisite.enabled | default(false) or (item.value.multisite.enabled | default(false) and item.value.multisite.cron | default(true))) }}"
 sites_using_ssl: "{{ wordpress_sites | dict2items | selectattr('value.ssl.enabled', 'equalto', true) | items2dict }}"
 first_site_using_ssl: "{{ (sites_using_ssl | dict2items | first | default(None, True)) }}"

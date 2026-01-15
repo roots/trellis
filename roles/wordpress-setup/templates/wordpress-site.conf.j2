@@ -30,6 +30,9 @@ server {
   index index.php index.htm index.html;
   add_header Fastcgi-Cache $upstream_cache_status;
 
+  # Additional proxy header for WordPress (notably its Site Health check)
+  add_header X-Cache-Enabled $loopback_header_x_cache_enabled;
+
   # Specify a charset
   charset utf-8;
 
@@ -49,7 +52,7 @@ server {
   {% endblock -%}
 
   {% block cache_conditions -%}
-  {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+  {% if fastcgi_cache_enabled -%}
   # Fastcgi cache conditions
   set $skip_cache 0;
 
@@ -93,22 +96,19 @@ server {
   {% if ssl_enabled -%}
   # SSL configuration
   include h5bp/directive-only/ssl.conf;
-  {% if ssl_stapling_enabled -%}
-  include h5bp/directive-only/ssl-stapling.conf;
-  {% endif -%}
 
   ssl_buffer_size 1400; # 1400 bytes to fit in one MTU
 
   {% if item.value.ssl.provider | default('manual') != 'self-signed' -%}
-  add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') | trim }}";
+  add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('equalto', omit) | join('; ') | trim }}";
   {% endif -%}
 
-  {% if item.value.ssl.client_cert_url is defined -%}
+  {% if 'client_cert_url' in item.value.ssl -%}
   ssl_verify_client       on;
   ssl_client_certificate  {{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt;
   {% endif -%}
 
-  {% if item.value.ssl.provider | default('manual') == 'manual' and item.value.ssl.cert is defined and item.value.ssl.key is defined -%}
+  {% if item.value.ssl.provider | default('manual') == 'manual' and 'cert' in item.value.ssl and 'key' in item.value.ssl -%}
   ssl_certificate         {{ nginx_path }}/ssl/{{ item.value.ssl.cert | basename }};
   ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
 
@@ -184,6 +184,13 @@ server {
   }
   {% endblock %}
 
+  {% block plugin_theme_docs_files -%}
+  # Block .txt and .md files in plugins, mu-plugins, and themes directories to prevent version disclosure
+  location ~* /app/(plugins|mu-plugins|themes)/.+\.(txt|md)$ {
+    deny all;
+  }
+  {% endblock %}
+
   {% block location_primary -%}
   location / {
     try_files $uri $uri/ /index.php?$args;
@@ -191,7 +198,7 @@ server {
   {% endblock %}
 
   {% block disable_xmlrpc -%}
-    {% if item.value.xmlrpc.enabled is defined and item.value.xmlrpc.enabled == false %}
+    {% if 'xmlrpc' in item.value and item.value.xmlrpc.enabled | default(true) == false %}
       location ~* xmlrpc\.php$ {
         return 444;
       }
@@ -256,7 +263,7 @@ server {
     {% endblock -%}
 
     {% block cache_config -%}
-    {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
+    {% if fastcgi_cache_enabled -%}
     # Fastcgi cache settings
     fastcgi_cache wordpress;
     fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
@@ -269,6 +276,7 @@ server {
 
     {% block fastcgi_basic -%}
     include fastcgi_params;
+    fastcgi_param SERVER_NAME $host;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
     fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
@@ -304,7 +312,7 @@ server {
 {% endblock -%}
 
 {%- block redirects_domains %}
-{% if site_hosts_redirects | default([]) | count %}
+{% if site_hosts_redirects | default([]) | count > 0 %}
 # Redirect some domains
 {% endif %}
 {% for host in item.value.site_hosts if host.redirects | default([]) %}

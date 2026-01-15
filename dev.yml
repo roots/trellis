@@ -2,19 +2,20 @@
 - name: "WordPress Server: Install LEMP Stack with PHP and MariaDB MySQL"
   hosts: web:&development
   become: yes
-  remote_user: vagrant
 
   roles:
     - { role: common, tags: [common] }
     - { role: fail2ban, tags: [fail2ban] }
     - { role: ferm, tags: [ferm] }
+    - { role: hosts, tags: [hosts] }
     - { role: ntp, tags: [ntp] }
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb] }
     - { role: mailpit, tags: [mailpit, mailhog, mail] }
     - { role: php, tags: [php] }
     - { role: xdebug, tags: [php, xdebug] }
-    - { role: memcached, tags: [memcached] }
+    - { role: memcached, tags: [memcached], when: sites_using_memcached | count > 0 }
+    - { role: redis, tags: [redis], when: sites_using_redis | count > 0 }
     - { role: nginx, tags: [nginx] }
     - { role: logrotate, tags: [logrotate] }
     - { role: composer, tags: [composer] }

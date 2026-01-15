@@ -50,7 +50,22 @@ pid        /run/nginx.pid;
 {% endblock %}
 
 http {
-  {% block http_begin %}{% endblock %}
+  {% block http_begin %}
+  map $upstream_cache_status $header_x_cache_enabled {
+    default true;
+    BYPASS  "";
+  }
+
+  map $server_addr:$remote_addr $is_loopback_request {
+    "~^([^:]+):\1$" 1;
+    default         0;
+  }
+
+  map $is_loopback_request:$header_x_cache_enabled $loopback_header_x_cache_enabled {
+    default "";
+    1:true  true;
+  }
+  {% endblock %}
 
   {% block server_tokens -%}
   # Hide nginx version information.
@@ -66,8 +81,8 @@ http {
   fastcgi_cache_path {{ nginx_cache_path }} levels=1:2 keys_zone=wordpress:{{ nginx_cache_key_storage_size }} max_size={{ nginx_cache_size }} inactive={{ nginx_cache_inactive }};
   fastcgi_cache_use_stale updating error timeout invalid_header http_500;
   fastcgi_cache_lock on;
-  fastcgi_cache_key $realpath_root$scheme$host$request_uri$request_method$http_origin;
-  fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
+  fastcgi_cache_key $realpath_root$scheme$host$request_uri$request_method$http_origin$http_x_http_method_override;
+  fastcgi_ignore_headers Expires Set-Cookie;
   fastcgi_pass_header Set-Cookie;
   fastcgi_pass_header Cookie;
   {% endblock %}

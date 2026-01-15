@@ -17,14 +17,34 @@ nginx_hsts_preload: false
 
 # HSTS helpers
 hsts_max_age: "{{ item.value.ssl.hsts_max_age | default(nginx_hsts_max_age) }}"
-hsts_include_subdomains: "{{ item.value.ssl.hsts_include_subdomains | default(nginx_hsts_include_subdomains) | ternary('includeSubDomains', None) }}"
-hsts_preload: "{{ item.value.ssl.hsts_preload | default(nginx_hsts_preload) | ternary('preload', None) }}"
+hsts_include_subdomains: "{{ item.value.ssl.hsts_include_subdomains | default(nginx_hsts_include_subdomains) | ternary('includeSubDomains', omit) }}"
+hsts_preload: "{{ item.value.ssl.hsts_preload | default(nginx_hsts_preload) | ternary('preload', omit) }}"
 
 # Fastcgi cache params
 nginx_cache_duration: 30s
 nginx_skip_cache_uri: /wp-admin/|/wp-json/|/xmlrpc.php|wp-.*.php|/feed/|index.php|sitemap(_index)?.xml
 nginx_skip_cache_cookie: comment_author|wordpress_[a-f0-9]+|wp-postpass|wordpress_no_cache|wordpress_logged_in
 nginx_cache_background_update: "on"
+
+# Cache configuration helpers
+cache_config: "{{ item.value.cache | default({}) }}"
+object_cache_config: "{{ item.value.object_cache | default({}) }}"
+
+# FastCGI cache - enabled when cache.enabled is true (backward compatible)
+fastcgi_cache_enabled: "{{ cache_config.enabled | default(false) }}"
+
+# Object cache - enabled when object_cache.enabled is true
+object_cache_enabled: "{{ object_cache_config.enabled | default(false) }}"
+object_cache_provider: "{{ object_cache_config.provider | default('redis') }}"
+
+# Object cache defaults
+redis_host: "{{ object_cache_config.host | default('127.0.0.1') }}"
+redis_port: "{{ object_cache_config.port | default(6379) }}"
+redis_database: "{{ object_cache_config.database | default(0) }}"
+redis_password: "{{ object_cache_config.password | default('') }}"
+redis_prefix: "{{ object_cache_config.prefix | default('') }}"
+memcached_host: "{{ object_cache_config.host | default('127.0.0.1') }}"
+memcached_port: "{{ object_cache_config.port | default(11211) }}"
 
 # Nginx includes
 nginx_includes_templates_path: nginx-includes

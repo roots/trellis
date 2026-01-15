@@ -3,8 +3,10 @@
   command: nginx -t
   notify: "{{ (role_path | basename == 'common') | ternary('perform nginx reload', omit) }}"
   changed_when: true
+  become: yes
 
 - name: perform nginx reload
   service:
     name: nginx
     state: reloaded
+  become: yes

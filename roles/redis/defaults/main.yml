@@ -1,0 +1,87 @@
+---
+# Basic Redis configuration
+redis_daemonize: "yes"
+redis_pidfile: /run/redis/redis-server.pid
+redis_port: 6379
+redis_bind_interface: 127.0.0.1
+redis_unixsocket: /var/run/redis/redis.sock
+redis_timeout: 0
+redis_tcp_keepalive: 0
+
+# Logging
+redis_loglevel: notice
+redis_logfile: /var/log/redis/redis-server.log
+
+# Database configuration
+redis_databases: 16
+
+# Persistence - RDB snapshots
+redis_save:
+  - "900 1"
+  - "300 10"
+  - "60 10000"
+
+redis_stop_writes_on_bgsave_error: "yes"
+redis_rdbcompression: "yes"
+redis_rdbchecksum: "yes"
+redis_dbfilename: dump.rdb
+redis_dir: /var/lib/redis
+
+# Memory management
+redis_maxclients: 10000
+redis_maxmemory: 256mb
+redis_maxmemory_policy: allkeys-lru
+redis_maxmemory_samples: 5
+
+# Append Only File (AOF) persistence
+redis_appendonly: "no"
+redis_appendfilename: appendonly.aof
+redis_appendfsync: everysec
+redis_no_appendfsync_on_rewrite: "no"
+redis_auto_aof_rewrite_percentage: 100
+redis_auto_aof_rewrite_min_size: 64mb
+redis_aof_load_truncated: "yes"
+
+# Advanced configuration
+redis_lua_time_limit: 5000
+redis_slowlog_log_slower_than: 10000
+redis_slowlog_max_len: 128
+redis_latency_monitor_threshold: 0
+
+# Hash table optimizations
+redis_hash_max_ziplist_entries: 512
+redis_hash_max_ziplist_value: 64
+redis_list_max_ziplist_entries: 512
+redis_list_max_ziplist_value: 64
+redis_set_max_intset_entries: 512
+redis_zset_max_ziplist_entries: 128
+redis_zset_max_ziplist_value: 64
+redis_hll_sparse_max_bytes: 3000
+redis_activerehashing: "yes"
+
+# Client output buffer limits
+redis_client_output_buffer_limit_normal: "0 0 0"
+redis_client_output_buffer_limit_replica: "256mb 64mb 60"
+redis_client_output_buffer_limit_pubsub: "32mb 8mb 60"
+
+# Misc
+redis_hz: 10
+redis_aof_rewrite_incremental_fsync: "yes"
+
+# Security
+redis_requirepass: false
+redis_disabled_commands:
+  - FLUSHALL
+  - KEYS
+  - CONFIG
+  - SHUTDOWN
+
+# Custom configuration
+redis_includes: []
+redis_extra_config: {}
+
+redis_packages_default:
+  redis-server: "{{ apt_package_state }}"
+
+redis_packages_custom: {}
+redis_packages: "{{ redis_packages_default | combine(php_redis_packages, redis_packages_custom) }}"
