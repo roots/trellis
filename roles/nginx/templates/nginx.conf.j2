@@ -67,6 +67,25 @@ http {
   }
   {% endblock %}
 
+  {% block resolver -%}
+  resolver {{ nginx_resolver }};
+  resolver_timeout {{ nginx_resolver_timeout }};
+  {% endblock %}
+
+  {% block acme -%}
+  {% if sites_using_letsencrypt | length > 0 %}
+  acme_issuer letsencrypt {
+    uri             {{ acme_server }};
+    state_path      {{ nginx_acme_state_path }};
+    account_key     {{ acme_account_key_type }};
+    ssl_verify      {{ acme_ssl_verify }};
+    accept_terms_of_service;
+  }
+
+  acme_shared_zone zone=acme:{{ nginx_acme_zone_size }};
+  {% endif %}
+  {% endblock %}
+
   {% block server_tokens -%}
   # Hide nginx version information.
   # Default: on

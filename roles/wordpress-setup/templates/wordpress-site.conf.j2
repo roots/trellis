@@ -99,8 +99,10 @@ server {
   ssl_certificate_key     {{ nginx_path }}/ssl/{{ item.value.ssl.key | basename }};
 
   {% elif item.value.ssl.provider | default('manual') == 'letsencrypt' -%}
-  ssl_certificate         {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}-bundled.cert;
-  ssl_certificate_key     {{ nginx_path }}/ssl/letsencrypt/{{ item.key }}.key;
+  acme_certificate letsencrypt {{ site_hosts | join(' ') }} key={{ acme_certificate_key_type }};
+
+  ssl_certificate         $acme_certificate;
+  ssl_certificate_key     $acme_certificate_key;
 
   {% elif item.value.ssl.provider | default('manual') == 'self-signed' -%}
   ssl_certificate         {{ nginx_path }}/ssl/{{ item.key }}.cert;
@@ -112,8 +114,6 @@ server {
   {% endblock -%}
 
   {% block acme_challenge -%}
-  include acme-challenge-location.conf;
-
   {% endblock -%}
 
   {% block includes_d -%}

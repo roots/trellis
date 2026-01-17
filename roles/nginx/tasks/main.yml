@@ -19,6 +19,24 @@
     state: "{{ nginx_package_state | default(apt_package_state) }}"
     update_cache: true
 
+- name: Install Nginx Acme module
+  ansible.builtin.apt:
+    name: nginx-module-acme
+    state: "{{ nginx_package_state | default(apt_package_state) }}"
+
+- name: Ensure modules-enabled directory exists
+  file:
+    path: "{{ nginx_path }}/modules-enabled"
+    state: directory
+    mode: '0755'
+
+- name: Enable Nginx Acme module
+  copy:
+    content: "load_module modules/ngx_http_acme_module.so;\n"
+    dest: "{{ nginx_path }}/modules-enabled/50-mod-http-acme.conf"
+    mode: '0644'
+  notify: reload nginx
+
 - name: Ensure site directories exist
   file:
     path: "{{ nginx_path }}/{{ item }}"
@@ -33,6 +51,14 @@
     mode: '0700'
     path: "{{ nginx_path }}/ssl"
     state: directory
+
+- name: Create ACME state directory
+  file:
+    path: "{{ nginx_acme_state_path }}"
+    state: directory
+    owner: "{{ nginx_user.split()[0] }}"
+    mode: '0700'
+  when: sites_using_letsencrypt | length > 0
 
 - name: Copy h5bp configs
   copy:
