@@ -48,6 +48,9 @@ server {
   {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/http3-tune.conf;
   include includes/directive-only/http3-negotiate.conf;
+  {% if nginx_rtt0_enabled -%}
+  include includes/directive-only/http3-rtt0.conf;
+  {% endif %}
   {% endif %}
   {% endblock -%}
 
