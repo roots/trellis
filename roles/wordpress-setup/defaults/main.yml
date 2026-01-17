@@ -9,6 +9,7 @@ nginx_sites_confs:
 
 nginx_http2_enabled: true
 nginx_http3_enabled: false
+nginx_rtt0_enabled: false
 
 # HSTS defaults
 nginx_hsts_max_age: 31536000
