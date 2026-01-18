@@ -6,6 +6,15 @@ server {
   {% block server_id -%}
   listen {{ ssl_enabled | ternary('[::]:443 ssl', '[::]:80') }};
   listen {{ ssl_enabled | ternary('443 ssl', '80') }};
+
+  {% if nginx_http3_enabled and ssl_enabled -%}
+  # Listen on UDP for QUIC+HTTP/3
+  listen [::]:443 quic{% if is_first_site_use_ssl %} reuseport{% endif -%};
+  listen 443 quic{% if is_first_site_use_ssl %} reuseport{% endif -%};
+  {% if is_first_site_use_ssl -%}# there has to be one listen quic directive with reusport for working QUIC responses in current nginx version, using the first site.
+  {% endif %}
+  {% endif %}
+
   http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
@@ -35,6 +44,14 @@ server {
   sendfile off;
 
   {% endif -%}
+
+  {% if nginx_http3_enabled and ssl_enabled -%}
+  include includes/directive-only/http3-tune.conf;
+  include includes/directive-only/http3-negotiate.conf;
+  {% if nginx_rtt0_enabled -%}
+  include includes/directive-only/http3-rtt0.conf;
+  {% endif %}
+  {% endif %}
   {% endblock -%}
 
   {% block cache_conditions -%}
@@ -285,6 +302,10 @@ server {
 
   {{ self.includes_d() -}}
 
+  {% if nginx_http3_enabled and ssl_enabled -%}
+  include includes/directive-only/http3-negotiate-redirect.conf;
+  {% endif %}
+
   location / {
     return 301 https://$host$request_uri;
   }
@@ -303,11 +324,24 @@ server {
   listen [::]:443 ssl;
   listen 443 ssl;
   {% endif -%}
+
   listen [::]:80;
   listen 80;
+
+  {% if nginx_http3_enabled and ssl_enabled -%}
+  # Listen on UDP for QUIC+HTTP/3
+  listen [::]:443 quic;
+  listen 443 quic;
+  {% endif %}
+
   http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
   server_name {{ host.redirects | join(' ') }};
+
+  {% if nginx_http3_enabled and ssl_enabled -%}
+  include includes/directive-only/http3-tune.conf;
+  include includes/directive-only/http3-negotiate-redirect.conf;
+  {% endif %}
 
   {{ self.https() -}}
 
