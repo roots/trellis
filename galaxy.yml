@@ -19,3 +19,6 @@ roles:
   - name: mailpit
     src: roots.mailpit
     version: v1.0.0
+
+  - src: https://github.com/roots/ansible-output-prettify.git
+    name: ansible-output-prettify
