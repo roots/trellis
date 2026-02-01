@@ -23,6 +23,13 @@
 
 - import_tasks: "{{ playbook_dir }}/roles/common/tasks/disable_challenge_sites.yml"
 
+- name: Copy Nginx Wordpress site include folder
+  copy:
+    src: templates/includes
+    dest: "{{ nginx_path }}"
+    mode: '0755'
+  notify: reload nginx
+
 - name: Create Nginx available sites
   template:
     src: "{{ item.src }}"
@@ -68,6 +75,8 @@
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
+  vars:
+    is_first_site_use_ssl: "{{ first_site_using_ssl.key == item.key }}"
   notify: reload nginx
   tags: nginx-includes
 
