@@ -1,4 +1,0 @@
-location ^~ /.well-known/acme-challenge/ {
-  alias {{ acme_tiny_challenges_directory }}/;
-  try_files $uri =404;
-}

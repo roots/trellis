@@ -51,7 +51,7 @@ jobs:
       - run: trellis exec ansible-playbook --version
         working-directory: example.com/trellis
       - name: Provision
-        run: trellis provision --extra-vars "web_user=runner letsencrypt_ca=https://127.0.0.1:8443/acme/acme" production
+        run: trellis provision --extra-vars "web_user=runner acme_server=https://127.0.0.1:8443/acme/acme/directory acme_ssl_verify=off" production
         working-directory: example.com
       - name: Deploy non-https site
         run: trellis deploy --extra-vars "web_user=runner project_git_repo=https://github.com/roots/bedrock.git" production example.com
