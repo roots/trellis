@@ -97,7 +97,7 @@
   changed_when: false
   become: no
   register: admin_user_status
-  when: (ansible_user != admin_user and not sshd_permit_root_login) or (cli_ask_pass and not sshd_password_authentication)
+  when: (ansible_user != admin_user and not sshd_permit_root_login) or (cli_ask_pass | default(false) and not sshd_password_authentication)
   tags: [connection-tests, sshd]
 
 - import_tasks: connection-warnings.yml
