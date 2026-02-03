@@ -1,0 +1,81 @@
+---
+# This task detects whether the project uses Bedrock v1 (web/) or v2 (public/) structure
+# and automatically adjusts paths accordingly
+
+- name: Check for Bedrock v2 config file
+  stat:
+    path: "{{ site_path }}/config.php"
+  register: bedrock_v2_config_check
+  vars:
+    site_path: "{{ item.value.local_path | default(www_root + '/' + item.key + '/' + (item.value.current_path | default('current'))) }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Check for Bedrock v1 config file
+  stat:
+    path: "{{ site_path }}/config/application.php"
+  register: bedrock_v1_config_check
+  vars:
+    site_path: "{{ item.value.local_path | default(www_root + '/' + item.key + '/' + (item.value.current_path | default('current'))) }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Check for public directory
+  stat:
+    path: "{{ site_path }}/public"
+  register: public_dir_check
+  vars:
+    site_path: "{{ item.value.local_path | default(www_root + '/' + item.key + '/' + (item.value.current_path | default('current'))) }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Check for web directory
+  stat:
+    path: "{{ site_path }}/web"
+  register: web_dir_check
+  vars:
+    site_path: "{{ item.value.local_path | default(www_root + '/' + item.key + '/' + (item.value.current_path | default('current'))) }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Set public_path and upload_path based on detected Bedrock version
+  set_fact:
+    wordpress_sites: "{{ wordpress_sites | combine({
+      item.key: item.value | combine({
+        'public_path': detected_public_path,
+        'upload_path': detected_upload_path
+      })
+    }) }}"
+  vars:
+    site_results: "{{ bedrock_v2_config_check.results | selectattr('item.key', 'equalto', item.key) | first }}"
+    has_v2_config: "{{ site_results.stat.exists | default(false) }}"
+    site_results_v1: "{{ bedrock_v1_config_check.results | selectattr('item.key', 'equalto', item.key) | first }}"
+    has_v1_config: "{{ site_results_v1.stat.exists | default(false) }}"
+    site_results_public: "{{ public_dir_check.results | selectattr('item.key', 'equalto', item.key) | first }}"
+    has_public_dir: "{{ site_results_public.stat.exists | default(false) }}"
+    site_results_web: "{{ web_dir_check.results | selectattr('item.key', 'equalto', item.key) | first }}"
+    has_web_dir: "{{ site_results_web.stat.exists | default(false) }}"
+    detected_public_path: "{{ 'public' if (has_v2_config and has_public_dir) else ('web' if (has_v1_config and has_web_dir) else ('public' if has_public_dir else 'web')) }}"
+    detected_upload_path: "{{ 'uploads' if (has_v2_config and has_public_dir) else 'app/uploads' }}"
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+
+- name: Validate Bedrock structure
+  fail:
+    msg: "Ambiguous Bedrock structure detected: Both v1 and v2 config files exist for {{ item.key }}"
+  vars:
+    site_results: "{{ bedrock_v2_config_check.results | selectattr('item.key', 'equalto', item.key) | first }}"
+    has_v2_config: "{{ site_results.stat.exists | default(false) }}"
+    site_results_v1: "{{ bedrock_v1_config_check.results | selectattr('item.key', 'equalto', item.key) | first }}"
+    has_v1_config: "{{ site_results_v1.stat.exists | default(false) }}"
+  when: 
+    - has_v2_config
+    - has_v1_config
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
