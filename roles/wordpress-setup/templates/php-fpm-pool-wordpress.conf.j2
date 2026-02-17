@@ -19,4 +19,7 @@ php_admin_value[open_basedir] = {{ www_root }}/:/tmp
 {% if memcached_sessions %}
 php_value[session.save_handler] = memcached
 php_value[session.save_path] = "{{ memcached_listen_ip }}:{{ memcached_port }}"
+{% elif redis_sessions %}
+php_value[session.save_handler] = redis
+php_value[session.save_path] = "tcp://{{ redis_bind_interface }}:{{ redis_port }}?database={{ redis_sessions_database }}{% if redis_requirepass %}&auth={{ redis_requirepass }}{% endif %}"
 {% endif %}

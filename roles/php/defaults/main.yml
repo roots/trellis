@@ -1,5 +1,7 @@
 disable_default_pool: true
 memcached_sessions: false
+redis_sessions: false
+redis_sessions_database: 1
 
 php_extensions_custom: {}
 php_extensions: "{{ php_extensions_default | combine(php_extensions_custom) }}"
