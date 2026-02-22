@@ -81,6 +81,12 @@
     state: absent
   notify: reload nginx
 
+- name: Remove legacy Let's Encrypt cron job
+  file:
+    path: /etc/cron.d/letsencrypt-certificate-renewal
+    state: absent
+  when: sites_using_letsencrypt | length > 0
+
 - name: Enable Nginx to start on boot
   service:
     name: nginx

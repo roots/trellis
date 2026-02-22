@@ -27,3 +27,6 @@ acme_certificate_key_type: ecdsa:256
 acme_ssl_verify: "on"
 nginx_acme_state_path: /var/lib/nginx/acme
 nginx_acme_zone_size: 1M
+
+# SSL certificate cache for variable-based certs (ACME)
+nginx_ssl_certificate_cache_max: 10
