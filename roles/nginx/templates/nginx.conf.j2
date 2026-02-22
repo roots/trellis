@@ -67,13 +67,11 @@ http {
   }
   {% endblock %}
 
-  {% block resolver -%}
-  resolver {{ nginx_resolver }};
-  resolver_timeout {{ nginx_resolver_timeout }};
-  {% endblock %}
-
   {% block acme -%}
   {% if sites_using_letsencrypt | length > 0 -%}
+  resolver {{ nginx_resolver }};
+  resolver_timeout {{ nginx_resolver_timeout }};
+
   acme_issuer letsencrypt {
     uri             {{ acme_server }};
     state_path      {{ nginx_acme_state_path }};
@@ -83,6 +81,8 @@ http {
   }
 
   acme_shared_zone zone=acme:{{ nginx_acme_zone_size }};
+
+  ssl_certificate_cache max={{ nginx_ssl_certificate_cache_max }};
   {% endif %}
   {% endblock %}
 
