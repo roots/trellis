@@ -1,2 +1,5 @@
 /.gitattributes export-ignore
 /.github export-ignore
+/pytest.ini export-ignore
+/requirements-dev.txt export-ignore
+/tests export-ignore
