@@ -14,6 +14,11 @@ def test_redis_cli_ping():
     assert "PONG" in result.stdout
 
 
+def test_redis_info_includes_version():
+    result = run_cmd("redis-cli", "INFO", "server")
+    assert "redis_version:" in result.stdout
+
+
 def test_php_redis_extension():
     result = run_cmd("php", "-m")
     assert "redis" in result.stdout.lower()
