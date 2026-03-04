@@ -43,3 +43,24 @@ def test_nonexistent_page_returns_not_found(http_example):
         f"Expected 404 for non-existent page, got {response.status_code}. "
         f"Response snippet: {response.text[:240]!r}"
     )
+
+
+def test_nonexistent_page_returns_not_found_on_https(https_example):
+    response = get(
+        f"{https_example}/definitely-not-a-real-page-for-trellis-tests",
+        verify=False,
+    )
+
+    assert response.status_code == 404, (
+        f"Expected 404 for non-existent HTTPS page, got {response.status_code}. "
+        f"Response snippet: {response.text[:240]!r}"
+    )
+
+
+def test_nonexistent_page_returns_not_found_on_redis_site(redis_example):
+    response = get(f"{redis_example}/definitely-not-a-real-page-for-trellis-tests")
+
+    assert response.status_code == 404, (
+        f"Expected 404 for Redis site non-existent page, got {response.status_code}. "
+        f"Response snippet: {response.text[:240]!r}"
+    )
