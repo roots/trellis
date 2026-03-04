@@ -14,6 +14,7 @@ wordpress_env_defaults:
 redis_cache_env:
   wp_redis_host: "{{ item.value.object_cache.host | default('127.0.0.1') }}"
   wp_redis_port: "{{ item.value.object_cache.port | default(6379) }}"
+  wp_redis_password: "{{ item.value.object_cache.password | default('') }}"
   wp_redis_database: "{{ item.value.object_cache.database | default(0) }}"
   wp_redis_prefix: "{{ item.value.object_cache.prefix | default(item.key | underscore + '_') }}"
   wp_cache_key_salt: "{{ item.key }}_{{ env }}"
