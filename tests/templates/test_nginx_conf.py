@@ -1,9 +1,6 @@
-import pytest
-
 from tests.templates.render import render_template
 
 
-@pytest.mark.xfail(strict=True, reason="#1551")
 def test_cache_use_stale_excludes_updating_by_default() -> None:
     rendered = render_template("roles/nginx/templates/nginx.conf.j2")
 
