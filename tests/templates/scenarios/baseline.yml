@@ -1,0 +1,31 @@
+ansible_managed: test-managed
+env: production
+www_root: /srv/www
+
+nginx_path: /etc/nginx
+nginx_ssl_path: /etc/nginx/ssl
+loopback_header_x_cache_enabled: ""
+
+site_hosts_canonical:
+  - example.com
+site_hosts_redirects: []
+multisite_subdomains_wildcards: []
+
+item:
+  key: example.com
+  value:
+    current_path: current
+    public_path: web
+    upload_path: app/uploads
+    site_hosts:
+      - canonical: example.com
+        redirects:
+          - www.example.com
+    ssl:
+      enabled: false
+      provider: letsencrypt
+    multisite:
+      enabled: false
+      subdomains: false
+    cache:
+      enabled: true
