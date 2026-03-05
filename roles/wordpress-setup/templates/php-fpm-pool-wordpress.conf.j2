@@ -2,10 +2,11 @@
 
 [wordpress]
 listen = /var/run/php-fpm-wordpress.sock
+# Keep socket owner/group aligned with Nginx's service user so Nginx can always connect to php-fpm.
 listen.owner = www-data
 listen.group = www-data
-user = {{ web_user }}
-group = {{ web_group }}
+user = {{ wordpress_runtime_user if wordpress_runtime_hardened else web_user }}
+group = {{ wordpress_runtime_group if wordpress_runtime_hardened else web_group }}
 pm = {{ php_fpm_pm }}
 pm.max_children = {{ php_fpm_pm_max_children }}
 pm.start_servers = {{ php_fpm_pm_start_servers }}
