@@ -1,9 +1,6 @@
-import pytest
-
 from tests.templates.render import render_template
 
 
-@pytest.mark.xfail(strict=True, reason="#1594")
 def test_cache_directives_scope_to_200_and_skip_location_responses() -> None:
     rendered = render_template("roles/wordpress-setup/templates/wordpress-site.conf.j2")
 
@@ -25,7 +22,6 @@ def test_cache_directives_absent_when_cache_disabled() -> None:
     assert "fastcgi_no_cache" not in rendered
 
 
-@pytest.mark.xfail(strict=True, reason="#1548")
 def test_multisite_subdirectory_rewrite_uses_request_uri() -> None:
     rendered = render_template(
         "roles/wordpress-setup/templates/wordpress-site.conf.j2",
