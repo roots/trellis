@@ -76,7 +76,7 @@
   loop_control:
     label: "{{ item.key }}"
   vars:
-    is_first_site_use_ssl: "{{ first_site_using_ssl.key == item.key }}"
+    is_first_site_use_ssl: "{{ (first_site_using_ssl.key == item.key) if first_site_using_ssl else false }}"
   notify: reload nginx
   tags: nginx-includes
 
