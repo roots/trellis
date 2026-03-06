@@ -11,7 +11,7 @@ server {
   # Listen on UDP for QUIC+HTTP/3
   listen [::]:443 quic{% if is_first_site_use_ssl %} reuseport{% endif -%};
   listen 443 quic{% if is_first_site_use_ssl %} reuseport{% endif -%};
-  {% if is_first_site_use_ssl -%}# there has to be one listen quic directive with reusport for working QUIC responses in current nginx version, using the first site.
+  {% if is_first_site_use_ssl -%}# there has to be one listen quic directive with `reuseport` for working QUIC responses in current nginx version, using the first site.
   {% endif %}
   {% endif %}
 
