@@ -50,7 +50,7 @@ server {
   {% endif %}
 
   {% if nginx_http3_enabled and ssl_enabled -%}
-  include includes/directive-only/http3-tune.conf;
+  include includes/directive-only/quic-tune.conf;
   include includes/directive-only/http3-negotiate.conf;
   {% endif %}
   {% endblock -%}
@@ -340,7 +340,7 @@ server {
   server_name {{ host.redirects | join(' ') }};
 
   {% if nginx_http3_enabled and ssl_enabled -%}
-  include includes/directive-only/http3-tune.conf;
+  include includes/directive-only/quic-tune.conf;
   include includes/directive-only/http3-negotiate.conf;
   {% endif %}
 
