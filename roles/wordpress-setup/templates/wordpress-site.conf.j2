@@ -303,7 +303,7 @@ server {
   {{ self.includes_d() -}}
 
   {% if nginx_http3_enabled and ssl_enabled -%}
-  include includes/directive-only/http3-negotiate-redirect.conf;
+  include includes/directive-only/http3-negotiate.conf;
   {% endif %}
 
   location / {
@@ -340,7 +340,7 @@ server {
 
   {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/http3-tune.conf;
-  include includes/directive-only/http3-negotiate-redirect.conf;
+  include includes/directive-only/http3-negotiate.conf;
   {% endif %}
 
   {{ self.https() -}}
