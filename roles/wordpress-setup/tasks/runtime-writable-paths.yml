@@ -1,0 +1,13 @@
+---
+- name: Ensure hardened writable paths exist and are owned by runtime user
+  # Keep ownership non-recursive so existing release/shared contents are not mass-chowned.
+  file:
+    path: "{{ www_root }}/{{ item.key }}/{{ path }}"
+    owner: "{{ wordpress_runtime_user }}"
+    group: "{{ wordpress_runtime_group }}"
+    mode: '0775'
+    state: directory
+  loop: "{{ item.value.runtime_writable_paths | default(wordpress_runtime_writable_paths) }}"
+  loop_control:
+    loop_var: path
+    label: "{{ item.key }} -> {{ path }}"
