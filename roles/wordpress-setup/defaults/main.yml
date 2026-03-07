@@ -10,7 +10,7 @@ nginx_sites_confs:
     enabled: false
 
 nginx_http2_enabled: true
-nginx_http3_enabled: false
+nginx_http3_enabled: true
 nginx_rtt0_enabled: false
 
 # HSTS defaults
