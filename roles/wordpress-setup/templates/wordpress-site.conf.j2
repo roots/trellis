@@ -303,10 +303,6 @@ server {
 
   {{ self.includes_d() -}}
 
-  {% if nginx_http3_enabled and ssl_enabled -%}
-  include includes/directive-only/http3-negotiate.conf;
-  {% endif %}
-
   location / {
     return 301 https://$host$request_uri;
   }
@@ -341,7 +337,6 @@ server {
 
   {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/quic-tune.conf;
-  include includes/directive-only/http3-negotiate.conf;
   {% endif %}
 
   {{ self.https() -}}
