@@ -45,10 +45,6 @@ server {
 
   {% endif -%}
 
-  {% if nginx_rtt0_enabled and ssl_enabled and sites_use_ssl -%}
-  include includes/directive-only/tls-rtt0.conf;
-  {% endif %}
-
   {% if nginx_http3_enabled and ssl_enabled -%}
   include includes/directive-only/quic-tune.conf;
   include includes/directive-only/http3-negotiate.conf;

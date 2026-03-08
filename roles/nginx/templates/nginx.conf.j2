@@ -65,13 +65,6 @@ http {
     default "";
     1:true  true;
   }
-
-  {% if nginx_rtt0_enabled and sites_use_ssl -%}
-  map "$ssl_early_data:$request_method" $reject_early_data {
-    default 0;
-    "~^1:(?!GET|HEAD|OPTIONS)" 1;
-  }
-  {% endif -%}
   {% endblock %}
 
   {% block server_tokens -%}
