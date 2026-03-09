@@ -28,7 +28,7 @@ We're dedicated to pushing modern WordPress development forward through our open
 
 Trellis is a collection of Ansible playbooks for setting up a LEMP stack for WordPress.
 
-- Local development environment with Vagrant
+- Local development environment with Lima VMs
 - High-performance production servers
 - Zero-downtime deploys for your [Bedrock](https://roots.io/bedrock/)-based WordPress sites
 - [trellis-cli](https://github.com/roots/trellis-cli) for easier management
@@ -37,10 +37,12 @@ Trellis is a collection of Ansible playbooks for setting up a LEMP stack for Wor
 
 See the [Trellis installation documentation](https://roots.io/trellis/docs/installation/).
 
-## Stay Connected
+## Community
+
+Keep track of development and community news.
 
 - Join us on Discord by [sponsoring us on GitHub](https://github.com/sponsors/roots)
-- Participate on [Roots Discourse](https://discourse.roots.io/)
+- Join us on [Roots Discourse](https://discourse.roots.io/)
 - Follow [@rootswp on Twitter](https://twitter.com/rootswp)
-- Read the [Roots Blog](https://roots.io/blog/)
-- Subscribe to the [Roots Newsletter](https://roots.io/newsletter/)
+- Follow the [Roots Blog](https://roots.io/blog/)
+- Subscribe to the [Roots Newsletter](https://roots.io/subscribe/)
