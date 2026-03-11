@@ -38,6 +38,22 @@
   loop_control:
     label: "{{ item.type }}.{{ item.hostname }}"
 
+- name: Setup composer authentications (Custom Headers)
+  composer:
+    command: config
+    arguments: --auth custom-headers.{{ item.hostname | quote }} {{ item.headers | map('quote') | join(' ') }}
+    working_dir: "{{ deploy_helper.new_release_path }}"
+  no_log: true
+  changed_when: false
+  when:
+    - item.hostname is defined and item.hostname != ""
+    - item.headers is defined and item.headers | length > 0
+    - item.headers is sequence
+    - item.headers is not string
+  loop: "{{ composer_authentications_using_custom_headers }}"
+  loop_control:
+    label: "{{ item.type }}.{{ item.hostname }}"
+
 - name: Setup composer authentications (Other Tokens)
   composer:
     command: config

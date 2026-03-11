@@ -30,6 +30,23 @@
   loop_control:
     label: "{{ item.type }}.{{ item.hostname }}"
 
+- name: "Setup composer authentications (Custom Headers) - {{ site }}"
+  composer:
+    command: config
+    arguments: --auth custom-headers.{{ item.hostname | quote }} {{ item.headers | map('quote') | join(' ') }}
+    working_dir: "{{ working_dir }}"
+  become: no
+  no_log: true
+  changed_when: false
+  when:
+    - item.hostname is defined and item.hostname != ""
+    - item.headers is defined and item.headers | length > 0
+    - item.headers is sequence
+    - item.headers is not string
+  loop: "{{ composer_authentications_using_custom_headers }}"
+  loop_control:
+    label: "{{ item.type }}.{{ item.hostname }}"
+
 - name: "Setup composer authentications (Other Tokens) - {{ site }}"
   composer:
     command: config
