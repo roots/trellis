@@ -74,3 +74,14 @@ php_fpm_pm_start_servers: 1
 php_fpm_pm_min_spare_servers: 1
 php_fpm_pm_max_spare_servers: 3
 php_fpm_pm_max_requests: 500
+
+# Optional hardening mode: run php-fpm as a non-deploy user and grant writes only to writable paths.
+# Add extra writable paths as needed (for example current/web/app/cache).
+wordpress_runtime_hardened: false
+wordpress_runtime_user: www-data
+wordpress_runtime_group: www-data
+wordpress_runtime_writable_paths:
+  - shared/uploads
+
+# Optional hardening refinement: run WP cron as runtime user when hardening is enabled.
+wordpress_runtime_cron_as_runtime_user: false
