@@ -1,0 +1,20 @@
+msmtp_package: msmtp
+msmtp_auth: "on"
+msmtp_tls: "on"
+msmtp_tls_starttls: "on"
+msmtp_set_from_header: "on"
+msmtp_domain: "{{ mail_hostname }}"
+msmtp_port: 587
+
+# msmtp_accounts:
+#   - name: protonmail
+#     host: smtp.protonmail.ch
+#     port: 587                          # optional, defaults to msmtp_port
+#     from: user@protonmail.com
+#     user: user@protonmail.com
+#     password: "{{ vault_proton_pw }}"
+#     auth: "on"                         # optional, defaults to msmtp_auth
+#     tls: "on"                          # optional, defaults to msmtp_tls
+#     tls_starttls: "on"                 # optional, defaults to msmtp_tls_starttls
+#     domain: protonmail.com             # optional, defaults to msmtp_domain
+msmtp_accounts: []
