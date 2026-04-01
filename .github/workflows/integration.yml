@@ -49,6 +49,7 @@ jobs:
           cp ../../.github/files/inventory hosts/production
           cp ../../.github/files/wordpress_sites.yml group_vars/production/wordpress_sites.yml
           cp ../../.github/files/vault.yml group_vars/production/vault.yml
+          echo 'composer_platform_requirements_check: false' >> group_vars/production/main.yml
         working-directory: example.com/trellis
       - run: trellis exec ansible-playbook --version
         working-directory: example.com/trellis
