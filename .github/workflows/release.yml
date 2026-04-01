@@ -1,0 +1,28 @@
+name: Tag release version
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        ref: ${{ github.event.release.tag_name }}
+
+    - name: Update VERSION file
+      run: echo "${{ github.event.release.tag_name }}" > VERSION
+
+    - name: Commit and update tag
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add VERSION
+        git commit --message "Update VERSION to ${{ github.event.release.tag_name }}"
+        git tag --force "${{ github.event.release.tag_name }}"
+        git push --force origin "refs/tags/${{ github.event.release.tag_name }}"
