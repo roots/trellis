@@ -22,15 +22,7 @@
     - { role: users, tags: [users] }
     - { role: sshd, tags: [sshd] }
     - { role: mariadb, tags: [mariadb] }
-    - role: msmtp
-      tags: [msmtp, mail]
-      vars:
-        msmtp_server: "{{ mail_smtp_server }}"
-        msmtp_from: "{{ mail_admin }}"
-        msmtp_domain: "{{ mail_hostname }}"
-        msmtp_user: "{{ mail_user }}"
-        msmtp_password: "{{ mail_password }}"
-        msmtp_package_state: "{{ apt_package_state }}"
+    - { role: msmtp, tags: [msmtp, mail] }
     - { role: php, tags: [php] }
     - { role: memcached, tags: [memcached], when: sites_using_memcached | count > 0 }
     - { role: redis, tags: [redis], when: sites_using_redis | count > 0 }
