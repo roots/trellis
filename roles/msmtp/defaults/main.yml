@@ -7,14 +7,14 @@ msmtp_domain: "{{ mail_hostname }}"
 msmtp_port: 587
 
 # msmtp_accounts:
-#   - name: protonmail
-#     host: smtp.protonmail.ch
+#   - name: account_name
+#     host: smtp.example.com
 #     port: 587                          # optional, defaults to msmtp_port
-#     from: user@protonmail.com
-#     user: user@protonmail.com
-#     password: "{{ vault_proton_pw }}"
+#     from: user@example.com
+#     user: user@example.com
+#     password: "{{ vault_smtp_password }}"
 #     auth: "on"                         # optional, defaults to msmtp_auth
 #     tls: "on"                          # optional, defaults to msmtp_tls
 #     tls_starttls: "on"                 # optional, defaults to msmtp_tls_starttls
-#     domain: protonmail.com             # optional, defaults to msmtp_domain
+#     domain: example.com                # optional, defaults to msmtp_domain
 msmtp_accounts: []
