@@ -16,7 +16,7 @@ php_memory_limit: 96M
 php_cli_memory_limit: -1
 php_mysqlnd_collect_memory_statistics: 'Off'
 php_post_max_size: 25M
-php_sendmail_path: /usr/sbin/ssmtp -t
+php_sendmail_path: /usr/bin/msmtp -t
 php_session_save_path: /tmp
 php_session_cookie_httponly: 'On'
 php_session_cookie_secure: 'Off'
