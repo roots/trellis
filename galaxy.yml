@@ -16,6 +16,10 @@ roles:
     src: oefenweb.swapfile
     version: v2.0.42
 
+  - name: msmtp
+    src: roots.msmtp
+    version: v1.0.1
+
   - name: mailpit
     src: roots.mailpit
     version: v1.0.0
