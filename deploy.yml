@@ -9,6 +9,7 @@
   vars:
     dynamic_user: false
   roles:
+    - { role: ansible-output-prettify, tags: [always] }
     - { role: connection, tags: [connection, always] }
 
 - name: Deploy WP site
