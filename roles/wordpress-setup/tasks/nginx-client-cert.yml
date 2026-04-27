@@ -1,10 +1,41 @@
 ---
-- name: Download client cert
-  get_url:
-    url: "{{ item.value.ssl.client_cert_url }}"
-    dest: "{{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt"
-    mode: '0640'
+- name: Initialize client cert downloads
+  set_fact:
+    wordpress_setup_client_cert_downloads: []
+
+- name: Build client cert download list
+  set_fact:
+    wordpress_setup_client_cert_downloads: "{{ wordpress_setup_client_cert_downloads + [client_cert_download] }}"
+  vars:
+    client_cert_download:
+      url: "{{ item.value.ssl.client_cert_url }}"
+      dest: "{{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt"
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   when: ssl_enabled and 'client_cert_url' in item.value.ssl
+
+- name: Download client cert
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: '0640'
+  async: "{{ wordpress_setup_async_timeout }}"
+  poll: 0
+  register: wordpress_setup_client_cert_jobs
+  changed_when: false
+  loop: "{{ wordpress_setup_client_cert_downloads | unique(attribute='url') | list }}"
+  loop_control:
+    label: "{{ item.url }}"
+
+- name: Wait for client cert downloads
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: wordpress_setup_client_cert_job_result
+  until: wordpress_setup_client_cert_job_result.finished
+  retries: "{{ wordpress_setup_async_retries }}"
+  delay: "{{ wordpress_setup_async_poll_delay }}"
+  changed_when: wordpress_setup_client_cert_job_result.changed | default(false)
+  loop: "{{ wordpress_setup_client_cert_jobs.results | default([]) | selectattr('ansible_job_id', 'defined') | list }}"
+  loop_control:
+    label: "{{ item.item.url }}"
