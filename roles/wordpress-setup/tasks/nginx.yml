@@ -21,8 +21,6 @@
   when: ssl_enabled and 'key' in item.value.ssl
   notify: reload nginx
 
-- import_tasks: "{{ playbook_dir }}/roles/common/tasks/disable_challenge_sites.yml"
-
 - name: Copy Nginx Wordpress site include folder
   copy:
     src: templates/includes
@@ -59,13 +57,6 @@
   when: item.enabled | default(true)
   notify: reload nginx
   tags: nginx-sites
-
-- name: Create Nginx conf for challenges location
-  template:
-    src: "{{ playbook_dir }}/roles/letsencrypt/templates/acme-challenge-location.conf.j2"
-    dest: "{{ nginx_path }}/acme-challenge-location.conf"
-    mode: '0644'
-  notify: reload nginx
 
 - name: Create WordPress configuration for Nginx
   template:

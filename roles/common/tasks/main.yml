@@ -12,7 +12,7 @@
   loop_control:
     label: "{{ item.key }}"
   when: item.value.site_hosts | rejectattr('canonical', 'defined') | list | count > 0
-  tags: [letsencrypt, wordpress]
+  tags: [wordpress]
 
 - name: Import PHP version specific vars
   include_vars: "{{ lookup('first_found', params) }}"
