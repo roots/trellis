@@ -1,10 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["config:recommended"],
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^galaxy\\.ya?ml$"],
+      "managerFilePatterns": ["/^galaxy\\.ya?ml$/"],
       "matchStrings": [
         "- name: (?<depName>[^\\n]+)\\n\\s+src: (?<packageName>[^\\n]+)\\n\\s+version: (?<currentValue>[^\\n]+)"
       ],
