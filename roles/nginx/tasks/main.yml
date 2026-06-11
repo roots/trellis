@@ -5,7 +5,7 @@
     state: present
 
 - name: Add Nginx PPA
-  apt_repository:
+  deb822_repository:
     repo: "{{ nginx_ppa }}"
     update_cache: yes
   register: result
