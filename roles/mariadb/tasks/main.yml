@@ -5,7 +5,7 @@
     state: present
 
 - name: Add MariaDB PPA
-  apt_repository:
+  deb822_repository:
     repo: "{{ mariadb_ppa }}"
     update_cache: yes
   register: result
