@@ -22,4 +22,4 @@ roles:
 
   - name: mailpit
     src: roots.mailpit
-    version: v1.0.0
+    version: v1.0.1
