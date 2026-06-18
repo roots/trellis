@@ -16,8 +16,8 @@
 - name: Fail if root login will be disabled but admin_user will not be a sudoer
   assert:
     that:
-      - "{% for user in users if user.name == admin_user %}{{ 'sudo' in user.groups }}{% else %}{{ false }}{% endfor %}"
-      - "{% for user in vault_users | default([]) if user.name == admin_user %}{{ user.password is defined }}{% else %}{{ false }}{% endfor %}"
+      - "{{ 'sudo' in (users | selectattr('name', 'equalto', admin_user) | map(attribute='groups') | first | default([])) }}"
+      - "{{ (vault_users | default([]) | selectattr('name', 'equalto', admin_user) | first | default({})).password is defined }}"
     msg: |
       When `sshd_permit_root_login: false`, you must add `sudo` to the `groups` for admin_user (in `users` hash), and set a password for admin_user in `vault_users` (in `group_vars/{{ env }}/vault.yml`). Otherwise Ansible could lose the ability to run the necessary sudo commands. {% if sudoer_passwords is defined or vault_sudoer_passwords is defined %}
 
