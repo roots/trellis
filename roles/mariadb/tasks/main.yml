@@ -77,7 +77,7 @@
     loop:
       - localhost
       - "{{ inventory_hostname }}"
-      - "{{ ansible_hostname }}"
+      - "{{ ansible_facts['hostname'] }}"
 
   - name: Remove the test database
     mysql_db:
