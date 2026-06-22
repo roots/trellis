@@ -6,7 +6,7 @@
       ansible-playbook server.yml -e env={{ env | default('production') }} -u root --ask-pass
   when: dynamic_user | default(true) and ansible_user is not defined and cli_ask_pass | default(false)
 
-- name: Check whether Ansible can connect as {{ dynamic_user | default(true) | ternary('root', web_user) }}
+- name: Determine remote user by probing connection as {{ dynamic_user | default(true) | ternary('root', web_user) }}
   command: |
     ansible {{ inventory_hostname }} -m raw -a whoami
     -u {{ dynamic_user | default(true) | ternary('root', web_user) }} {{ cli_options | default('') }} -vvvv
