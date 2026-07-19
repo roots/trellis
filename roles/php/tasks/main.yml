@@ -1,7 +1,42 @@
 ---
-- name: Add PHP PPA
+- name: Remove legacy ondrej/php Launchpad list
+  file:
+    path: "/etc/apt/sources.list.d/ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.list"
+    state: absent
+
+- name: Remove legacy ondrej/php Launchpad key
+  file:
+    path: /etc/apt/trusted.gpg.d/ondrej_ubuntu_php.gpg
+    state: absent
+
+- name: Ensure apt keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Sury PHP signing key
+  get_url:
+    url: https://packages.sury.org/php/apt.gpg
+    dest: /etc/apt/keyrings/sury-php.gpg
+    mode: '0644'
+
+- name: Verify Sury PHP signing key fingerprint
+  command: gpg --show-keys --with-fingerprint --with-colons /etc/apt/keyrings/sury-php.gpg
+  register: sury_key_fpr
+  changed_when: false
+  check_mode: false
+
+- name: Assert Sury PHP signing key fingerprint
+  assert:
+    that:
+      - "'15058500A0235D97F5D10063B188E2B695BD4743' in sury_key_fpr.stdout"
+    fail_msg: "Sury PHP signing key fingerprint does not match expected value."
+
+- name: Add Sury PHP repository
   apt_repository:
-    repo: "ppa:ondrej/php"
+    repo: "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ {{ ansible_facts['distribution_release'] }} main"
+    filename: sury-php
     update_cache: yes
   register: result
   until: result is success
