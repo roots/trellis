@@ -12,6 +12,19 @@ def underscore(value):
     ''' Convert dots to underscore in a string '''
     return value.replace('.', '_')
 
+def php_extensions(value, php_version, package_state):
+    """Normalize php_extensions_custom into a dict.
+
+    Accepts either a dict (passed through unchanged for back-compat) or a
+    list of short names. Each short name is expanded to
+    "php<version>-<name>": "<package_state>".
+    """
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, list):
+        return {f"php{php_version}-{name}": package_state for name in value}
+    return {}
+
 def get_nested_attr(data, attr_path):
     """Helper to safely get a nested attribute from a dict."""
     keys = attr_path.split('.')
@@ -58,4 +71,5 @@ class FilterModule(object):
             'select_sites': select_sites,
             'to_env': to_env,
             'underscore': underscore,
+            'php_extensions': php_extensions,
         }

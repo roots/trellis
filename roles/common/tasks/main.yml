@@ -31,16 +31,32 @@
     msg: "{{ lookup('template', 'package_vars_wrong_format_msg.j2') }}"
   when: package_vars_wrong_format | count > 0
   vars:
-    package_vars:
+    # All package vars must remain dicts except php_extensions_custom,
+    # which additionally accepts a list of short names.
+    package_vars_dict_only:
       apt_packages_default: "{{ apt_packages_default }}"
       apt_packages_custom: "{{ apt_packages_custom }}"
       memcached_packages_default: "{{ memcached_packages_default }}"
       memcached_packages_custom: "{{ memcached_packages_custom }}"
       php_extensions_default: "{{ php_extensions_default }}"
-      php_extensions_custom: "{{ php_extensions_custom }}"
       sshd_packages_default: "{{ sshd_packages_default }}"
       sshd_packages_custom: "{{ sshd_packages_custom }}"
-    package_vars_wrong_format: "{{ package_vars | dict2items | rejectattr('value', 'mapping') | map(attribute='key') | list }}"
+    package_vars_list_or_dict:
+      php_extensions_custom: "{{ php_extensions_custom }}"
+    # dict-only wrong: anything that is not a mapping
+    package_vars_dict_only_wrong: "{{ package_vars_dict_only | dict2items | rejectattr('value', 'mapping') | map(attribute='key') | list }}"
+    # list-or-dict wrong: not a mapping and not a (sequence that is not a string)
+    package_vars_list_or_dict_valid_keys: >-
+      {{ package_vars_list_or_dict | dict2items
+         | selectattr('value', 'mapping') | map(attribute='key') | list
+         | union(package_vars_list_or_dict | dict2items
+                 | selectattr('value', 'sequence')
+                 | rejectattr('value', 'string')
+                 | map(attribute='key') | list) }}
+    package_vars_list_or_dict_wrong: >-
+      {{ package_vars_list_or_dict | dict2items | map(attribute='key') | list
+         | difference(package_vars_list_or_dict_valid_keys) }}
+    package_vars_wrong_format: "{{ package_vars_dict_only_wrong | union(package_vars_list_or_dict_wrong) }}"
   tags: [memcached, php, sshd]
 
 - name: Verify dict format for package combined variables
