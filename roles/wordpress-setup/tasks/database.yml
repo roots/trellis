@@ -1,32 +1,48 @@
 ---
-- block:
-  - name: Create databases for sites
-    mysql_db:
-      name: "{{ site_env.db_name }}"
-      state: present
-      login_host: "{{ site_env.db_host }}"
-      login_user: "{{ mysql_root_user }}"
-      login_password: "{{ mysql_root_password }}"
-    no_log: true
-    loop: "{{ wordpress_sites | dict2items }}"
-    loop_control:
-      label: "{{ item.key }}"
+- name: Create databases for sites
+  mysql_db:
+    name: "{{ site_env.db_name }}"
+    state: present
+    login_host: "{{ site_env.db_host }}"
+    login_user: "{{ mysql_root_user }}"
+    login_password: "{{ mysql_root_password }}"
+  async: "{{ wordpress_setup_async_timeout }}"
+  poll: 0
+  register: wordpress_setup_database_jobs
+  changed_when: false
+  no_log: true
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  when: site_uses_local_db and item.value.db_create | default(true)
 
-  - name: Create/assign database user to db and grant permissions
-    mysql_user:
-      name: "{{ site_env.db_user }}"
-      password: "{{ site_env.db_password }}"
-      host: "{{ site_env.db_user_host }}"
-      append_privs: yes
-      priv: "{{ site_env.db_name }}.*:ALL"
-      state: present
-      login_host: "{{ site_env.db_host }}"
-      login_user: "{{ mysql_root_user }}"
-      login_password: "{{ mysql_root_password }}"
-      column_case_sensitive: no
-    no_log: true
-    loop: "{{ wordpress_sites | dict2items }}"
-    loop_control:
-      label: "{{ item.key }}"
+- name: Wait for database creation jobs
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: wordpress_setup_database_job_result
+  until: wordpress_setup_database_job_result.finished
+  retries: "{{ wordpress_setup_async_retries }}"
+  delay: "{{ wordpress_setup_async_poll_delay }}"
+  changed_when: wordpress_setup_database_job_result.changed | default(false)
+  no_log: true
+  loop: "{{ wordpress_setup_database_jobs.results | default([]) | selectattr('ansible_job_id', 'defined') | list }}"
+  loop_control:
+    label: "{{ item.item.key }}"
 
+- name: Create/assign database user to db and grant permissions
+  mysql_user:
+    name: "{{ site_env.db_user }}"
+    password: "{{ site_env.db_password }}"
+    host: "{{ site_env.db_user_host }}"
+    append_privs: yes
+    priv: "{{ site_env.db_name }}.*:ALL"
+    state: present
+    login_host: "{{ site_env.db_host }}"
+    login_user: "{{ mysql_root_user }}"
+    login_password: "{{ mysql_root_password }}"
+    column_case_sensitive: no
+  no_log: true
+  loop: "{{ wordpress_sites | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
   when: site_uses_local_db and item.value.db_create | default(true)
