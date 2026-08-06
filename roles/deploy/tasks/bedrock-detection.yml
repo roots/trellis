@@ -1,0 +1,38 @@
+---
+# Bedrock version detection for deployment
+# This detects whether the deployed code uses Bedrock v1 (web/) or v2 (public/) structure
+
+- name: Check for Bedrock v2 structure in deployment (public directory)
+  stat:
+    path: "{{ deploy_helper.new_release_path }}/public"
+  register: deploy_bedrock_v2_check
+
+- name: Check for Bedrock v1 structure in deployment (web directory)  
+  stat:
+    path: "{{ deploy_helper.new_release_path }}/web"
+  register: deploy_bedrock_v1_check
+
+- name: Set public_path based on detected Bedrock version in deployment
+  set_fact:
+    detected_public_path: "{{ 
+      deploy_bedrock_v2_check.stat.exists | ternary('public',
+      deploy_bedrock_v1_check.stat.exists | ternary('web', 
+      site_env.public_path | default('web'))) 
+    }}"
+    detected_upload_path: "{{ 
+      deploy_bedrock_v2_check.stat.exists | ternary('uploads',
+      deploy_bedrock_v1_check.stat.exists | ternary('app/uploads', 
+      project.upload_path | default('app/uploads'))) 
+    }}"
+
+- name: Update site environment with detected public path
+  set_fact:
+    site_env: "{{ site_env | combine({'public_path': detected_public_path}) }}"
+
+- name: Update project configuration with detected paths
+  set_fact:
+    project: "{{ project | combine({'public_path': detected_public_path, 'upload_path': detected_upload_path}) }}"
+
+- name: Debug detected Bedrock structure for deployment
+  debug:
+    msg: "Deployment for {{ site }}: Using {{ detected_public_path }} directory (Bedrock {{ 'v2' if detected_public_path == 'public' else 'v1' }}), uploads: {{ detected_upload_path }}"

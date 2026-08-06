@@ -48,6 +48,9 @@
     executable: /bin/bash
   when: project.repo_subtree_path is defined
 
+- import_tasks: bedrock-detection.yml
+  tags: bedrock-detection
+
 - name: write unfinished file
   file:
     path: "{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}"
