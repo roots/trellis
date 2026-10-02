@@ -40,6 +40,9 @@
     label: "{{ item.item }}"
   when: item.stat.exists
 
+- include_tasks: runtime-writable-paths.yml
+  when: wordpress_runtime_hardened | default(false)
+
 - name: Check if deploy_build_after scripts exist
   stat:
     path: "{{ item }}"

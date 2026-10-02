@@ -1,0 +1,13 @@
+---
+- name: Ensure per-release hardened writable paths exist in the new release
+  # Deploys run as the web user without root, so paths are made group-writable
+  # instead of chowned. Only paths with the `current/` prefix are per-release;
+  # shared paths keep the ownership set at provision time.
+  file:
+    path: "{{ deploy_helper.new_release_path }}/{{ release_path }}"
+    state: directory
+    mode: '0775'
+  loop: "{{ project.runtime_writable_paths | default(wordpress_runtime_writable_paths | default([])) | select('match', '^current/.+') | map('regex_replace', '^current/', '') | list }}"
+  loop_control:
+    loop_var: release_path
+    label: "{{ release_path }}"
