@@ -16,11 +16,12 @@ project_copy_folders:
 
 # All the templates to process on the remote system on deploy. These could contain config files.
 # `src` and `dest` paths work the same as project_local_files.
+# The .env file is made group-readable in hardened mode so the PHP runtime user can read it.
 project_templates:
   - name: .env config
     src: roles/deploy/templates/env.j2
     dest: .env
-    mode: '0600'
+    mode: "{{ wordpress_runtime_hardened | default(false) | ternary('0640', '0600') }}"
 
 # The shared_children is a list of all files/folders in your project that need to be linked to a path in `/shared`.
 # For example a sessions directory or an uploads folder. They are created if they don't exist, with the type
