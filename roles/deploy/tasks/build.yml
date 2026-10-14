@@ -19,6 +19,7 @@
     src: "{{ item.src }}"
     dest: "{{ deploy_helper.new_release_path }}/{{ item.dest }}"
     mode: "{{ item.mode | default('0644') }}"
+    group: "{{ item.group | default(omit) }}"
   loop: "{{ project.project_templates | default(project_templates) }}"
   loop_control:
     label: "{{ item.name }}"
