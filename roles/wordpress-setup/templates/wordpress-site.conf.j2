@@ -143,6 +143,13 @@ server {
   }
   {% endblock %}
 
+  {% block location_cache_php -%}
+  # Prevent PHP scripts from being executed inside the cache folder.
+  location ~* /{{ item.value.cache_path | default('app/cache') }}/.*\.php$ {
+    deny all;
+  }
+  {% endblock %}
+
   {% block blade_twig_templates -%}
   # Prevent Blade and Twig templates from being accessed directly.
   location ~* \.(blade\.php|twig)$ {

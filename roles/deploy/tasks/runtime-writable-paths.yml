@@ -7,6 +7,7 @@
     path: "{{ deploy_helper.new_release_path }}/{{ release_path }}"
     state: directory
     mode: '0775'
+    group: "{{ web_group | default('www-data') }}"
   loop: "{{ project.runtime_writable_paths | default(wordpress_runtime_writable_paths | default([])) | select('match', '^current/.+') | map('regex_replace', '^current/', '') | list }}"
   loop_control:
     loop_var: release_path
