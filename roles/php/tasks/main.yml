@@ -1,8 +1,14 @@
 ---
-- name: Remove legacy ondrej/php Launchpad list
+- name: Remove legacy ondrej/php Launchpad sources
   file:
-    path: "/etc/apt/sources.list.d/ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.list"
+    path: "/etc/apt/sources.list.d/{{ item }}"
     state: absent
+  loop:
+    # Created by Ansible's apt_repository module (how Trellis added the PPA)
+    - "ppa_ondrej_php_{{ ansible_facts['distribution_release'] }}.list"
+    # Created by add-apt-repository
+    - "ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.list"
+    - "ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.sources"
 
 - name: Remove legacy ondrej/php Launchpad key
   file:
