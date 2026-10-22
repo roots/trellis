@@ -77,6 +77,9 @@ php_fpm_pm_max_requests: 500
 
 # Optional hardening mode: run php-fpm as a non-deploy user and grant writes only to writable paths.
 # Add extra writable paths as needed (for example current/web/app/cache).
+# Shared paths (shared/...) are owned by the runtime user at provision time. Per-release
+# paths (current/...) are made group-writable on every deploy, so the runtime user must be
+# a member of web_group when it differs from the runtime group.
 wordpress_runtime_hardened: false
 wordpress_runtime_user: www-data
 wordpress_runtime_group: www-data
