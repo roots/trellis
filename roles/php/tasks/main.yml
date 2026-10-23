@@ -92,6 +92,7 @@
     src: php-fpm.ini.j2
     dest: /etc/php/{{ php_version }}/fpm/php.ini
     mode: '0644'
+  notify: reload php-fpm
 
 - name: Copy PHP-FPM configuration file
   template:
