@@ -33,6 +33,22 @@
     - sites_use_ssl | bool
     - ssl_enabled | bool
     - item.value.ssl.provider | default('manual') == 'self-signed'
+  async: "{{ wordpress_setup_async_timeout }}"
+  poll: 0
+  register: wordpress_setup_self_signed_cert_jobs
+  changed_when: false
+
+- name: Wait for self-signed certificate jobs
+  async_status:
+    jid: "{{ item.ansible_job_id }}"
+  register: wordpress_setup_self_signed_cert_job_result
+  until: wordpress_setup_self_signed_cert_job_result.finished
+  retries: "{{ wordpress_setup_async_retries }}"
+  delay: "{{ wordpress_setup_async_poll_delay }}"
+  changed_when: wordpress_setup_self_signed_cert_job_result.changed | default(false)
+  loop: "{{ wordpress_setup_self_signed_cert_jobs.results | default([]) | selectattr('ansible_job_id', 'defined') | list }}"
+  loop_control:
+    label: "{{ item.item.key }}"
   notify: reload nginx
 
 - name: Clean up openssl configs directory

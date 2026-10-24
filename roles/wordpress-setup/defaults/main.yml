@@ -2,6 +2,10 @@ site_uses_local_db: "{{ site_env.db_host == 'localhost' }}"
 nginx_wordpress_site_conf: wordpress-site.conf.j2
 nginx_ssl_path: "{{ nginx_path }}/ssl"
 
+wordpress_setup_async_timeout: 900
+wordpress_setup_async_poll_delay: 2
+wordpress_setup_async_retries: 450
+
 nginx_sites_confs:
   - src: no-default.conf.j2
   - src: ssl.no-default.conf.j2
