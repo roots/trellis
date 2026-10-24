@@ -1,0 +1,6 @@
+# Fail2Ban filter for nginx .env file access attempts
+# Matches nginx error log entries for forbidden .env file requests
+
+[Definition]
+failregex = ^\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2} \[error\].*access forbidden by rule, client: <HOST>,.*request: "GET .*\.env.*"
+ignoreregex =
