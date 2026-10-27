@@ -19,6 +19,7 @@
     src: "{{ item.src }}"
     dest: "{{ deploy_helper.new_release_path }}/{{ item.dest }}"
     mode: "{{ item.mode | default('0644') }}"
+    group: "{{ item.group | default(omit) }}"
   loop: "{{ project.project_templates | default(project_templates) }}"
   loop_control:
     label: "{{ item.name }}"
@@ -39,6 +40,9 @@
   loop_control:
     label: "{{ item.item }}"
   when: item.stat.exists
+
+- include_tasks: runtime-writable-paths.yml
+  when: wordpress_runtime_hardened | default(false)
 
 - name: Check if deploy_build_after scripts exist
   stat:
