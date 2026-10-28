@@ -1,7 +1,6 @@
 import types
 
 from ansible import errors
-from ansible.module_utils.six import string_types
 from jinja2 import pass_environment
 
 def to_env(dict_value):
