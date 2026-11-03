@@ -1,28 +1,31 @@
 ---
-- name: Add an Apt signing key, uses whichever key is at the URL
-  ansible.builtin.apt_key:
-    url: "https://mariadb.org/mariadb_release_signing_key.asc"
-    state: present
+- name: Fail if removed mariadb_ppa variable is set
+  fail:
+    msg: "`mariadb_ppa` has been replaced by `mariadb_repo_uri`, `mariadb_repo_suite` and `mariadb_repo_signing_key`. Update your group_vars."
+  when: mariadb_ppa is defined
 
-- name: Find MariaDB repositories for other versions
+- name: Find legacy MariaDB repositories
   find:
     paths: /etc/apt/sources.list.d
     patterns: "mirror_rackspace_com_mariadb_repo_*.list"
-    excludes: "mirror_rackspace_com_mariadb_repo_{{ mariadb_version | replace('.', '_') }}_*.list"
-  register: mariadb_stale_repos
+  register: mariadb_legacy_repos
 
-- name: Remove MariaDB repositories for other versions
+- name: Remove legacy MariaDB repositories
   file:
     path: "{{ item.path }}"
     state: absent
-  loop: "{{ mariadb_stale_repos.files }}"
+  loop: "{{ mariadb_legacy_repos.files }}"
   loop_control:
     label: "{{ item.path | basename }}"
 
-- name: Add MariaDB PPA
+- name: Add MariaDB repository
   deb822_repository:
-    repo: "{{ mariadb_ppa }}"
-    update_cache: yes
+    name: mariadb
+    types: deb
+    uris: "{{ mariadb_repo_uri }}"
+    suites: "{{ mariadb_repo_suite }}"
+    components: main
+    signed_by: "{{ mariadb_repo_signing_key }}"
   register: result
   until: result is success
   retries: 3

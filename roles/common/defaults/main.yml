@@ -11,6 +11,7 @@ apt_packages_default:
   libgs-dev: "{{ apt_package_state }}"
   libnss-myhostname: "{{ apt_package_state }}"
   python3: "{{ apt_package_state }}"
+  python3-debian: "{{ apt_package_state }}"
   python3-software-properties: "{{ apt_package_state }}"
   python3-pymysql: "{{ apt_package_state }}"
   python3-pycurl: "{{ apt_package_state }}"

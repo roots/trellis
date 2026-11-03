@@ -39,11 +39,25 @@
       - "'15058500A0235D97F5D10063B188E2B695BD4743' in sury_key_fpr.stdout"
     fail_msg: "Sury PHP signing key fingerprint does not match expected value."
 
+- name: Remove legacy Sury PHP repository
+  file:
+    path: /etc/apt/sources.list.d/sury-php.list
+    state: absent
+
 - name: Add Sury PHP repository
-  apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ {{ ansible_facts['distribution_release'] }} main"
-    filename: sury-php
+  deb822_repository:
+    name: sury-php
+    types: deb
+    uris: https://packages.sury.org/php/
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: main
+    signed_by: /etc/apt/keyrings/sury-php.gpg
+  register: sury_php_repo
+
+- name: Update apt cache for Sury PHP repository
+  apt:
     update_cache: yes
+  when: sury_php_repo is changed
   register: result
   until: result is success
   retries: 3
