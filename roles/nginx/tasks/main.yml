@@ -1,13 +1,22 @@
 ---
-- name: Add Nginx APT key
-  ansible.builtin.apt_key:
-    url: "https://nginx.org/keys/nginx_signing.key"
-    state: present
+- name: Fail if removed nginx_ppa variable is set
+  fail:
+    msg: "`nginx_ppa` has been replaced by `nginx_repo_uri`, `nginx_repo_suite` and `nginx_repo_signing_key`. Update your group_vars."
+  when: nginx_ppa is defined
 
-- name: Add Nginx PPA
-  apt_repository:
-    repo: "{{ nginx_ppa }}"
-    update_cache: yes
+- name: Remove legacy Nginx repository
+  file:
+    path: "/etc/apt/sources.list.d/nginx_org_packages_mainline_{{ ansible_facts['distribution'] | lower }}.list"
+    state: absent
+
+- name: Add Nginx repository
+  deb822_repository:
+    name: nginx
+    types: deb
+    uris: "{{ nginx_repo_uri }}"
+    suites: "{{ nginx_repo_suite }}"
+    components: nginx
+    signed_by: "{{ nginx_repo_signing_key }}"
   register: result
   until: result is success
   retries: 3
