@@ -51,7 +51,7 @@ for site in {{ sites_using_letsencrypt }}:
         with open(bundled_hashed_cert_path, 'rb') as bundled_hashed_cert_file:
             bundled_hashed_cert = bundled_hashed_cert_file.read()
 
-            with open(bundled_cert_path, 'w') as bundled_cert_file:
+            with open(bundled_cert_path, 'wb') as bundled_cert_file:
                 bundled_cert_file.write(bundled_hashed_cert)
                 print('Created bundled certificate {}'.format(bundled_cert_path))
 

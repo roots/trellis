@@ -60,4 +60,3 @@
     name: nginx
     enabled: yes
     state: started
-    use: service

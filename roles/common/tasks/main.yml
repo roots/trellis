@@ -24,7 +24,7 @@
       paths:
         - "{{ playbook_dir }}/roles/php/vars/"
 
-  tags: [memcached, php, sshd]
+  tags: [memcached, php, redis, sshd]
 
 - name: Verify dict format for package component variables
   fail:
@@ -38,10 +38,12 @@
       memcached_packages_custom: "{{ memcached_packages_custom }}"
       php_extensions_default: "{{ php_extensions_default }}"
       php_extensions_custom: "{{ php_extensions_custom }}"
+      redis_packages_default: "{{ redis_packages_default }}"
+      redis_packages_custom: "{{ redis_packages_custom }}"
       sshd_packages_default: "{{ sshd_packages_default }}"
       sshd_packages_custom: "{{ sshd_packages_custom }}"
     package_vars_wrong_format: "{{ package_vars | dict2items | rejectattr('value', 'mapping') | map(attribute='key') | list }}"
-  tags: [memcached, php, sshd]
+  tags: [memcached, php, redis, sshd]
 
 - name: Verify dict format for package combined variables
   fail:
@@ -52,9 +54,10 @@
       apt_packages: "{{ apt_packages }}"
       memcached_packages: "{{ memcached_packages }}"
       php_extensions: "{{ php_extensions }}"
+      redis_packages: "{{ redis_packages }}"
       sshd_packages: "{{ sshd_packages }}"
     package_vars_wrong_format: "{{ package_vars | dict2items | rejectattr('value', 'mapping') | map(attribute='key') | list }}"
-  tags: [memcached, php, sshd]
+  tags: [memcached, php, redis, sshd]
 
 - name: Clean old APT sources
   import_tasks: clean-apt-sources.yml

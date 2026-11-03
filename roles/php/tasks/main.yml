@@ -1,7 +1,48 @@
 ---
-- name: Add PHP PPA
-  deb822_repository:
-    repo: "ppa:ondrej/php"
+- name: Remove legacy ondrej/php Launchpad sources
+  file:
+    path: "/etc/apt/sources.list.d/{{ item }}"
+    state: absent
+  loop:
+    # Created by Ansible's apt_repository module (how Trellis added the PPA)
+    - "ppa_ondrej_php_{{ ansible_facts['distribution_release'] }}.list"
+    # Created by add-apt-repository
+    - "ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.list"
+    - "ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.sources"
+
+- name: Remove legacy ondrej/php Launchpad key
+  file:
+    path: /etc/apt/trusted.gpg.d/ondrej_ubuntu_php.gpg
+    state: absent
+
+- name: Ensure apt keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Sury PHP signing key
+  get_url:
+    url: https://packages.sury.org/php/apt.gpg
+    dest: /etc/apt/keyrings/sury-php.gpg
+    mode: '0644'
+
+- name: Verify Sury PHP signing key fingerprint
+  command: gpg --show-keys --with-fingerprint --with-colons /etc/apt/keyrings/sury-php.gpg
+  register: sury_key_fpr
+  changed_when: false
+  check_mode: false
+
+- name: Assert Sury PHP signing key fingerprint
+  assert:
+    that:
+      - "'15058500A0235D97F5D10063B188E2B695BD4743' in sury_key_fpr.stdout"
+    fail_msg: "Sury PHP signing key fingerprint does not match expected value."
+
+- name: Add Sury PHP repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ {{ ansible_facts['distribution_release'] }} main"
+    filename: sury-php
     update_cache: yes
   register: result
   until: result is success
@@ -51,6 +92,7 @@
     src: php-fpm.ini.j2
     dest: /etc/php/{{ php_version }}/fpm/php.ini
     mode: '0644'
+  notify: reload php-fpm
 
 - name: Copy PHP-FPM configuration file
   template:
