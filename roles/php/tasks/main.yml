@@ -128,10 +128,17 @@
     mode: '0644'
   notify: reload php-fpm
 
+- name: Check for ImageMagick 6 policy.xml
+  stat:
+    path: /etc/ImageMagick-6/policy.xml
+  register: imagemagick6_policy
+
+# ImageMagick 7 (Ubuntu 26.04, Debian 13) doesn't block PDFs by default
 - name: Change ImageMagick policy.xml to allow for PDFs
   replace:
     path: /etc/ImageMagick-6/policy.xml
     regexp: '<policy domain="coder" rights="none" pattern="PDF" />'
     replace: '<policy domain="coder" rights="read" pattern="PDF" />'
     backup: no
+  when: imagemagick6_policy.stat.exists
   notify: reload php-fpm
