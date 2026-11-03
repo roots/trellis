@@ -31,3 +31,4 @@
       when: project.repo is not defined or project.repo is not match("^ssh://.+@.+|.+@.+:.+")
   roles:
     - deploy
+    - { role: reboot-check, tags: [always], when: env != 'development' }
