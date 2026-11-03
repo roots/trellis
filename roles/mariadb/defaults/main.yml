@@ -1,4 +1,4 @@
-mariadb_version: 10.11
+mariadb_version: "11.8"
 mariadb_ppa: "deb https://mirror.rackspace.com/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_facts['distribution_release'] }} main"
 
 mariadb_client_package: mariadb-client
