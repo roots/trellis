@@ -1,0 +1,21 @@
+---
+- name: Check for pending reboot
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required
+
+- name: Read packages requiring reboot
+  slurp:
+    src: /var/run/reboot-required.pkgs
+  register: reboot_required_pkgs
+  when: reboot_required.stat.exists
+  failed_when: false
+
+- name: Warn about pending reboot
+  debug:
+    msg: >-
+      WARNING: Reboot required. Updated packages aren't active until the
+      server is rebooted{{ (': ' ~ pkgs | join(', ')) if pkgs else '.' }}
+  vars:
+    pkgs: "{{ (reboot_required_pkgs.content | default('') | b64decode).split() | unique }}"
+  when: reboot_required.stat.exists
