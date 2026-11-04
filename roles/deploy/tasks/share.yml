@@ -15,10 +15,13 @@
   tags: deploy-share-before
 
 - name: Ensure shared sources are present -- directories
+  # Skip the default mode in hardened mode: shared paths are chowned to the
+  # runtime user at provision time, and chmodding them as the non-owner web
+  # user would fail the deploy.
   file:
     path: "{{ deploy_helper.shared_path }}/{{ item.src }}"
     state: directory
-    mode: "{{ item.mode | default('0755') }}"
+    mode: "{{ item.mode | default(wordpress_runtime_hardened | default(false) | ternary(omit, '0755')) }}"
   loop: "{{ project.project_shared_children | default(project_shared_children) }}"
   loop_control:
     label: "{{ item.path }}"
