@@ -1,13 +1,11 @@
 import re
-import sys
-import os
 
-from ansible.module_utils.six import iteritems
 from ansible.errors import AnsibleError
-from ansible.parsing.yaml.objects import AnsibleMapping, AnsibleSequence, AnsibleUnicode
 from ansible.playbook.play_context import PlayContext
 from ansible.plugins.callback import CallbackBase
 from ansible.template import Templar
+# wrap_var removes the template trust tag so values are left alone. It is
+# deprecated in ansible-core but has no public replacement for untrusting yet.
 from ansible.utils.unsafe_proxy import wrap_var
 from ansible import context
 
@@ -24,15 +22,15 @@ class CallbackModule(CallbackBase):
 
     def raw_triage(self, key_string, item, patterns):
         # process dict values
-        if isinstance(item, AnsibleMapping):
-            return AnsibleMapping(dict((key,self.raw_triage('.'.join([key_string, key]), value, patterns)) for key,value in iteritems(item)))
+        if isinstance(item, dict):
+            return dict((key,self.raw_triage('.'.join([key_string, key]), value, patterns)) for key,value in item.items())
 
         # process list values
-        elif isinstance(item, AnsibleSequence):
-            return AnsibleSequence([self.raw_triage('.'.join([key_string, str(i)]), value, patterns) for i,value in enumerate(item)])
+        elif isinstance(item, list):
+            return [self.raw_triage('.'.join([key_string, str(i)]), value, patterns) for i,value in enumerate(item)]
 
         # wrap values if they match raw_vars pattern
-        elif isinstance(item, AnsibleUnicode):
+        elif isinstance(item, str):
             match = next((pattern for pattern in patterns if re.match(pattern, key_string)), None)
             return wrap_var(item) if match else item
 
@@ -67,7 +65,7 @@ class CallbackModule(CallbackBase):
             '--vault-password-file': 'vault_password_file',
             }
 
-        for option,value in iteritems(strings):
+        for option,value in strings.items():
             if self._options.get(value, False):
                 options.append("{0}='{1}'".format(option, str(self._options.get(value))))
 
@@ -83,7 +81,7 @@ class CallbackModule(CallbackBase):
         play_context = PlayContext(play=play)
 
         env = play.get_variable_manager().get_vars(play=play).get('env', '')
-        env_group = next((group for key,group in iteritems(play.get_variable_manager()._inventory.groups) if key == env), False)
+        env_group = next((group for key,group in play.get_variable_manager()._inventory.groups.items() if key == env), False)
         if env_group:
             env_group.set_priority(20)
 

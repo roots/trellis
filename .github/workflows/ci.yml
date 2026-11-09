@@ -23,8 +23,8 @@ jobs:
           architecture: x64
           cache: 'pip'
       - run: pip install -r requirements.txt -r requirements-dev.txt
-      - name: Run template rendering tests
-        run: pytest -q -ra tests/templates
+      - name: Run template and plugin tests
+        run: pytest -q -ra tests/templates tests/plugins
       - uses: actions/cache@v6
         with:
           path: vendor
