@@ -63,8 +63,7 @@ def test_multisite_subdomain_rewrites_present() -> None:
 def test_location_cache_php_blocks_direct_execution() -> None:
     rendered = render_template("roles/wordpress-setup/templates/wordpress-site.conf.j2")
 
-    assert "location ~* /app/cache/.*\\.php$ {" in rendered
-    assert "deny all;" in rendered
+    assert "location ~* /app/cache/.*\\.php$ {\n    deny all;\n  }" in rendered
 
 
 def test_location_cache_php_custom_path() -> None:
