@@ -92,6 +92,14 @@
       become: no
       when: env != 'development' and ssh_client_ip_lookup | default(true)
       tags: [fail2ban, ferm]
+
+    # Facts aren't injected as top-level vars (inject_facts_as_vars = False), so
+    # expose the IP as a var for `ip_whitelist` in group_vars/all/security.yml.
+    - name: Set SSH client IP
+      set_fact:
+        ipify_public_ip: "{{ ansible_facts['ipify_public_ip'] }}"
+      when: env != 'development' and ssh_client_ip_lookup | default(true)
+      tags: [fail2ban, ferm]
   rescue:
     - name: Fail when unable to retrieve SSH client IP
       fail:
