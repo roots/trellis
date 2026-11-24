@@ -8,6 +8,9 @@
 # with modes the runtime user can't write to (e.g. Acorn creates its cache
 # directories with a hardcoded 0755), so everything the web user owns in them is
 # made group-writable. This runs before and after the release is made current.
+# After the release is current, php-fpm may delete cache files or create
+# directories the web user can't read while find walks them, so those errors
+# don't fail the deploy.
 - name: Handle per-release runtime writable paths
   vars:
     current_path_prefix: "^{{ project_current_path | regex_escape }}/"
@@ -25,6 +28,7 @@
     - name: Make per-release writable paths group-writable
       command: >-
         find {{ (deploy_helper.new_release_path ~ '/' ~ release_path) | quote }}
+        -ignore_readdir_race
         -user {{ web_user | quote }} ! -type l ! -perm -g=w
         -print -exec chmod g+w {} +
       loop: "{{ release_writable_paths }}"
@@ -32,3 +36,8 @@
         loop_var: release_path
       register: release_writable_paths_chmod
       changed_when: release_writable_paths_chmod.stdout != ''
+      failed_when: >-
+        release_writable_paths_chmod.rc != 0 and
+        release_writable_paths_chmod.stderr_lines
+        | reject('search', 'No such file or directory|Permission denied')
+        | list | length > 0
