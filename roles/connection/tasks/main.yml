@@ -18,25 +18,52 @@
   tags: [connection-tests]
 
 - name: Warn about change in host keys
+  vars:
+    # With strict host key checking, ssh names the known_hosts entry itself
+    # (after ~/.ssh/config is applied). Otherwise build it from the inventory:
+    # known_hosts names hosts on a non-standard port as [host]:port.
+    inventory_host: "{{ ansible_host | default(inventory_hostname) }}"
+    inventory_known_host: "{{ inventory_host if (ansible_port | default(22) | int) == 22 else '[' ~ inventory_host ~ ']:' ~ ansible_port }}"
+    known_host: >-
+      {{ connection_status.stdout | regex_search('[Hh]ost key for \S+ has changed') | default('', true)
+         | regex_replace('^[Hh]ost key for (\S+) has changed$', '\1') or inventory_known_host }}
+    # The file holding the old key, from ssh's "Offending ED25519 key in FILE:LINE".
+    known_hosts_file: >-
+      {{ connection_status.stdout | regex_search('Offending [A-Z0-9]+ key in [^ ]+?:[0-9]+') | default('', true)
+         | regex_replace('^Offending [A-Z0-9]+ key in (.+):[0-9]+$', '\1') }}
+    # The -vvvv output also has fingerprints of the user's own keys, so match
+    # the one ssh reports for the server.
+    new_host_key: >-
+      {{ connection_status.stdout
+         | regex_search('The fingerprint for the [A-Z0-9]+ key sent by the remote host is[^S]*SHA256:[A-Za-z0-9+/=]+')
+         | default('', true) }}
+    new_host_key_type: >-
+      {{ new_host_key | regex_replace('^The fingerprint for the ([A-Z0-9]+) key(?s:.*)$', '\1') }}
+    new_host_key_fingerprint: "{{ new_host_key | regex_search('SHA256:[A-Za-z0-9+/=]+') | default('', true) }}"
   fail:
     msg: |
       WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+      {% if new_host_key_fingerprint %}
+
+      The server sent a new {{ new_host_key_type }} host key with the fingerprint:
+
+        {{ new_host_key_fingerprint }}
+
+      To check it's your server's key, compare it with the output of
+      `ssh-keygen -lf /etc/ssh/ssh_host_{{ new_host_key_type | lower }}_key.pub` run on the
+      server (e.g., from your hosting provider's console).
+      {% endif %}
 
       If this change in host keys is expected (e.g., if you rebuilt the server
       or if the Trellis sshd role made changes recently), then run the following
       command to clear the old host key from your known_hosts.
 
-        ssh-keygen -R {{ connection_status.stdout | regex_replace('(.|\n)*host key for (.*) has changed(.|\n)*', '\2') }}
+        ssh-keygen {% if known_hosts_file %}-f '{{ known_hosts_file }}' {% endif %}-R '{{ known_host }}'
 
       Then try your Trellis playbook or SSH connection again.
 
       If the change is unexpected, cautiously consider why the host identification
       may have changed and whether you may be victim to a man-in-the-middle attack.
-
-      ---------------------------------------------------
-      {{ (connection_status.stdout.replace('Please contact your system administrator.\r\n', '') |
-          regex_replace ('(.|\n)*(The fingerprint for the(.|\n)*Host key verification failed.)(.|\n)*', '\2') |
-          regex_replace('(\\r\\n|\\n)', '\n\n')).replace('\"', '"') }}
   when: "'REMOTE HOST IDENTIFICATION HAS CHANGED' in connection_status.stdout"
   tags: [connection-tests]
 
