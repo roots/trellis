@@ -85,10 +85,10 @@
     regexp: ^(hosts\:((?!myhostname).)*)$
     state: present
 
-# `ip_whitelist` (group_vars/all/security.yml) uses this IP for the ferm and
-# fail2ban roles, so it's tagged with every tag that runs ferm in server.yml.
+# `ip_whitelist` (group_vars/all/security.yml) uses this IP in the ferm and
+# fail2ban roles.
 - when: env != 'development' and ssh_client_ip_lookup | default(true)
-  tags: [fail2ban, ferm, letsencrypt]
+  tags: [fail2ban, ferm]
   block:
     - name: Retrieve SSH client IP
       ipify_facts:
