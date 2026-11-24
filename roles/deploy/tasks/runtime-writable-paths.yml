@@ -1,0 +1,43 @@
+---
+# Per-release writable paths (e.g. `current/web/app/cache`) only exist in each new
+# release, so they're handled on every deploy instead of at provision time. Deploys
+# run as the web user without root, so instead of chowning them to the runtime user
+# they're made writable by web_group (the runtime user's group by default).
+#
+# `wp` commands run during the deploy can create directories inside these paths
+# with modes the runtime user can't write to (e.g. Acorn creates its cache
+# directories with a hardcoded 0755), so everything the web user owns in them is
+# made group-writable. This runs before and after the release is made current.
+# After the release is current, php-fpm may delete cache files or create
+# directories the web user can't read while find walks them, so those errors
+# don't fail the deploy.
+- name: Handle per-release runtime writable paths
+  vars:
+    current_path_prefix: "^{{ project_current_path | regex_escape }}/"
+    release_writable_paths: "{{ project.runtime_writable_paths | default(wordpress_runtime_writable_paths | default([])) | select('match', current_path_prefix ~ '.+') | map('regex_replace', current_path_prefix, '') | list }}"
+  block:
+    - name: Ensure per-release writable paths exist
+      file:
+        path: "{{ deploy_helper.new_release_path }}/{{ release_path }}"
+        state: directory
+        mode: '0775'
+      loop: "{{ release_writable_paths }}"
+      loop_control:
+        loop_var: release_path
+
+    - name: Make per-release writable paths group-writable
+      command: >-
+        find {{ (deploy_helper.new_release_path ~ '/' ~ release_path) | quote }}
+        -ignore_readdir_race
+        -user {{ web_user | quote }} ! -type l ! -perm -g=w
+        -print -exec chmod g+w {} +
+      loop: "{{ release_writable_paths }}"
+      loop_control:
+        loop_var: release_path
+      register: release_writable_paths_chmod
+      changed_when: release_writable_paths_chmod.stdout != ''
+      failed_when: >-
+        release_writable_paths_chmod.rc != 0 and
+        release_writable_paths_chmod.stderr_lines
+        | reject('search', 'No such file or directory|Permission denied')
+        | list | length > 0
