@@ -1,8 +1,14 @@
 ---
-- name: Remove legacy ondrej/php Launchpad list
+- name: Remove legacy ondrej/php Launchpad sources
   file:
-    path: "/etc/apt/sources.list.d/ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.list"
+    path: "/etc/apt/sources.list.d/{{ item }}"
     state: absent
+  loop:
+    # Created by Ansible's apt_repository module (how Trellis added the PPA)
+    - "ppa_ondrej_php_{{ ansible_facts['distribution_release'] }}.list"
+    # Created by add-apt-repository
+    - "ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.list"
+    - "ondrej-ubuntu-php-{{ ansible_facts['distribution_release'] }}.sources"
 
 - name: Remove legacy ondrej/php Launchpad key
   file:
@@ -33,11 +39,25 @@
       - "'15058500A0235D97F5D10063B188E2B695BD4743' in sury_key_fpr.stdout"
     fail_msg: "Sury PHP signing key fingerprint does not match expected value."
 
+- name: Remove legacy Sury PHP repository
+  file:
+    path: /etc/apt/sources.list.d/sury-php.list
+    state: absent
+
 - name: Add Sury PHP repository
-  apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ {{ ansible_facts['distribution_release'] }} main"
-    filename: sury-php
+  deb822_repository:
+    name: sury-php
+    types: deb
+    uris: https://packages.sury.org/php/
+    suites: "{{ ansible_facts['distribution_release'] }}"
+    components: main
+    signed_by: /etc/apt/keyrings/sury-php.gpg
+  register: sury_php_repo
+
+- name: Update apt cache for Sury PHP repository
+  apt:
     update_cache: yes
+  when: sury_php_repo is changed
   register: result
   until: result is success
   retries: 3
@@ -86,6 +106,7 @@
     src: php-fpm.ini.j2
     dest: /etc/php/{{ php_version }}/fpm/php.ini
     mode: '0644'
+  notify: reload php-fpm
 
 - name: Copy PHP-FPM configuration file
   template:
@@ -107,10 +128,17 @@
     mode: '0644'
   notify: reload php-fpm
 
+- name: Check for ImageMagick 6 policy.xml
+  stat:
+    path: /etc/ImageMagick-6/policy.xml
+  register: imagemagick6_policy
+
+# ImageMagick 7 (Ubuntu 26.04, Debian 13) doesn't block PDFs by default
 - name: Change ImageMagick policy.xml to allow for PDFs
   replace:
     path: /etc/ImageMagick-6/policy.xml
     regexp: '<policy domain="coder" rights="none" pattern="PDF" />'
     replace: '<policy domain="coder" rights="read" pattern="PDF" />'
     backup: no
+  when: imagemagick6_policy.stat.exists
   notify: reload php-fpm

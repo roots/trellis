@@ -93,6 +93,11 @@ expire_logs_days        = 10
 # utf8 4-byte character set. See also client.cnf
 character-set-server  = utf8mb4
 collation-server      = utf8mb4_general_ci
+{% if mariadb_version is version('11.2', '>=') %}
+# MariaDB 11.2+ otherwise uses utf8mb4_uca1400_ai_ci for tables created with
+# a charset but no collation, which MySQL and older MariaDB can't import
+character_set_collations = utf8mb4=utf8mb4_general_ci
+{% endif %}
 
 #
 # * InnoDB

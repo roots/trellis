@@ -35,7 +35,31 @@
   getent:
     database: passwd
     key: "{{ wordpress_runtime_user }}"
+  register: wordpress_runtime_user_entry
   when: wordpress_runtime_hardened
+
+- name: Look up web group
+  getent:
+    database: group
+    key: "{{ web_group }}"
+  register: wordpress_web_group_entry
+  when: wordpress_runtime_hardened
+
+- name: Ensure WordPress runtime user can access web group files
+  # Deploys run as web_user without root, so `.env` and per-release writable paths
+  # are made readable/writable by web_group instead of being chowned to the runtime user.
+  vars:
+    web_group_entry: "{{ wordpress_web_group_entry.ansible_facts.getent_group[web_group] }}"
+    runtime_user_entry: "{{ wordpress_runtime_user_entry.ansible_facts.getent_passwd[wordpress_runtime_user] }}"
+  fail:
+    msg: |
+      WordPress runtime hardening requires `wordpress_runtime_user` ({{ wordpress_runtime_user }}) to be able to read files owned by `web_group` ({{ web_group }}).
+      Either add {{ wordpress_runtime_user }} to the {{ web_group }} group, or set `wordpress_runtime_group: {{ web_group }}`.
+  when:
+    - wordpress_runtime_hardened
+    - wordpress_runtime_group != web_group
+    - runtime_user_entry[2] != web_group_entry[1]
+    - wordpress_runtime_user not in (web_group_entry[2] | default('', true)).split(',')
 
 - name: Ensure hardened writable paths exist and are owned by runtime user
   include_tasks: runtime-writable-paths.yml

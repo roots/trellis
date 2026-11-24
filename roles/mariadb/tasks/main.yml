@@ -1,13 +1,31 @@
 ---
-- name: Add an Apt signing key, uses whichever key is at the URL
-  ansible.builtin.apt_key:
-    url: "https://mariadb.org/mariadb_release_signing_key.asc"
-    state: present
+- name: Fail if removed mariadb_ppa variable is set
+  fail:
+    msg: "`mariadb_ppa` has been replaced by `mariadb_repo_uri`, `mariadb_repo_suite` and `mariadb_repo_signing_key`. Update your group_vars."
+  when: mariadb_ppa is defined
 
-- name: Add MariaDB PPA
-  apt_repository:
-    repo: "{{ mariadb_ppa }}"
-    update_cache: yes
+- name: Find legacy MariaDB repositories
+  find:
+    paths: /etc/apt/sources.list.d
+    patterns: "mirror_rackspace_com_mariadb_repo_*.list"
+  register: mariadb_legacy_repos
+
+- name: Remove legacy MariaDB repositories
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ mariadb_legacy_repos.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+
+- name: Add MariaDB repository
+  deb822_repository:
+    name: mariadb
+    types: deb
+    uris: "{{ mariadb_repo_uri }}"
+    suites: "{{ mariadb_repo_suite }}"
+    components: main
+    signed_by: "{{ mariadb_repo_signing_key }}"
   register: result
   until: result is success
   retries: 3
@@ -84,5 +102,15 @@
       name: test
       state: absent
     no_log: true
+
+  # The package's own upgrade check (/etc/mysql/debian-start) can't log in
+  # once Trellis sets a root password, so system tables are left on the old
+  # version after a major upgrade. This is a no-op when already up to date.
+  - name: Upgrade MariaDB system tables
+    command: mariadb-upgrade
+    environment:
+      HOME: /root
+    register: mariadb_upgrade
+    changed_when: "'no need to run mariadb-upgrade' not in mariadb_upgrade.stdout"
 
   when:  (wordpress_sites.items() | count) > (sites_using_remote_db | count)

@@ -11,10 +11,10 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     strategy:
       matrix:
-        python-version: ['3.x']
+        python-version: ['3.14']
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7

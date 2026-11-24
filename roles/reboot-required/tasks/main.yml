@@ -1,0 +1,25 @@
+---
+- name: Run pending handlers so this warning is the last output
+  meta: flush_handlers
+
+- name: Check whether a reboot is required
+  stat:
+    path: /var/run/reboot-required
+    get_checksum: false
+  register: reboot_required
+
+- name: Read the packages that require a reboot
+  slurp:
+    src: /var/run/reboot-required.pkgs
+  register: reboot_required_pkgs
+  failed_when: false
+  when: reboot_required.stat.exists
+
+- name: Warn that a reboot is required
+  debug:
+    msg:
+      - "Reboot required: this server needs a reboot to finish installing updates{{ (': ' ~ reboot_required_packages | join(', ')) if reboot_required_packages else '' }}."
+      - "Reboot when convenient (the site will be briefly unavailable): connect with `ssh {{ admin_user }}@{{ ansible_host | default(inventory_hostname) }}` and run `sudo reboot`"
+  vars:
+    reboot_required_packages: "{{ (reboot_required_pkgs.content | default('') | b64decode).splitlines() | map('trim') | select | unique | list }}"
+  when: reboot_required.stat.exists

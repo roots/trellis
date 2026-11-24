@@ -1,5 +1,7 @@
 ---
-nginx_ppa: "deb http://nginx.org/packages/mainline/ubuntu {{ ansible_facts['distribution_release'] }} nginx"
+nginx_repo_uri: "https://nginx.org/packages/mainline/{{ ansible_facts['distribution'] | lower }}"
+nginx_repo_suite: "{{ ansible_facts['distribution_release'] }}"
+nginx_repo_signing_key: https://nginx.org/keys/nginx_signing.key
 nginx_package: nginx
 nginx_conf: nginx.conf.j2
 nginx_path: /etc/nginx

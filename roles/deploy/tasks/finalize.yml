@@ -14,6 +14,10 @@
   when: include_path.stat.exists
   tags: deploy-finalize-before
 
+- name: Ensure per-release runtime writable paths are group-writable
+  include_tasks: runtime-writable-paths.yml
+  when: wordpress_runtime_hardened | default(false)
+
 - name: Finalize the deploy
   deploy_helper:
     current_path: "{{ project_current_path }}"
@@ -36,6 +40,10 @@
     label: "{{ include_path.item }}"
   when: include_path.stat.exists
   tags: deploy-finalize-after
+
+- name: Ensure per-release runtime writable paths are group-writable
+  include_tasks: runtime-writable-paths.yml
+  when: wordpress_runtime_hardened | default(false)
 
 - debug:
     msg: "{{ project_version }}@{{ git_clone.after | truncate(7, True, '') }} deployed as release {{ deploy_helper.new_release }}"
