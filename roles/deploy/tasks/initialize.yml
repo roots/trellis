@@ -19,6 +19,12 @@
     path: "{{ project_root }}"
     state: present
 
+# Facts aren't injected as top-level vars (inject_facts_as_vars = False), so
+# expose them as `deploy_helper` for the deploy role and deploy hooks.
+- name: Set deploy_helper
+  set_fact:
+    deploy_helper: "{{ ansible_facts['deploy_helper'] }}"
+
 - name: Check if deploy_initialize_after scripts exist
   stat:
     path: "{{ item }}"
