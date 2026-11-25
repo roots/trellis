@@ -35,6 +35,9 @@ logpath = {{ service.logpath }}
 {% if service.maxretry is defined %}
 maxretry = {{ service.maxretry }}
 {% endif %}
+{% if service.bantime is defined %}
+bantime = {{ service.bantime }}
+{% endif %}
 {% if service.protocol is defined %}
 protocol = {{ service.protocol }}
 {% endif %}
