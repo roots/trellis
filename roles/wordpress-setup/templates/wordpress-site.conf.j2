@@ -17,7 +17,7 @@ server {
 
   http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
   http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
-  server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
+  server_name {{ (site_hosts_canonical + multisite_subdomains_wildcards) | unique | join(' ') }};
   {% endblock %}
 
   {% block logs -%}
@@ -300,7 +300,7 @@ server {
 server {
   listen [::]:80;
   listen 80;
-  server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
+  server_name {{ (site_hosts_canonical + multisite_subdomains_wildcards) | unique | join(' ') }};
 
   {{ self.acme_challenge() -}}
 

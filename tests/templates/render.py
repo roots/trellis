@@ -117,6 +117,17 @@ def build_vars(overrides: dict[str, Any] | None = None, scenario: str = "baselin
     return _derive_template_vars(variables)
 
 
+def render_helper(name: str, variables: dict[str, Any]) -> Any:
+    """Evaluate a variable from group_vars/all/helpers.yml with the given variables (e.g. `item`)."""
+    data_loader = DataLoader()
+    data_loader.set_basedir(str(REPO_ROOT))
+
+    helpers = _load_yaml(REPO_ROOT / "group_vars/all/helpers.yml")
+    helpers = {key: trust_as_template(value) if isinstance(value, str) else value for key, value in helpers.items()}
+    templar = Templar(loader=data_loader, variables={**helpers, **variables})
+    return templar.template(trust_as_template("{{ %s }}" % name), fail_on_undefined=True)
+
+
 def render_template(template_path: str, overrides: dict[str, Any] | None = None, scenario: str = "baseline") -> str:
     template = REPO_ROOT / template_path
     data_loader = DataLoader()
