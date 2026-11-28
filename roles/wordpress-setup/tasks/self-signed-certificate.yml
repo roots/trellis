@@ -34,8 +34,3 @@
     - ssl_enabled | bool
     - item.value.ssl.provider | default('manual') == 'self-signed'
   notify: reload nginx
-
-- name: Clean up openssl configs directory
-  file:
-    path: "{{ nginx_ssl_path }}/self-signed-openssl-configs/"
-    state: absent
